@@ -1,4 +1,4 @@
-local CompanionSystem = require("../src/CompanionSystem")
+local CompanionSystem = require("src.CompanionSystem")
 
 describe("CompanionSystem", function()
     it("can add a companion", function()

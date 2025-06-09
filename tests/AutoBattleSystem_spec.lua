@@ -1,6 +1,7 @@
 local AutoBattleSystem = require("../src/AutoBattleSystem")
 local EnemySystem = require("../src/EnemySystem")
 
+
 describe("AutoBattleSystem", function()
     it("is disabled by default", function()
         assert.is_false(AutoBattleSystem.enabled)
