@@ -2,6 +2,19 @@
 -- Provides automatic combat actions when enabled.
 
 local AutoBattleSystem = {}
+local EnemySystem = require("src.EnemySystem")
+
+---Current player position used for simple movement calculations.
+AutoBattleSystem.playerPosition = {x = 0, y = 0}
+
+---Movement speed in studs per second used when approaching a target.
+AutoBattleSystem.moveSpeed = 1
+
+---Maximum distance at which an attack will occur instead of moving.
+AutoBattleSystem.attackRange = 5
+
+---Reference to the last enemy attacked by the system.
+AutoBattleSystem.lastAttackTarget = nil
 
 ---Indicates whether auto-battle mode is active.
 AutoBattleSystem.enabled = false
@@ -22,7 +35,28 @@ function AutoBattleSystem:update(dt)
     if not self.enabled then
         return
     end
-    -- TODO: perform automatic actions such as attacking enemies
+    local pos = self.playerPosition
+    local target = EnemySystem:getNearestEnemy(pos)
+    if not target then
+        return
+    end
+
+    local dx = target.x - pos.x
+    local dy = target.y - pos.y
+    local distSq = dx * dx + dy * dy
+    if distSq <= self.attackRange * self.attackRange then
+        -- Target is within attack range, register an attack
+        self.lastAttackTarget = target
+    else
+        -- Move toward the target by a small step based on moveSpeed
+        local dist = math.sqrt(distSq)
+        if dist > 0 then
+            local step = math.min(self.moveSpeed * dt, dist)
+            pos.x = pos.x + dx / dist * step
+            pos.y = pos.y + dy / dist * step
+        end
+        self.lastAttackTarget = nil
+    end
 end
 
 return AutoBattleSystem
