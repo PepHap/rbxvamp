@@ -35,8 +35,9 @@ EnemySystem.lastBossType = nil
 function EnemySystem:getNearestEnemy(position)
     local closest, minDistSq
     for _, enemy in ipairs(self.enemies) do
-        local dx = enemy.x - position.x
-        local dy = enemy.y - position.y
+        -- Use the enemy's position field for distance calculations
+        local dx = enemy.position.x - position.x
+        local dy = enemy.position.y - position.y
         local distSq = dx * dx + dy * dy
         if not closest or distSq < minDistSq then
             closest = enemy

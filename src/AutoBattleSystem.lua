@@ -41,8 +41,9 @@ function AutoBattleSystem:update(dt)
         return
     end
 
-    local dx = target.x - pos.x
-    local dy = target.y - pos.y
+    -- Target tables store coordinates within the `position` field
+    local dx = target.position.x - pos.x
+    local dy = target.position.y - pos.y
     local distSq = dx * dx + dy * dy
     if distSq <= self.attackRange * self.attackRange then
         -- Target is within attack range, register an attack

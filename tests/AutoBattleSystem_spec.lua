@@ -19,7 +19,7 @@ describe("AutoBattleSystem", function()
         AutoBattleSystem.enabled = false
         AutoBattleSystem.playerPosition = {x = 0, y = 0}
         AutoBattleSystem.lastAttackTarget = nil
-        EnemySystem.enemies = {{x = 1, y = 0}}
+        EnemySystem.enemies = {{position = {x = 1, y = 0}}}
         AutoBattleSystem:update(1)
         assert.is_nil(AutoBattleSystem.lastAttackTarget)
         assert.equals(0, AutoBattleSystem.playerPosition.x)
@@ -30,7 +30,7 @@ describe("AutoBattleSystem", function()
         AutoBattleSystem.playerPosition = {x = 0, y = 0}
         AutoBattleSystem.moveSpeed = 1
         AutoBattleSystem.attackRange = 2
-        EnemySystem.enemies = {{x = 10, y = 0}}
+        EnemySystem.enemies = {{position = {x = 10, y = 0}}}
         AutoBattleSystem:update(1)
         assert.is_nil(AutoBattleSystem.lastAttackTarget)
         assert.equals(1, AutoBattleSystem.playerPosition.x)
@@ -40,7 +40,7 @@ describe("AutoBattleSystem", function()
         AutoBattleSystem.enabled = true
         AutoBattleSystem.playerPosition = {x = 0, y = 0}
         AutoBattleSystem.attackRange = 5
-        local enemy = {x = 1, y = 0}
+        local enemy = {position = {x = 1, y = 0}}
         EnemySystem.enemies = {enemy}
         AutoBattleSystem:update(1)
         assert.are.equal(enemy, AutoBattleSystem.lastAttackTarget)
