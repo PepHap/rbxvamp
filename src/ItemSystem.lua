@@ -2,6 +2,7 @@
 -- Manages equipment items and slots
 
 local ItemSystem = {}
+ItemSystem.__index = ItemSystem
 
 local validSlots = {
     Hat = true,
@@ -11,6 +12,21 @@ local validSlots = {
     Accessory = true,
     Weapon = true
 }
+
+---Creates a new item system instance with empty equipment slots.
+-- @return table ItemSystem instance
+function ItemSystem.new()
+    return setmetatable({
+        slots = {
+            Hat = nil,
+            Necklace = nil,
+            Ring = nil,
+            Armor = nil,
+            Accessory = nil,
+            Weapon = nil,
+        }
+    }, ItemSystem)
+end
 
 ItemSystem.slots = {
     Hat = nil,
