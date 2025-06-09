@@ -1,5 +1,9 @@
-local LevelSystem = require("../src/LevelSystem")
-local EnemySystem = require("../src/EnemySystem")
+-- Use the same module paths as the production code so that the
+-- EnemySystem instance referenced here matches the one used within
+-- LevelSystem. This prevents state from diverging between two copies
+-- of the module when the tests run.
+local LevelSystem = require("src.LevelSystem")
+local EnemySystem = require("src.EnemySystem")
 
 describe("LevelSystem", function()
     it("starts at level 1", function()
