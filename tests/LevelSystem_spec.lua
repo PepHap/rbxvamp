@@ -11,4 +11,14 @@ describe("LevelSystem", function()
         assert.equals(2, LevelSystem.currentLevel)
         assert.equals(2, newLevel)
     end)
+
+    it("advances after reaching required kills", function()
+        LevelSystem.currentLevel = 1
+        LevelSystem.killCount = 0
+        LevelSystem.requiredKills = 2
+        LevelSystem:addKill()
+        LevelSystem:addKill()
+        assert.equals(2, LevelSystem.currentLevel)
+        assert.equals(0, LevelSystem.killCount)
+    end)
 end)
