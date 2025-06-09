@@ -16,6 +16,14 @@ major systems. Game assets should be placed under `assets`.
 - **SkillSystem.lua** – manages player skills and upgrades
 - **CompanionSystem.lua** – companion acquisition and upgrades
 
+## Installing Busted
+This project uses the [Busted](https://olivinelabs.com/busted/) testing
+framework. Install it on Debian-based systems with:
+
+```bash
+sudo apt-get install lua-busted
+```
+
 ## Usage
 Import this repository into Roblox Studio and require the modules as needed.
 Further gameplay features will be implemented incrementally.
@@ -29,9 +37,10 @@ GameManager:addSystem("Level", LevelSystem)
 GameManager:start()
 ```
 ## Testing
-Install the Busted framework (`sudo apt-get install lua-busted`) and run:
+Run the repository checks via:
 
 ```bash
-busted
+bash scripts/check.sh
 ```
-from the repository root. This will execute the test suites under `tests/`.
+This script executes the Busted test suite if it is installed and warns you if
+the framework is missing. The tests live under the `tests/` directory.
