@@ -1,4 +1,4 @@
-local ItemSystem = require("../src/ItemSystem")
+local ItemSystem = require("src.ItemSystem")
 
 describe("ItemSystem", function()
     it("has default empty slots", function()
