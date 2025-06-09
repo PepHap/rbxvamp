@@ -7,6 +7,7 @@ major systems. Game assets should be placed under `assets`.
 ## Directory Structure
 - `src/` – core game modules
 - `assets/` – models, textures, and other resources
+- `tests/` – automated Busted test suites
 
 ## Modules
 - **GameManager.lua** – entry point and main loop
@@ -27,3 +28,10 @@ local LevelSystem = require(path.to.LevelSystem)
 GameManager:addSystem("Level", LevelSystem)
 GameManager:start()
 ```
+## Testing
+Install the Busted framework (`sudo apt-get install lua-busted`) and run:
+
+```bash
+busted
+```
+from the repository root. This will execute the test suites under `tests/`.
