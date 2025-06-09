@@ -4,6 +4,10 @@
 local ItemSystem = {}
 ItemSystem.__index = ItemSystem
 
+-- Preloaded item templates describing available equipment. These definitions
+-- are used when presenting random rewards to the player.
+ItemSystem.templates = require("assets.items")
+
 local validSlots = {
     Hat = true,
     Necklace = true,
