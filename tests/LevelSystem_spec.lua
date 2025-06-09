@@ -1,5 +1,5 @@
-local LevelSystem = require("../src/LevelSystem")
-local EnemySystem = require("../src/EnemySystem")
+local LevelSystem = require("src.LevelSystem")
+local EnemySystem = require("src.EnemySystem")
 
 describe("LevelSystem", function()
     it("starts at level 1", function()
@@ -49,5 +49,23 @@ describe("LevelSystem", function()
         EnemySystem.lastBossType = nil
         LevelSystem:advance()
         assert.equals("location", EnemySystem.lastBossType)
+    end)
+
+    it("strengthens monsters based on current level", function()
+        LevelSystem.currentLevel = 3
+        EnemySystem:reset()
+        LevelSystem:strengthenMonsters()
+        assert.equals(300, EnemySystem.enemyHealth)
+        assert.equals(30, EnemySystem.enemyDamage)
+    end)
+
+    it("applies scaled stats when spawning", function()
+        LevelSystem.currentLevel = 1
+        EnemySystem:reset()
+        EnemySystem.lastWaveStats = nil
+        LevelSystem:advance() -- to level 2
+        assert.equals(2, EnemySystem.lastWaveLevel)
+        assert.equals(EnemySystem.enemyHealth, EnemySystem.lastWaveStats.health)
+        assert.equals(EnemySystem.enemyDamage, EnemySystem.lastWaveStats.damage)
     end)
 end)

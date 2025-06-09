@@ -21,7 +21,11 @@ LevelSystem.requiredKills = 15
 --- Internal helper that increases monster stats. Placeholder for future
 --  implementation where monsters gain more health or damage each level.
 function LevelSystem:strengthenMonsters()
-    -- TODO: implement monster stat scaling
+    -- Linear scaling based on the current level. Health and damage increase
+    -- proportionally so that later enemies pose a greater threat.
+    local level = self.currentLevel
+    EnemySystem.enemyHealth = EnemySystem.baseHealth * level
+    EnemySystem.enemyDamage = EnemySystem.baseDamage * level
 end
 
 --- Checks if the player has enough kills to advance and, if so,
