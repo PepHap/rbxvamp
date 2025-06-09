@@ -56,4 +56,24 @@ GameManager:addSystem("Enemy", EnemySystem)
 local AutoBattleSystem = require("src.AutoBattleSystem")
 GameManager:addSystem("AutoBattle", AutoBattleSystem)
 
+-- Gacha system used for rolling random rewards
+local GachaSystem = require("src.GachaSystem")
+GameManager:addSystem("Gacha", GachaSystem)
+
+---Triggers a skill gacha roll.
+function GameManager:rollSkill()
+    return GachaSystem:rollSkill()
+end
+
+---Triggers a companion gacha roll.
+function GameManager:rollCompanion()
+    return GachaSystem:rollCompanion()
+end
+
+---Triggers an equipment gacha roll for the given slot.
+-- @param slot string equipment slot
+function GameManager:rollEquipment(slot)
+    return GachaSystem:rollEquipment(slot)
+end
+
 return GameManager
