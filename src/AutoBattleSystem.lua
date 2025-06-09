@@ -2,7 +2,16 @@
 -- Provides automatic combat actions when enabled.
 
 local AutoBattleSystem = {}
-local EnemySystem = require("src.EnemySystem")
+
+-- Resolve the EnemySystem path relative to how this module was required. This
+-- keeps unit tests functional even when they load modules using relative paths
+-- like "../src/AutoBattleSystem".
+local moduleName = (...)
+local prefix = "src."
+if type(moduleName) == "string" then
+    prefix = moduleName:gsub("AutoBattleSystem$", "")
+end
+local EnemySystem = require(prefix .. "EnemySystem")
 
 ---Current player position used for simple movement calculations.
 AutoBattleSystem.playerPosition = {x = 0, y = 0}
