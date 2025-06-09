@@ -1,4 +1,4 @@
-local SkillSystem = require("../src/SkillSystem")
+local SkillSystem = require("src.SkillSystem")
 
 describe("SkillSystem", function()
     it("can add a skill", function()

@@ -1,4 +1,4 @@
-local GameManager = require("../src/GameManager")
+local GameManager = require("src.GameManager")
 
 describe("GameManager", function()
     it("exposes a start function", function()

@@ -1,5 +1,5 @@
-local LevelSystem = require("../src/LevelSystem")
-local EnemySystem = require("../src/EnemySystem")
+local LevelSystem = require("src.LevelSystem")
+local EnemySystem = require("src.EnemySystem")
 
 describe("LevelSystem", function()
     it("starts at level 1", function()

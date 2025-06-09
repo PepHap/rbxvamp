@@ -1,4 +1,4 @@
-local AutoBattleSystem = require("../src/AutoBattleSystem")
+local AutoBattleSystem = require("src.AutoBattleSystem")
 
 describe("AutoBattleSystem", function()
     it("is disabled by default", function()
