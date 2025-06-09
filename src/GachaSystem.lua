@@ -6,13 +6,13 @@ local GachaSystem = {}
 -- Rarity weights used when rolling. Values do not need to sum to 100 and
 -- are treated as relative chances.
 GachaSystem.rarityWeights = {
-    C = 80,
-    D = 25,
-    B = 5,
-    A = 1,
-    S = 0.1,
-    SS = 0.001,
-    SSS = 1e-12,
+    {"C", 80},
+    {"D", 25},
+    {"B", 5},
+    {"A", 1},
+    {"S", 0.1},
+    {"SS", 0.001},
+    {"SSS", 1e-12},
 }
 
 -- Load reward pools
@@ -28,15 +28,15 @@ GachaSystem.crystals = 0
 -- @return string rarity key
 function GachaSystem:rollRarity()
     local total = 0
-    for _, w in pairs(self.rarityWeights) do
-        total = total + w
+    for _, entry in ipairs(self.rarityWeights) do
+        total = total + entry[2]
     end
     local r = math.random() * total
     local acc = 0
-    for rarity, w in pairs(self.rarityWeights) do
-        acc = acc + w
+    for _, entry in ipairs(self.rarityWeights) do
+        acc = acc + entry[2]
         if r <= acc then
-            return rarity
+            return entry[1]
         end
     end
     return "C" -- Fallback
