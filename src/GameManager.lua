@@ -56,6 +56,11 @@ GameManager:addSystem("Enemy", EnemySystem)
 local AutoBattleSystem = require("src.AutoBattleSystem")
 GameManager:addSystem("AutoBattle", AutoBattleSystem)
 
+
+-- Player progression handling
+local PlayerLevelSystem = require("src.PlayerLevelSystem")
+GameManager:addSystem("PlayerLevel", PlayerLevelSystem)
+
 -- Gacha system used for rolling random rewards
 local GachaSystem = require("src.GachaSystem")
 GameManager:addSystem("Gacha", GachaSystem)
@@ -75,5 +80,6 @@ end
 function GameManager:rollEquipment(slot)
     return GachaSystem:rollEquipment(slot)
 end
+
 
 return GameManager
