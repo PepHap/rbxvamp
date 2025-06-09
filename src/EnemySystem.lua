@@ -3,6 +3,11 @@
 
 local EnemySystem = {}
 
+-- Multipliers applied to all enemy health and damage values. These start at
+-- ``1`` so that base stats are unchanged until modified by other systems.
+EnemySystem.healthScale = 1
+EnemySystem.damageScale = 1
+
 
 ---Utility to create a basic enemy table. The returned table describes the
 --  enemy's health, damage, current position and optional type string.
@@ -58,10 +63,13 @@ function EnemySystem:spawnWave(level)
     local baseDamage = 1
     local damagePerLevel = 1
 
+    local hScale = self.healthScale or 1
+    local dScale = self.damageScale or 1
+
     for i = 1, level do
         local enemy = createEnemy(
-            baseHealth + healthPerLevel * level,
-            baseDamage + damagePerLevel * level,
+            (baseHealth + healthPerLevel * level) * hScale,
+            (baseDamage + damagePerLevel * level) * dScale,
             {x = i, y = 0, z = 0}
         )
         table.insert(self.enemies, enemy)
@@ -86,9 +94,12 @@ function EnemySystem:spawnBoss(bossType)
         location = 15
     }
 
+    local hScale = self.healthScale or 1
+    local dScale = self.damageScale or 1
+
     local boss = createEnemy(
-        bossHealth[bossType] or 20,
-        bossDamage[bossType] or 2,
+        (bossHealth[bossType] or 20) * hScale,
+        (bossDamage[bossType] or 2) * dScale,
         {x = 0, y = 0, z = 0},
         bossType
     )
