@@ -4,6 +4,9 @@
 
 local LevelSystem = {}
 
+--- Highest stage the player has cleared so far.
+LevelSystem.highestClearedStage = 0
+
 -- Enemy system is required so that level progression can trigger new waves
 -- or boss spawns depending on the current level reached.
 local EnemySystem = require("src.EnemySystem")
@@ -18,12 +21,30 @@ LevelSystem.killCount = 0
 --- Number of kills required to advance to the next level.
 LevelSystem.requiredKills = 15
 
---- Internal helper that increases monster stats. Placeholder for future
---  implementation where monsters gain more health or damage each level.
-function LevelSystem:strengthenMonsters()
-    -- Apply a simple scaling factor to enemy stats each level. Multipliers are
-    -- stored on the EnemySystem so newly spawned enemies inherit the increase.
-    local factor = 1.1
+---Determines the type of a given stage.
+-- @param level number stage number
+-- @return string one of "normal", "mini", "boss", "location"
+local function getStageType(level)
+    if level % 30 == 0 then
+        return "location"
+    elseif level % 10 == 0 then
+        return "boss"
+    elseif level % 5 == 0 then
+        return "mini"
+    else
+        return "normal"
+    end
+end
+--- Internal helper that increases monster stats based on the stage type.
+-- @param stageType string type returned by ``getStageType``
+function LevelSystem:strengthenMonsters(stageType)
+    local factors = {
+        normal = 1.05,
+        mini = 1.1,
+        boss = 1.15,
+        location = 1.25
+    }
+    local factor = factors[stageType] or 1.05
     EnemySystem.healthScale = (EnemySystem.healthScale or 1) * factor
     EnemySystem.damageScale = (EnemySystem.damageScale or 1) * factor
 end
@@ -50,20 +71,38 @@ function LevelSystem:advance()
     self.currentLevel = self.currentLevel + 1
     self.killCount = 0
     self.requiredKills = self.requiredKills + 5
-    self:strengthenMonsters()
+
+    -- Record the highest stage cleared which is the previous level.
+    if self.currentLevel - 1 > self.highestClearedStage then
+        self.highestClearedStage = self.currentLevel - 1
+    end
+
+    local stageType = getStageType(self.currentLevel)
+    self:strengthenMonsters(stageType)
+
     -- Determine what kind of enemy encounter should occur on this level.
-    -- Every 30th level spawns a strong location boss, every 10th level a boss,
-    -- and every 5th level a mini-boss. All other levels spawn a normal wave.
-    if self.currentLevel % 30 == 0 then
+    if stageType == "location" then
         EnemySystem:spawnBoss("location")
-    elseif self.currentLevel % 10 == 0 then
+    elseif stageType == "boss" then
         EnemySystem:spawnBoss("boss")
-    elseif self.currentLevel % 5 == 0 then
+    elseif stageType == "mini" then
         EnemySystem:spawnBoss("mini")
     else
         EnemySystem:spawnWave(self.currentLevel)
     end
     return self.currentLevel
+end
+
+---Handles player death and rolls back when dying to a mini-boss.
+function LevelSystem:onPlayerDeath()
+    local lvl = self.currentLevel
+    -- Roll back only on mini-boss stages which occur every 5th level
+    -- except when it is also a boss or strong boss stage.
+    if lvl % 5 == 0 and lvl % 10 ~= 0 then
+        self.currentLevel = math.max(lvl - 1, 1)
+        self.killCount = 0
+        self.requiredKills = self.requiredKills - 5
+    end
 end
 
 return LevelSystem

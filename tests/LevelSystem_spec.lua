@@ -67,4 +67,31 @@ describe("LevelSystem", function()
         assert.is_true(second.health > h1)
         assert.is_true(second.damage > d1)
     end)
+
+    it("records highest cleared stage", function()
+        LevelSystem.currentLevel = 1
+        LevelSystem.highestClearedStage = 0
+        LevelSystem:advance() -- to 2 clears stage 1
+        assert.equals(1, LevelSystem.highestClearedStage)
+    end)
+
+    it("rolls back on mini boss death", function()
+        LevelSystem.currentLevel = 5
+        LevelSystem.requiredKills = 35
+        LevelSystem:onPlayerDeath()
+        assert.equals(4, LevelSystem.currentLevel)
+        assert.equals(30, LevelSystem.requiredKills)
+    end)
+
+    it("applies scaling based on stage type", function()
+        LevelSystem.currentLevel = 4
+        EnemySystem.healthScale = 1
+        EnemySystem.damageScale = 1
+        LevelSystem:advance() -- to 5 -> mini boss
+        local scaleAfterMini = EnemySystem.healthScale
+        LevelSystem:advance() -- to 6 -> normal
+        local scaleAfterNormal = EnemySystem.healthScale
+        assert.is_true(scaleAfterNormal > scaleAfterMini)
+        assert.is_true(scaleAfterMini > 1)
+    end)
 end)
