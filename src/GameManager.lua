@@ -65,6 +65,10 @@ GameManager:addSystem("PlayerLevel", PlayerLevelSystem)
 local GachaSystem = require("src.GachaSystem")
 GameManager:addSystem("Gacha", GachaSystem)
 
+-- Gauge based reward choices independent of stage/XP
+local RewardGaugeSystem = require("src.RewardGaugeSystem")
+GameManager:addSystem("RewardGauge", RewardGaugeSystem)
+
 ---Triggers a skill gacha roll.
 function GameManager:rollSkill()
     return GachaSystem:rollSkill()
@@ -79,6 +83,23 @@ end
 -- @param slot string equipment slot
 function GameManager:rollEquipment(slot)
     return GachaSystem:rollEquipment(slot)
+end
+
+---Adds points to the reward gauge.
+-- @param amount number amount to add
+function GameManager:addRewardPoints(amount)
+    RewardGaugeSystem:addPoints(amount)
+end
+
+---Returns reward options when the gauge is full.
+function GameManager:getRewardOptions()
+    return RewardGaugeSystem:getOptions()
+end
+
+---Chooses one of the reward options.
+-- @param index number option index
+function GameManager:chooseReward(index)
+    return RewardGaugeSystem:choose(index)
 end
 
 
