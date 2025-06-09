@@ -1,10 +1,12 @@
 local QuestSystem = require("src.QuestSystem")
 local CurrencySystem = require("src.CurrencySystem")
+local KeySystem = require("src.KeySystem")
 
 describe("QuestSystem", function()
     before_each(function()
         QuestSystem.quests = {}
         CurrencySystem.balances = {}
+        KeySystem.keys = {}
     end)
 
     it("adds a quest", function()
@@ -20,5 +22,13 @@ describe("QuestSystem", function()
         local ok = QuestSystem:claimReward("q1")
         assert.is_true(ok)
         assert.equals(3, CurrencySystem:get("gold"))
+    end)
+
+    it("grants keys from rewards", function()
+        QuestSystem:addQuest{ id = "q2", goal = 1, reward = {keys = {arena = 2}} }
+        QuestSystem:addProgress("q2", 1)
+        local ok = QuestSystem:claimReward("q2")
+        assert.is_true(ok)
+        assert.equals(2, KeySystem:getCount("arena"))
     end)
 end)

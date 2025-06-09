@@ -8,6 +8,7 @@ QuestSystem.quests = {}
 
 -- CurrencySystem is used for basic reward handling
 local CurrencySystem = require("src.CurrencySystem")
+local KeySystem = require("src.KeySystem")
 
 ---Adds a new quest definition.
 -- @param def table quest definition with fields: id, goal, reward
@@ -53,8 +54,15 @@ function QuestSystem:claimReward(id)
     if not q or not q.completed or q.rewarded then
         return false
     end
-    if q.reward and q.reward.currency and q.reward.amount then
-        CurrencySystem:add(q.reward.currency, q.reward.amount)
+    if q.reward then
+        if q.reward.currency and q.reward.amount then
+            CurrencySystem:add(q.reward.currency, q.reward.amount)
+        end
+        if q.reward.keys then
+            for kind, amt in pairs(q.reward.keys) do
+                KeySystem:addKey(kind, amt)
+            end
+        end
     end
     q.rewarded = true
     return true
