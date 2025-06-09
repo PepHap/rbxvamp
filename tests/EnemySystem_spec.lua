@@ -14,6 +14,7 @@ describe("EnemySystem", function()
         assert.equals(14, first.health)
         assert.equals(3, first.damage)
         assert.same({x = 1, y = 0, z = 0}, first.position)
+        assert.is_nil(first.type)
     end)
 
     it("spawns boss and records type", function()

@@ -3,6 +3,22 @@
 
 local EnemySystem = {}
 
+---Utility to create a basic enemy table. The returned table describes the
+--  enemy's health, damage, current position and optional type string.
+--  @param health number
+--  @param damage number
+--  @param position table table containing x/y/z coordinates
+--  @param enemyType string|nil classification such as "mini" or "boss"
+--  @return table new enemy object
+local function createEnemy(health, damage, position, enemyType)
+    return {
+        health = health,
+        damage = damage,
+        position = position,
+        type = enemyType
+    }
+end
+
 ---List of currently active enemies in the world.
 EnemySystem.enemies = {}
 
@@ -24,11 +40,11 @@ function EnemySystem:spawnWave(level)
     local damagePerLevel = 1
 
     for i = 1, level do
-        local enemy = {
-            health = baseHealth + healthPerLevel * level,
-            damage = baseDamage + damagePerLevel * level,
-            position = {x = i, y = 0, z = 0}
-        }
+        local enemy = createEnemy(
+            baseHealth + healthPerLevel * level,
+            baseDamage + damagePerLevel * level,
+            {x = i, y = 0, z = 0}
+        )
         table.insert(self.enemies, enemy)
     end
 end
@@ -51,12 +67,12 @@ function EnemySystem:spawnBoss(bossType)
         location = 15
     }
 
-    local boss = {
-        health = bossHealth[bossType] or 20,
-        damage = bossDamage[bossType] or 2,
-        position = {x = 0, y = 0, z = 0},
-        type = bossType
-    }
+    local boss = createEnemy(
+        bossHealth[bossType] or 20,
+        bossDamage[bossType] or 2,
+        {x = 0, y = 0, z = 0},
+        bossType
+    )
 
     table.insert(self.enemies, boss)
 end
