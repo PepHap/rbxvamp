@@ -7,7 +7,8 @@ describe("LevelSystem", function()
 
     it("advances the level", function()
         LevelSystem.currentLevel = 1
-        LevelSystem:advance()
+        local newLevel = LevelSystem:advance()
         assert.equals(2, LevelSystem.currentLevel)
+        assert.equals(2, newLevel)
     end)
 end)
