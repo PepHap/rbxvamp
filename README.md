@@ -18,3 +18,12 @@ major systems. Game assets should be placed under `assets`.
 ## Usage
 Import this repository into Roblox Studio and require the modules as needed.
 Further gameplay features will be implemented incrementally.
+
+### Example
+```lua
+local GameManager = require(path.to.GameManager)
+local LevelSystem = require(path.to.LevelSystem)
+
+GameManager:addSystem("Level", LevelSystem)
+GameManager:start()
+```
