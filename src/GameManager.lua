@@ -69,6 +69,10 @@ GameManager:addSystem("Gacha", GachaSystem)
 local RewardGaugeSystem = require("src.RewardGaugeSystem")
 GameManager:addSystem("RewardGauge", RewardGaugeSystem)
 
+-- Quests provide structured objectives and rewards
+local QuestSystem = require("src.QuestSystem")
+GameManager:addSystem("Quest", QuestSystem)
+
 ---Triggers a skill gacha roll.
 function GameManager:rollSkill()
     return GachaSystem:rollSkill()
