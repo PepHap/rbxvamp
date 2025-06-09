@@ -56,4 +56,8 @@ GameManager:addSystem("Enemy", EnemySystem)
 local AutoBattleSystem = require("src.AutoBattleSystem")
 GameManager:addSystem("AutoBattle", AutoBattleSystem)
 
+-- Player progression handling
+local PlayerLevelSystem = require("src.PlayerLevelSystem")
+GameManager:addSystem("PlayerLevel", PlayerLevelSystem)
+
 return GameManager
