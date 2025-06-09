@@ -10,4 +10,5 @@ Codex agents working in this repository should follow these guidelines:
 bash scripts/check.sh
 ```
 
-This project does not yet include automated tests, so the check script simply notifies that no tests exist.
+The check script executes the Busted test suite if it is installed, or
+prompts you to install it.
