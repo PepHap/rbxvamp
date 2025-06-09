@@ -48,4 +48,8 @@ function GameManager:update(dt)
     end
 end
 
+-- Integrate the default enemy system on load
+local EnemySystem = require("src.EnemySystem")
+GameManager:addSystem("Enemy", EnemySystem)
+
 return GameManager
