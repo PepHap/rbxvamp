@@ -52,4 +52,8 @@ end
 local EnemySystem = require("src.EnemySystem")
 GameManager:addSystem("Enemy", EnemySystem)
 
+-- Auto battle functionality can optionally control the player's actions
+local AutoBattleSystem = require("src.AutoBattleSystem")
+GameManager:addSystem("AutoBattle", AutoBattleSystem)
+
 return GameManager
