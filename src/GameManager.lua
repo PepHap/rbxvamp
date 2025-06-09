@@ -73,6 +73,10 @@ GameManager:addSystem("RewardGauge", RewardGaugeSystem)
 local QuestSystem = require("src.QuestSystem")
 GameManager:addSystem("Quest", QuestSystem)
 
+-- Base stats like attack and defense upgrades
+local StatUpgradeSystem = require("src.StatUpgradeSystem")
+GameManager:addSystem("Stats", StatUpgradeSystem)
+
 ---Triggers a skill gacha roll.
 function GameManager:rollSkill()
     return GachaSystem:rollSkill()
