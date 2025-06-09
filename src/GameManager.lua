@@ -69,6 +69,11 @@ GameManager:addSystem("Gacha", GachaSystem)
 local RewardGaugeSystem = require("src.RewardGaugeSystem")
 GameManager:addSystem("RewardGauge", RewardGaugeSystem)
 
+-- Equipment handling
+local ItemSystem = require("src.ItemSystem")
+GameManager.itemSystem = ItemSystem.new()
+GameManager:addSystem("Items", GameManager.itemSystem)
+
 -- Quests provide structured objectives and rewards
 local QuestSystem = require("src.QuestSystem")
 GameManager:addSystem("Quest", QuestSystem)
@@ -107,7 +112,11 @@ end
 ---Chooses one of the reward options.
 -- @param index number option index
 function GameManager:chooseReward(index)
-    return RewardGaugeSystem:choose(index)
+    local chosen = RewardGaugeSystem:choose(index)
+    if chosen then
+        self.itemSystem:equip(chosen.slot, chosen.item)
+    end
+    return chosen
 end
 
 

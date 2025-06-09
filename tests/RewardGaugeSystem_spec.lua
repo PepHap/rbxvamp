@@ -1,10 +1,14 @@
 local RewardGaugeSystem = require("src.RewardGaugeSystem")
+local GameManager = require("src.GameManager")
+local ItemSystem = require("src.ItemSystem")
 
 describe("RewardGaugeSystem", function()
     before_each(function()
         RewardGaugeSystem.gauge = 0
         RewardGaugeSystem.options = nil
         RewardGaugeSystem.maxGauge = 100
+        GameManager.itemSystem = ItemSystem.new()
+        GameManager.systems["Items"] = GameManager.itemSystem
     end)
 
     it("accumulates points", function()
@@ -31,5 +35,16 @@ describe("RewardGaugeSystem", function()
         assert.is_table(chosen)
         assert.is_nil(RewardGaugeSystem:getOptions())
         assert.equals(0, RewardGaugeSystem.gauge)
+    end)
+
+    it("equips the chosen reward via GameManager", function()
+        RewardGaugeSystem.options = {
+            {slot = "Hat", item = {name = "Cap"}},
+            {slot = "Weapon", item = {name = "Sword"}},
+            {slot = "Ring", item = {name = "Ring"}}
+        }
+        local chosen = GameManager:chooseReward(2)
+        assert.equals("Weapon", chosen.slot)
+        assert.equals("Sword", GameManager.itemSystem.slots.Weapon.name)
     end)
 end)
