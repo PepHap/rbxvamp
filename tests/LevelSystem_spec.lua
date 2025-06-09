@@ -54,4 +54,17 @@ describe("LevelSystem", function()
         LevelSystem:advance()
         assert.equals("location", EnemySystem.lastBossType)
     end)
+
+    it("strengthens enemies each level", function()
+        LevelSystem.currentLevel = 1
+        EnemySystem.healthScale = 1
+        EnemySystem.damageScale = 1
+        LevelSystem:advance()
+        local first = EnemySystem.enemies[1]
+        local h1, d1 = first.health, first.damage
+        LevelSystem:advance()
+        local second = EnemySystem.enemies[1]
+        assert.is_true(second.health > h1)
+        assert.is_true(second.damage > d1)
+    end)
 end)
