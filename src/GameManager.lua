@@ -12,8 +12,10 @@
 --]]
 
 local GameManager = {
-    -- container for all registered systems
-    systems = {}
+    -- Mapping of system name to implementation
+    systems = {},
+    -- Ordered list of system names for deterministic iteration
+    order = {}
 }
 
 --- Registers a system for later initialization and updates.
@@ -23,11 +25,13 @@ function GameManager:addSystem(name, system)
     assert(name ~= nil, "System name must be provided")
     assert(system ~= nil, "System table must be provided")
     self.systems[name] = system
+    table.insert(self.order, name)
 end
 
 function GameManager:start()
-    -- Initialize all registered systems in deterministic order
-    for name, system in pairs(self.systems) do
+    -- Initialize all registered systems in the order they were added
+    for _, name in ipairs(self.order) do
+        local system = self.systems[name]
         if type(system.start) == "function" then
             system:start()
         end
@@ -36,7 +40,8 @@ end
 
 function GameManager:update(dt)
     -- Forward the update call to every registered system
-    for _, system in pairs(self.systems) do
+    for _, name in ipairs(self.order) do
+        local system = self.systems[name]
         if type(system.update) == "function" then
             system:update(dt)
         end
