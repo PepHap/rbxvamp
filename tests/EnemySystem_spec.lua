@@ -32,4 +32,20 @@ describe("EnemySystem", function()
         assert.equals("mini", boss.type)
         assert.same({x = 0, y = 0, z = 0}, boss.position)
     end)
+
+    it("returns nearest enemy from a spawned wave", function()
+        EnemySystem:spawnWave(3)
+        local nearest = EnemySystem:getNearestEnemy({x = 2.1, y = 0})
+        assert.are.equal(EnemySystem.enemies[2], nearest)
+    end)
+
+    it("returns nearest enemy among arbitrary positions", function()
+        EnemySystem.enemies = {
+            {position = {x = -5, y = 0}},
+            {position = {x = 10, y = 0}},
+            {position = {x = 0, y = 0}}
+        }
+        local nearest = EnemySystem:getNearestEnemy({x = 1, y = 0})
+        assert.are.equal(EnemySystem.enemies[3], nearest)
+    end)
 end)
