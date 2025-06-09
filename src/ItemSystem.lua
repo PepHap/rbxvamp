@@ -28,15 +28,6 @@ function ItemSystem.new()
     }, ItemSystem)
 end
 
-ItemSystem.slots = {
-    Hat = nil,
-    Necklace = nil,
-    Ring = nil,
-    Armor = nil,
-    Accessory = nil,
-    Weapon = nil
-}
-
 local function assertValidSlot(slot)
     assert(validSlots[slot], ("Invalid slot: %s"):format(tostring(slot)))
 end

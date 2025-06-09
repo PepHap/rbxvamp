@@ -2,12 +2,13 @@ local ItemSystem = require("../src/ItemSystem")
 
 describe("ItemSystem", function()
     it("has default empty slots", function()
-        assert.is_nil(ItemSystem.slots.Weapon)
+        local items = ItemSystem.new()
+        assert.is_nil(items.slots.Weapon)
     end)
 
     it("equips an item in a slot", function()
-        ItemSystem.slots.Weapon = nil
-        ItemSystem:equip("Weapon", "Sword")
-        assert.equals("Sword", ItemSystem.slots.Weapon)
+        local items = ItemSystem.new()
+        items:equip("Weapon", "Sword")
+        assert.equals("Sword", items.slots.Weapon)
     end)
 end)
