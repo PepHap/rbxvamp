@@ -4,6 +4,10 @@
 local SkillSystem = {}
 SkillSystem.__index = SkillSystem
 
+-- Table of predefined skills available to the game. Each skill entry
+-- specifies its rarity and any additional parameters.
+SkillSystem.templates = require("assets.skills")
+
 ---Creates a new skill system instance.
 -- @return table
 function SkillSystem.new()

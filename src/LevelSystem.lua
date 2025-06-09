@@ -4,6 +4,10 @@
 
 local LevelSystem = {}
 
+-- Enemy system is required so that level progression can trigger new waves
+-- or boss spawns depending on the current level reached.
+local EnemySystem = require("src.EnemySystem")
+
 --- Tracks the player's current level.
 --  Starts at ``1`` when the game begins.
 LevelSystem.currentLevel = 1
@@ -43,6 +47,18 @@ function LevelSystem:advance()
     self.killCount = 0
     self.requiredKills = self.requiredKills + 5
     self:strengthenMonsters()
+    -- Determine what kind of enemy encounter should occur on this level.
+    -- Every 30th level spawns a strong location boss, every 10th level a boss,
+    -- and every 5th level a mini-boss. All other levels spawn a normal wave.
+    if self.currentLevel % 30 == 0 then
+        EnemySystem:spawnBoss("location")
+    elseif self.currentLevel % 10 == 0 then
+        EnemySystem:spawnBoss("boss")
+    elseif self.currentLevel % 5 == 0 then
+        EnemySystem:spawnBoss("mini")
+    else
+        EnemySystem:spawnWave(self.currentLevel)
+    end
     return self.currentLevel
 end
 
