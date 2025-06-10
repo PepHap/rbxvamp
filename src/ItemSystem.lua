@@ -4,6 +4,8 @@
 local ItemSystem = {}
 ItemSystem.__index = ItemSystem
 
+local CurrencySystem = require("src.CurrencySystem")
+
 -- Preloaded item templates describing available equipment. These definitions
 -- are used when presenting random rewards to the player.
 ItemSystem.templates = require("assets.items")
@@ -58,12 +60,12 @@ end
 --  table.
 -- @param slot string equipment slot to upgrade
 -- @param amount number number of levels to add
--- @param currency number available currency
+-- @param currencyType string currency key used for payment
 -- @return boolean ``true`` if the upgrade succeeds
-function ItemSystem:upgradeItem(slot, amount, currency)
+function ItemSystem:upgradeItem(slot, amount, currencyType)
     assertValidSlot(slot)
     local item = self.slots[slot]
-    if not item then
+    if not item or amount <= 0 then
         return false
     end
     local required = 0
@@ -71,7 +73,7 @@ function ItemSystem:upgradeItem(slot, amount, currency)
     for i = 1, amount do
         required = required + (self.upgradeCosts[current + i] or 0)
     end
-    if currency < required then
+    if not CurrencySystem:spend(currencyType, required) then
         return false
     end
     item.level = current + amount
