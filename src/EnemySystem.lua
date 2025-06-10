@@ -3,6 +3,31 @@
 
 local EnemySystem = {}
 
+-- Resolve other module paths relative to how this module was required so that
+-- tests using relative paths function correctly.
+local moduleName = (...)
+local prefix = "src."
+if type(moduleName) == "string" then
+    prefix = moduleName:gsub("EnemySystem$", "")
+end
+
+-- Lazily required to avoid circular dependency with AutoBattleSystem
+local AutoBattleSystem
+
+-- Simple stub for Roblox's PathfindingService used in the test environment.
+local PathfindingService = {}
+function PathfindingService.CreatePath()
+    local points
+    return {
+        ComputeAsync = function(_, startPos, endPos)
+            points = {startPos, endPos}
+        end,
+        GetWaypoints = function()
+            return points or {}
+        end
+    }
+end
+
 -- Multipliers applied to all enemy health and damage values. These start at
 -- ``1`` so that base stats are unchanged until modified by other systems.
 EnemySystem.healthScale = 1
@@ -11,6 +36,9 @@ EnemySystem.damageScale = 1
 ---Indicates whether enemy Roblox models should be spawned. Tests can disable
 --  this to avoid creating placeholder instances.
 EnemySystem.spawnModels = true
+
+---Movement speed in studs per second used when advancing along a path.
+EnemySystem.moveSpeed = 1
 
 
 ---Utility to create a basic enemy table. The returned table describes the
@@ -131,6 +159,42 @@ function EnemySystem:spawnBoss(bossType)
     end
 
     table.insert(self.enemies, boss)
+end
+
+---Updates enemy movement by computing a path toward the player and moving a
+--  small step along it. In the test environment this uses a minimal
+--  PathfindingService stub to return a straight line path.
+-- @param dt number delta time since the last update
+function EnemySystem:update(dt)
+    AutoBattleSystem = AutoBattleSystem or require(prefix .. "AutoBattleSystem")
+    local playerPos = AutoBattleSystem.playerPosition
+    if not playerPos then
+        return
+    end
+    for _, enemy in ipairs(self.enemies) do
+        if enemy.model and enemy.model.primaryPart then
+            local startPos = enemy.model.primaryPart.position
+            local goal = {x = playerPos.x, y = playerPos.y, z = 0}
+            local path = PathfindingService.CreatePath()
+            path:ComputeAsync(startPos, goal)
+            enemy.path = path:GetWaypoints()
+            if #enemy.path >= 2 then
+                local nextPos = enemy.path[2]
+                local dx = nextPos.x - startPos.x
+                local dy = nextPos.y - startPos.y
+                local dz = nextPos.z - (startPos.z or 0)
+                local dist = math.sqrt(dx * dx + dy * dy + dz * dz)
+                if dist > 0 then
+                    local step = math.min(self.moveSpeed * dt, dist)
+                    local nx = startPos.x + dx / dist * step
+                    local ny = startPos.y + dy / dist * step
+                    local nz = (startPos.z or 0) + dz / dist * step
+                    enemy.position.x, enemy.position.y, enemy.position.z = nx, ny, nz
+                    enemy.model.primaryPart.position = {x = nx, y = ny, z = nz}
+                end
+            end
+        end
+    end
 end
 
 return EnemySystem

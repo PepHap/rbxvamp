@@ -64,4 +64,25 @@ describe("EnemySystem", function()
         assert.equals(1, #EnemySystem.enemies)
         EnemySystem.spawnModels = true
     end)
+
+    it("computes a path toward the player on update", function()
+        local AutoBattleSystem = require("src.AutoBattleSystem")
+        AutoBattleSystem.playerPosition = {x = 5, y = 0}
+        local enemy = {position = {x = 0, y = 0, z = 0}, model = {primaryPart = {position = {x = 0, y = 0, z = 0}}}}
+        EnemySystem.enemies = {enemy}
+        EnemySystem:update(1)
+        assert.is_table(enemy.path)
+        assert.equals(2, #enemy.path)
+    end)
+
+    it("moves enemies toward the player", function()
+        local AutoBattleSystem = require("src.AutoBattleSystem")
+        AutoBattleSystem.playerPosition = {x = 3, y = 0}
+        local enemy = {position = {x = 0, y = 0, z = 0}, model = {primaryPart = {position = {x = 0, y = 0, z = 0}}}}
+        EnemySystem.enemies = {enemy}
+        local before = math.sqrt((enemy.position.x - 3)^2 + (enemy.position.y)^2)
+        EnemySystem:update(1)
+        local after = math.sqrt((enemy.position.x - 3)^2 + (enemy.position.y)^2)
+        assert.is_true(after < before)
+    end)
 end)
