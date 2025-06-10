@@ -48,4 +48,20 @@ describe("EnemySystem", function()
         local nearest = EnemySystem:getNearestEnemy({x = 1, y = 0})
         assert.are.equal(EnemySystem.enemies[3], nearest)
     end)
+
+    it("spawns models when enabled", function()
+        EnemySystem.spawnModels = true
+        EnemySystem:spawnWave(1)
+        local enemy = EnemySystem.enemies[1]
+        assert.is_table(enemy.model)
+        assert.same(enemy.position, enemy.model.primaryPart.position)
+    end)
+
+    it("skips model creation when disabled", function()
+        EnemySystem.spawnModels = false
+        EnemySystem:spawnBoss("mini")
+        assert.is_nil(EnemySystem.enemies[1].model)
+        assert.equals(1, #EnemySystem.enemies)
+        EnemySystem.spawnModels = true
+    end)
 end)
