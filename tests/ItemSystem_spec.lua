@@ -1,4 +1,5 @@
 local ItemSystem = require("src.ItemSystem")
+local CurrencySystem = require("src.CurrencySystem")
 
 describe("ItemSystem", function()
     it("has default empty slots", function()
@@ -23,17 +24,21 @@ describe("ItemSystem", function()
     it("upgrades an item when enough currency", function()
         local items = ItemSystem.new()
         items:equip("Weapon", {name = "Sword"})
-        local ok = items:upgradeItem("Weapon", 1, 1)
+        CurrencySystem.balances = {gold = 5}
+        local ok = items:upgradeItem("Weapon", 1, "gold")
         assert.is_true(ok)
         assert.equals(2, items.slots.Weapon.level)
+        assert.equals(4, CurrencySystem:get("gold"))
     end)
 
     it("fails upgrade without sufficient currency", function()
         local items = ItemSystem.new()
         items:equip("Weapon", {name = "Sword"})
-        local ok = items:upgradeItem("Weapon", 1, 0)
+        CurrencySystem.balances = {gold = 0}
+        local ok = items:upgradeItem("Weapon", 1, "gold")
         assert.is_false(ok)
         assert.equals(1, items.slots.Weapon.level)
+        assert.equals(0, CurrencySystem:get("gold"))
     end)
 
     it("errors when using an invalid slot", function()
