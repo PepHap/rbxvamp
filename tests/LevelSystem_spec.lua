@@ -4,6 +4,7 @@
 -- of the module when the tests run.
 local LevelSystem = require("src.LevelSystem")
 local EnemySystem = require("src.EnemySystem")
+local KeySystem = require("src.KeySystem")
 
 describe("LevelSystem", function()
     it("starts at level 1", function()
@@ -51,7 +52,24 @@ describe("LevelSystem", function()
     it("spawns a location boss on the 30th level", function()
         LevelSystem.currentLevel = 29
         EnemySystem.lastBossType = nil
+        KeySystem.keys = {}
+        KeySystem:addKey("location", 1)
         LevelSystem:advance()
+        assert.equals("location", EnemySystem.lastBossType)
+    end)
+
+    it("requires a location key to advance", function()
+        LevelSystem.currentLevel = 29
+        EnemySystem.lastBossType = nil
+        KeySystem.keys = {}
+        -- attempt without key should fail
+        local res = LevelSystem:advance()
+        assert.is_nil(res)
+        assert.equals(29, LevelSystem.currentLevel)
+        -- add key and try again
+        KeySystem:addKey("location", 1)
+        local ok = LevelSystem:advance()
+        assert.equals(30, ok)
         assert.equals("location", EnemySystem.lastBossType)
     end)
 
