@@ -4,6 +4,8 @@
 local SkillSystem = {}
 SkillSystem.__index = SkillSystem
 
+local CurrencySystem = require("src.CurrencySystem")
+
 -- Table of predefined skills available to the game. Each skill entry
 -- specifies its rarity and any additional parameters.
 SkillSystem.templates = require("assets.skills")
@@ -24,14 +26,16 @@ function SkillSystem:addSkill(skill)
 end
 
 
----Upgrades a skill's internal level if enough currency is provided.
+---Upgrades a skill's internal level by spending Ether.
 -- @param index number index of the skill in the list
 -- @param amount number amount of levels to add
--- @param currency number available upgrade currency
 -- @return boolean ``true`` when the upgrade succeeds
-function SkillSystem:upgradeSkill(index, amount, currency)
+function SkillSystem:upgradeSkill(index, amount)
     local skill = self.skills[index]
-    if not skill or currency < amount then
+    if not skill then
+        return false
+    end
+    if not CurrencySystem:spend("ether", amount) then
         return false
     end
     skill.level = skill.level + amount
