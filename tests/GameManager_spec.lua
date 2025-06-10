@@ -46,6 +46,11 @@ describe("GameManager", function()
         assert.equals(KeySystem, GameManager.systems.Keys)
     end)
 
+    it("registers the Dungeon system", function()
+        local DungeonSystem = require("src.DungeonSystem")
+        assert.equals(DungeonSystem, GameManager.systems.Dungeon)
+    end)
+
     it("includes the UI system", function()
         local UISystem = require("src.UISystem")
         assert.equals(UISystem, GameManager.systems.UI)
