@@ -35,6 +35,12 @@ local LevelSystem = require(path.to.LevelSystem)
 
 GameManager:addSystem("Level", LevelSystem)
 GameManager:start()
+GameManager.systems.AutoBattle:enable()
+
+local RunService = game:GetService("RunService")
+RunService.Heartbeat:Connect(function(dt)
+    GameManager:update(dt)
+end)
 ```
 ## Testing
 Run the repository checks via:
