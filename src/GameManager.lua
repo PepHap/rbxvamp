@@ -94,6 +94,10 @@ GameManager:addSystem("Quest", QuestSystem)
 local KeySystem = require("src.KeySystem")
 GameManager:addSystem("Keys", KeySystem)
 
+-- Optional dungeon runs for earning upgrade currency
+local DungeonSystem = require("src.DungeonSystem")
+GameManager:addSystem("Dungeon", DungeonSystem)
+
 -- Base stats like attack and defense upgrades
 local StatUpgradeSystem = require("src.StatUpgradeSystem")
 GameManager:addSystem("Stats", StatUpgradeSystem)

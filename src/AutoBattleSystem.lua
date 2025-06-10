@@ -14,6 +14,7 @@ end
 local EnemySystem = require(prefix .. "EnemySystem")
 local LevelSystem = require(prefix .. "LevelSystem")
 local LootSystem = require(prefix .. "LootSystem")
+local DungeonSystem = require(prefix .. "DungeonSystem")
 
 ---Current player position used for simple movement calculations.
 AutoBattleSystem.playerPosition = {x = 0, y = 0}
@@ -72,6 +73,7 @@ function AutoBattleSystem:update(dt)
                     end
                 end
                 LevelSystem:addKill()
+                DungeonSystem:onEnemyKilled(target)
                 LootSystem:onEnemyKilled(target)
                 self.lastAttackTarget = nil
             end
