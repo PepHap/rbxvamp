@@ -10,6 +10,7 @@ LevelSystem.highestClearedStage = 0
 -- Enemy system is required so that level progression can trigger new waves
 -- or boss spawns depending on the current level reached.
 local EnemySystem = require("src.EnemySystem")
+local KeySystem = require("src.KeySystem")
 
 --- Tracks the player's current level.
 --  Starts at ``1`` when the game begins.
@@ -54,7 +55,11 @@ end
 function LevelSystem:checkAdvance()
     if self.killCount >= self.requiredKills then
         self.killCount = self.killCount - self.requiredKills
-        self:advance()
+        local ok = self:advance()
+        if not ok then
+            -- Revert kill deduction if advancement was blocked
+            self.killCount = self.killCount + self.requiredKills
+        end
     end
 end
 
@@ -68,7 +73,17 @@ end
 --  The explicit increment keeps compatibility with Lua 5.1.
 --  @return number The current level after the increment
 function LevelSystem:advance()
-    self.currentLevel = self.currentLevel + 1
+    local nextLevel = self.currentLevel + 1
+    local stageType = getStageType(nextLevel)
+
+    if stageType == "location" then
+        -- Require a location key to move to the next area
+        if not KeySystem:useKey("location") then
+            return nil
+        end
+    end
+
+    self.currentLevel = nextLevel
     self.killCount = 0
     self.requiredKills = self.requiredKills + 5
 
@@ -77,7 +92,6 @@ function LevelSystem:advance()
         self.highestClearedStage = self.currentLevel - 1
     end
 
-    local stageType = getStageType(self.currentLevel)
     self:strengthenMonsters(stageType)
 
     -- Determine what kind of enemy encounter should occur on this level.
