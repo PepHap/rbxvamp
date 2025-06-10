@@ -22,6 +22,15 @@ LevelSystem.killCount = 0
 --- Number of kills required to advance to the next level.
 LevelSystem.requiredKills = 15
 
+---Resets stage tracking and spawns the initial enemy wave.
+--  This is called when the overall game begins via ``GameManager``.
+function LevelSystem:start()
+    self.currentLevel = 1
+    self.killCount = 0
+    self.requiredKills = 15
+    EnemySystem:spawnWave(1)
+end
+
 ---Determines the type of a given stage.
 -- @param level number stage number
 -- @return string one of "normal", "mini", "boss", "location"

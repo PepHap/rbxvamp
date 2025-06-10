@@ -14,6 +14,13 @@ describe("GameManager", function()
         assert.is_true(pcall(function() GameManager:update(0.1) end))
     end)
 
+    it("spawns enemies on start", function()
+        local EnemySystem = require("src.EnemySystem")
+        EnemySystem.enemies = {}
+        GameManager:start()
+        assert.is_true(#EnemySystem.enemies > 0)
+    end)
+
     it("registers and starts added systems", function()
         local started = 0
         local mockSystem = {
