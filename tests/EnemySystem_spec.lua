@@ -53,6 +53,7 @@ describe("EnemySystem", function()
 
     it("spawns models when enabled", function()
         EnemySystem.spawnModels = true
+        EnemySystem.useRobloxObjects = false
         EnemySystem:spawnWave(1)
         local enemy = EnemySystem.enemies[1]
         assert.is_table(enemy.model)
@@ -94,5 +95,103 @@ describe("EnemySystem", function()
         EnemySystem:update(1)
         local after = math.sqrt((enemy.position.x - 3)^2 + (enemy.position.y)^2)
         assert.is_true(after < before)
+    end)
+
+    it("spawns Roblox instances when useRobloxObjects is enabled", function()
+        EnemySystem.spawnModels = true
+        EnemySystem.useRobloxObjects = true
+
+        _G.Instance = {
+            new = function(className)
+                return {ClassName = className}
+            end
+        }
+        local workspace = {}
+        _G.workspace = workspace
+        _G.game = {
+            GetService = function(self, name)
+                if name == "Workspace" then
+                    return workspace
+                elseif name == "PathfindingService" then
+                    return {
+                        CreatePath = function()
+                            local points
+                            return {
+                                ComputeAsync = function(_, startPos, endPos)
+                                    points = {startPos, endPos}
+                                end,
+                                GetWaypoints = function()
+                                    return points or {}
+                                end
+                            }
+                        end
+                    }
+                end
+            end
+        }
+        _G.Vector3 = {new = function(x, y, z) return {X = x, Y = y, Z = z} end}
+
+        EnemySystem:spawnWave(1)
+        local enemy = EnemySystem.enemies[1]
+        assert.equals("Model", enemy.model.ClassName)
+        assert.equals("Part", enemy.model.PrimaryPart.ClassName)
+
+        EnemySystem.useRobloxObjects = false
+        _G.Instance = nil
+        _G.game = nil
+        _G.workspace = nil
+        _G.Vector3 = nil
+    end)
+
+    it("uses PathfindingService to compute movement when using Roblox objects", function()
+        EnemySystem.spawnModels = true
+        EnemySystem.useRobloxObjects = true
+
+        local workspace = {}
+        _G.workspace = workspace
+        _G.Instance = {
+            new = function(className)
+                return {ClassName = className}
+            end
+        }
+        local pathCreated = false
+        local pathService = {
+            CreatePath = function()
+                pathCreated = true
+                local points
+                return {
+                    ComputeAsync = function(_, startPos, endPos)
+                        points = {startPos, endPos}
+                    end,
+                    GetWaypoints = function()
+                        return points or {}
+                    end
+                }
+            end
+        }
+        _G.game = {
+            GetService = function(self, name)
+                if name == "Workspace" then
+                    return workspace
+                elseif name == "PathfindingService" then
+                    return pathService
+                end
+            end
+        }
+        _G.Vector3 = {new = function(x, y, z) return {X = x, Y = y, Z = z} end}
+
+        EnemySystem:spawnWave(1)
+        local enemy = EnemySystem.enemies[1]
+        local AutoBattleSystem = require("src.AutoBattleSystem")
+        AutoBattleSystem.playerPosition = {x = 2, y = 0}
+        EnemySystem:update(1)
+        assert.is_true(pathCreated)
+        assert.is_table(enemy.path)
+
+        EnemySystem.useRobloxObjects = false
+        _G.Instance = nil
+        _G.game = nil
+        _G.workspace = nil
+        _G.Vector3 = nil
     end)
 end)

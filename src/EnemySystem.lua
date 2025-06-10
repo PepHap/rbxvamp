@@ -15,8 +15,8 @@ end
 local AutoBattleSystem
 
 -- Simple stub for Roblox's PathfindingService used in the test environment.
-local PathfindingService = {}
-function PathfindingService.CreatePath()
+local PathfindingServiceStub = {}
+function PathfindingServiceStub:CreatePath()
     local points
     return {
         ComputeAsync = function(_, startPos, endPos)
@@ -37,8 +37,49 @@ EnemySystem.damageScale = 1
 --  this to avoid creating placeholder instances.
 EnemySystem.spawnModels = true
 
+---When enabled the system will attempt to create real Roblox Instances rather
+--  than simple Lua tables. This is disabled during unit tests where the Roblox
+--  APIs are unavailable.
+EnemySystem.useRobloxObjects = false
+
 ---Movement speed in studs per second used when advancing along a path.
 EnemySystem.moveSpeed = 1
+
+---Returns the appropriate pathfinding service depending on environment.
+local function getPathfindingService()
+    if EnemySystem.useRobloxObjects and game ~= nil and type(game.GetService) == "function" then
+        local ok, service = pcall(function()
+            return game:GetService("PathfindingService")
+        end)
+        if ok and service then
+            return service
+        end
+    end
+    return PathfindingServiceStub
+end
+
+---Utility converting coordinates into ``Vector3`` values when available.
+local function createVector3(x, y, z)
+    local ok, ctor = pcall(function()
+        return Vector3.new
+    end)
+    if ok and type(ctor) == "function" then
+        return ctor(x, y, z)
+    end
+    return {x = x, y = y, z = z}
+end
+
+---Extracts ``x``, ``y`` and ``z`` fields from either a ``Vector3`` or table.
+local function getCoords(v)
+    if type(v) == "table" then
+        if v.X then
+            return v.X, v.Y, v.Z
+        else
+            return v.x, v.y, v.z
+        end
+    end
+    return 0, 0, 0
+end
 
 
 ---Utility to create a basic enemy table. The returned table describes the
@@ -65,6 +106,46 @@ end
 --  @param enemy table enemy data
 --  @return table model table assigned to ``enemy.model``
 local function spawnModel(enemy)
+    -- When running inside Roblox and ``useRobloxObjects`` is enabled we create
+    -- real Instances and parent them to Workspace. Unit tests fall back to a
+    -- lightweight table representation so they can run without the Roblox APIs.
+    if EnemySystem.useRobloxObjects and typeof ~= nil and Instance ~= nil and game ~= nil then
+        local success, workspaceService = pcall(function()
+            return game:GetService("Workspace")
+        end)
+        if success and workspaceService then
+            local model = Instance.new("Model")
+            model.Name = enemy.name
+
+            local part = Instance.new("Part")
+            part.Name = enemy.name .. "Part"
+
+            local ok, vectorCtor = pcall(function()
+                return Vector3.new
+            end)
+            if ok and type(vectorCtor) == "function" then
+                part.Position = vectorCtor(enemy.position.x, enemy.position.y, enemy.position.z)
+            else
+                part.Position = {x = enemy.position.x, y = enemy.position.y, z = enemy.position.z}
+            end
+
+            part.Parent = model
+            model.PrimaryPart = part
+
+            local billboardGui = Instance.new("BillboardGui")
+            billboardGui.Adornee = part
+            local textLabel = Instance.new("TextLabel")
+            textLabel.Text = enemy.name
+            textLabel.Parent = billboardGui
+            billboardGui.Parent = model
+
+            model.Parent = workspaceService
+            enemy.model = model
+            return model
+        end
+    end
+
+    -- Fallback table representation used during tests
     local model = {
         primaryPart = {
             position = {x = enemy.position.x, y = enemy.position.y, z = enemy.position.z}
@@ -185,26 +266,31 @@ function EnemySystem:update(dt)
     if not playerPos then
         return
     end
+    local pathService = getPathfindingService()
     for _, enemy in ipairs(self.enemies) do
-        if enemy.model and enemy.model.primaryPart then
-            local startPos = enemy.model.primaryPart.position
-            local goal = {x = playerPos.x, y = playerPos.y, z = 0}
-            local path = PathfindingService.CreatePath()
+        local model = enemy.model
+        local primaryPart = model and (model.PrimaryPart or model.primaryPart)
+        if primaryPart then
+            local sx, sy, sz = getCoords(primaryPart.Position or primaryPart.position)
+            local startPos = createVector3(sx, sy, sz)
+            local goal = createVector3(playerPos.x, playerPos.y, 0)
+            local path = pathService:CreatePath()
             path:ComputeAsync(startPos, goal)
             enemy.path = path:GetWaypoints()
             if #enemy.path >= 2 then
                 local nextPos = enemy.path[2]
-                local dx = nextPos.x - startPos.x
-                local dy = nextPos.y - startPos.y
-                local dz = nextPos.z - (startPos.z or 0)
+                local nx, ny, nz = getCoords(nextPos.Position or nextPos)
+                local dx, dy, dz = nx - sx, ny - sy, nz - sz
                 local dist = math.sqrt(dx * dx + dy * dy + dz * dz)
                 if dist > 0 then
                     local step = math.min(self.moveSpeed * dt, dist)
-                    local nx = startPos.x + dx / dist * step
-                    local ny = startPos.y + dy / dist * step
-                    local nz = (startPos.z or 0) + dz / dist * step
-                    enemy.position.x, enemy.position.y, enemy.position.z = nx, ny, nz
-                    enemy.model.primaryPart.position = {x = nx, y = ny, z = nz}
+                    local tx, ty, tz = sx + dx / dist * step, sy + dy / dist * step, sz + dz / dist * step
+                    enemy.position.x, enemy.position.y, enemy.position.z = tx, ty, tz
+                    if primaryPart.Position ~= nil then
+                        primaryPart.Position = createVector3(tx, ty, tz)
+                    else
+                        primaryPart.position = {x = tx, y = ty, z = tz}
+                    end
                 end
             end
         end
