@@ -109,7 +109,7 @@ local function spawnModel(enemy)
     -- When running inside Roblox and ``useRobloxObjects`` is enabled we create
     -- real Instances and parent them to Workspace. Unit tests fall back to a
     -- lightweight table representation so they can run without the Roblox APIs.
-    if EnemySystem.useRobloxObjects and typeof ~= nil and Instance ~= nil and game ~= nil then
+    if EnemySystem.useRobloxObjects and Instance ~= nil and game ~= nil then
         local success, workspaceService = pcall(function()
             return game:GetService("Workspace")
         end)
