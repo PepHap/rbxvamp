@@ -5,8 +5,15 @@
 local LevelSystem = require("src.LevelSystem")
 local EnemySystem = require("src.EnemySystem")
 local KeySystem = require("src.KeySystem")
+local PlayerLevelSystem = require("src.PlayerLevelSystem")
+local CurrencySystem = require("src.CurrencySystem")
 
 describe("LevelSystem", function()
+    before_each(function()
+        PlayerLevelSystem.level = 1
+        PlayerLevelSystem.exp = 0
+        CurrencySystem.balances = {}
+    end)
     it("starts at level 1", function()
         assert.equals(1, LevelSystem.currentLevel)
     end)
@@ -111,5 +118,14 @@ describe("LevelSystem", function()
         local scaleAfterNormal = EnemySystem.healthScale
         assert.is_true(scaleAfterNormal > scaleAfterMini)
         assert.is_true(scaleAfterMini > 1)
+    end)
+
+    it("grants experience and gold on kill", function()
+        PlayerLevelSystem.exp = 0
+        CurrencySystem.balances = {}
+        LevelSystem.killCount = 0
+        LevelSystem:addKill()
+        assert.equals(LevelSystem.killExp, PlayerLevelSystem.exp)
+        assert.equals(LevelSystem.killGold, CurrencySystem:get("gold"))
     end)
 end)

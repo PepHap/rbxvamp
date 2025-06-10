@@ -11,6 +11,9 @@ LevelSystem.highestClearedStage = 0
 -- or boss spawns depending on the current level reached.
 local EnemySystem = require("src.EnemySystem")
 local KeySystem = require("src.KeySystem")
+local LocationSystem = require("src.LocationSystem")
+local PlayerLevelSystem = require("src.PlayerLevelSystem")
+local CurrencySystem = require("src.CurrencySystem")
 
 --- Tracks the player's current level.
 --  Starts at ``1`` when the game begins.
@@ -21,6 +24,12 @@ LevelSystem.killCount = 0
 
 --- Number of kills required to advance to the next level.
 LevelSystem.requiredKills = 15
+
+---Experience granted for each enemy defeated.
+LevelSystem.killExp = 10
+
+---Gold granted for each enemy defeated.
+LevelSystem.killGold = 1
 
 ---Resets stage tracking and spawns the initial enemy wave.
 --  This is called when the overall game begins via ``GameManager``.
@@ -75,6 +84,13 @@ end
 --- Increments the kill counter and automatically checks for advancement.
 function LevelSystem:addKill()
     self.killCount = self.killCount + 1
+    -- Award basic rewards for defeating an enemy
+    if PlayerLevelSystem and PlayerLevelSystem.addExperience then
+        PlayerLevelSystem:addExperience(self.killExp or 10)
+    end
+    if CurrencySystem and CurrencySystem.add then
+        CurrencySystem:add("gold", self.killGold or 1)
+    end
     self:checkAdvance()
 end
 
@@ -90,6 +106,7 @@ function LevelSystem:advance()
         if not KeySystem:useKey("location") then
             return nil
         end
+        LocationSystem:advance()
     end
 
     self.currentLevel = nextLevel

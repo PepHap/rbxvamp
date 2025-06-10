@@ -69,6 +69,10 @@ GameManager:addSystem("Player", PlayerSystem)
 local LevelSystem = require("src.LevelSystem")
 GameManager:addSystem("Level", LevelSystem)
 
+-- Tracks which area the player is currently exploring
+local LocationSystem = require("src.LocationSystem")
+GameManager:addSystem("Location", LocationSystem)
+
 -- Gacha system used for rolling random rewards
 local GachaSystem = require("src.GachaSystem")
 GameManager:addSystem("Gacha", GachaSystem)
