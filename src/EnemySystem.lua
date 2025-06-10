@@ -47,13 +47,15 @@ EnemySystem.moveSpeed = 1
 --  @param damage number
 --  @param position table table containing x/y/z coordinates
 --  @param enemyType string|nil classification such as "mini" or "boss"
+--  @param name string display name for this enemy
 --  @return table new enemy object
-local function createEnemy(health, damage, position, enemyType)
+local function createEnemy(health, damage, position, enemyType, name)
     return {
         health = health,
         damage = damage,
         position = position,
-        type = enemyType
+        type = enemyType,
+        name = name
     }
 end
 
@@ -67,6 +69,10 @@ local function spawnModel(enemy)
         primaryPart = {
             position = {x = enemy.position.x, y = enemy.position.y, z = enemy.position.z}
         }
+    }
+    model.billboardGui = {
+        adornee = model.primaryPart,
+        textLabel = {text = enemy.name}
     }
     enemy.model = model
     return model
@@ -117,7 +123,9 @@ function EnemySystem:spawnWave(level)
         local enemy = createEnemy(
             (baseHealth + healthPerLevel * level) * hScale,
             (baseDamage + damagePerLevel * level) * dScale,
-            {x = i, y = 0, z = 0}
+            {x = i, y = 0, z = 0},
+            nil,
+            string.format("Enemy %d", i)
         )
         if self.spawnModels ~= false then
             spawnModel(enemy)
@@ -147,11 +155,17 @@ function EnemySystem:spawnBoss(bossType)
     local hScale = self.healthScale or 1
     local dScale = self.damageScale or 1
 
+    local bossNames = {
+        mini = "Mini Boss",
+        boss = "Boss",
+        location = "Location Boss"
+    }
     local boss = createEnemy(
         (bossHealth[bossType] or 20) * hScale,
         (bossDamage[bossType] or 2) * dScale,
         {x = 0, y = 0, z = 0},
-        bossType
+        bossType,
+        bossNames[bossType] or "Boss"
     )
 
     if self.spawnModels ~= false then

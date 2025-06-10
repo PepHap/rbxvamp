@@ -15,6 +15,7 @@ describe("EnemySystem", function()
         assert.equals(3, first.damage)
         assert.same({x = 1, y = 0, z = 0}, first.position)
         assert.is_nil(first.type)
+        assert.equals("Enemy 1", first.name)
     end)
 
     it("spawns boss and records type", function()
@@ -31,6 +32,7 @@ describe("EnemySystem", function()
         assert.equals(5, boss.damage)
         assert.equals("mini", boss.type)
         assert.same({x = 0, y = 0, z = 0}, boss.position)
+        assert.equals("Mini Boss", boss.name)
     end)
 
     it("returns nearest enemy from a spawned wave", function()
@@ -55,6 +57,7 @@ describe("EnemySystem", function()
         local enemy = EnemySystem.enemies[1]
         assert.is_table(enemy.model)
         assert.same(enemy.position, enemy.model.primaryPart.position)
+        assert.equals(enemy.name, enemy.model.billboardGui.textLabel.text)
     end)
 
     it("skips model creation when disabled", function()
@@ -63,6 +66,13 @@ describe("EnemySystem", function()
         assert.is_nil(EnemySystem.enemies[1].model)
         assert.equals(1, #EnemySystem.enemies)
         EnemySystem.spawnModels = true
+    end)
+
+    it("labels boss models when spawned", function()
+        EnemySystem.spawnModels = true
+        EnemySystem:spawnBoss("mini")
+        local boss = EnemySystem.enemies[1]
+        assert.equals(boss.name, boss.model.billboardGui.textLabel.text)
     end)
 
     it("computes a path toward the player on update", function()
