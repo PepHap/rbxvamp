@@ -90,6 +90,10 @@ GameManager:addSystem("Keys", KeySystem)
 local StatUpgradeSystem = require("src.StatUpgradeSystem")
 GameManager:addSystem("Stats", StatUpgradeSystem)
 
+-- Minimal UI for displaying rewards and gacha results
+local UISystem = require("src.UISystem")
+GameManager:addSystem("UI", UISystem)
+
 ---Triggers a skill gacha roll.
 function GameManager:rollSkill()
     return GachaSystem:rollSkill()
