@@ -31,6 +31,20 @@ describe("ItemSystem", function()
         assert.equals(4, CurrencySystem:get("gold"))
     end)
 
+    it("upgrades an item up to the maximum level", function()
+        local items = ItemSystem.new()
+        items:equip("Weapon", {name = "Sword"})
+        local cost = 0
+        for lvl = 2, ItemSystem.maxLevel do
+            cost = cost + (ItemSystem.upgradeCosts[lvl] or 0)
+        end
+        CurrencySystem.balances = {gold = cost}
+        local ok = items:upgradeItem("Weapon", ItemSystem.maxLevel - 1, "gold")
+        assert.is_true(ok)
+        assert.equals(ItemSystem.maxLevel, items.slots.Weapon.level)
+        assert.equals(0, CurrencySystem:get("gold"))
+    end)
+
     it("fails upgrade without sufficient currency", function()
         local items = ItemSystem.new()
         items:equip("Weapon", {name = "Sword"})
@@ -49,5 +63,14 @@ describe("ItemSystem", function()
         assert.has_error(function()
             items:unequip("Invalid")
         end)
+    end)
+
+    it("prevents upgrading beyond the maximum level", function()
+        local items = ItemSystem.new()
+        items:equip("Weapon", {name = "Sword", level = ItemSystem.maxLevel})
+        CurrencySystem.balances = {gold = 100}
+        local ok = items:upgradeItem("Weapon", 1, "gold")
+        assert.is_false(ok)
+        assert.equals(ItemSystem.maxLevel, items.slots.Weapon.level)
     end)
 end)

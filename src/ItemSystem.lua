@@ -11,6 +11,18 @@ local CurrencySystem = require("src.CurrencySystem")
 ItemSystem.templates = require("assets.items")
 ItemSystem.upgradeCosts = require("assets.item_upgrade_costs")
 
+-- Determine the highest level defined in the upgrade cost table. This value
+-- acts as a hard cap for item upgrades.
+do
+    local max = 1
+    for lvl in pairs(ItemSystem.upgradeCosts) do
+        if lvl > max then
+            max = lvl
+        end
+    end
+    ItemSystem.maxLevel = max
+end
+
 local validSlots = {
     Hat = true,
     Necklace = true,
@@ -68,15 +80,19 @@ function ItemSystem:upgradeItem(slot, amount, currencyType)
     if not item or amount <= 0 then
         return false
     end
-    local required = 0
     local current = item.level or 1
-    for i = 1, amount do
-        required = required + (self.upgradeCosts[current + i] or 0)
+    local target = current + amount
+    if target > self.maxLevel then
+        return false
+    end
+    local required = 0
+    for lvl = current + 1, target do
+        required = required + (self.upgradeCosts[lvl] or 0)
     end
     if not CurrencySystem:spend(currencyType, required) then
         return false
     end
-    item.level = current + amount
+    item.level = target
     return true
 end
 
