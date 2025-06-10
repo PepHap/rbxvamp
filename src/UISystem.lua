@@ -11,7 +11,7 @@ local UISystem = {
 
 -- Helper to create an Instance when available or fall back to a table
 local function createInstance(className)
-    if UISystem.useRobloxObjects and typeof ~= nil and Instance ~= nil and type(Instance.new) == "function" then
+    if UISystem.useRobloxObjects and Instance ~= nil and type(Instance.new) == "function" then
         return Instance.new(className)
     end
     return {ClassName = className}
