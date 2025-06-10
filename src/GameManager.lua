@@ -61,6 +61,10 @@ GameManager:addSystem("AutoBattle", AutoBattleSystem)
 local PlayerLevelSystem = require("src.PlayerLevelSystem")
 GameManager:addSystem("PlayerLevel", PlayerLevelSystem)
 
+-- Stage progression between floors
+local LevelSystem = require("src.LevelSystem")
+GameManager:addSystem("Level", LevelSystem)
+
 -- Gacha system used for rolling random rewards
 local GachaSystem = require("src.GachaSystem")
 GameManager:addSystem("Gacha", GachaSystem)
@@ -77,6 +81,10 @@ GameManager:addSystem("Items", GameManager.itemSystem)
 -- Quests provide structured objectives and rewards
 local QuestSystem = require("src.QuestSystem")
 GameManager:addSystem("Quest", QuestSystem)
+
+-- Keys used to unlock special areas and modes
+local KeySystem = require("src.KeySystem")
+GameManager:addSystem("Keys", KeySystem)
 
 -- Base stats like attack and defense upgrades
 local StatUpgradeSystem = require("src.StatUpgradeSystem")
