@@ -11,6 +11,7 @@ LevelSystem.highestClearedStage = 0
 -- or boss spawns depending on the current level reached.
 local EnemySystem = require("src.EnemySystem")
 local KeySystem = require("src.KeySystem")
+local LocationSystem = require("src.LocationSystem")
 
 --- Tracks the player's current level.
 --  Starts at ``1`` when the game begins.
@@ -90,6 +91,7 @@ function LevelSystem:advance()
         if not KeySystem:useKey("location") then
             return nil
         end
+        LocationSystem:advance()
     end
 
     self.currentLevel = nextLevel
