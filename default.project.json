@@ -6,6 +6,9 @@
         "ServerScriptService": {
             "src": {
                 "$path": "src"
+            },
+            "GameRunner": {
+                "$path": "ServerScriptService/GameRunner.lua"
             }
         },
         "ReplicatedStorage": {
