@@ -9,6 +9,7 @@ QuestSystem.quests = {}
 -- CurrencySystem is used for basic reward handling
 local CurrencySystem = require("src.CurrencySystem")
 local KeySystem = require("src.KeySystem")
+local GachaSystem = require("src.GachaSystem")
 
 ---Adds a new quest definition.
 -- @param def table quest definition with fields: id, goal, reward
@@ -62,6 +63,14 @@ function QuestSystem:claimReward(id)
             for kind, amt in pairs(q.reward.keys) do
                 KeySystem:addKey(kind, amt)
             end
+        end
+        if q.reward.tickets then
+            for kind, amt in pairs(q.reward.tickets) do
+                GachaSystem.tickets[kind] = (GachaSystem.tickets[kind] or 0) + amt
+            end
+        end
+        if q.reward.crystals then
+            GachaSystem.crystals = (GachaSystem.crystals or 0) + q.reward.crystals
         end
     end
     q.rewarded = true
