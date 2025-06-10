@@ -36,6 +36,17 @@ local LevelSystem = require(path.to.LevelSystem)
 GameManager:addSystem("Level", LevelSystem)
 GameManager:start()
 ```
+
+### Syncing with Rojo
+Install [Rojo](https://rojo.space/docs) and run the following command to sync
+this repository with Roblox Studio using `default.project.json`:
+
+```bash
+rojo serve
+```
+This maps files such as `src/GameManager.lua` to
+`ServerScriptService.src.GameManager` and places the `assets` folder under
+`ReplicatedStorage.assets`.
 ## Testing
 Run the repository checks via:
 
