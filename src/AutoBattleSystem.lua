@@ -12,6 +12,7 @@ if type(moduleName) == "string" then
     prefix = moduleName:gsub("AutoBattleSystem$", "")
 end
 local EnemySystem = require(prefix .. "EnemySystem")
+local LevelSystem = require(prefix .. "LevelSystem")
 
 ---Current player position used for simple movement calculations.
 AutoBattleSystem.playerPosition = {x = 0, y = 0}
@@ -21,6 +22,9 @@ AutoBattleSystem.moveSpeed = 1
 
 ---Maximum distance at which an attack will occur instead of moving.
 AutoBattleSystem.attackRange = 5
+
+---Damage dealt to enemies per attack.
+AutoBattleSystem.damage = 1
 
 ---Reference to the last enemy attacked by the system.
 AutoBattleSystem.lastAttackTarget = nil
@@ -57,6 +61,19 @@ function AutoBattleSystem:update(dt)
     if distSq <= self.attackRange * self.attackRange then
         -- Target is within attack range, register an attack
         self.lastAttackTarget = target
+        if target.health then
+            target.health = target.health - self.damage
+            if target.health <= 0 then
+                for i, enemy in ipairs(EnemySystem.enemies) do
+                    if enemy == target then
+                        table.remove(EnemySystem.enemies, i)
+                        break
+                    end
+                end
+                LevelSystem:addKill()
+                self.lastAttackTarget = nil
+            end
+        end
     else
         -- Move toward the target by a small step based on moveSpeed
         local dist = math.sqrt(distSq)

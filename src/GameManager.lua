@@ -61,6 +61,10 @@ GameManager:addSystem("AutoBattle", AutoBattleSystem)
 local PlayerLevelSystem = require("src.PlayerLevelSystem")
 GameManager:addSystem("PlayerLevel", PlayerLevelSystem)
 
+-- Player health management
+local PlayerSystem = require("src.PlayerSystem")
+GameManager:addSystem("Player", PlayerSystem)
+
 -- Stage progression between floors
 local LevelSystem = require("src.LevelSystem")
 GameManager:addSystem("Level", LevelSystem)
