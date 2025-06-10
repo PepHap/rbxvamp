@@ -8,6 +8,10 @@ local EnemySystem = {}
 EnemySystem.healthScale = 1
 EnemySystem.damageScale = 1
 
+---Indicates whether enemy Roblox models should be spawned. Tests can disable
+--  this to avoid creating placeholder instances.
+EnemySystem.spawnModels = true
+
 
 ---Utility to create a basic enemy table. The returned table describes the
 --  enemy's health, damage, current position and optional type string.
@@ -23,6 +27,21 @@ local function createEnemy(health, damage, position, enemyType)
         position = position,
         type = enemyType
     }
+end
+
+---Creates a placeholder Roblox model for the enemy at its position. In this
+--  simplified environment a model is represented by a table containing a
+--  single part positioned at ``enemy.position``.
+--  @param enemy table enemy data
+--  @return table model table assigned to ``enemy.model``
+local function spawnModel(enemy)
+    local model = {
+        primaryPart = {
+            position = {x = enemy.position.x, y = enemy.position.y, z = enemy.position.z}
+        }
+    }
+    enemy.model = model
+    return model
 end
 
 ---List of currently active enemies in the world.
@@ -72,6 +91,9 @@ function EnemySystem:spawnWave(level)
             (baseDamage + damagePerLevel * level) * dScale,
             {x = i, y = 0, z = 0}
         )
+        if self.spawnModels ~= false then
+            spawnModel(enemy)
+        end
         table.insert(self.enemies, enemy)
     end
 end
@@ -103,6 +125,10 @@ function EnemySystem:spawnBoss(bossType)
         {x = 0, y = 0, z = 0},
         bossType
     )
+
+    if self.spawnModels ~= false then
+        spawnModel(boss)
+    end
 
     table.insert(self.enemies, boss)
 end
