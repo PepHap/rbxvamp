@@ -1,0 +1,17 @@
+{
+    "$schema": "https://raw.githubusercontent.com/rojo-rbx/rojo/master/default.project.json",
+    "name": "rbxvamp",
+    "tree": {
+        "$className": "DataModel",
+        "ServerScriptService": {
+            "src": {
+                "$path": "src"
+            }
+        },
+        "ReplicatedStorage": {
+            "assets": {
+                "$path": "assets"
+            }
+        }
+    }
+}
