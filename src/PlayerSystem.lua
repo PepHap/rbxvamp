@@ -2,6 +2,7 @@
 -- Tracks player health and handles death events.
 
 local PlayerSystem = {}
+local EventManager = require("src.EventManager")
 
 ---Indicates if a Roblox model should be created for the player when the game
 --  starts. Tests can disable this to avoid manipulating Instance objects.
@@ -34,18 +35,21 @@ function PlayerSystem:takeDamage(amount)
         self.health = 0
         self:onDeath()
     end
+    EventManager:Get("PlayerDamaged"):Fire(amount, self.health)
 end
 
 ---Heals the player by the given amount without exceeding max health.
 -- @param amount number amount to heal
 function PlayerSystem:heal(amount)
     self.health = math.min(self.health + amount, self.maxHealth)
+    EventManager:Get("PlayerHealed"):Fire(amount, self.health)
 end
 
 ---Handles player death and notifies the LevelSystem.
 function PlayerSystem:onDeath()
     LevelSystem:onPlayerDeath()
     self.health = self.maxHealth
+    EventManager:Get("PlayerDied"):Fire()
 end
 
 ---Utility converting coordinates into ``Vector3`` values when running inside
