@@ -1,24 +1,35 @@
 {
-    "$schema": "https://raw.githubusercontent.com/rojo-rbx/rojo/master/default.project.json",
-    "name": "rbxvamp",
-    "tree": {
-        "$className": "DataModel",
-        "ServerScriptService": {
-            "src": {
-                "$path": "src"
-            },
-            "GameRunner": {
-                "$path": "ServerScriptService/GameRunner.lua"
-            },
-            "MainServer": {
-                "$path": "src/MainServerScript.lua",
-                "$className": "Script"
-            }
-        },
-        "ReplicatedStorage": {
-            "assets": {
-                "$path": "assets"
-            }
+  "$schema": "https://raw.githubusercontent.com/rojo-rbx/rojo/master/default.project.json",
+  "name": "rbxvamp",
+  "tree": {
+    "$className": "DataModel",
+    "ServerScriptService": {
+      "src": {
+        "$path": "src"
+      },
+      "GameRunner": {
+        "$path": "ServerScriptService/GameRunner.lua"
+      },
+      "MainServer": {
+        "$path": "src/MainServerScript.lua",
+        "$className": "Script"
+      }
+    },
+    "ReplicatedStorage": {
+      "assets": {
+        "$path": "assets"
+      },
+      "src": {
+        "$path": "src"
+      }
+    },
+    "StarterPlayer": {
+      "StarterPlayerScripts": {
+        "ClientGameRunner": {
+          "$path": "StarterPlayerScripts/ClientGameRunner.lua",
+          "$className": "LocalScript"
         }
+      }
     }
+  }
 }
