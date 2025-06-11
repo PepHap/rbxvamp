@@ -9,6 +9,10 @@
             },
             "GameRunner": {
                 "$path": "ServerScriptService/GameRunner.lua"
+            },
+            "MainServer": {
+                "$path": "src/MainServerScript.lua",
+                "$className": "Script"
             }
         },
         "ReplicatedStorage": {
