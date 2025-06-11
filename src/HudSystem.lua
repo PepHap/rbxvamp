@@ -6,11 +6,13 @@ local HudSystem = {
     gui = nil,
     levelLabel = nil,
     currencyLabel = nil,
+    autoButton = nil,
 }
 
 local PlayerLevelSystem = require("src.PlayerLevelSystem")
 local CurrencySystem = require("src.CurrencySystem")
 local LocationSystem = require("src.LocationSystem")
+local AutoBattleSystem = require("src.AutoBattleSystem")
 
 local function createInstance(className)
     if HudSystem.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
@@ -50,8 +52,20 @@ function HudSystem:start()
     local gui = ensureGui()
     self.levelLabel = createInstance("TextLabel")
     self.currencyLabel = createInstance("TextLabel")
+    self.autoButton = createInstance("TextButton")
+    self.autoButton.Text = "Auto: OFF"
+    if self.autoButton.MouseButton1Click then
+        self.autoButton.MouseButton1Click:Connect(function()
+            HudSystem:toggleAutoBattle()
+        end)
+    else
+        self.autoButton.onClick = function()
+            HudSystem:toggleAutoBattle()
+        end
+    end
     parent(self.levelLabel, gui)
     parent(self.currencyLabel, gui)
+    parent(self.autoButton, gui)
     self:update()
 end
 
@@ -70,6 +84,20 @@ function HudSystem:update()
     local currencyType = loc and loc.currency or "gold"
     local amount = CurrencySystem:get(currencyType)
     self.currencyLabel.Text = string.format("%s: %d", currencyType, amount)
+
+    self.autoButton = self.autoButton or createInstance("TextButton")
+    parent(self.autoButton, gui)
+    local state = AutoBattleSystem.enabled and "ON" or "OFF"
+    self.autoButton.Text = "Auto: " .. state
+end
+
+function HudSystem:toggleAutoBattle()
+    if AutoBattleSystem.enabled then
+        AutoBattleSystem:disable()
+    else
+        AutoBattleSystem:enable()
+    end
+    self:update()
 end
 
 return HudSystem
