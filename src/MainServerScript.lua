@@ -1,15 +1,21 @@
 local Players = game:GetService("Players")
-local GameManager = require(script.Parent.Modules.GameManager)
-
-local managers = {}
+local GameManager = require(script.Parent.GameManager)
 
 local function onPlayerAdded(player)
-    managers[player.UserId] = GameManager.new(player)
-    managers[player.UserId].Monsters = managers[player.UserId].MonsterManager:SpawnMonsters()
+    local data = GameManager:loadPlayerData(player.UserId)
+    if player.SetAttribute then
+        player:SetAttribute("SaveData", data)
+    end
 end
 
 local function onPlayerRemoving(player)
-    managers[player.UserId] = nil
+    local data
+    if player.GetAttribute then
+        data = player:GetAttribute("SaveData")
+    end
+    if data then
+        GameManager:savePlayerData(player.UserId, data)
+    end
 end
 
 Players.PlayerAdded:Connect(onPlayerAdded)
