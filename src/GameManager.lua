@@ -133,6 +133,10 @@ InventoryUISystem.itemSystem = GameManager.itemSystem
 
 GameManager:addSystem("InventoryUI", InventoryUISystem)
 
+-- Heads-up display with level, experience and currency
+local HudSystem = require("src.HudSystem")
+GameManager:addSystem("HUD", HudSystem)
+
 -- Skill and companion UI modules
 local SkillUISystem = require("src.SkillUISystem")
 SkillUISystem.skillSystem = GameManager.skillSystem
