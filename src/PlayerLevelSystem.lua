@@ -2,6 +2,7 @@
 -- Manages player experience, levels and content unlocks.
 
 local PlayerLevelSystem = {}
+local EventManager = require("src.EventManager")
 
 ---Current player level starting at ``1``.
 PlayerLevelSystem.level = 1
@@ -39,6 +40,9 @@ function PlayerLevelSystem:checkThreshold()
         -- Increase required experience slightly each level
         self.nextExp = math.floor(self.nextExp * 1.2)
         self:unlockForLevel(self.level)
+        -- notify listeners of the level up
+        local ev = EventManager:Get("PlayerLevelUp")
+        ev:Fire(self.level)
     end
 end
 

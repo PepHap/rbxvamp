@@ -3,6 +3,7 @@
 -- monster scaling in the future.
 
 local LevelSystem = {}
+local EventManager = require("src.EventManager")
 
 --- Highest stage the player has cleared so far.
 LevelSystem.highestClearedStage = 0
@@ -30,6 +31,7 @@ function LevelSystem:start()
     self.killCount = 0
     self.requiredKills = 15
     EnemySystem:spawnWave(1)
+    EventManager:Get("LevelStart"):Fire(1)
 end
 
 ---Determines the type of a given stage.
@@ -115,6 +117,7 @@ function LevelSystem:advance()
     else
         EnemySystem:spawnWave(self.currentLevel)
     end
+    EventManager:Get("LevelAdvance"):Fire(self.currentLevel, stageType)
     return self.currentLevel
 end
 
@@ -128,6 +131,7 @@ function LevelSystem:onPlayerDeath()
         self.killCount = 0
         self.requiredKills = self.requiredKills - 5
     end
+    EventManager:Get("PlayerDeath"):Fire(lvl)
 end
 
 return LevelSystem

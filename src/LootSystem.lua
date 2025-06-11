@@ -2,6 +2,7 @@
 -- Awards currency, experience and gauge points when enemies are defeated.
 
 local LootSystem = {}
+local EventManager = require("src.EventManager")
 
 local CurrencySystem = require("src.CurrencySystem")
 local PlayerLevelSystem = require("src.PlayerLevelSystem")
@@ -39,6 +40,7 @@ function LootSystem:onEnemyKilled(enemy)
     PlayerLevelSystem:addExperience(r.exp)
     RewardGaugeSystem:addPoints(r.gauge)
     AchievementSystem:addProgress("kills", 1)
+    EventManager:Get("EnemyKilled"):Fire(enemy)
 end
 
 return LootSystem

@@ -2,6 +2,7 @@
 -- Spawns waves of enemies and bosses.
 
 local EnemySystem = {}
+local EventManager = require("src.EventManager")
 
 -- Resolve other module paths relative to how this module was required so that
 -- tests using relative paths function correctly.
@@ -222,6 +223,7 @@ function EnemySystem:spawnWave(level)
         end
         table.insert(self.enemies, enemy)
     end
+    EventManager:Get("SpawnWave"):Fire(level)
 end
 
 ---Spawns a boss of the given type.
@@ -263,6 +265,7 @@ function EnemySystem:spawnBoss(bossType)
     end
 
     table.insert(self.enemies, boss)
+    EventManager:Get("SpawnBoss"):Fire(bossType)
 end
 
 ---Updates enemy movement by computing a path toward the player and moving a
