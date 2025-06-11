@@ -13,6 +13,7 @@ end
 
 -- Lazily required to avoid circular dependency with AutoBattleSystem
 local AutoBattleSystem
+local PlayerSystem
 
 -- Simple stub for Roblox's PathfindingService used in the test environment.
 local PathfindingServiceStub = {}
@@ -44,6 +45,12 @@ EnemySystem.useRobloxObjects = false
 
 ---Movement speed in studs per second used when advancing along a path.
 EnemySystem.moveSpeed = 1
+
+---Distance within which enemies can damage the player.
+EnemySystem.attackRange = 2
+
+---Delay between successive enemy attacks in seconds.
+EnemySystem.attackCooldown = 1
 
 ---Returns the appropriate pathfinding service depending on environment.
 local function getPathfindingService()
@@ -96,7 +103,9 @@ local function createEnemy(health, damage, position, enemyType, name)
         damage = damage,
         position = position,
         type = enemyType,
-        name = name
+        name = name,
+        attackCooldown = EnemySystem.attackCooldown,
+        attackTimer = 0
     }
 end
 
@@ -262,12 +271,14 @@ end
 -- @param dt number delta time since the last update
 function EnemySystem:update(dt)
     AutoBattleSystem = AutoBattleSystem or require(prefix .. "AutoBattleSystem")
+    PlayerSystem = PlayerSystem or require(prefix .. "PlayerSystem")
     local playerPos = AutoBattleSystem.playerPosition
     if not playerPos then
         return
     end
     local pathService = getPathfindingService()
     for _, enemy in ipairs(self.enemies) do
+        enemy.attackTimer = (enemy.attackTimer or 0) - dt
         local model = enemy.model
         local primaryPart = model and (model.PrimaryPart or model.primaryPart)
         if primaryPart then
@@ -291,6 +302,12 @@ function EnemySystem:update(dt)
                     else
                         primaryPart.position = {x = tx, y = ty, z = tz}
                     end
+                end
+                local pdx, pdy = enemy.position.x - playerPos.x, enemy.position.y - playerPos.y
+                local pdist = math.sqrt(pdx * pdx + pdy * pdy)
+                if pdist <= self.attackRange and enemy.attackTimer <= 0 then
+                    PlayerSystem:takeDamage(enemy.damage or 0)
+                    enemy.attackTimer = enemy.attackCooldown or self.attackCooldown
                 end
             end
         end
