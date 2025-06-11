@@ -109,6 +109,7 @@ GameManager:addSystem("UI", UISystem)
 -- Inventory UI provides equipment and bag management
 local InventoryUISystem = require("src.InventoryUISystem")
 InventoryUISystem.itemSystem = GameManager.itemSystem
+
 GameManager:addSystem("InventoryUI", InventoryUISystem)
 
 ---Triggers a skill gacha roll.

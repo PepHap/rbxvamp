@@ -18,6 +18,8 @@ local InventoryUI = {
     itemSystem = nil,
 }
 
+local ItemSystem = require("src.ItemSystem")
+
 local PlayerSystem = require("src.PlayerSystem")
 
 -- utility for environment agnostic Instance creation
@@ -224,5 +226,6 @@ function InventoryUI:selectSlot(slot)
     end
     self:update()
 end
+
 
 return InventoryUI
