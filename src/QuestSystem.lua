@@ -3,6 +3,12 @@
 
 local QuestSystem = {}
 
+-- Built-in quest definitions loaded when the system starts
+QuestSystem.definitions = require("assets.quests")
+
+-- Event connections for automatic progress tracking
+QuestSystem.connections = {}
+
 -- Active quest table indexed by quest id
 QuestSystem.quests = {}
 
@@ -10,6 +16,23 @@ QuestSystem.quests = {}
 local CurrencySystem = require("src.CurrencySystem")
 local KeySystem = require("src.KeySystem")
 local GachaSystem = require("src.GachaSystem")
+local EventManager = require("src.EventManager")
+
+---Initializes built-in quests and connects event listeners.
+function QuestSystem:start()
+    for _, def in ipairs(self.definitions or {}) do
+        if not self.quests[def.id] then
+            self:addQuest(def)
+        end
+    end
+    for id, q in pairs(self.quests) do
+        if q.event then
+            EventManager:Get(q.event):Connect(function(amount)
+                QuestSystem:addProgress(id, amount or 1)
+            end)
+        end
+    end
+end
 
 ---Adds a new quest definition.
 -- @param def table quest definition with fields: id, goal, reward
@@ -20,6 +43,7 @@ function QuestSystem:addQuest(def)
         goal = def.goal or 0,
         progress = 0,
         reward = def.reward,
+        event = def.event,
         completed = false,
         rewarded = false,
     }
