@@ -20,8 +20,11 @@ ServerScriptService
         QuestSystem (ModuleScript)
         RewardGaugeSystem (ModuleScript)
         SkillSystem (ModuleScript)
+        SkillUISystem (ModuleScript)
+        CompanionUISystem (ModuleScript)
         StatUpgradeSystem (ModuleScript)
         UISystem (ModuleScript)
+        InventoryUISystem (ModuleScript)
     GameRunner (Script)
 ```
 

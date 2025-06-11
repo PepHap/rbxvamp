@@ -102,6 +102,16 @@ GameManager:addSystem("Dungeon", DungeonSystem)
 local StatUpgradeSystem = require("src.StatUpgradeSystem")
 GameManager:addSystem("Stats", StatUpgradeSystem)
 
+-- Skill management and upgrades
+local SkillSystem = require("src.SkillSystem")
+GameManager.skillSystem = SkillSystem.new()
+GameManager:addSystem("Skills", GameManager.skillSystem)
+
+-- Companion management
+local CompanionSystem = require("src.CompanionSystem")
+GameManager.companionSystem = CompanionSystem
+GameManager:addSystem("Companions", CompanionSystem)
+
 -- Minimal UI for displaying rewards and gacha results
 local UISystem = require("src.UISystem")
 GameManager:addSystem("UI", UISystem)
@@ -112,24 +122,45 @@ InventoryUISystem.itemSystem = GameManager.itemSystem
 
 GameManager:addSystem("InventoryUI", InventoryUISystem)
 
+-- Skill and companion UI modules
+local SkillUISystem = require("src.SkillUISystem")
+SkillUISystem.skillSystem = GameManager.skillSystem
+GameManager:addSystem("SkillUI", SkillUISystem)
+
+local CompanionUISystem = require("src.CompanionUISystem")
+CompanionUISystem.companionSystem = GameManager.companionSystem
+GameManager:addSystem("CompanionUI", CompanionUISystem)
+
 -- Manual player input when auto battle is disabled
 local PlayerInputSystem = require("src.PlayerInputSystem")
 GameManager:addSystem("PlayerInput", PlayerInputSystem)
 
 ---Triggers a skill gacha roll.
 function GameManager:rollSkill()
-    return GachaSystem:rollSkill()
+    local reward = GachaSystem:rollSkill()
+    if reward then
+        self.skillSystem:addSkill(reward)
+    end
+    return reward
 end
 
 ---Triggers a companion gacha roll.
 function GameManager:rollCompanion()
-    return GachaSystem:rollCompanion()
+    local reward = GachaSystem:rollCompanion()
+    if reward then
+        self.companionSystem:add(reward)
+    end
+    return reward
 end
 
 ---Triggers an equipment gacha roll for the given slot.
 -- @param slot string equipment slot
 function GameManager:rollEquipment(slot)
-    return GachaSystem:rollEquipment(slot)
+    local reward = GachaSystem:rollEquipment(slot)
+    if reward then
+        self.itemSystem:addItem(reward)
+    end
+    return reward
 end
 
 ---Adds points to the reward gauge.
