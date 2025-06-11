@@ -81,6 +81,11 @@ GameManager:addSystem("Gacha", GachaSystem)
 local RewardGaugeSystem = require("src.RewardGaugeSystem")
 GameManager:addSystem("RewardGauge", RewardGaugeSystem)
 
+-- Achievement tracking for milestone rewards
+local AchievementSystem = require("src.AchievementSystem")
+GameManager.achievementSystem = AchievementSystem
+GameManager:addSystem("Achievements", AchievementSystem)
+
 -- Equipment handling
 local ItemSystem = require("src.ItemSystem")
 GameManager.itemSystem = ItemSystem.new()
