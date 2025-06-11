@@ -7,6 +7,7 @@ local HudSystem = {
     levelLabel = nil,
     currencyLabel = nil,
     autoButton = nil,
+    attackButton = nil,
 }
 
 local PlayerLevelSystem = require("src.PlayerLevelSystem")
@@ -53,7 +54,9 @@ function HudSystem:start()
     self.levelLabel = createInstance("TextLabel")
     self.currencyLabel = createInstance("TextLabel")
     self.autoButton = createInstance("TextButton")
+    self.attackButton = createInstance("TextButton")
     self.autoButton.Text = "Auto: OFF"
+    self.attackButton.Text = "Attack"
     if self.autoButton.MouseButton1Click then
         self.autoButton.MouseButton1Click:Connect(function()
             HudSystem:toggleAutoBattle()
@@ -63,9 +66,19 @@ function HudSystem:start()
             HudSystem:toggleAutoBattle()
         end
     end
+    if self.attackButton.MouseButton1Click then
+        self.attackButton.MouseButton1Click:Connect(function()
+            HudSystem:manualAttack()
+        end)
+    else
+        self.attackButton.onClick = function()
+            HudSystem:manualAttack()
+        end
+    end
     parent(self.levelLabel, gui)
     parent(self.currencyLabel, gui)
     parent(self.autoButton, gui)
+    parent(self.attackButton, gui)
     self:update()
 end
 
@@ -89,6 +102,15 @@ function HudSystem:update()
     parent(self.autoButton, gui)
     local state = AutoBattleSystem.enabled and "ON" or "OFF"
     self.autoButton.Text = "Auto: " .. state
+
+    self.attackButton = self.attackButton or createInstance("TextButton")
+    parent(self.attackButton, gui)
+    self.attackButton.Text = "Attack"
+    if AutoBattleSystem.enabled then
+        self.attackButton.Active = false
+    else
+        self.attackButton.Active = true
+    end
 end
 
 function HudSystem:toggleAutoBattle()
@@ -98,6 +120,14 @@ function HudSystem:toggleAutoBattle()
         AutoBattleSystem:enable()
     end
     self:update()
+end
+
+function HudSystem:manualAttack()
+    if AutoBattleSystem.enabled then
+        return
+    end
+    local PlayerInputSystem = require("src.PlayerInputSystem")
+    PlayerInputSystem:manualAttack()
 end
 
 return HudSystem
