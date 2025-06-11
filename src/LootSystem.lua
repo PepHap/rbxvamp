@@ -8,6 +8,7 @@ local PlayerLevelSystem = require("src.PlayerLevelSystem")
 local RewardGaugeSystem = require("src.RewardGaugeSystem")
 local LevelSystem = require("src.LevelSystem")
 local LocationSystem = require("src.LocationSystem")
+local AchievementSystem = require("src.AchievementSystem")
 
 ---Returns the currency key for the current location.
 local function getCurrencyType()
@@ -37,6 +38,7 @@ function LootSystem:onEnemyKilled(enemy)
     CurrencySystem:add(currency, r.coins * lvl)
     PlayerLevelSystem:addExperience(r.exp)
     RewardGaugeSystem:addPoints(r.gauge)
+    AchievementSystem:addProgress("kills", 1)
 end
 
 return LootSystem

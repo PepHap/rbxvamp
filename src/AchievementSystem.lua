@@ -1,0 +1,69 @@
+-- AchievementSystem.lua
+-- Tracks achievement progress such as enemy kills and awards rewards when completed.
+
+local AchievementSystem = {}
+
+local CurrencySystem = require("src.CurrencySystem")
+
+-- Predefined achievements indexed by id
+AchievementSystem.definitions = {
+    {id = "kills_10", type = "kills", goal = 10, reward = {currency = "gold", amount = 10}},
+    {id = "kills_50", type = "kills", goal = 50, reward = {currency = "gold", amount = 50}},
+    {id = "kills_100", type = "kills", goal = 100, reward = {currency = "gold", amount = 100}},
+}
+
+-- Runtime progress table indexed by achievement id
+AchievementSystem.progress = {}
+
+---Initializes progress entries for all defined achievements.
+function AchievementSystem:start()
+    for _, def in ipairs(self.definitions) do
+        self.progress[def.id] = {
+            value = 0,
+            completed = false,
+            rewarded = false,
+        }
+    end
+end
+
+---Adds progress for a specific type such as "kills".
+-- @param kind string progress category
+-- @param amount number value to add
+function AchievementSystem:addProgress(kind, amount)
+    amount = amount or 1
+    for _, def in ipairs(self.definitions) do
+        if def.type == kind then
+            local p = self.progress[def.id]
+            if not p.completed then
+                p.value = p.value + amount
+                if p.value >= def.goal then
+                    p.completed = true
+                end
+            end
+        end
+    end
+end
+
+---Claims an achievement reward when complete.
+-- @param id string achievement identifier
+-- @return boolean true if reward granted
+function AchievementSystem:claim(id)
+    local def
+    for _, d in ipairs(self.definitions) do
+        if d.id == id then
+            def = d
+            break
+        end
+    end
+    local p = self.progress[id]
+    if not def or not p or not p.completed or p.rewarded then
+        return false
+    end
+    if def.reward and def.reward.currency and def.reward.amount then
+        CurrencySystem:add(def.reward.currency, def.reward.amount)
+    end
+    p.rewarded = true
+    return true
+end
+
+return AchievementSystem
