@@ -112,6 +112,10 @@ InventoryUISystem.itemSystem = GameManager.itemSystem
 
 GameManager:addSystem("InventoryUI", InventoryUISystem)
 
+-- Manual player input when auto battle is disabled
+local PlayerInputSystem = require("src.PlayerInputSystem")
+GameManager:addSystem("PlayerInput", PlayerInputSystem)
+
 ---Triggers a skill gacha roll.
 function GameManager:rollSkill()
     return GachaSystem:rollSkill()
