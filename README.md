@@ -15,6 +15,7 @@ major systems. Game assets should be placed under `assets`.
 - **ItemSystem.lua** – manages equipment items
 - **SkillSystem.lua** – manages player skills and upgrades
 - **CompanionSystem.lua** – companion acquisition and upgrades
+- **DataPersistenceSystem.lua** – saves and loads player data
 
 ## Installing Busted
 This project uses the [Busted](https://olivinelabs.com/busted/) testing

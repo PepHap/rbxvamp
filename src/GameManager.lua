@@ -102,6 +102,11 @@ GameManager:addSystem("Dungeon", DungeonSystem)
 local StatUpgradeSystem = require("src.StatUpgradeSystem")
 GameManager:addSystem("Stats", StatUpgradeSystem)
 
+-- Data persistence for saving and loading progress
+local DataPersistenceSystem = require("src.DataPersistenceSystem")
+GameManager:addSystem("Save", DataPersistenceSystem)
+GameManager.saveSystem = DataPersistenceSystem
+
 -- Skill management and upgrades
 local SkillSystem = require("src.SkillSystem")
 GameManager.skillSystem = SkillSystem.new()
@@ -196,6 +201,25 @@ function GameManager:chooseReward(index)
         self.itemSystem:equip(chosen.slot, chosen.item)
     end
     return chosen
+end
+
+---Loads persistent data for a player using the Save system.
+-- @param playerId string|number player identifier
+-- @return table data table
+function GameManager:loadPlayerData(playerId)
+    if self.saveSystem and self.saveSystem.load then
+        return self.saveSystem:load(playerId)
+    end
+    return {}
+end
+
+---Saves persistent data for a player using the Save system.
+-- @param playerId string|number player identifier
+-- @param data table data table to save
+function GameManager:savePlayerData(playerId, data)
+    if self.saveSystem and self.saveSystem.save then
+        self.saveSystem:save(playerId, data)
+    end
 end
 
 
