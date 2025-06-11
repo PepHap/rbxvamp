@@ -133,6 +133,11 @@ local CompanionSystem = require("src.CompanionSystem")
 GameManager.companionSystem = CompanionSystem
 GameManager:addSystem("Companions", CompanionSystem)
 
+-- Companions follow the player and attack nearby enemies
+local CompanionAttackSystem = require("src.CompanionAttackSystem")
+CompanionAttackSystem.companionSystem = GameManager.companionSystem
+GameManager:addSystem("CompanionAI", CompanionAttackSystem)
+
 -- Minimal UI for displaying rewards and gacha results
 local UISystem = require("src.UISystem")
 GameManager:addSystem("UI", UISystem)
