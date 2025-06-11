@@ -131,6 +131,11 @@ local CompanionUISystem = require("src.CompanionUISystem")
 CompanionUISystem.companionSystem = GameManager.companionSystem
 GameManager:addSystem("CompanionUI", CompanionUISystem)
 
+-- UI for upgrading base stats
+local StatUpgradeUISystem = require("src.StatUpgradeUISystem")
+StatUpgradeUISystem.statSystem = StatUpgradeSystem
+GameManager:addSystem("StatUI", StatUpgradeUISystem)
+
 -- Manual player input when auto battle is disabled
 local PlayerInputSystem = require("src.PlayerInputSystem")
 GameManager:addSystem("PlayerInput", PlayerInputSystem)
