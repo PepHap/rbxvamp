@@ -107,6 +107,12 @@ local SkillSystem = require("src.SkillSystem")
 GameManager.skillSystem = SkillSystem.new()
 GameManager:addSystem("Skills", GameManager.skillSystem)
 
+-- Skill casting using mana and cooldowns
+local SkillCastSystem = require("src.SkillCastSystem")
+SkillCastSystem.skillSystem = GameManager.skillSystem
+GameManager.skillCastSystem = SkillCastSystem
+GameManager:addSystem("SkillCast", SkillCastSystem)
+
 -- Companion management
 local CompanionSystem = require("src.CompanionSystem")
 GameManager.companionSystem = CompanionSystem
@@ -145,6 +151,9 @@ function GameManager:rollSkill()
     local reward = GachaSystem:rollSkill()
     if reward then
         self.skillSystem:addSkill(reward)
+        if self.skillCastSystem and self.skillCastSystem.addSkill then
+            self.skillCastSystem:addSkill(reward)
+        end
     end
     return reward
 end
