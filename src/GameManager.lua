@@ -107,6 +107,11 @@ local DataPersistenceSystem = require("src.DataPersistenceSystem")
 GameManager:addSystem("Save", DataPersistenceSystem)
 GameManager.saveSystem = DataPersistenceSystem
 
+-- Automatically saves player progress at intervals
+local AutoSaveSystem = require("src.AutoSaveSystem")
+GameManager.autoSaveSystem = AutoSaveSystem
+GameManager:addSystem("AutoSave", AutoSaveSystem)
+
 -- Skill management and upgrades
 local SkillSystem = require("src.SkillSystem")
 GameManager.skillSystem = SkillSystem.new()
