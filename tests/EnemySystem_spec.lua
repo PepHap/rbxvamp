@@ -194,4 +194,15 @@ describe("EnemySystem", function()
         _G.workspace = nil
         _G.Vector3 = nil
     end)
+
+    it("damages the player when within attack range", function()
+        local PlayerSystem = require("src.PlayerSystem")
+        local AutoBattleSystem = require("src.AutoBattleSystem")
+        PlayerSystem.health = 100
+        PlayerSystem.maxHealth = 100
+        AutoBattleSystem.playerPosition = PlayerSystem.position
+        EnemySystem.enemies = {{position = {x = 1, y = 0, z = 0}, damage = 5, model = {primaryPart = {position = {x = 1, y = 0, z = 0}}}}}
+        EnemySystem:update(1)
+        assert.equals(95, PlayerSystem.health)
+    end)
 end)
