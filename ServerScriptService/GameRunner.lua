@@ -11,6 +11,16 @@ Players.PlayerAdded:Connect(function(player)
     if player.SetAttribute then
         player:SetAttribute("SaveData", data)
     end
+    -- Start automatic saving for this player's data
+    GameManager.autoSaveSystem:start(
+        GameManager.saveSystem,
+        player.UserId,
+        function()
+            if player.GetAttribute then
+                return player:GetAttribute("SaveData")
+            end
+        end
+    )
 end)
 
 Players.PlayerRemoving:Connect(function(player)
