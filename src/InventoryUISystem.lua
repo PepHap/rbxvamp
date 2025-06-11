@@ -10,9 +10,16 @@ local InventoryUI = {
     page = 1,
     ---Number of inventory items shown per page
     itemsPerPage = 20,
+    ---Equipment slot awaiting an item selection
+    selectedSlot = nil,
+    ---Inventory index awaiting a slot selection
+    pendingIndex = nil,
+    ---Reference to the active ItemSystem instance provided by GameManager
+    itemSystem = nil,
 }
 
 local ItemSystem = require("src.ItemSystem")
+
 local PlayerSystem = require("src.PlayerSystem")
 
 -- utility for environment agnostic Instance creation
@@ -50,6 +57,40 @@ local function ensureGui()
     return gui
 end
 
+---Initializes the Inventory UI and binds page buttons.
+-- @param items table ItemSystem instance
+function InventoryUI:start(items)
+    self.itemSystem = items or self.itemSystem
+    local gui = ensureGui()
+    gui.PrevPage = gui.PrevPage or createInstance("TextButton")
+    gui.PrevPage.Text = "<"
+    parent(gui.PrevPage, gui)
+    if gui.PrevPage.MouseButton1Click then
+        gui.PrevPage.MouseButton1Click:Connect(function()
+            InventoryUI:changePage(-1)
+        end)
+    else
+        gui.PrevPage.onClick = function()
+            InventoryUI:changePage(-1)
+        end
+    end
+
+    gui.NextPage = gui.NextPage or createInstance("TextButton")
+    gui.NextPage.Text = ">"
+    parent(gui.NextPage, gui)
+    if gui.NextPage.MouseButton1Click then
+        gui.NextPage.MouseButton1Click:Connect(function()
+            InventoryUI:changePage(1)
+        end)
+    else
+        gui.NextPage.onClick = function()
+            InventoryUI:changePage(1)
+        end
+    end
+
+    self:update()
+end
+
 ---Renders equipment slot buttons
 local function renderEquipment(container, items)
     container.children = {}
@@ -59,6 +100,15 @@ local function renderEquipment(container, items)
         btn.Text = item and item.name or "Empty"
         btn.Slot = slot
         parent(btn, container)
+        if btn.MouseButton1Click then
+            btn.MouseButton1Click:Connect(function()
+                InventoryUI:selectSlot(slot)
+            end)
+        else
+            btn.onClick = function()
+                InventoryUI:selectSlot(slot)
+            end
+        end
     end
 end
 
@@ -72,6 +122,15 @@ local function renderInventory(container, items, page, perPage)
         btn.Text = item.name
         btn.Index = (page - 1) * perPage + i
         parent(btn, container)
+        if btn.MouseButton1Click then
+            btn.MouseButton1Click:Connect(function()
+                InventoryUI:selectInventory(btn.Index)
+            end)
+        else
+            btn.onClick = function()
+                InventoryUI:selectInventory(btn.Index)
+            end
+        end
     end
 end
 
@@ -107,17 +166,66 @@ function InventoryUI:update()
     parent(gui.Inventory, gui)
     parent(gui.Stats, gui)
 
-    renderEquipment(gui.Equipment, ItemSystem)
-    renderInventory(gui.Inventory, ItemSystem, self.page, self.itemsPerPage)
-    renderStats(gui.Stats, ItemSystem)
+    local items = self.itemSystem
+    if not items then
+        return
+    end
+
+    renderEquipment(gui.Equipment, items)
+    renderInventory(gui.Inventory, items, self.page, self.itemsPerPage)
+    renderStats(gui.Stats, items)
 end
 
 ---Changes the current inventory page and rerenders
 -- @param delta number positive or negative page change
 function InventoryUI:changePage(delta)
-    local total = ItemSystem:getInventoryPageCount(self.itemsPerPage)
+    if not self.itemSystem then
+        return
+    end
+    local total = self.itemSystem:getInventoryPageCount(self.itemsPerPage)
     self.page = math.max(1, math.min(total, self.page + delta))
     self:update()
 end
+
+---Handles clicking an inventory item. When a slot has been selected first,
+--  the item will be equipped into that slot. Otherwise the index is stored
+--  until a slot is chosen.
+-- @param index number inventory index
+function InventoryUI:selectInventory(index)
+    if not self.itemSystem then
+        return
+    end
+    if self.selectedSlot then
+        self.itemSystem:equipFromInventory(index, self.selectedSlot)
+        self.selectedSlot = nil
+    else
+        self.pendingIndex = index
+    end
+    self:update()
+end
+
+---Handles clicking an equipment slot. If an inventory index was selected
+--  beforehand, the item is equipped here. Otherwise clicking an occupied
+--  slot will unequip the item back into the inventory.
+-- @param slot string equipment slot name
+function InventoryUI:selectSlot(slot)
+    if not self.itemSystem then
+        return
+    end
+    if self.pendingIndex then
+        self.itemSystem:equipFromInventory(self.pendingIndex, slot)
+        self.pendingIndex = nil
+        self.selectedSlot = nil
+    else
+        local itm = self.itemSystem.slots[slot]
+        if itm then
+            self.itemSystem:unequipToInventory(slot)
+        else
+            self.selectedSlot = slot
+        end
+    end
+    self:update()
+end
+
 
 return InventoryUI
