@@ -13,7 +13,7 @@ local PlayerInputSystem = {
     ---Reference to the player's position table.
     playerPosition = nil,
     ---Key used to toggle the inventory UI.
-    inventoryKey = "I",
+    inventoryKey = "B",
 }
 
 local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
