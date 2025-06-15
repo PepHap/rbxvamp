@@ -113,10 +113,10 @@ function HudSystem:update()
     end
 
     if UDim2 and UDim2.new then
-        self.levelLabel.Position = UDim2.new(0, 10, 0, 10)
-        self.currencyLabel.Position = UDim2.new(0, 10, 0, 30)
-        self.autoButton.Position = UDim2.new(0, 10, 1, -80)
-        self.attackButton.Position = UDim2.new(0, 10, 1, -40)
+        self.levelLabel.Position = UDim2.new(0, 20, 0, 10)
+        self.currencyLabel.Position = UDim2.new(0, 20, 0, 30)
+        self.autoButton.Position = UDim2.new(0, 20, 1, -80)
+        self.attackButton.Position = UDim2.new(0, 20, 1, -40)
     end
 end
 
