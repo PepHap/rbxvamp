@@ -18,6 +18,12 @@ describe("QuestSystem", function()
         assert.equals(0, QuestSystem.quests["q1"].progress)
     end)
 
+    it("handles non-number progress amounts", function()
+        QuestSystem:addQuest{ id = "qt", goal = 2, reward = {currency = "gold", amount = 1} }
+        QuestSystem:addProgress("qt", {})
+        assert.equals(1, QuestSystem.quests["qt"].progress)
+    end)
+
     it("completes a quest and grants reward", function()
         QuestSystem:addQuest{ id = "q1", goal = 1, reward = {currency = "gold", amount = 3} }
         QuestSystem:addProgress("q1", 1)
