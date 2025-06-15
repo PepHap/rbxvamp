@@ -6,6 +6,12 @@ local InventoryUI = {
     useRobloxObjects = false,
     ---Reference to the created ScreenGui container
     gui = nil,
+    ---Child frame used for equipment slots
+    equipmentFrame = nil,
+    ---Child frame used for inventory items
+    inventoryFrame = nil,
+    ---Child frame used for showing stats
+    statsFrame = nil,
     ---Current page index
     page = 1,
     ---Number of inventory items shown per page
@@ -181,24 +187,32 @@ function InventoryUI:update()
     if type(gui) == "table" then
         gui.children = gui.children or {}
     end
-    gui.Equipment = gui.Equipment or createInstance("Frame")
-    gui.Inventory = gui.Inventory or createInstance("Frame")
-    gui.Stats = gui.Stats or createInstance("Frame")
-    clearChildren(gui.Equipment)
-    clearChildren(gui.Inventory)
-    clearChildren(gui.Stats)
-    parent(gui.Equipment, gui)
-    parent(gui.Inventory, gui)
-    parent(gui.Stats, gui)
+    local existing = gui.FindFirstChild and gui:FindFirstChild("Equipment")
+    self.equipmentFrame = self.equipmentFrame or existing or createInstance("Frame")
+    self.equipmentFrame.Name = "Equipment"
+    existing = gui.FindFirstChild and gui:FindFirstChild("Inventory")
+    self.inventoryFrame = self.inventoryFrame or existing or createInstance("Frame")
+    self.inventoryFrame.Name = "Inventory"
+    existing = gui.FindFirstChild and gui:FindFirstChild("Stats")
+    self.statsFrame = self.statsFrame or existing or createInstance("Frame")
+    self.statsFrame.Name = "Stats"
+
+    clearChildren(self.equipmentFrame)
+    clearChildren(self.inventoryFrame)
+    clearChildren(self.statsFrame)
+
+    parent(self.equipmentFrame, gui)
+    parent(self.inventoryFrame, gui)
+    parent(self.statsFrame, gui)
 
     local items = self.itemSystem
     if not items then
         return
     end
 
-    renderEquipment(gui.Equipment, items)
-    renderInventory(gui.Inventory, items, self.page, self.itemsPerPage)
-    renderStats(gui.Stats, items)
+    renderEquipment(self.equipmentFrame, items)
+    renderInventory(self.inventoryFrame, items, self.page, self.itemsPerPage)
+    renderStats(self.statsFrame, items)
 end
 
 ---Changes the current inventory page and rerenders

@@ -1,4 +1,5 @@
 local Players = game:GetService("Players")
+local HttpService = game:GetService("HttpService")
 
 -- Allow modules to be required using string paths like "src.Module" when
 -- running inside Roblox. This matches the behavior expected by the Lua
@@ -39,18 +40,24 @@ local GameManager = require(src:WaitForChild("GameManager"))
 
 local function onPlayerAdded(player)
     local data = GameManager:loadPlayerData(player.UserId)
-    if player.SetAttribute then
-        player:SetAttribute("SaveData", data)
+    if player.SetAttribute and HttpService then
+        local encoded = HttpService:JSONEncode(data)
+        player:SetAttribute("SaveData", encoded)
     end
 end
 
 local function onPlayerRemoving(player)
-    local data
+    local json
     if player.GetAttribute then
-        data = player:GetAttribute("SaveData")
+        json = player:GetAttribute("SaveData")
     end
-    if data then
-        GameManager:savePlayerData(player.UserId, data)
+    if json and HttpService then
+        local success, decoded = pcall(function()
+            return HttpService:JSONDecode(json)
+        end)
+        if success then
+            GameManager:savePlayerData(player.UserId, decoded)
+        end
     end
 end
 
