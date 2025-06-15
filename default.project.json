@@ -8,11 +8,10 @@
         "$path": "src"
       },
       "GameRunner": {
-        "$path": "ServerScriptService/GameRunner.lua"
+        "$path": "ServerScriptService/GameRunner.server.lua"
       },
       "MainServer": {
-        "$path": "ServerScriptService/MainServerScript.lua",
-        "$className": "Script"
+        "$path": "ServerScriptService/MainServer.server.lua"
       }
     },
     "ReplicatedStorage": {
@@ -26,8 +25,7 @@
     "StarterPlayer": {
       "StarterPlayerScripts": {
         "ClientGameRunner": {
-          "$path": "StarterPlayerScripts/ClientGameRunner.lua",
-          "$className": "LocalScript"
+          "$path": "StarterPlayerScripts/ClientGameRunner.client.lua"
         }
       }
     }
