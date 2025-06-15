@@ -49,8 +49,20 @@ function SkillUISystem:start(skillSys)
     self:update()
 end
 
+local function clearChildren(container)
+    if typeof and typeof(container) == "Instance" and container.GetChildren then
+        for _, child in ipairs(container:GetChildren()) do
+            if child.Destroy then
+                child:Destroy()
+            end
+        end
+    elseif type(container) == "table" then
+        container.children = {}
+    end
+end
+
 local function renderSkills(container, sys)
-    container.children = {}
+    clearChildren(container)
     for i, skill in ipairs(sys.skills) do
         local frame = createInstance("Frame")
         frame.Name = skill.name .. "Frame"
@@ -85,7 +97,9 @@ function SkillUISystem:update()
         return
     end
     local gui = ensureGui()
-    gui.children = gui.children or {}
+    if type(gui) == "table" then
+        gui.children = gui.children or {}
+    end
     gui.SkillList = gui.SkillList or createInstance("Frame")
     parent(gui.SkillList, gui)
 

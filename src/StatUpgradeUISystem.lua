@@ -49,8 +49,20 @@ function StatUpgradeUISystem:start(statSys)
     self:update()
 end
 
+local function clearChildren(container)
+    if typeof and typeof(container) == "Instance" and container.GetChildren then
+        for _, child in ipairs(container:GetChildren()) do
+            if child.Destroy then
+                child:Destroy()
+            end
+        end
+    elseif type(container) == "table" then
+        container.children = {}
+    end
+end
+
 local function renderStats(container, sys)
-    container.children = {}
+    clearChildren(container)
     for name, stat in pairs(sys.stats) do
         local frame = createInstance("Frame")
         frame.Name = name .. "Frame"
@@ -86,7 +98,9 @@ function StatUpgradeUISystem:update()
         return
     end
     local gui = ensureGui()
-    gui.children = gui.children or {}
+    if type(gui) == "table" then
+        gui.children = gui.children or {}
+    end
     gui.StatList = gui.StatList or createInstance("Frame")
     parent(gui.StatList, gui)
 
