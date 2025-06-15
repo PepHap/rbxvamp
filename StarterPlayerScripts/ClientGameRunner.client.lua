@@ -1,6 +1,25 @@
 -- ClientGameRunner.lua
 -- Starts GameManager client-side so UI modules become visible.
 
+-- Provide a require function that accepts string paths like "src.Module" when
+-- executed within Roblox Studio. This mirrors how the plain Lua environment
+-- loads modules during automated tests.
+local originalRequire = require
+local function pathRequire(target)
+    if typeof(target) == "Instance" then
+        return originalRequire(target)
+    elseif type(target) == "string" then
+        local current = game
+        for part in string.gmatch(target, "[^%.]+") do
+            current = current:WaitForChild(part)
+        end
+        return originalRequire(current)
+    else
+        return originalRequire(target)
+    end
+end
+require = pathRequire
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local src = ReplicatedStorage:WaitForChild("src")
 local GameManager = require(src.GameManager)
