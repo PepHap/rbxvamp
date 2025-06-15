@@ -12,6 +12,8 @@ local PlayerInputSystem = {
     keyStates = {},
     ---Reference to the player's position table.
     playerPosition = nil,
+    ---Key used to toggle the inventory UI.
+    inventoryKey = "I",
 }
 
 local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
@@ -20,6 +22,7 @@ local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
 local LootSystem = require(script.Parent:WaitForChild("LootSystem"))
 local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
 local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
+local InventoryUISystem = require(script.Parent:WaitForChild("InventoryUISystem"))
 
 -- Utility to connect Roblox input events when available
 local function connectRoblox()
@@ -32,7 +35,11 @@ local function connectRoblox()
         end)
         if ok and UIS then
             UIS.InputBegan:Connect(function(input)
-                PlayerInputSystem:setKeyState(input.KeyCode.Name, true)
+                local name = input.KeyCode.Name
+                PlayerInputSystem:setKeyState(name, true)
+                if name == PlayerInputSystem.inventoryKey then
+                    InventoryUISystem:toggle()
+                end
             end)
             UIS.InputEnded:Connect(function(input)
                 PlayerInputSystem:setKeyState(input.KeyCode.Name, false)
@@ -52,6 +59,9 @@ end
 -- @param isDown boolean whether the key is pressed
 function PlayerInputSystem:setKeyState(key, isDown)
     self.keyStates[key] = isDown and true or false
+    if key == self.inventoryKey and isDown then
+        InventoryUISystem:toggle()
+    end
 end
 
 ---Performs a manual attack against the nearest enemy.
