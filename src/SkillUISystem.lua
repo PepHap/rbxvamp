@@ -5,6 +5,7 @@ local SkillUISystem = {
     useRobloxObjects = false,
     gui = nil,
     skillSystem = nil,
+    skillListFrame = nil,
 }
 
 local SkillSystem = require(script.Parent:WaitForChild("SkillSystem"))
@@ -100,10 +101,20 @@ function SkillUISystem:update()
     if type(gui) == "table" then
         gui.children = gui.children or {}
     end
-    gui.SkillList = gui.SkillList or createInstance("Frame")
-    parent(gui.SkillList, gui)
+    local container
+    if self.skillListFrame then
+        container = self.skillListFrame
+    elseif gui.FindFirstChild then
+        container = gui:FindFirstChild("SkillList")
+    end
+    if not container then
+        container = createInstance("Frame")
+        container.Name = "SkillList"
+    end
+    parent(container, gui)
+    self.skillListFrame = container
 
-    renderSkills(gui.SkillList, sys)
+    renderSkills(container, sys)
 end
 
 function SkillUISystem:upgrade(index)
