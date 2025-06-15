@@ -6,6 +6,8 @@ local InventoryUI = {
     useRobloxObjects = false,
     ---Reference to the created ScreenGui container
     gui = nil,
+    ---Whether the inventory is currently visible
+    visible = false,
     ---Child frame used for equipment slots
     equipmentFrame = nil,
     ---Child frame used for inventory items
@@ -69,6 +71,11 @@ local function ensureGui()
     local gui = createInstance("ScreenGui")
     gui.Name = "InventoryUI"
     InventoryUI.gui = gui
+    if gui.Enabled ~= nil then
+        gui.Enabled = InventoryUI.visible
+    else
+        gui.Visible = InventoryUI.visible
+    end
     if InventoryUI.useRobloxObjects and game and type(game.GetService) == "function" then
         local ok, players = pcall(function() return game:GetService("Players") end)
         if ok and players and players.LocalPlayer and players.LocalPlayer:FindFirstChild("PlayerGui") then
@@ -87,6 +94,9 @@ function InventoryUI:start(items)
     local prev = gui:FindFirstChild("PrevPage") or createInstance("TextButton")
     prev.Name = "PrevPage"
     prev.Text = "<"
+    if prev.Position == nil and UDim2 and UDim2.new then
+        prev.Position = UDim2.new(0, 10, 1, -40)
+    end
     parent(prev, gui)
     if prev.MouseButton1Click then
         prev.MouseButton1Click:Connect(function()
@@ -102,6 +112,9 @@ function InventoryUI:start(items)
     local nextBtn = gui:FindFirstChild("NextPage") or createInstance("TextButton")
     nextBtn.Name = "NextPage"
     nextBtn.Text = ">"
+    if nextBtn.Position == nil and UDim2 and UDim2.new then
+        nextBtn.Position = UDim2.new(0, 50, 1, -40)
+    end
     parent(nextBtn, gui)
     if nextBtn.MouseButton1Click then
         nextBtn.MouseButton1Click:Connect(function()
@@ -115,6 +128,7 @@ function InventoryUI:start(items)
     if type(gui) == "table" then gui.NextPage = nextBtn end
 
     self:update()
+    self:setVisible(self.visible)
 end
 
 ---Renders equipment slot buttons
@@ -195,12 +209,30 @@ function InventoryUI:update()
     local existing = gui.FindFirstChild and gui:FindFirstChild("Equipment")
     self.equipmentFrame = self.equipmentFrame or existing or createInstance("Frame")
     self.equipmentFrame.Name = "Equipment"
+    if self.equipmentFrame.Position == nil and UDim2 and UDim2.new then
+        self.equipmentFrame.Position = UDim2.new(0, 10, 0.1, 0)
+    end
+    if self.equipmentFrame.Size == nil and UDim2 and UDim2.new then
+        self.equipmentFrame.Size = UDim2.new(0, 150, 0, 200)
+    end
     existing = gui.FindFirstChild and gui:FindFirstChild("Inventory")
     self.inventoryFrame = self.inventoryFrame or existing or createInstance("Frame")
     self.inventoryFrame.Name = "Inventory"
+    if self.inventoryFrame.Position == nil and UDim2 and UDim2.new then
+        self.inventoryFrame.Position = UDim2.new(0, 170, 0.1, 0)
+    end
+    if self.inventoryFrame.Size == nil and UDim2 and UDim2.new then
+        self.inventoryFrame.Size = UDim2.new(0, 200, 0, 200)
+    end
     existing = gui.FindFirstChild and gui:FindFirstChild("Stats")
     self.statsFrame = self.statsFrame or existing or createInstance("Frame")
     self.statsFrame.Name = "Stats"
+    if self.statsFrame.Position == nil and UDim2 and UDim2.new then
+        self.statsFrame.Position = UDim2.new(0, 380, 0.1, 0)
+    end
+    if self.statsFrame.Size == nil and UDim2 and UDim2.new then
+        self.statsFrame.Size = UDim2.new(0, 150, 0, 200)
+    end
 
     clearChildren(self.equipmentFrame)
     clearChildren(self.inventoryFrame)
@@ -269,6 +301,23 @@ function InventoryUI:selectSlot(slot)
         end
     end
     self:update()
+end
+
+---Sets whether the inventory UI is visible.
+-- @param on boolean
+function InventoryUI:setVisible(on)
+    self.visible = not not on
+    local gui = ensureGui()
+    if gui.Enabled ~= nil then
+        gui.Enabled = self.visible
+    else
+        gui.Visible = self.visible
+    end
+end
+
+---Toggles the visibility of the inventory UI.
+function InventoryUI:toggle()
+    self:setVisible(not self.visible)
 end
 
 
