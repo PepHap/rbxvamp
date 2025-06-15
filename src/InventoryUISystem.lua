@@ -94,7 +94,7 @@ function InventoryUI:start(items)
     local prev = gui:FindFirstChild("PrevPage") or createInstance("TextButton")
     prev.Name = "PrevPage"
     prev.Text = "<"
-    if prev.Position == nil and UDim2 and UDim2.new then
+    if UDim2 and UDim2.new then
         prev.Position = UDim2.new(0, 10, 1, -40)
     end
     parent(prev, gui)
@@ -112,7 +112,7 @@ function InventoryUI:start(items)
     local nextBtn = gui:FindFirstChild("NextPage") or createInstance("TextButton")
     nextBtn.Name = "NextPage"
     nextBtn.Text = ">"
-    if nextBtn.Position == nil and UDim2 and UDim2.new then
+    if UDim2 and UDim2.new then
         nextBtn.Position = UDim2.new(0, 50, 1, -40)
     end
     parent(nextBtn, gui)
@@ -140,10 +140,8 @@ local function renderEquipment(container, items)
         btn.Name = slot .. "Slot"
         btn.Text = item and item.name or "Empty"
         btn.Slot = slot
-        if btn.Position == nil and UDim2 and UDim2.new then
+        if UDim2 and UDim2.new then
             btn.Position = UDim2.new(0, 0, 0, index * 25)
-        end
-        if btn.Size == nil and UDim2 and UDim2.new then
             btn.Size = UDim2.new(1, 0, 0, 24)
         end
         parent(btn, container)
@@ -174,10 +172,8 @@ local function renderInventory(container, items, page, perPage)
         elseif type(btn) == "table" then
             btn.Index = idx
         end
-        if btn.Position == nil and UDim2 and UDim2.new then
+        if UDim2 and UDim2.new then
             btn.Position = UDim2.new(0, 0, 0, (i - 1) * 25)
-        end
-        if btn.Size == nil and UDim2 and UDim2.new then
             btn.Size = UDim2.new(1, 0, 0, 24)
         end
         parent(btn, container)
@@ -208,13 +204,13 @@ local function renderStats(container, items)
     end
     local hLabel = createInstance("TextLabel")
     hLabel.Text = "Health: " .. tostring(health)
-    if hLabel.Position == nil and UDim2 and UDim2.new then
+    if UDim2 and UDim2.new then
         hLabel.Position = UDim2.new(0, 0, 0, 0)
     end
     parent(hLabel, container)
     local aLabel = createInstance("TextLabel")
     aLabel.Text = "Attack: " .. tostring(attack)
-    if aLabel.Position == nil and UDim2 and UDim2.new then
+    if UDim2 and UDim2.new then
         aLabel.Position = UDim2.new(0, 0, 0, 20)
     end
     parent(aLabel, container)
@@ -229,28 +225,22 @@ function InventoryUI:update()
     local existing = gui.FindFirstChild and gui:FindFirstChild("Equipment")
     self.equipmentFrame = self.equipmentFrame or existing or createInstance("Frame")
     self.equipmentFrame.Name = "Equipment"
-    if self.equipmentFrame.Position == nil and UDim2 and UDim2.new then
+    if UDim2 and UDim2.new then
         self.equipmentFrame.Position = UDim2.new(0, 10, 0.1, 0)
-    end
-    if self.equipmentFrame.Size == nil and UDim2 and UDim2.new then
         self.equipmentFrame.Size = UDim2.new(0, 150, 0, 200)
     end
     existing = gui.FindFirstChild and gui:FindFirstChild("Inventory")
     self.inventoryFrame = self.inventoryFrame or existing or createInstance("Frame")
     self.inventoryFrame.Name = "Inventory"
-    if self.inventoryFrame.Position == nil and UDim2 and UDim2.new then
+    if UDim2 and UDim2.new then
         self.inventoryFrame.Position = UDim2.new(0, 170, 0.1, 0)
-    end
-    if self.inventoryFrame.Size == nil and UDim2 and UDim2.new then
         self.inventoryFrame.Size = UDim2.new(0, 200, 0, 200)
     end
     existing = gui.FindFirstChild and gui:FindFirstChild("Stats")
     self.statsFrame = self.statsFrame or existing or createInstance("Frame")
     self.statsFrame.Name = "Stats"
-    if self.statsFrame.Position == nil and UDim2 and UDim2.new then
+    if UDim2 and UDim2.new then
         self.statsFrame.Position = UDim2.new(0, 380, 0.1, 0)
-    end
-    if self.statsFrame.Size == nil and UDim2 and UDim2.new then
         self.statsFrame.Size = UDim2.new(0, 150, 0, 200)
     end
 
