@@ -41,6 +41,21 @@ local function parent(child, parentObj)
     end
 end
 
+-- Removes all child objects from the given container. When running in Roblox
+-- this will destroy Instance children. In the test environment it resets the
+-- `children` table used to emulate the hierarchy.
+local function clearChildren(container)
+    if typeof and typeof(container) == "Instance" and container.GetChildren then
+        for _, child in ipairs(container:GetChildren()) do
+            if child.Destroy then
+                child:Destroy()
+            end
+        end
+    elseif type(container) == "table" then
+        container.children = {}
+    end
+end
+
 local function ensureGui()
     if InventoryUI.gui then
         return InventoryUI.gui
@@ -98,7 +113,7 @@ end
 
 ---Renders equipment slot buttons
 local function renderEquipment(container, items)
-    container.children = {}
+    clearChildren(container)
     for slot, item in pairs(items.slots) do
         local btn = createInstance("TextButton")
         btn.Name = slot .. "Slot"
@@ -119,7 +134,7 @@ end
 
 ---Renders inventory item buttons for the current page
 local function renderInventory(container, items, page, perPage)
-    container.children = {}
+    clearChildren(container)
     local list = items:getInventoryPage(page, perPage)
     for i, item in ipairs(list) do
         local btn = createInstance("TextButton")
@@ -141,7 +156,7 @@ end
 
 ---Renders a list of basic stats derived from PlayerSystem and equipped items
 local function renderStats(container, items)
-    container.children = {}
+    clearChildren(container)
     local health = PlayerSystem.health
     local attack = 0
     for _, itm in pairs(items.slots) do
@@ -163,10 +178,15 @@ end
 ---Updates the whole GUI based on the ItemSystem state
 function InventoryUI:update()
     local gui = ensureGui()
-    gui.children = gui.children or {}
+    if type(gui) == "table" then
+        gui.children = gui.children or {}
+    end
     gui.Equipment = gui.Equipment or createInstance("Frame")
     gui.Inventory = gui.Inventory or createInstance("Frame")
     gui.Stats = gui.Stats or createInstance("Frame")
+    clearChildren(gui.Equipment)
+    clearChildren(gui.Inventory)
+    clearChildren(gui.Stats)
     parent(gui.Equipment, gui)
     parent(gui.Inventory, gui)
     parent(gui.Stats, gui)
