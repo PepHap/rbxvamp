@@ -146,15 +146,20 @@ local function renderInventory(container, items, page, perPage)
         local btn = createInstance("TextButton")
         btn.Name = "Inv" .. i
         btn.Text = item.name
-        btn.Index = (page - 1) * perPage + i
+        local idx = (page - 1) * perPage + i
+        if btn.SetAttribute then
+            btn:SetAttribute("Index", idx)
+        elseif type(btn) == "table" then
+            btn.Index = idx
+        end
         parent(btn, container)
         if btn.MouseButton1Click then
             btn.MouseButton1Click:Connect(function()
-                InventoryUI:selectInventory(btn.Index)
+                InventoryUI:selectInventory(idx)
             end)
         else
             btn.onClick = function()
-                InventoryUI:selectInventory(btn.Index)
+                InventoryUI:selectInventory(idx)
             end
         end
     end

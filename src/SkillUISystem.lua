@@ -75,20 +75,26 @@ local function renderSkills(container, sys)
 
         local btn = createInstance("TextButton")
         btn.Text = "Upgrade"
-        btn.Index = i
+        if btn.SetAttribute then
+            btn:SetAttribute("Index", i)
+        elseif type(btn) == "table" then
+            btn.Index = i
+        end
         parent(btn, frame)
         if btn.MouseButton1Click then
             btn.MouseButton1Click:Connect(function()
-                SkillUISystem:upgrade(btn.Index)
+                SkillUISystem:upgrade(i)
             end)
         else
             btn.onClick = function()
-                SkillUISystem:upgrade(btn.Index)
+                SkillUISystem:upgrade(i)
             end
         end
 
-        frame.Label = label
-        frame.Button = btn
+        if type(frame) == "table" then
+            frame.Label = label
+            frame.Button = btn
+        end
     end
 end
 
