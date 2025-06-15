@@ -9,11 +9,26 @@ local function pathRequire(target)
     if typeof(target) == "Instance" then
         return originalRequire(target)
     elseif type(target) == "string" then
-        local current = game
+        local parts = {}
         for part in string.gmatch(target, "[^%.]+") do
-            current = current:WaitForChild(part)
+            table.insert(parts, part)
         end
-        return originalRequire(current)
+
+        local root = game
+        if parts[1] == "src" then
+            local rs = game:GetService("ReplicatedStorage")
+            local sss = game:GetService("ServerScriptService")
+            root = rs:FindFirstChild("src") or sss:FindFirstChild("src") or root
+            table.remove(parts, 1)
+        elseif parts[1] == "assets" then
+            root = game:GetService("ReplicatedStorage"):FindFirstChild("assets") or root
+            table.remove(parts, 1)
+        end
+
+        for _, part in ipairs(parts) do
+            root = root:WaitForChild(part)
+        end
+        return originalRequire(root)
     else
         return originalRequire(target)
     end
