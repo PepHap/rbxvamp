@@ -20,4 +20,10 @@ describe("CurrencySystem", function()
         assert.is_false(ok)
         assert.equals(2, CurrencySystem:get("gold"))
     end)
+
+    it("handles non-number amounts", function()
+        CurrencySystem.balances = {}
+        CurrencySystem:add("gold", {})
+        assert.equals(0, CurrencySystem:get("gold"))
+    end)
 end)
