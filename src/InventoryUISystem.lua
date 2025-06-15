@@ -134,11 +134,18 @@ end
 ---Renders equipment slot buttons
 local function renderEquipment(container, items)
     clearChildren(container)
+    local index = 0
     for slot, item in pairs(items.slots) do
         local btn = createInstance("TextButton")
         btn.Name = slot .. "Slot"
         btn.Text = item and item.name or "Empty"
         btn.Slot = slot
+        if btn.Position == nil and UDim2 and UDim2.new then
+            btn.Position = UDim2.new(0, 0, 0, index * 25)
+        end
+        if btn.Size == nil and UDim2 and UDim2.new then
+            btn.Size = UDim2.new(1, 0, 0, 24)
+        end
         parent(btn, container)
         if btn.MouseButton1Click then
             btn.MouseButton1Click:Connect(function()
@@ -149,6 +156,7 @@ local function renderEquipment(container, items)
                 InventoryUI:selectSlot(slot)
             end
         end
+        index = index + 1
     end
 end
 
@@ -165,6 +173,12 @@ local function renderInventory(container, items, page, perPage)
             btn:SetAttribute("Index", idx)
         elseif type(btn) == "table" then
             btn.Index = idx
+        end
+        if btn.Position == nil and UDim2 and UDim2.new then
+            btn.Position = UDim2.new(0, 0, 0, (i - 1) * 25)
+        end
+        if btn.Size == nil and UDim2 and UDim2.new then
+            btn.Size = UDim2.new(1, 0, 0, 24)
         end
         parent(btn, container)
         if btn.MouseButton1Click then
@@ -194,9 +208,15 @@ local function renderStats(container, items)
     end
     local hLabel = createInstance("TextLabel")
     hLabel.Text = "Health: " .. tostring(health)
+    if hLabel.Position == nil and UDim2 and UDim2.new then
+        hLabel.Position = UDim2.new(0, 0, 0, 0)
+    end
     parent(hLabel, container)
     local aLabel = createInstance("TextLabel")
     aLabel.Text = "Attack: " .. tostring(attack)
+    if aLabel.Position == nil and UDim2 and UDim2.new then
+        aLabel.Position = UDim2.new(0, 0, 0, 20)
+    end
     parent(aLabel, container)
 end
 
