@@ -75,7 +75,11 @@ local function renderStats(container, sys)
 
         local btn = createInstance("TextButton")
         btn.Text = "Upgrade"
-        btn.StatName = name
+        if btn.SetAttribute then
+            btn:SetAttribute("StatName", name)
+        elseif type(btn) == "table" then
+            btn.StatName = name
+        end
         parent(btn, frame)
 
         if btn.MouseButton1Click then
@@ -88,8 +92,10 @@ local function renderStats(container, sys)
             end
         end
 
-        frame.Label = label
-        frame.Button = btn
+        if type(frame) == "table" then
+            frame.Label = label
+            frame.Button = btn
+        end
     end
 end
 

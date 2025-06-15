@@ -5,6 +5,7 @@ local CompanionUISystem = {
     useRobloxObjects = false,
     gui = nil,
     companionSystem = nil,
+    listFrame = nil,
 }
 
 local CompanionSystem = require(script.Parent:WaitForChild("CompanionSystem"))
@@ -50,7 +51,11 @@ function CompanionUISystem:start(compSys)
 end
 
 local function renderCompanions(container, sys)
-    container.children = {}
+    if type(container) == "table" then
+        container.children = {}
+    elseif container.ClearAllChildren then
+        container:ClearAllChildren()
+    end
     for i, comp in ipairs(sys.companions) do
         local frame = createInstance("Frame")
         frame.Name = comp.name .. "Frame"
@@ -62,20 +67,26 @@ local function renderCompanions(container, sys)
 
         local btn = createInstance("TextButton")
         btn.Text = "Upgrade"
-        btn.Index = i
+        if btn.SetAttribute then
+            btn:SetAttribute("Index", i)
+        elseif type(btn) == "table" then
+            btn.Index = i
+        end
         parent(btn, frame)
         if btn.MouseButton1Click then
             btn.MouseButton1Click:Connect(function()
-                CompanionUISystem:upgrade(btn.Index)
+                CompanionUISystem:upgrade(i)
             end)
         else
             btn.onClick = function()
-                CompanionUISystem:upgrade(btn.Index)
+                CompanionUISystem:upgrade(i)
             end
         end
 
-        frame.Label = label
-        frame.Button = btn
+        if type(frame) == "table" then
+            frame.Label = label
+            frame.Button = btn
+        end
     end
 end
 
@@ -85,11 +96,24 @@ function CompanionUISystem:update()
         return
     end
     local gui = ensureGui()
-    gui.children = gui.children or {}
-    gui.CompanionList = gui.CompanionList or createInstance("Frame")
-    parent(gui.CompanionList, gui)
+    if type(gui) == "table" then
+        gui.children = gui.children or {}
+    end
 
-    renderCompanions(gui.CompanionList, sys)
+    local container
+    if self.listFrame then
+        container = self.listFrame
+    elseif gui.FindFirstChild then
+        container = gui:FindFirstChild("CompanionList")
+    end
+    if not container then
+        container = createInstance("Frame")
+        container.Name = "CompanionList"
+    end
+    parent(container, gui)
+    self.listFrame = container
+
+    renderCompanions(container, sys)
 end
 
 function CompanionUISystem:upgrade(index)

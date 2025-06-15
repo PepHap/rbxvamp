@@ -7,6 +7,15 @@ local UISystem = {
 
     ---Label displaying the current reward gauge value.
     gaugeLabel = nil,
+
+    ---Temporary reward option buttons
+    rewardButtons = nil,
+
+    ---Label showing the selected reward
+    selectionLabel = nil,
+
+    ---Label displaying gacha results
+    gachaLabel = nil,
 }
 
 -- Helper to create an Instance when available or fall back to a table
@@ -36,7 +45,9 @@ local function ensureGui()
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "UISystemGui"
-    gui.children = {}
+    if type(gui) == "table" then
+        gui.children = {}
+    end
     UISystem.gui = gui
     if UISystem.useRobloxObjects and game ~= nil and type(game.GetService) == "function" then
         local ok, players = pcall(function() return game:GetService("Players") end)
@@ -60,14 +71,13 @@ function UISystem:showRewardOptions()
     end
 
     local gui = ensureGui()
-    gui.rewardButtons = {}
+    self.rewardButtons = {}
 
     for i, opt in ipairs(opts) do
         local btn = createInstance("TextButton")
         btn.Text = ("%d) %s (%s)"):format(i, opt.item.name, opt.slot)
-        btn.OptionIndex = i
         parent(btn, gui)
-        table.insert(gui.rewardButtons, btn)
+        table.insert(self.rewardButtons, btn)
     end
 
     return opts
@@ -80,16 +90,16 @@ function UISystem:selectReward(index)
     local chosen = RewardGaugeSystem:choose(index)
 
     local gui = ensureGui()
-    gui.selectionLabel = gui.selectionLabel or createInstance("TextLabel")
-    parent(gui.selectionLabel, gui)
+    self.selectionLabel = self.selectionLabel or createInstance("TextLabel")
+    parent(self.selectionLabel, gui)
 
     if chosen then
-        gui.selectionLabel.Text = ("Selected %s for %s"):format(chosen.item.name, chosen.slot)
+        self.selectionLabel.Text = ("Selected %s for %s"):format(chosen.item.name, chosen.slot)
     else
-        gui.selectionLabel.Text = "Invalid reward selection"
+        self.selectionLabel.Text = "Invalid reward selection"
     end
 
-    gui.rewardButtons = nil
+    self.rewardButtons = nil
 
     return chosen
 end
@@ -98,17 +108,17 @@ end
 -- @param result table|nil reward returned from GachaSystem
 function UISystem:displayGachaResult(result)
     local gui = ensureGui()
-    gui.gachaLabel = gui.gachaLabel or createInstance("TextLabel")
-    parent(gui.gachaLabel, gui)
+    self.gachaLabel = self.gachaLabel or createInstance("TextLabel")
+    parent(self.gachaLabel, gui)
 
     if not result then
-        gui.gachaLabel.Text = "Gacha: no reward"
+        self.gachaLabel.Text = "Gacha: no reward"
         return
     end
 
     local extra = result.slot and (" - " .. result.slot) or ""
     local rarity = result.rarity or "?"
-    gui.gachaLabel.Text = ("Gacha: %s [%s]%s"):format(result.name, rarity, extra)
+    self.gachaLabel.Text = ("Gacha: %s [%s]%s"):format(result.name, rarity, extra)
 end
 
 ---Rolls a skill through ``GachaSystem`` and displays the outcome.

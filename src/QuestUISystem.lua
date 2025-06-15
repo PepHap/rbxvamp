@@ -2,6 +2,7 @@ local QuestUISystem = {
     useRobloxObjects = false,
     gui = nil,
     questSystem = nil,
+    listFrame = nil,
 }
 
 local function createInstance(className)
@@ -49,11 +50,29 @@ function QuestUISystem:update()
         return
     end
     local gui = ensureGui()
-    gui.children = {}
+    if type(gui) == "table" then
+        gui.children = {}
+    elseif self.listFrame and self.listFrame.ClearAllChildren then
+        self.listFrame:ClearAllChildren()
+    end
+
+    local container = self.listFrame
+    if not container then
+        if gui.FindFirstChild then
+            container = gui:FindFirstChild("QuestList")
+        end
+    end
+    if not container then
+        container = createInstance("Frame")
+        container.Name = "QuestList"
+    end
+    parent(container, gui)
+    self.listFrame = container
+
     for id, q in pairs(qs.quests) do
         local frame = createInstance("Frame")
         frame.Name = id .. "Frame"
-        parent(frame, gui)
+        parent(frame, container)
 
         local label = createInstance("TextLabel")
         label.Name = "ProgressLabel"
@@ -63,7 +82,6 @@ function QuestUISystem:update()
         local btn = createInstance("TextButton")
         btn.Name = "ClaimButton"
         btn.Text = "Claim"
-        btn.QuestId = id
         parent(btn, frame)
 
         if q.completed and not q.rewarded then
@@ -80,8 +98,10 @@ function QuestUISystem:update()
             btn.Active = false
         end
 
-        frame.ProgressLabel = label
-        frame.ClaimButton = btn
+        if type(frame) == "table" then
+            frame.ProgressLabel = label
+            frame.ClaimButton = btn
+        end
     end
 end
 
