@@ -111,6 +111,19 @@ function HudSystem:update()
     else
         self.attackButton.Active = true
     end
+
+    if self.levelLabel.Position == nil and UDim2 and UDim2.new then
+        self.levelLabel.Position = UDim2.new(0, 10, 0, 10)
+    end
+    if self.currencyLabel.Position == nil and UDim2 and UDim2.new then
+        self.currencyLabel.Position = UDim2.new(0, 10, 0, 30)
+    end
+    if self.autoButton.Position == nil and UDim2 and UDim2.new then
+        self.autoButton.Position = UDim2.new(0, 10, 1, -80)
+    end
+    if self.attackButton.Position == nil and UDim2 and UDim2.new then
+        self.attackButton.Position = UDim2.new(0, 10, 1, -40)
+    end
 end
 
 function HudSystem:toggleAutoBattle()
