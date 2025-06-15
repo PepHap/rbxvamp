@@ -6,9 +6,12 @@ SkillSystem.__index = SkillSystem
 
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local assets = ReplicatedStorage:WaitForChild("assets")
+
 -- Table of predefined skills available to the game. Each skill entry
 -- specifies its rarity and any additional parameters.
-SkillSystem.templates = require("assets.skills")
+SkillSystem.templates = require(assets:WaitForChild("skills"))
 
 ---Creates a new skill system instance.
 -- @return table

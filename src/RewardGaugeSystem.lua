@@ -14,7 +14,9 @@ RewardGaugeSystem.options = nil
 
 -- Required systems/assets
 local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
-local itemPool = require("assets.items")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local assets = ReplicatedStorage:WaitForChild("assets")
+local itemPool = require(assets:WaitForChild("items"))
 
 -- Precompute a list of available equipment slots
 local slots = {}
