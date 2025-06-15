@@ -5,6 +5,7 @@ local StatUpgradeUISystem = {
     useRobloxObjects = false,
     gui = nil,
     statSystem = nil,
+    statListFrame = nil,
 }
 
 local StatUpgradeSystem = require(script.Parent:WaitForChild("StatUpgradeSystem"))
@@ -101,10 +102,20 @@ function StatUpgradeUISystem:update()
     if type(gui) == "table" then
         gui.children = gui.children or {}
     end
-    gui.StatList = gui.StatList or createInstance("Frame")
-    parent(gui.StatList, gui)
+    local container
+    if self.statListFrame then
+        container = self.statListFrame
+    elseif gui.FindFirstChild then
+        container = gui:FindFirstChild("StatList")
+    end
+    if not container then
+        container = createInstance("Frame")
+        container.Name = "StatList"
+    end
+    parent(container, gui)
+    self.statListFrame = container
 
-    renderStats(gui.StatList, sys)
+    renderStats(container, sys)
 end
 
 function StatUpgradeUISystem:upgrade(name)
