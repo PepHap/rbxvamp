@@ -59,7 +59,11 @@ function QuestSystem:addProgress(id, amount)
     if not q or q.completed then
         return
     end
-    q.progress = q.progress + (amount or 0)
+    local add = amount
+    if type(add) ~= "number" then
+        add = 1
+    end
+    q.progress = q.progress + add
     if q.progress >= q.goal then
         q.completed = true
     end
