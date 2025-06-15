@@ -77,9 +77,14 @@ local function ensureGui()
         gui.Visible = InventoryUI.visible
     end
     if InventoryUI.useRobloxObjects and game and type(game.GetService) == "function" then
-        local ok, players = pcall(function() return game:GetService("Players") end)
-        if ok and players and players.LocalPlayer and players.LocalPlayer:FindFirstChild("PlayerGui") then
-            gui.Parent = players.LocalPlayer.PlayerGui
+        local ok, players = pcall(function()
+            return game:GetService("Players")
+        end)
+        if ok and players and players.LocalPlayer then
+            local pgui = players.LocalPlayer:WaitForChild("PlayerGui", 5)
+            if pgui then
+                gui.Parent = pgui
+            end
         end
     end
     return gui
