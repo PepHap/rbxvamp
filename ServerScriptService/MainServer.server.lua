@@ -1,4 +1,24 @@
 local Players = game:GetService("Players")
+
+-- Allow modules to be required using string paths like "src.Module" when
+-- running inside Roblox. This matches the behavior expected by the Lua
+-- test environment.
+local originalRequire = require
+local function pathRequire(target)
+    if typeof(target) == "Instance" then
+        return originalRequire(target)
+    elseif type(target) == "string" then
+        local current = game
+        for part in string.gmatch(target, "[^%.]+") do
+            current = current:WaitForChild(part)
+        end
+        return originalRequire(current)
+    else
+        return originalRequire(target)
+    end
+end
+require = pathRequire
+
 local GameManager = require(script.Parent.src.GameManager)
 
 local function onPlayerAdded(player)

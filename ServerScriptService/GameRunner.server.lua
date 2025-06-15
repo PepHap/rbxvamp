@@ -1,6 +1,25 @@
 -- GameRunner.lua
 -- Entry point script for starting the game within Roblox Studio.
 
+-- Override require so that modules can be loaded via string paths like
+-- "src.Module" when running inside Roblox. This mirrors the plain Lua test
+-- environment where such paths are valid.
+local originalRequire = require
+local function pathRequire(target)
+    if typeof(target) == "Instance" then
+        return originalRequire(target)
+    elseif type(target) == "string" and game then
+        local current = game
+        for part in string.gmatch(target, "[^%.]+") do
+            current = current:WaitForChild(part)
+        end
+        return originalRequire(current)
+    else
+        return originalRequire(target)
+    end
+end
+require = pathRequire
+
 local GameManager = require(script.Parent.src.GameManager)
 
 -- Enable Roblox object creation for modules that support it so the
