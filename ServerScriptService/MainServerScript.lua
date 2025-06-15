@@ -1,5 +1,5 @@
 local Players = game:GetService("Players")
-local GameManager = require(script.Parent.GameManager)
+local GameManager = require(script.Parent.src.GameManager)
 
 local function onPlayerAdded(player)
     local data = GameManager:loadPlayerData(player.UserId)
