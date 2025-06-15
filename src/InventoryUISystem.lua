@@ -91,7 +91,7 @@ function InventoryUI:start(items)
     self.itemSystem = items or self.itemSystem
     local gui = ensureGui()
 
-    local prev = gui:FindFirstChild("PrevPage") or createInstance("TextButton")
+    local prev = gui.FindFirstChild and gui:FindFirstChild("PrevPage") or createInstance("TextButton")
     prev.Name = "PrevPage"
     prev.Text = "<"
     if UDim2 and UDim2.new then
@@ -109,7 +109,7 @@ function InventoryUI:start(items)
     end
     if type(gui) == "table" then gui.PrevPage = prev end
 
-    local nextBtn = gui:FindFirstChild("NextPage") or createInstance("TextButton")
+    local nextBtn = gui.FindFirstChild and gui:FindFirstChild("NextPage") or createInstance("TextButton")
     nextBtn.Name = "NextPage"
     nextBtn.Text = ">"
     if UDim2 and UDim2.new then
