@@ -187,6 +187,10 @@ function GameManager:rollCompanion()
     local reward = GachaSystem:rollCompanion()
     if reward then
         self.companionSystem:add(reward)
+        local ai = self.systems and self.systems.CompanionAI
+        if ai and ai.addCompanion then
+            ai:addCompanion(reward)
+        end
     end
     return reward
 end
