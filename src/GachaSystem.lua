@@ -16,9 +16,11 @@ GachaSystem.rarityWeights = {
 }
 
 -- Load reward pools
-local skillPool = require("assets.skills")
-local itemPool = require("assets.items")
-local companionPool = require("assets.companions")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local assets = ReplicatedStorage:WaitForChild("assets")
+local skillPool = require(assets:WaitForChild("skills"))
+local itemPool = require(assets:WaitForChild("items"))
+local companionPool = require(assets:WaitForChild("companions"))
 
 -- Simple currency storage
 GachaSystem.tickets = {skill = 0, companion = 0, equipment = 0}

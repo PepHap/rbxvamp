@@ -6,10 +6,13 @@ ItemSystem.__index = ItemSystem
 
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local assets = ReplicatedStorage:WaitForChild("assets")
+
 -- Preloaded item templates describing available equipment. These definitions
 -- are used when presenting random rewards to the player.
-ItemSystem.templates = require("assets.items")
-ItemSystem.upgradeCosts = require("assets.item_upgrade_costs")
+ItemSystem.templates = require(assets:WaitForChild("items"))
+ItemSystem.upgradeCosts = require(assets:WaitForChild("item_upgrade_costs"))
 
 -- Determine the highest level defined in the upgrade cost table. This value
 -- acts as a hard cap for item upgrades.

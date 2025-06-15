@@ -4,7 +4,9 @@
 local QuestSystem = {}
 
 -- Built-in quest definitions loaded when the system starts
-QuestSystem.definitions = require("assets.quests")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local assets = ReplicatedStorage:WaitForChild("assets")
+QuestSystem.definitions = require(assets:WaitForChild("quests"))
 
 -- Event connections for automatic progress tracking
 QuestSystem.connections = {}
