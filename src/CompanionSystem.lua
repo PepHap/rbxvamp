@@ -3,7 +3,7 @@
 
 local CompanionSystem = {}
 
-local CurrencySystem = require("src.CurrencySystem")
+local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 
 -- List of companion tables currently owned by the player. Each companion
 -- stores a ``name``, ``rarity`` and current ``level``.

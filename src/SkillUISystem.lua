@@ -7,8 +7,8 @@ local SkillUISystem = {
     skillSystem = nil,
 }
 
-local SkillSystem = require("src.SkillSystem")
-local CurrencySystem = require("src.CurrencySystem")
+local SkillSystem = require(script.Parent:WaitForChild("SkillSystem"))
+local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 
 local function createInstance(className)
     if SkillUISystem.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then

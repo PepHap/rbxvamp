@@ -39,7 +39,7 @@ local function ensureGui()
 end
 
 function QuestUISystem:start(questSys)
-    self.questSystem = questSys or self.questSystem or require("src.QuestSystem")
+    self.questSystem = questSys or self.questSystem or require(script.Parent:WaitForChild("QuestSystem"))
     self:update()
 end
 

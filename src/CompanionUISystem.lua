@@ -7,8 +7,8 @@ local CompanionUISystem = {
     companionSystem = nil,
 }
 
-local CompanionSystem = require("src.CompanionSystem")
-local CurrencySystem = require("src.CurrencySystem")
+local CompanionSystem = require(script.Parent:WaitForChild("CompanionSystem"))
+local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 
 local function createInstance(className)
     if CompanionUISystem.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then

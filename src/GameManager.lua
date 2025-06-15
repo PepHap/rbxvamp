@@ -49,125 +49,125 @@ function GameManager:update(dt)
 end
 
 -- Integrate the default enemy system on load
-local EnemySystem = require("src.EnemySystem")
+local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
 GameManager:addSystem("Enemy", EnemySystem)
 
 -- Auto battle functionality can optionally control the player's actions
-local AutoBattleSystem = require("src.AutoBattleSystem")
+local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
 GameManager:addSystem("AutoBattle", AutoBattleSystem)
 
 
 -- Player progression handling
-local PlayerLevelSystem = require("src.PlayerLevelSystem")
+local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
 GameManager:addSystem("PlayerLevel", PlayerLevelSystem)
 
 -- Player health management
-local PlayerSystem = require("src.PlayerSystem")
+local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
 GameManager:addSystem("Player", PlayerSystem)
 
 -- Stage progression between floors
-local LevelSystem = require("src.LevelSystem")
+local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
 GameManager:addSystem("Level", LevelSystem)
 
 -- Tracks which area the player is currently exploring
-local LocationSystem = require("src.LocationSystem")
+local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
 GameManager:addSystem("Location", LocationSystem)
 
 -- Gacha system used for rolling random rewards
-local GachaSystem = require("src.GachaSystem")
+local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
 GameManager:addSystem("Gacha", GachaSystem)
 
 -- Gauge based reward choices independent of stage/XP
-local RewardGaugeSystem = require("src.RewardGaugeSystem")
+local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
 GameManager:addSystem("RewardGauge", RewardGaugeSystem)
 
 -- Achievement tracking for milestone rewards
-local AchievementSystem = require("src.AchievementSystem")
+local AchievementSystem = require(script.Parent:WaitForChild("AchievementSystem"))
 GameManager.achievementSystem = AchievementSystem
 GameManager:addSystem("Achievements", AchievementSystem)
 
 -- Equipment handling
-local ItemSystem = require("src.ItemSystem")
+local ItemSystem = require(script.Parent:WaitForChild("ItemSystem"))
 GameManager.itemSystem = ItemSystem.new()
 GameManager:addSystem("Items", GameManager.itemSystem)
 
 -- Quests provide structured objectives and rewards
-local QuestSystem = require("src.QuestSystem")
+local QuestSystem = require(script.Parent:WaitForChild("QuestSystem"))
 GameManager:addSystem("Quest", QuestSystem)
 
 -- Keys used to unlock special areas and modes
-local KeySystem = require("src.KeySystem")
+local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
 GameManager:addSystem("Keys", KeySystem)
 
 -- Optional dungeon runs for earning upgrade currency
-local DungeonSystem = require("src.DungeonSystem")
+local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
 GameManager:addSystem("Dungeon", DungeonSystem)
 
 -- Base stats like attack and defense upgrades
-local StatUpgradeSystem = require("src.StatUpgradeSystem")
+local StatUpgradeSystem = require(script.Parent:WaitForChild("StatUpgradeSystem"))
 GameManager:addSystem("Stats", StatUpgradeSystem)
 
 -- Data persistence for saving and loading progress
-local DataPersistenceSystem = require("src.DataPersistenceSystem")
+local DataPersistenceSystem = require(script.Parent:WaitForChild("DataPersistenceSystem"))
 GameManager:addSystem("Save", DataPersistenceSystem)
 GameManager.saveSystem = DataPersistenceSystem
 
 -- Automatically saves player progress at intervals
-local AutoSaveSystem = require("src.AutoSaveSystem")
+local AutoSaveSystem = require(script.Parent:WaitForChild("AutoSaveSystem"))
 GameManager.autoSaveSystem = AutoSaveSystem
 GameManager:addSystem("AutoSave", AutoSaveSystem)
 
 -- Skill management and upgrades
-local SkillSystem = require("src.SkillSystem")
+local SkillSystem = require(script.Parent:WaitForChild("SkillSystem"))
 GameManager.skillSystem = SkillSystem.new()
 GameManager:addSystem("Skills", GameManager.skillSystem)
 
 -- Skill casting using mana and cooldowns
-local SkillCastSystem = require("src.SkillCastSystem")
+local SkillCastSystem = require(script.Parent:WaitForChild("SkillCastSystem"))
 SkillCastSystem.skillSystem = GameManager.skillSystem
 GameManager.skillCastSystem = SkillCastSystem
 GameManager:addSystem("SkillCast", SkillCastSystem)
 
 -- Companion management
-local CompanionSystem = require("src.CompanionSystem")
+local CompanionSystem = require(script.Parent:WaitForChild("CompanionSystem"))
 GameManager.companionSystem = CompanionSystem
 GameManager:addSystem("Companions", CompanionSystem)
 
 -- Companions follow the player and attack nearby enemies
-local CompanionAttackSystem = require("src.CompanionAttackSystem")
+local CompanionAttackSystem = require(script.Parent:WaitForChild("CompanionAttackSystem"))
 CompanionAttackSystem.companionSystem = GameManager.companionSystem
 GameManager:addSystem("CompanionAI", CompanionAttackSystem)
 
 -- Minimal UI for displaying rewards and gacha results
-local UISystem = require("src.UISystem")
+local UISystem = require(script.Parent:WaitForChild("UISystem"))
 GameManager:addSystem("UI", UISystem)
 
 -- Inventory UI provides equipment and bag management
-local InventoryUISystem = require("src.InventoryUISystem")
+local InventoryUISystem = require(script.Parent:WaitForChild("InventoryUISystem"))
 InventoryUISystem.itemSystem = GameManager.itemSystem
 
 GameManager:addSystem("InventoryUI", InventoryUISystem)
 
 -- Heads-up display with level, experience and currency
-local HudSystem = require("src.HudSystem")
+local HudSystem = require(script.Parent:WaitForChild("HudSystem"))
 GameManager:addSystem("HUD", HudSystem)
 
 -- Skill and companion UI modules
-local SkillUISystem = require("src.SkillUISystem")
+local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
 SkillUISystem.skillSystem = GameManager.skillSystem
 GameManager:addSystem("SkillUI", SkillUISystem)
 
-local CompanionUISystem = require("src.CompanionUISystem")
+local CompanionUISystem = require(script.Parent:WaitForChild("CompanionUISystem"))
 CompanionUISystem.companionSystem = GameManager.companionSystem
 GameManager:addSystem("CompanionUI", CompanionUISystem)
 
 -- UI for upgrading base stats
-local StatUpgradeUISystem = require("src.StatUpgradeUISystem")
+local StatUpgradeUISystem = require(script.Parent:WaitForChild("StatUpgradeUISystem"))
 StatUpgradeUISystem.statSystem = StatUpgradeSystem
 GameManager:addSystem("StatUI", StatUpgradeUISystem)
 
 -- Manual player input when auto battle is disabled
-local PlayerInputSystem = require("src.PlayerInputSystem")
+local PlayerInputSystem = require(script.Parent:WaitForChild("PlayerInputSystem"))
 GameManager:addSystem("PlayerInput", PlayerInputSystem)
 
 ---Triggers a skill gacha roll.

@@ -37,22 +37,22 @@ local function pathRequire(target)
 end
 require = pathRequire
 
-local GameManager = require(script.Parent.src.GameManager)
+local GameManager = require(script.Parent:WaitForChild("GameManager"))
 
 -- Enable Roblox object creation for modules that support it so the
 -- user can actually see models and interfaces when running the game
 local modulesWithUI = {
-    require(script.Parent.src.HudSystem),
-    require(script.Parent.src.InventoryUISystem),
-    require(script.Parent.src.SkillUISystem),
-    require(script.Parent.src.CompanionUISystem),
-    require(script.Parent.src.StatUpgradeUISystem),
-    require(script.Parent.src.QuestUISystem),
-    require(script.Parent.src.UISystem),
-    require(script.Parent.src.PlayerSystem),
-    require(script.Parent.src.PlayerInputSystem),
-    require(script.Parent.src.EnemySystem),
-    require(script.Parent.src.DataPersistenceSystem),
+    require(script.Parent:WaitForChild("HudSystem")),
+    require(script.Parent:WaitForChild("InventoryUISystem")),
+    require(script.Parent:WaitForChild("SkillUISystem")),
+    require(script.Parent:WaitForChild("CompanionUISystem")),
+    require(script.Parent:WaitForChild("StatUpgradeUISystem")),
+    require(script.Parent:WaitForChild("QuestUISystem")),
+    require(script.Parent:WaitForChild("UISystem")),
+    require(script.Parent:WaitForChild("PlayerSystem")),
+    require(script.Parent:WaitForChild("PlayerInputSystem")),
+    require(script.Parent:WaitForChild("EnemySystem")),
+    require(script.Parent:WaitForChild("DataPersistenceSystem")),
 }
 for _, mod in ipairs(modulesWithUI) do
     if type(mod) == "table" then

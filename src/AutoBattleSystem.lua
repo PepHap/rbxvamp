@@ -6,15 +6,12 @@ local AutoBattleSystem = {}
 -- Resolve the EnemySystem path relative to how this module was required. This
 -- keeps unit tests functional even when they load modules using relative paths
 -- like "../src/AutoBattleSystem".
-local moduleName = (...)
-local prefix = "src."
-if type(moduleName) == "string" then
-    prefix = moduleName:gsub("AutoBattleSystem$", "")
-end
-local EnemySystem = require(prefix .. "EnemySystem")
-local LevelSystem = require(prefix .. "LevelSystem")
-local LootSystem = require(prefix .. "LootSystem")
-local DungeonSystem = require(prefix .. "DungeonSystem")
+-- Parent folder containing the other systems
+local parent = script.Parent
+local EnemySystem = require(parent:WaitForChild("EnemySystem"))
+local LevelSystem = require(parent:WaitForChild("LevelSystem"))
+local LootSystem = require(parent:WaitForChild("LootSystem"))
+local DungeonSystem = require(parent:WaitForChild("DungeonSystem"))
 
 ---Current player position used for simple movement calculations.
 AutoBattleSystem.playerPosition = {x = 0, y = 0}

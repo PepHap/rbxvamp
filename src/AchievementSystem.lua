@@ -3,7 +3,7 @@
 
 local AchievementSystem = {}
 
-local CurrencySystem = require("src.CurrencySystem")
+local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 
 -- Predefined achievements indexed by id
 AchievementSystem.definitions = {

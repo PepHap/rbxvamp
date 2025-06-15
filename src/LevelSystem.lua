@@ -3,16 +3,16 @@
 -- monster scaling in the future.
 
 local LevelSystem = {}
-local EventManager = require("src.EventManager")
+local EventManager = require(script.Parent:WaitForChild("EventManager"))
 
 --- Highest stage the player has cleared so far.
 LevelSystem.highestClearedStage = 0
 
 -- Enemy system is required so that level progression can trigger new waves
 -- or boss spawns depending on the current level reached.
-local EnemySystem = require("src.EnemySystem")
-local KeySystem = require("src.KeySystem")
-local LocationSystem = require("src.LocationSystem")
+local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
+local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
+local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
 
 --- Tracks the player's current level.
 --  Starts at ``1`` when the game begins.

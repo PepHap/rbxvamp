@@ -34,7 +34,7 @@ local function pathRequire(target)
 end
 require = pathRequire
 
-local GameManager = require(script.Parent.src.GameManager)
+local GameManager = require(script.Parent:WaitForChild("GameManager"))
 
 local function onPlayerAdded(player)
     local data = GameManager:loadPlayerData(player.UserId)

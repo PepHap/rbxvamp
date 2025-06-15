@@ -2,15 +2,13 @@
 -- Spawns waves of enemies and bosses.
 
 local EnemySystem = {}
-local EventManager = require("src.EventManager")
+local EventManager = require(script.Parent:WaitForChild("EventManager"))
 
 -- Resolve other module paths relative to how this module was required so that
 -- tests using relative paths function correctly.
-local moduleName = (...)
-local prefix = "src."
-if type(moduleName) == "string" then
-    prefix = moduleName:gsub("EnemySystem$", "")
-end
+-- Parent folder reference for requiring sibling modules when running
+-- inside Roblox Studio.
+local parent = script.Parent
 
 -- Lazily required to avoid circular dependency with AutoBattleSystem
 local AutoBattleSystem
@@ -273,8 +271,8 @@ end
 --  PathfindingService stub to return a straight line path.
 -- @param dt number delta time since the last update
 function EnemySystem:update(dt)
-    AutoBattleSystem = AutoBattleSystem or require(prefix .. "AutoBattleSystem")
-    PlayerSystem = PlayerSystem or require(prefix .. "PlayerSystem")
+    AutoBattleSystem = AutoBattleSystem or require(parent:WaitForChild("AutoBattleSystem"))
+    PlayerSystem = PlayerSystem or require(parent:WaitForChild("PlayerSystem"))
     local playerPos = AutoBattleSystem.playerPosition
     if not playerPos then
         return

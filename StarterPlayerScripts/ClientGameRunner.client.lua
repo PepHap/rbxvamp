@@ -37,21 +37,21 @@ require = pathRequire
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local src = ReplicatedStorage:WaitForChild("src")
-local GameManager = require(src.GameManager)
+local GameManager = require(src:WaitForChild("GameManager"))
 
 -- Enable Roblox objects for modules with UI when running in Studio
 local modulesWithUI = {
-    require(src.HudSystem),
-    require(src.InventoryUISystem),
-    require(src.SkillUISystem),
-    require(src.CompanionUISystem),
-    require(src.StatUpgradeUISystem),
-    require(src.QuestUISystem),
-    require(src.UISystem),
-    require(src.PlayerSystem),
-    require(src.PlayerInputSystem),
-    require(src.EnemySystem),
-    require(src.DataPersistenceSystem),
+    require(src:WaitForChild("HudSystem")),
+    require(src:WaitForChild("InventoryUISystem")),
+    require(src:WaitForChild("SkillUISystem")),
+    require(src:WaitForChild("CompanionUISystem")),
+    require(src:WaitForChild("StatUpgradeUISystem")),
+    require(src:WaitForChild("QuestUISystem")),
+    require(src:WaitForChild("UISystem")),
+    require(src:WaitForChild("PlayerSystem")),
+    require(src:WaitForChild("PlayerInputSystem")),
+    require(src:WaitForChild("EnemySystem")),
+    require(src:WaitForChild("DataPersistenceSystem")),
 }
 for _, mod in ipairs(modulesWithUI) do
     if type(mod) == "table" then

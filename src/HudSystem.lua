@@ -10,10 +10,10 @@ local HudSystem = {
     attackButton = nil,
 }
 
-local PlayerLevelSystem = require("src.PlayerLevelSystem")
-local CurrencySystem = require("src.CurrencySystem")
-local LocationSystem = require("src.LocationSystem")
-local AutoBattleSystem = require("src.AutoBattleSystem")
+local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
+local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
+local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
 
 local function createInstance(className)
     if HudSystem.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
@@ -126,7 +126,7 @@ function HudSystem:manualAttack()
     if AutoBattleSystem.enabled then
         return
     end
-    local PlayerInputSystem = require("src.PlayerInputSystem")
+    local PlayerInputSystem = require(script.Parent:WaitForChild("PlayerInputSystem"))
     PlayerInputSystem:manualAttack()
 end
 

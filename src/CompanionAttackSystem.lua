@@ -14,12 +14,12 @@ local CompanionAttackSystem = {
     positions = {},
 }
 
-local AutoBattleSystem = require("src.AutoBattleSystem")
-local EnemySystem = require("src.EnemySystem")
-local LevelSystem = require("src.LevelSystem")
-local DungeonSystem = require("src.DungeonSystem")
-local LootSystem = require("src.LootSystem")
-local CompanionSystem = require("src.CompanionSystem")
+local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
+local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
+local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
+local LootSystem = require(script.Parent:WaitForChild("LootSystem"))
+local CompanionSystem = require(script.Parent:WaitForChild("CompanionSystem"))
 
 ---Initializes companion positions and stores the system reference.
 -- @param compSys table optional CompanionSystem instance

@@ -7,8 +7,8 @@ local StatUpgradeUISystem = {
     statSystem = nil,
 }
 
-local StatUpgradeSystem = require("src.StatUpgradeSystem")
-local CurrencySystem = require("src.CurrencySystem")
+local StatUpgradeSystem = require(script.Parent:WaitForChild("StatUpgradeSystem"))
+local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 
 local function createInstance(className)
     if StatUpgradeUISystem.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then

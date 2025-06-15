@@ -2,7 +2,7 @@
 -- Manages player experience, levels and content unlocks.
 
 local PlayerLevelSystem = {}
-local EventManager = require("src.EventManager")
+local EventManager = require(script.Parent:WaitForChild("EventManager"))
 
 ---Current player level starting at ``1``.
 PlayerLevelSystem.level = 1

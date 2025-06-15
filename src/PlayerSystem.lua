@@ -2,7 +2,7 @@
 -- Tracks player health and handles death events.
 
 local PlayerSystem = {}
-local EventManager = require("src.EventManager")
+local EventManager = require(script.Parent:WaitForChild("EventManager"))
 
 ---Indicates if a Roblox model should be created for the player when the game
 --  starts. Tests can disable this to avoid manipulating Instance objects.
@@ -18,8 +18,8 @@ PlayerSystem.position = {x = 0, y = 0, z = 0}
 ---Reference to the player's model table or Instance.
 PlayerSystem.model = nil
 
-local LevelSystem = require("src.LevelSystem")
-local AutoBattleSystem = require("src.AutoBattleSystem")
+local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
 
 ---Maximum player health.
 PlayerSystem.maxHealth = 100

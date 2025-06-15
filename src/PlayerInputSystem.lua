@@ -14,12 +14,12 @@ local PlayerInputSystem = {
     playerPosition = nil,
 }
 
-local PlayerSystem = require("src.PlayerSystem")
-local EnemySystem = require("src.EnemySystem")
-local LevelSystem = require("src.LevelSystem")
-local LootSystem = require("src.LootSystem")
-local AutoBattleSystem = require("src.AutoBattleSystem")
-local DungeonSystem = require("src.DungeonSystem")
+local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
+local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
+local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+local LootSystem = require(script.Parent:WaitForChild("LootSystem"))
+local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
+local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
 
 -- Utility to connect Roblox input events when available
 local function connectRoblox()

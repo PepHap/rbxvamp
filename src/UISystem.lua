@@ -47,8 +47,8 @@ local function ensureGui()
     return gui
 end
 
-local RewardGaugeSystem = require("src.RewardGaugeSystem")
-local GachaSystem = require("src.GachaSystem")
+local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
+local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
 
 ---Displays reward options from the RewardGaugeSystem if available.
 -- Prints each option to the console.

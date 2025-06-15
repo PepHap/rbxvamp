@@ -3,8 +3,8 @@
 
 local DungeonSystem = {}
 
-local KeySystem = require("src.KeySystem")
-local CurrencySystem = require("src.CurrencySystem")
+local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
+local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 
 -- Definition of available dungeons. Each dungeon specifies the key
 -- type required to enter, the currency rewarded and the number of
