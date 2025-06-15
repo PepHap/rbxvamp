@@ -11,7 +11,7 @@
         "$path": "ServerScriptService/GameRunner.lua"
       },
       "MainServer": {
-        "$path": "src/MainServerScript.lua",
+        "$path": "ServerScriptService/MainServerScript.lua",
         "$className": "Script"
       }
     },
