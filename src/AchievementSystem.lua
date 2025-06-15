@@ -15,14 +15,24 @@ AchievementSystem.definitions = {
 -- Runtime progress table indexed by achievement id
 AchievementSystem.progress = {}
 
----Initializes progress entries for all defined achievements.
-function AchievementSystem:start()
-    for _, def in ipairs(self.definitions) do
-        self.progress[def.id] = {
+-- Ensures a progress entry exists for the given achievement id.
+local function ensureProgress(id)
+    local p = AchievementSystem.progress[id]
+    if not p then
+        AchievementSystem.progress[id] = {
             value = 0,
             completed = false,
             rewarded = false,
         }
+        p = AchievementSystem.progress[id]
+    end
+    return p
+end
+
+---Initializes progress entries for all defined achievements.
+function AchievementSystem:start()
+    for _, def in ipairs(self.definitions) do
+        ensureProgress(def.id)
     end
 end
 
@@ -33,7 +43,7 @@ function AchievementSystem:addProgress(kind, amount)
     amount = amount or 1
     for _, def in ipairs(self.definitions) do
         if def.type == kind then
-            local p = self.progress[def.id]
+            local p = ensureProgress(def.id)
             if not p.completed then
                 p.value = p.value + amount
                 if p.value >= def.goal then
@@ -55,7 +65,7 @@ function AchievementSystem:claim(id)
             break
         end
     end
-    local p = self.progress[id]
+    local p = ensureProgress(id)
     if not def or not p or not p.completed or p.rewarded then
         return false
     end
