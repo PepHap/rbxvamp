@@ -2,14 +2,14 @@
 -- Awards currency, experience and gauge points when enemies are defeated.
 
 local LootSystem = {}
-local EventManager = require("src.EventManager")
+local EventManager = require(script.Parent:WaitForChild("EventManager"))
 
-local CurrencySystem = require("src.CurrencySystem")
-local PlayerLevelSystem = require("src.PlayerLevelSystem")
-local RewardGaugeSystem = require("src.RewardGaugeSystem")
-local LevelSystem = require("src.LevelSystem")
-local LocationSystem = require("src.LocationSystem")
-local AchievementSystem = require("src.AchievementSystem")
+local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
+local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
+local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
+local AchievementSystem = require(script.Parent:WaitForChild("AchievementSystem"))
 
 ---Returns the currency key for the current location.
 local function getCurrencyType()

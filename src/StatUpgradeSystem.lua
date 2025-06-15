@@ -7,7 +7,7 @@ local StatUpgradeSystem = {}
 -- Each entry stores a base value and current level.
 StatUpgradeSystem.stats = {}
 
-local CurrencySystem = require("src.CurrencySystem")
+local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 
 ---Adds a new stat with the provided base value.
 -- @param name string name of the stat

@@ -13,7 +13,7 @@ RewardGaugeSystem.maxGauge = 100
 RewardGaugeSystem.options = nil
 
 -- Required systems/assets
-local GachaSystem = require("src.GachaSystem")
+local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
 local itemPool = require("assets.items")
 
 -- Precompute a list of available equipment slots

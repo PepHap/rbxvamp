@@ -18,9 +18,9 @@ local InventoryUI = {
     itemSystem = nil,
 }
 
-local ItemSystem = require("src.ItemSystem")
+local ItemSystem = require(script.Parent:WaitForChild("ItemSystem"))
 
-local PlayerSystem = require("src.PlayerSystem")
+local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
 
 -- utility for environment agnostic Instance creation
 local function createInstance(className)

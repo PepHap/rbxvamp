@@ -13,10 +13,10 @@ QuestSystem.connections = {}
 QuestSystem.quests = {}
 
 -- CurrencySystem is used for basic reward handling
-local CurrencySystem = require("src.CurrencySystem")
-local KeySystem = require("src.KeySystem")
-local GachaSystem = require("src.GachaSystem")
-local EventManager = require("src.EventManager")
+local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
+local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
+local EventManager = require(script.Parent:WaitForChild("EventManager"))
 
 ---Initializes built-in quests and connects event listeners.
 function QuestSystem:start()

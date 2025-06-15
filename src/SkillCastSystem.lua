@@ -14,11 +14,11 @@ local SkillCastSystem = {
     skillSystem = nil,
 }
 
-local EnemySystem = require("src.EnemySystem")
-local LevelSystem = require("src.LevelSystem")
-local LootSystem = require("src.LootSystem")
-local DungeonSystem = require("src.DungeonSystem")
-local SkillSystem = require("src.SkillSystem")
+local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
+local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+local LootSystem = require(script.Parent:WaitForChild("LootSystem"))
+local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
+local SkillSystem = require(script.Parent:WaitForChild("SkillSystem"))
 
 ---Initializes the cast system with a skill system instance.
 -- @param skillSys table optional SkillSystem instance

@@ -4,7 +4,7 @@
 local ItemSystem = {}
 ItemSystem.__index = ItemSystem
 
-local CurrencySystem = require("src.CurrencySystem")
+local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 
 -- Preloaded item templates describing available equipment. These definitions
 -- are used when presenting random rewards to the player.
