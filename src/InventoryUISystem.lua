@@ -62,31 +62,36 @@ end
 function InventoryUI:start(items)
     self.itemSystem = items or self.itemSystem
     local gui = ensureGui()
-    gui.PrevPage = gui.PrevPage or createInstance("TextButton")
-    gui.PrevPage.Text = "<"
-    parent(gui.PrevPage, gui)
-    if gui.PrevPage.MouseButton1Click then
-        gui.PrevPage.MouseButton1Click:Connect(function()
-            InventoryUI:changePage(-1)
-        end)
-    else
-        gui.PrevPage.onClick = function()
-            InventoryUI:changePage(-1)
-        end
-    end
 
-    gui.NextPage = gui.NextPage or createInstance("TextButton")
-    gui.NextPage.Text = ">"
-    parent(gui.NextPage, gui)
-    if gui.NextPage.MouseButton1Click then
-        gui.NextPage.MouseButton1Click:Connect(function()
+    local prev = gui:FindFirstChild("PrevPage") or createInstance("TextButton")
+    prev.Name = "PrevPage"
+    prev.Text = "<"
+    parent(prev, gui)
+    if prev.MouseButton1Click then
+        prev.MouseButton1Click:Connect(function()
+            InventoryUI:changePage(-1)
+        end)
+    else
+        prev.onClick = function()
+            InventoryUI:changePage(-1)
+        end
+    end
+    if type(gui) == "table" then gui.PrevPage = prev end
+
+    local nextBtn = gui:FindFirstChild("NextPage") or createInstance("TextButton")
+    nextBtn.Name = "NextPage"
+    nextBtn.Text = ">"
+    parent(nextBtn, gui)
+    if nextBtn.MouseButton1Click then
+        nextBtn.MouseButton1Click:Connect(function()
             InventoryUI:changePage(1)
         end)
     else
-        gui.NextPage.onClick = function()
+        nextBtn.onClick = function()
             InventoryUI:changePage(1)
         end
     end
+    if type(gui) == "table" then gui.NextPage = nextBtn end
 
     self:update()
 end
