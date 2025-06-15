@@ -14,7 +14,29 @@ RewardGaugeSystem.options = nil
 
 -- Required systems/assets
 local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ReplicatedStorage
+if game and type(game.GetService) == "function" then
+    local ok, service = pcall(function()
+        return game:GetService("ReplicatedStorage")
+    end)
+    if ok then
+        ReplicatedStorage = service
+    end
+end
+if not ReplicatedStorage then
+    ReplicatedStorage = {
+        WaitForChild = function(_, name)
+            if name == "assets" then
+                return {
+                    WaitForChild = function(_, child)
+                        return require("assets." .. child)
+                    end
+                }
+            end
+            return nil
+        end
+    }
+end
 local assets = ReplicatedStorage:WaitForChild("assets")
 local itemPool = require(assets:WaitForChild("items"))
 
@@ -51,10 +73,11 @@ end
 -- Further points are ignored until an option is chosen.
 -- @param amount number amount to add
 function RewardGaugeSystem:addPoints(amount)
+    local n = tonumber(amount) or 0
     if self.options then
         return
     end
-    self.gauge = self.gauge + amount
+    self.gauge = self.gauge + n
     if self.gauge >= self.maxGauge then
         self.gauge = 0
         self.options = self:generateOptions()

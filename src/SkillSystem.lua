@@ -6,7 +6,29 @@ SkillSystem.__index = SkillSystem
 
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ReplicatedStorage
+if game and type(game.GetService) == "function" then
+    local ok, service = pcall(function()
+        return game:GetService("ReplicatedStorage")
+    end)
+    if ok then
+        ReplicatedStorage = service
+    end
+end
+if not ReplicatedStorage then
+    ReplicatedStorage = {
+        WaitForChild = function(_, name)
+            if name == "assets" then
+                return {
+                    WaitForChild = function(_, child)
+                        return require("assets." .. child)
+                    end
+                }
+            end
+            return nil
+        end
+    }
+end
 local assets = ReplicatedStorage:WaitForChild("assets")
 
 -- Table of predefined skills available to the game. Each skill entry

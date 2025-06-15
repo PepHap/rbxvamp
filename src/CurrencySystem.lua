@@ -10,7 +10,8 @@ CurrencySystem.balances = {}
 -- @param kind string currency identifier
 -- @param amount number amount to add
 function CurrencySystem:add(kind, amount)
-    self.balances[kind] = (self.balances[kind] or 0) + amount
+    local n = tonumber(amount) or 0
+    self.balances[kind] = (self.balances[kind] or 0) + n
 end
 
 ---Retrieves the current balance for a currency.

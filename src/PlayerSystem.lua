@@ -30,7 +30,8 @@ PlayerSystem.health = PlayerSystem.maxHealth
 ---Damages the player by the given amount and checks for death.
 -- @param amount number amount of damage to apply
 function PlayerSystem:takeDamage(amount)
-    self.health = self.health - amount
+    local n = tonumber(amount) or 0
+    self.health = self.health - n
     if self.health <= 0 then
         self.health = 0
         self:onDeath()
@@ -41,7 +42,8 @@ end
 ---Heals the player by the given amount without exceeding max health.
 -- @param amount number amount to heal
 function PlayerSystem:heal(amount)
-    self.health = math.min(self.health + amount, self.maxHealth)
+    local n = tonumber(amount) or 0
+    self.health = math.min(self.health + n, self.maxHealth)
     EventManager:Get("PlayerHealed"):Fire(amount, self.health)
 end
 

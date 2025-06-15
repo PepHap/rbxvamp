@@ -31,4 +31,12 @@ describe("StatUpgradeSystem", function()
         assert.is_false(ok)
         assert.equals(1, StatUpgradeSystem.stats.attack.level)
     end)
+
+    it("rejects invalid upgrade amounts", function()
+        StatUpgradeSystem:addStat("defense", 5)
+        CurrencySystem.balances = {gold = 10}
+        local ok = StatUpgradeSystem:upgradeStat("defense", "bad", "gold")
+        assert.is_false(ok)
+        assert.equals(1, StatUpgradeSystem.stats.defense.level)
+    end)
 end)

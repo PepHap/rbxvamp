@@ -55,6 +55,15 @@ describe("ItemSystem", function()
         assert.equals(0, CurrencySystem:get("gold"))
     end)
 
+    it("rejects invalid upgrade amounts", function()
+        local items = ItemSystem.new()
+        items:equip("Weapon", {name = "Sword"})
+        CurrencySystem.balances = {gold = 10}
+        local ok = items:upgradeItem("Weapon", {}, "gold")
+        assert.is_false(ok)
+        assert.equals(1, items.slots.Weapon.level)
+    end)
+
     it("errors when using an invalid slot", function()
         local items = ItemSystem.new()
         assert.has_error(function()

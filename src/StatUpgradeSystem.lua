@@ -26,13 +26,14 @@ end
 -- @return boolean true when the upgrade succeeds
 function StatUpgradeSystem:upgradeStat(name, amount, currency)
     local stat = self.stats[name]
-    if not stat or amount <= 0 then
+    local n = tonumber(amount)
+    if not stat or not n or n <= 0 then
         return false
     end
-    if not CurrencySystem:spend(currency, amount) then
+    if not CurrencySystem:spend(currency, n) then
         return false
     end
-    stat.level = stat.level + amount
+    stat.level = stat.level + n
     return true
 end
 

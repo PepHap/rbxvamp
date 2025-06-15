@@ -41,4 +41,12 @@ describe("PlayerSystem", function()
         assert.equals(0, #EnemySystem.enemies)
         assert.equals(1, LevelSystem.killCount)
     end)
+
+    it("handles invalid heal and damage values", function()
+        PlayerSystem.health = 50
+        PlayerSystem:heal("bad")
+        assert.equals(50, PlayerSystem.health)
+        PlayerSystem:takeDamage({})
+        assert.equals(50, PlayerSystem.health)
+    end)
 end)

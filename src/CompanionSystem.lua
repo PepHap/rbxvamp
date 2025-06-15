@@ -30,10 +30,14 @@ function CompanionSystem:upgradeCompanion(index, amount)
     if not companion then
         return false
     end
-    if not CurrencySystem:spend("ether", amount) then
+    local n = tonumber(amount)
+    if not n or n <= 0 then
         return false
     end
-    companion.level = companion.level + amount
+    if not CurrencySystem:spend("ether", n) then
+        return false
+    end
+    companion.level = companion.level + n
     return true
 end
 

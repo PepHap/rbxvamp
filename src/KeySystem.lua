@@ -10,11 +10,11 @@ KeySystem.keys = {}
 -- @param kind string type of key (e.g. "arena", "skill")
 -- @param amount number amount to add, defaults to 1
 function KeySystem:addKey(kind, amount)
-    amount = amount or 1
-    if amount <= 0 then
+    local n = tonumber(amount) or 1
+    if n <= 0 then
         return
     end
-    self.keys[kind] = (self.keys[kind] or 0) + amount
+    self.keys[kind] = (self.keys[kind] or 0) + n
 end
 
 ---Attempts to consume one key of the given type.

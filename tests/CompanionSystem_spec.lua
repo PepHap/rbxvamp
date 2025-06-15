@@ -30,4 +30,13 @@ describe("CompanionSystem", function()
         assert.equals(1, CompanionSystem.companions[1].level)
         assert.equals(1, CurrencySystem:get("ether"))
     end)
+
+    it("rejects invalid upgrade amounts", function()
+        CompanionSystem.companions = {}
+        CurrencySystem.balances = {ether = 5}
+        CompanionSystem:add({name = "Golem", rarity = "B"})
+        local ok = CompanionSystem:upgradeCompanion(1, "bad")
+        assert.is_false(ok)
+        assert.equals(1, CompanionSystem.companions[1].level)
+    end)
 end)
