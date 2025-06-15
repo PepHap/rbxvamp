@@ -28,7 +28,9 @@ sudo apt-get install lua-busted
 
 ## Usage
 Import this repository into Roblox Studio and require the modules as needed.
-Further gameplay features will be implemented incrementally.
+Further gameplay features will be implemented incrementally. When running inside
+Roblox Studio, call `GameManager:enableRobloxUI()` so modules create real GUI
+instances.
 
 ### Example
 ```lua
@@ -37,6 +39,8 @@ local LevelSystem = require(path.to.LevelSystem)
 
 GameManager:addSystem("Level", LevelSystem)
 GameManager:start()
+-- Enable GUI and models when running inside Roblox Studio
+GameManager:enableRobloxUI()
 GameManager.systems.AutoBattle:enable()
 
 local RunService = game:GetService("RunService")

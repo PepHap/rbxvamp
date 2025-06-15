@@ -5,24 +5,10 @@ local GameManager = require(script.Parent.src.GameManager)
 
 -- Enable Roblox object creation for modules that support it so the
 -- user can actually see models and interfaces when running the game
-local modulesWithUI = {
-    require(script.Parent.src.HudSystem),
-    require(script.Parent.src.InventoryUISystem),
-    require(script.Parent.src.SkillUISystem),
-    require(script.Parent.src.CompanionUISystem),
-    require(script.Parent.src.StatUpgradeUISystem),
-    require(script.Parent.src.QuestUISystem),
-    require(script.Parent.src.UISystem),
-    require(script.Parent.src.PlayerSystem),
-    require(script.Parent.src.PlayerInputSystem),
-    require(script.Parent.src.EnemySystem),
-    require(script.Parent.src.DataPersistenceSystem),
-}
-for _, mod in ipairs(modulesWithUI) do
-    if type(mod) == "table" then
-        mod.useRobloxObjects = true
-    end
-end
+-- Allow all registered systems that expose the `useRobloxObjects` flag to create
+-- real Instances. This makes GUI elements and models visible when running the
+-- game inside Roblox Studio.
+GameManager:enableRobloxUI()
 
 GameManager:start()
 GameManager.systems.AutoBattle:enable()

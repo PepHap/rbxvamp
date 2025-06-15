@@ -6,24 +6,9 @@ local src = ReplicatedStorage:WaitForChild("src")
 local GameManager = require(src.GameManager)
 
 -- Enable Roblox objects for modules with UI when running in Studio
-local modulesWithUI = {
-    require(src.HudSystem),
-    require(src.InventoryUISystem),
-    require(src.SkillUISystem),
-    require(src.CompanionUISystem),
-    require(src.StatUpgradeUISystem),
-    require(src.QuestUISystem),
-    require(src.UISystem),
-    require(src.PlayerSystem),
-    require(src.PlayerInputSystem),
-    require(src.EnemySystem),
-    require(src.DataPersistenceSystem),
-}
-for _, mod in ipairs(modulesWithUI) do
-    if type(mod) == "table" then
-        mod.useRobloxObjects = true
-    end
-end
+-- Enable Roblox objects on all systems that support it so that GUIs and models
+-- appear client-side when running in Studio.
+GameManager:enableRobloxUI()
 
 GameManager:start()
 GameManager.systems.AutoBattle:enable()

@@ -48,6 +48,17 @@ function GameManager:update(dt)
     end
 end
 
+---Enables Roblox object usage for all registered systems that support it.
+--  This allows UIs and models to appear when running inside Roblox Studio
+--  without needing external scripts to toggle each module individually.
+function GameManager:enableRobloxUI()
+    for _, system in pairs(self.systems) do
+        if type(system) == "table" and system.useRobloxObjects ~= nil then
+            system.useRobloxObjects = true
+        end
+    end
+end
+
 -- Integrate the default enemy system on load
 local EnemySystem = require("src.EnemySystem")
 GameManager:addSystem("Enemy", EnemySystem)
