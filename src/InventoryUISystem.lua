@@ -79,15 +79,11 @@ local function ensureGui()
     else
         gui.Visible = InventoryUI.visible
     end
-    if InventoryUI.useRobloxObjects and game and type(game.GetService) == "function" then
-        local ok, players = pcall(function()
-            return game:GetService("Players")
-        end)
-        if ok and players and players.LocalPlayer then
-            local pgui = players.LocalPlayer:WaitForChild("PlayerGui", 5)
-            if pgui then
-                gui.Parent = pgui
-            end
+    if InventoryUI.useRobloxObjects then
+        local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
+        local pgui = GuiUtil.getPlayerGui()
+        if pgui then
+            gui.Parent = pgui
         end
     end
     return gui
