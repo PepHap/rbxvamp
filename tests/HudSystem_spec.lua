@@ -10,6 +10,8 @@ describe("HudSystem", function()
         HudSystem.currencyLabel = nil
         HudSystem.autoButton = nil
         HudSystem.attackButton = nil
+        HudSystem.gachaButton = nil
+        HudSystem.inventoryButton = nil
         PlayerLevelSystem.level = 1
         PlayerLevelSystem.exp = 0
         PlayerLevelSystem.nextExp = 100
@@ -65,5 +67,17 @@ describe("HudSystem", function()
         PlayerInputSystem.manualAttack = old
         AutoBattleSystem.enabled = false
         assert.is_false(called)
+    end)
+
+    it("toggles gacha and inventory windows", function()
+        local GachaUISystem = require("src.GachaUISystem")
+        local InventoryUISystem = require("src.InventoryUISystem")
+        GachaUISystem.visible = false
+        InventoryUISystem.visible = false
+        HudSystem:start()
+        HudSystem.gachaButton.onClick()
+        assert.is_true(GachaUISystem.visible)
+        HudSystem.inventoryButton.onClick()
+        assert.is_true(InventoryUISystem.visible)
     end)
 end)
