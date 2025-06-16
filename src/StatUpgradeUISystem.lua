@@ -14,6 +14,7 @@ local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
 if not ok then Theme = nil end
+local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 
 local function createInstance(className)
     if StatUpgradeUISystem.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
@@ -53,7 +54,6 @@ local function ensureGui()
     gui.Name = "StatUpgradeUI"
     StatUpgradeUISystem.gui = gui
     if StatUpgradeUISystem.useRobloxObjects then
-        local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
         local pgui = GuiUtil.getPlayerGui()
         if pgui then
             gui.Parent = pgui
@@ -98,16 +98,9 @@ local function renderStats(container, sys)
             btn.StatName = name
         end
         parent(btn, frame)
-
-        if btn.MouseButton1Click then
-            btn.MouseButton1Click:Connect(function()
-                StatUpgradeUISystem:upgrade(name)
-            end)
-        else
-            btn.onClick = function()
-                StatUpgradeUISystem:upgrade(name)
-            end
-        end
+        GuiUtil.connectButton(btn, function()
+            StatUpgradeUISystem:upgrade(name)
+        end)
 
         if type(frame) == "table" then
             frame.Label = label

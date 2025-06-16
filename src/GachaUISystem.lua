@@ -17,6 +17,7 @@ local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
 if not ok then Theme = nil end
+local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 
 local function createInstance(className)
     if GachaUI.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
@@ -52,7 +53,6 @@ local function ensureGui()
     gui.Name = "GachaUI"
     GachaUI.gui = gui
     if GachaUI.useRobloxObjects then
-        local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
         local pgui = GuiUtil.getPlayerGui()
         if pgui then
             gui.Parent = pgui
@@ -63,17 +63,12 @@ end
 
 local function connect(btn, callback)
     if not btn then return end
-    if btn.MouseButton1Click then
-        btn.MouseButton1Click:Connect(callback)
-    else
-        btn.onClick = callback
-    end
+    GuiUtil.connectButton(btn, callback)
 end
 
 function GachaUI:start(manager)
     self.gameManager = manager or self.gameManager or require(script.Parent:WaitForChild("GameManager"))
     local gui = ensureGui()
-    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 
     -- use a plain window frame; banner images were removed
     self.window = GuiUtil.createWindow("GachaWindow")

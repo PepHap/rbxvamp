@@ -4,6 +4,8 @@ local QuestUISystem = {
     questSystem = nil,
 }
 
+local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
+
 local function createInstance(className)
     if QuestUISystem.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
         return Instance.new(className)
@@ -30,7 +32,6 @@ local function ensureGui()
     gui.Name = "QuestUI"
     QuestUISystem.gui = gui
     if QuestUISystem.useRobloxObjects then
-        local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
         local pgui = GuiUtil.getPlayerGui()
         if pgui then
             gui.Parent = pgui
@@ -71,15 +72,9 @@ function QuestUISystem:update()
         parent(btn, frame)
 
         if q.completed and not q.rewarded then
-            if btn.MouseButton1Click then
-                btn.MouseButton1Click:Connect(function()
-                    QuestUISystem:claim(id)
-                end)
-            else
-                btn.onClick = function()
-                    QuestUISystem:claim(id)
-                end
-            end
+            GuiUtil.connectButton(btn, function()
+                QuestUISystem:claim(id)
+            end)
         else
             btn.Active = false
         end

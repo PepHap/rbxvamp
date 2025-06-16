@@ -15,6 +15,7 @@ local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
 if not ok then Theme = nil end
+local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 
 local function createInstance(className)
     if RewardGaugeUISystem.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
@@ -50,7 +51,6 @@ local function ensureGui()
     gui.Name = "RewardGaugeUI"
     RewardGaugeUISystem.gui = gui
     if RewardGaugeUISystem.useRobloxObjects then
-        local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
         local pgui = GuiUtil.getPlayerGui()
         if pgui then
             gui.Parent = pgui
@@ -61,7 +61,6 @@ end
 
 function RewardGaugeUISystem:start()
     local gui = ensureGui()
-    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 
     -- simple frame; image removed to keep repository text only
     self.window = GuiUtil.createWindow("RewardWindow")
@@ -91,15 +90,9 @@ function RewardGaugeUISystem:showOptions()
     for i, opt in ipairs(opts) do
         local btn = createInstance("TextButton")
         btn.Text = string.format("%d) %s (%s)", i, opt.item.name, opt.slot)
-        if btn.MouseButton1Click then
-            btn.MouseButton1Click:Connect(function()
-                RewardGaugeUISystem:choose(i)
-            end)
-        else
-            btn.onClick = function()
-                RewardGaugeUISystem:choose(i)
-            end
-        end
+        GuiUtil.connectButton(btn, function()
+            RewardGaugeUISystem:choose(i)
+        end)
         parent(btn, parentGui)
         table.insert(self.optionButtons, btn)
     end
