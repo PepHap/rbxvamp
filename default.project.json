@@ -28,6 +28,11 @@
           "$path": "StarterPlayerScripts/ClientGameRunner.client.lua"
         }
       }
+    },
+    "StarterGui": {
+      "UILoader": {
+        "$path": "StarterGui/UILoader.client.lua"
+      }
     }
   }
 }
