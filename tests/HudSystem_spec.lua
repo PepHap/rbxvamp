@@ -72,13 +72,17 @@ describe("HudSystem", function()
         assert.is_false(called)
     end)
 
-    it("toggles gacha, inventory and reward windows", function()
+    it("toggles various UI windows", function()
         local GachaUISystem = require("src.GachaUISystem")
         local InventoryUISystem = require("src.InventoryUISystem")
         local RewardGaugeUISystem = require("src.RewardGaugeUISystem")
+        local SkillUISystem = require("src.SkillUISystem")
+        local CompanionUISystem = require("src.CompanionUISystem")
         GachaUISystem.visible = false
         InventoryUISystem.visible = false
         RewardGaugeUISystem.visible = false
+        SkillUISystem.visible = false
+        CompanionUISystem.visible = false
         HudSystem:start()
         HudSystem.gachaButton.onClick()
         assert.is_true(GachaUISystem.visible)
@@ -86,5 +90,9 @@ describe("HudSystem", function()
         assert.is_true(InventoryUISystem.visible)
         HudSystem.rewardButton.onClick()
         assert.is_true(RewardGaugeUISystem.visible)
+        HudSystem.skillButton.onClick()
+        assert.is_true(SkillUISystem.visible)
+        HudSystem.companionButton.onClick()
+        assert.is_true(CompanionUISystem.visible)
     end)
 end)

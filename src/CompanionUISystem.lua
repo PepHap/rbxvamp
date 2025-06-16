@@ -4,6 +4,7 @@
 local CompanionUISystem = {
     useRobloxObjects = false,
     gui = nil,
+    visible = false,
     companionSystem = nil,
     listFrame = nil,
 }
@@ -49,6 +50,7 @@ end
 function CompanionUISystem:start(compSys)
     self.companionSystem = compSys or self.companionSystem or {companions = {}}
     self:update()
+    self:setVisible(self.visible)
 end
 
 local function renderCompanions(container, sys)
@@ -126,6 +128,20 @@ function CompanionUISystem:upgrade(index)
         self:update()
     end
     return ok
+end
+
+function CompanionUISystem:setVisible(on)
+    self.visible = not not on
+    local gui = ensureGui()
+    if gui.Enabled ~= nil then
+        gui.Enabled = self.visible
+    else
+        gui.Visible = self.visible
+    end
+end
+
+function CompanionUISystem:toggle()
+    self:setVisible(not self.visible)
 end
 
 return CompanionUISystem
