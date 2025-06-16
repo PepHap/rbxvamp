@@ -16,6 +16,7 @@ local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
 if not ok then Theme = nil end
+local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 
 local function createInstance(className)
     if CompanionUISystem.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
@@ -55,7 +56,6 @@ local function ensureGui()
     gui.Name = "CompanionUI"
     CompanionUISystem.gui = gui
     if CompanionUISystem.useRobloxObjects then
-        local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
         local pgui = GuiUtil.getPlayerGui()
         if pgui then
             gui.Parent = pgui
@@ -67,7 +67,6 @@ end
 function CompanionUISystem:start(compSys)
     self.companionSystem = compSys or self.companionSystem or {companions = {}}
     local gui = ensureGui()
-    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 
     -- create a simple window frame; images are optional and removed to keep the repo text only
     self.window = GuiUtil.createWindow("CompanionWindow")
@@ -100,15 +99,9 @@ local function renderCompanions(container, sys)
             btn.Index = i
         end
         parent(btn, frame)
-        if btn.MouseButton1Click then
-            btn.MouseButton1Click:Connect(function()
-                CompanionUISystem:upgrade(i)
-            end)
-        else
-            btn.onClick = function()
-                CompanionUISystem:upgrade(i)
-            end
-        end
+        GuiUtil.connectButton(btn, function()
+            CompanionUISystem:upgrade(i)
+        end)
 
         if type(frame) == "table" then
             frame.Label = label

@@ -18,6 +18,7 @@ local HudSystem = {
 local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
+local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
 local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
 local ok, Theme = pcall(function()
@@ -63,7 +64,6 @@ local function ensureGui()
     gui.Name = "HudUI"
     HudSystem.gui = gui
     if HudSystem.useRobloxObjects then
-        local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
         local pgui = GuiUtil.getPlayerGui()
         if pgui then
             gui.Parent = pgui
@@ -90,69 +90,27 @@ function HudSystem:start()
     self.rewardButton.Text = "Rewards"
     self.skillButton.Text = "Skills"
     self.companionButton.Text = "Companions"
-    if self.autoButton.MouseButton1Click then
-        self.autoButton.MouseButton1Click:Connect(function()
-            HudSystem:toggleAutoBattle()
-        end)
-    else
-        self.autoButton.onClick = function()
-            HudSystem:toggleAutoBattle()
-        end
-    end
-    if self.attackButton.MouseButton1Click then
-        self.attackButton.MouseButton1Click:Connect(function()
-            HudSystem:manualAttack()
-        end)
-    else
-        self.attackButton.onClick = function()
-            HudSystem:manualAttack()
-        end
-    end
-    if self.gachaButton.MouseButton1Click then
-        self.gachaButton.MouseButton1Click:Connect(function()
-            HudSystem:toggleGacha()
-        end)
-    else
-        self.gachaButton.onClick = function()
-            HudSystem:toggleGacha()
-        end
-    end
-    if self.inventoryButton.MouseButton1Click then
-        self.inventoryButton.MouseButton1Click:Connect(function()
-            HudSystem:toggleInventory()
-        end)
-    else
-        self.inventoryButton.onClick = function()
-            HudSystem:toggleInventory()
-        end
-    end
-    if self.rewardButton.MouseButton1Click then
-        self.rewardButton.MouseButton1Click:Connect(function()
-            HudSystem:toggleRewardGauge()
-        end)
-    else
-        self.rewardButton.onClick = function()
-            HudSystem:toggleRewardGauge()
-        end
-    end
-    if self.skillButton.MouseButton1Click then
-        self.skillButton.MouseButton1Click:Connect(function()
-            HudSystem:toggleSkillUI()
-        end)
-    else
-        self.skillButton.onClick = function()
-            HudSystem:toggleSkillUI()
-        end
-    end
-    if self.companionButton.MouseButton1Click then
-        self.companionButton.MouseButton1Click:Connect(function()
-            HudSystem:toggleCompanionUI()
-        end)
-    else
-        self.companionButton.onClick = function()
-            HudSystem:toggleCompanionUI()
-        end
-    end
+    GuiUtil.connectButton(self.autoButton, function()
+        HudSystem:toggleAutoBattle()
+    end)
+    GuiUtil.connectButton(self.attackButton, function()
+        HudSystem:manualAttack()
+    end)
+    GuiUtil.connectButton(self.gachaButton, function()
+        HudSystem:toggleGacha()
+    end)
+    GuiUtil.connectButton(self.inventoryButton, function()
+        HudSystem:toggleInventory()
+    end)
+    GuiUtil.connectButton(self.rewardButton, function()
+        HudSystem:toggleRewardGauge()
+    end)
+    GuiUtil.connectButton(self.skillButton, function()
+        HudSystem:toggleSkillUI()
+    end)
+    GuiUtil.connectButton(self.companionButton, function()
+        HudSystem:toggleCompanionUI()
+    end)
     parent(self.levelLabel, gui)
     parent(self.currencyLabel, gui)
     parent(self.autoButton, gui)

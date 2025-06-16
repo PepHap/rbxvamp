@@ -74,4 +74,22 @@ function GuiUtil.createWindow(name, image)
     return frame
 end
 
+---Connects a button click handler using ``Activated`` when available or
+-- ``MouseButton1Click`` as a fallback. In the test environment where real
+-- events are unavailable, the callback is stored in ``onClick``.
+---@param button table|Instance TextButton to connect
+---@param callback function function to run on activation
+function GuiUtil.connectButton(button, callback)
+    if not button or not callback then
+        return
+    end
+    if button.Activated then
+        button.Activated:Connect(callback)
+    elseif button.MouseButton1Click then
+        button.MouseButton1Click:Connect(callback)
+    else
+        button.onClick = callback
+    end
+end
+
 return GuiUtil

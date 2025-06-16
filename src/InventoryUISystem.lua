@@ -38,6 +38,7 @@ local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
 if not ok then Theme = nil end
+local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 
 -- utility for environment agnostic Instance creation
 local function createInstance(className)
@@ -98,7 +99,6 @@ local function ensureGui()
         gui.Visible = InventoryUI.visible
     end
     if InventoryUI.useRobloxObjects then
-        local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
         local pgui = GuiUtil.getPlayerGui()
         if pgui then
             gui.Parent = pgui
@@ -118,7 +118,6 @@ end
 function InventoryUI:start(items)
     self.itemSystem = items or self.itemSystem
     local gui = ensureGui()
-    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 
     -- no bundled images; create a plain window instead
     self.window = GuiUtil.createWindow("InventoryWindow")
@@ -131,15 +130,9 @@ function InventoryUI:start(items)
         prev.Position = UDim2.new(0, 10, 1, -40)
     end
     parent(prev, self.window)
-    if prev.MouseButton1Click then
-        prev.MouseButton1Click:Connect(function()
-            InventoryUI:changePage(-1)
-        end)
-    else
-        prev.onClick = function()
-            InventoryUI:changePage(-1)
-        end
-    end
+    GuiUtil.connectButton(prev, function()
+        InventoryUI:changePage(-1)
+    end)
     if type(self.window) == "table" then self.window.PrevPage = prev end
 
     local nextBtn = gui.FindFirstChild and gui:FindFirstChild("NextPage") or createInstance("TextButton")
@@ -149,15 +142,9 @@ function InventoryUI:start(items)
         nextBtn.Position = UDim2.new(0, 50, 1, -40)
     end
     parent(nextBtn, self.window)
-    if nextBtn.MouseButton1Click then
-        nextBtn.MouseButton1Click:Connect(function()
-            InventoryUI:changePage(1)
-        end)
-    else
-        nextBtn.onClick = function()
-            InventoryUI:changePage(1)
-        end
-    end
+    GuiUtil.connectButton(nextBtn, function()
+        InventoryUI:changePage(1)
+    end)
     if type(self.window) == "table" then self.window.NextPage = nextBtn end
 
     self:update()
@@ -186,15 +173,9 @@ local function renderEquipment(container, items)
             btn.Size = UDim2.new(1, 0, 0, 24)
         end
         parent(btn, container)
-        if btn.MouseButton1Click then
-            btn.MouseButton1Click:Connect(function()
-                InventoryUI:selectSlot(slot)
-            end)
-        else
-            btn.onClick = function()
-                InventoryUI:selectSlot(slot)
-            end
-        end
+        GuiUtil.connectButton(btn, function()
+            InventoryUI:selectSlot(slot)
+        end)
         index = index + 1
     end
 end
@@ -218,15 +199,9 @@ local function renderInventory(container, items, page, perPage)
             btn.Size = UDim2.new(1, 0, 0, 24)
         end
         parent(btn, container)
-        if btn.MouseButton1Click then
-            btn.MouseButton1Click:Connect(function()
-                InventoryUI:selectInventory(idx)
-            end)
-        else
-            btn.onClick = function()
-                InventoryUI:selectInventory(idx)
-            end
-        end
+        GuiUtil.connectButton(btn, function()
+            InventoryUI:selectInventory(idx)
+        end)
     end
 end
 

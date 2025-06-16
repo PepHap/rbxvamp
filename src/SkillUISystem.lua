@@ -16,6 +16,7 @@ local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
 if not ok then Theme = nil end
+local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 
 local function createInstance(className)
     if SkillUISystem.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
@@ -55,7 +56,6 @@ local function ensureGui()
     gui.Name = "SkillUI"
     SkillUISystem.gui = gui
     if SkillUISystem.useRobloxObjects then
-        local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
         local pgui = GuiUtil.getPlayerGui()
         if pgui then
             gui.Parent = pgui
@@ -67,7 +67,6 @@ end
 function SkillUISystem:start(skillSys)
     self.skillSystem = skillSys or self.skillSystem or SkillSystem.new()
     local gui = ensureGui()
-    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 
     -- window backgrounds were removed; use plain window frame
     self.window = GuiUtil.createWindow("SkillWindow")
@@ -108,15 +107,9 @@ local function renderSkills(container, sys)
             btn.Index = i
         end
         parent(btn, frame)
-        if btn.MouseButton1Click then
-            btn.MouseButton1Click:Connect(function()
-                SkillUISystem:upgrade(i)
-            end)
-        else
-            btn.onClick = function()
-                SkillUISystem:upgrade(i)
-            end
-        end
+        GuiUtil.connectButton(btn, function()
+            SkillUISystem:upgrade(i)
+        end)
 
         if type(frame) == "table" then
             frame.Label = label
