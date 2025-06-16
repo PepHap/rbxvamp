@@ -7,15 +7,9 @@ local GameManager = require(src:WaitForChild("GameManager"))
 
 -- Enable Roblox object creation for modules that support it so the
 -- user can actually see models and interfaces when running the game
+-- Only non-UI modules should run on the server to avoid
+-- duplicating interface elements for each client.
 local modulesWithUI = {
-    require(src:WaitForChild("HudSystem")),
-    require(src:WaitForChild("InventoryUISystem")),
-    require(src:WaitForChild("SkillUISystem")),
-    require(src:WaitForChild("CompanionUISystem")),
-    require(src:WaitForChild("StatUpgradeUISystem")),
-    require(src:WaitForChild("QuestUISystem")),
-    require(src:WaitForChild("GachaUISystem")),
-    require(src:WaitForChild("UISystem")),
     require(src:WaitForChild("PlayerSystem")),
     require(src:WaitForChild("PlayerInputSystem")),
     require(src:WaitForChild("EnemySystem")),
