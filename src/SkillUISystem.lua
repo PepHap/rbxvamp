@@ -7,6 +7,7 @@ local SkillUISystem = {
     visible = false,
     skillSystem = nil,
     skillListFrame = nil,
+    window = nil,
 }
 
 local SkillSystem = require(script.Parent:WaitForChild("SkillSystem"))
@@ -49,6 +50,13 @@ end
 
 function SkillUISystem:start(skillSys)
     self.skillSystem = skillSys or self.skillSystem or SkillSystem.new()
+    local gui = ensureGui()
+    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
+
+    -- window backgrounds were removed; use plain window frame
+    self.window = GuiUtil.createWindow("SkillWindow")
+    parent(self.window, gui)
+
     self:update()
     self:setVisible(self.visible)
 end
@@ -110,17 +118,18 @@ function SkillUISystem:update()
     if type(gui) == "table" then
         gui.children = gui.children or {}
     end
+    local parentGui = self.window or gui
     local container
     if self.skillListFrame then
         container = self.skillListFrame
-    elseif gui.FindFirstChild then
-        container = gui:FindFirstChild("SkillList")
+    elseif parentGui.FindFirstChild then
+        container = parentGui:FindFirstChild("SkillList")
     end
     if not container then
         container = createInstance("Frame")
         container.Name = "SkillList"
     end
-    parent(container, gui)
+    parent(container, parentGui)
     self.skillListFrame = container
 
     renderSkills(container, sys)
@@ -140,10 +149,11 @@ end
 function SkillUISystem:setVisible(on)
     self.visible = not not on
     local gui = ensureGui()
-    if gui.Enabled ~= nil then
-        gui.Enabled = self.visible
+    local parentGui = self.window or gui
+    if parentGui.Enabled ~= nil then
+        parentGui.Enabled = self.visible
     else
-        gui.Visible = self.visible
+        parentGui.Visible = self.visible
     end
 end
 
