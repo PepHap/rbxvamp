@@ -49,10 +49,11 @@ local function ensureGui()
         gui.children = {}
     end
     UISystem.gui = gui
-    if UISystem.useRobloxObjects and game ~= nil and type(game.GetService) == "function" then
-        local ok, players = pcall(function() return game:GetService("Players") end)
-        if ok and players and players.LocalPlayer and players.LocalPlayer:FindFirstChild("PlayerGui") then
-            gui.Parent = players.LocalPlayer.PlayerGui
+    if UISystem.useRobloxObjects then
+        local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
+        local pgui = GuiUtil.getPlayerGui()
+        if pgui then
+            gui.Parent = pgui
         end
     end
     return gui
