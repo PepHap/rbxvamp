@@ -195,10 +195,13 @@ function EnemySystem:getNearestEnemy(position)
 end
 
 ---Creates a wave of enemies scaled by the provided level.
--- @param level number strength of the wave
-function EnemySystem:spawnWave(level)
+--- @param level number strength of the wave
+--- @param count number how many enemies to spawn (defaults to ``level``)
+function EnemySystem:spawnWave(level, count)
     self.lastWaveLevel = level
     self.enemies = {}
+
+    count = count or level
 
     local baseHealth = 10
     local healthPerLevel = 2
@@ -208,7 +211,7 @@ function EnemySystem:spawnWave(level)
     local hScale = self.healthScale or 1
     local dScale = self.damageScale or 1
 
-    for i = 1, level do
+    for i = 1, count do
         local enemy = createEnemy(
             (baseHealth + healthPerLevel * level) * hScale,
             (baseDamage + damagePerLevel * level) * dScale,
@@ -221,7 +224,7 @@ function EnemySystem:spawnWave(level)
         end
         table.insert(self.enemies, enemy)
     end
-    EventManager:Get("SpawnWave"):Fire(level)
+    EventManager:Get("SpawnWave"):Fire(level, count)
 end
 
 ---Spawns a boss of the given type.

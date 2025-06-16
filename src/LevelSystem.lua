@@ -24,13 +24,16 @@ LevelSystem.killCount = 0
 --- Number of kills required to advance to the next level.
 LevelSystem.requiredKills = 15
 
+---Number of enemies spawned per wave.
+LevelSystem.waveSize = 5
+
 ---Resets stage tracking and spawns the initial enemy wave.
 --  This is called when the overall game begins via ``GameManager``.
 function LevelSystem:start()
     self.currentLevel = 1
     self.killCount = 0
     self.requiredKills = 15
-    EnemySystem:spawnWave(1)
+    EnemySystem:spawnWave(1, self.waveSize)
     EventManager:Get("LevelStart"):Fire(1)
 end
 
@@ -91,7 +94,9 @@ function LevelSystem:update()
     end
     -- Spawn another wave when no enemies remain
     if #EnemySystem.enemies == 0 then
-        EnemySystem:spawnWave(self.currentLevel)
+        local remaining = self.requiredKills - self.killCount
+        local count = math.min(self.waveSize, remaining)
+        EnemySystem:spawnWave(self.currentLevel, count)
     end
 end
 
@@ -129,7 +134,7 @@ function LevelSystem:advance()
     elseif stageType == "mini" then
         EnemySystem:spawnBoss("mini")
     else
-        EnemySystem:spawnWave(self.currentLevel)
+        EnemySystem:spawnWave(self.currentLevel, self.waveSize)
     end
     EventManager:Get("LevelAdvance"):Fire(self.currentLevel, stageType)
     return self.currentLevel
