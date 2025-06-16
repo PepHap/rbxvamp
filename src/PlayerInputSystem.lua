@@ -8,6 +8,8 @@ local PlayerInputSystem = {
     moveSpeed = 5,
     ---Damage dealt per manual attack.
     damage = 1,
+    ---Maximum distance at which a manual attack can hit.
+    attackRange = 5,
     ---Table of currently held keys.
     keyStates = {},
     ---Reference to the player's position table.
@@ -79,18 +81,24 @@ function PlayerInputSystem:manualAttack()
     if not target then
         return
     end
-    if target.health then
-        target.health = target.health - self.damage
-        if target.health <= 0 then
-            for i, e in ipairs(EnemySystem.enemies) do
-                if e == target then
-                    table.remove(EnemySystem.enemies, i)
-                    break
+    -- Ensure the target is within attack range before applying damage
+    local dx = target.position.x - pos.x
+    local dy = target.position.y - pos.y
+    local distSq = dx * dx + dy * dy
+    if distSq <= self.attackRange * self.attackRange then
+        if target.health then
+            target.health = target.health - self.damage
+            if target.health <= 0 then
+                for i, e in ipairs(EnemySystem.enemies) do
+                    if e == target then
+                        table.remove(EnemySystem.enemies, i)
+                        break
+                    end
                 end
+                LevelSystem:addKill()
+                DungeonSystem:onEnemyKilled(target)
+                LootSystem:onEnemyKilled(target)
             end
-            LevelSystem:addKill()
-            DungeonSystem:onEnemyKilled(target)
-            LootSystem:onEnemyKilled(target)
         end
     end
 end
