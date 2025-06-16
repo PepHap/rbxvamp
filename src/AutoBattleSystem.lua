@@ -25,6 +25,12 @@ AutoBattleSystem.attackRange = 5
 ---Damage dealt to enemies per attack.
 AutoBattleSystem.damage = 1
 
+---Delay between successive attacks when auto battling.
+AutoBattleSystem.attackCooldown = 1
+
+---Time remaining before another attack can occur.
+AutoBattleSystem.attackTimer = 0
+
 ---Reference to the last enemy attacked by the system.
 AutoBattleSystem.lastAttackTarget = nil
 
@@ -47,6 +53,7 @@ function AutoBattleSystem:update(dt)
     if not self.enabled then
         return
     end
+    self.attackTimer = math.max(0, (self.attackTimer or 0) - dt)
     local pos = self.playerPosition
     local target = EnemySystem:getNearestEnemy(pos)
     if not target then
@@ -57,7 +64,7 @@ function AutoBattleSystem:update(dt)
     local dx = target.position.x - pos.x
     local dy = target.position.y - pos.y
     local distSq = dx * dx + dy * dy
-    if distSq <= self.attackRange * self.attackRange then
+    if distSq <= self.attackRange * self.attackRange and self.attackTimer <= 0 then
         -- Target is within attack range, register an attack
         self.lastAttackTarget = target
         if target.health then
@@ -75,6 +82,7 @@ function AutoBattleSystem:update(dt)
                 self.lastAttackTarget = nil
             end
         end
+        self.attackTimer = self.attackCooldown
     else
         -- Move toward the target by a small step based on moveSpeed
         local dist = math.sqrt(distSq)
