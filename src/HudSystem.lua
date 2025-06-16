@@ -8,6 +8,8 @@ local HudSystem = {
     currencyLabel = nil,
     autoButton = nil,
     attackButton = nil,
+    gachaButton = nil,
+    inventoryButton = nil,
 }
 
 local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
@@ -56,8 +58,12 @@ function HudSystem:start()
     self.currencyLabel = createInstance("TextLabel")
     self.autoButton = createInstance("TextButton")
     self.attackButton = createInstance("TextButton")
+    self.gachaButton = createInstance("TextButton")
+    self.inventoryButton = createInstance("TextButton")
     self.autoButton.Text = "Auto: OFF"
     self.attackButton.Text = "Attack"
+    self.gachaButton.Text = "Gacha"
+    self.inventoryButton.Text = "Inventory"
     if self.autoButton.MouseButton1Click then
         self.autoButton.MouseButton1Click:Connect(function()
             HudSystem:toggleAutoBattle()
@@ -76,10 +82,30 @@ function HudSystem:start()
             HudSystem:manualAttack()
         end
     end
+    if self.gachaButton.MouseButton1Click then
+        self.gachaButton.MouseButton1Click:Connect(function()
+            HudSystem:toggleGacha()
+        end)
+    else
+        self.gachaButton.onClick = function()
+            HudSystem:toggleGacha()
+        end
+    end
+    if self.inventoryButton.MouseButton1Click then
+        self.inventoryButton.MouseButton1Click:Connect(function()
+            HudSystem:toggleInventory()
+        end)
+    else
+        self.inventoryButton.onClick = function()
+            HudSystem:toggleInventory()
+        end
+    end
     parent(self.levelLabel, gui)
     parent(self.currencyLabel, gui)
     parent(self.autoButton, gui)
     parent(self.attackButton, gui)
+    parent(self.gachaButton, gui)
+    parent(self.inventoryButton, gui)
     self:update()
 end
 
@@ -113,11 +139,21 @@ function HudSystem:update()
         self.attackButton.Active = true
     end
 
+    self.gachaButton = self.gachaButton or createInstance("TextButton")
+    parent(self.gachaButton, gui)
+    self.gachaButton.Text = "Gacha"
+
+    self.inventoryButton = self.inventoryButton or createInstance("TextButton")
+    parent(self.inventoryButton, gui)
+    self.inventoryButton.Text = "Inventory"
+
     if UDim2 and UDim2.new then
         self.levelLabel.Position = UDim2.new(0, 20, 0, 10)
         self.currencyLabel.Position = UDim2.new(0, 20, 0, 30)
-        self.autoButton.Position = UDim2.new(0, 20, 1, -80)
+        self.autoButton.Position = UDim2.new(0, 20, 1, -120)
         self.attackButton.Position = UDim2.new(0, 20, 1, -40)
+        self.gachaButton.Position = UDim2.new(0, 20, 1, -80)
+        self.inventoryButton.Position = UDim2.new(0, 120, 1, -80)
     end
 end
 
@@ -136,6 +172,16 @@ function HudSystem:manualAttack()
     end
     local PlayerInputSystem = require(script.Parent:WaitForChild("PlayerInputSystem"))
     PlayerInputSystem:manualAttack()
+end
+
+function HudSystem:toggleGacha()
+    local GachaUISystem = require(script.Parent:WaitForChild("GachaUISystem"))
+    GachaUISystem:toggle()
+end
+
+function HudSystem:toggleInventory()
+    local InventoryUISystem = require(script.Parent:WaitForChild("InventoryUISystem"))
+    InventoryUISystem:toggle()
 end
 
 return HudSystem

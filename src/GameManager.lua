@@ -148,6 +148,11 @@ InventoryUISystem.itemSystem = GameManager.itemSystem
 
 GameManager:addSystem("InventoryUI", InventoryUISystem)
 
+-- Gacha UI for rolling rewards
+local GachaUISystem = require(script.Parent:WaitForChild("GachaUISystem"))
+GachaUISystem.gameManager = GameManager
+GameManager:addSystem("GachaUI", GachaUISystem)
+
 -- Heads-up display with level, experience and currency
 local HudSystem = require(script.Parent:WaitForChild("HudSystem"))
 GameManager:addSystem("HUD", HudSystem)
