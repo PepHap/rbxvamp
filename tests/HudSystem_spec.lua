@@ -12,11 +12,14 @@ describe("HudSystem", function()
         HudSystem.attackButton = nil
         HudSystem.gachaButton = nil
         HudSystem.inventoryButton = nil
+        HudSystem.rewardButton = nil
         PlayerLevelSystem.level = 1
         PlayerLevelSystem.exp = 0
         PlayerLevelSystem.nextExp = 100
         CurrencySystem.balances = {}
         LocationSystem.currentIndex = 1
+        local RewardGaugeUISystem = require("src.RewardGaugeUISystem")
+        RewardGaugeUISystem.visible = false
     end)
 
     it("creates labels on start", function()
@@ -69,15 +72,19 @@ describe("HudSystem", function()
         assert.is_false(called)
     end)
 
-    it("toggles gacha and inventory windows", function()
+    it("toggles gacha, inventory and reward windows", function()
         local GachaUISystem = require("src.GachaUISystem")
         local InventoryUISystem = require("src.InventoryUISystem")
+        local RewardGaugeUISystem = require("src.RewardGaugeUISystem")
         GachaUISystem.visible = false
         InventoryUISystem.visible = false
+        RewardGaugeUISystem.visible = false
         HudSystem:start()
         HudSystem.gachaButton.onClick()
         assert.is_true(GachaUISystem.visible)
         HudSystem.inventoryButton.onClick()
         assert.is_true(InventoryUISystem.visible)
+        HudSystem.rewardButton.onClick()
+        assert.is_true(RewardGaugeUISystem.visible)
     end)
 end)

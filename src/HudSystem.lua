@@ -10,12 +10,14 @@ local HudSystem = {
     attackButton = nil,
     gachaButton = nil,
     inventoryButton = nil,
+    rewardButton = nil,
 }
 
 local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
 local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
+local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
 
 local function createInstance(className)
     if HudSystem.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
@@ -60,10 +62,12 @@ function HudSystem:start()
     self.attackButton = createInstance("TextButton")
     self.gachaButton = createInstance("TextButton")
     self.inventoryButton = createInstance("TextButton")
+    self.rewardButton = createInstance("TextButton")
     self.autoButton.Text = "Auto: OFF"
     self.attackButton.Text = "Attack"
     self.gachaButton.Text = "Gacha"
     self.inventoryButton.Text = "Inventory"
+    self.rewardButton.Text = "Rewards"
     if self.autoButton.MouseButton1Click then
         self.autoButton.MouseButton1Click:Connect(function()
             HudSystem:toggleAutoBattle()
@@ -100,12 +104,22 @@ function HudSystem:start()
             HudSystem:toggleInventory()
         end
     end
+    if self.rewardButton.MouseButton1Click then
+        self.rewardButton.MouseButton1Click:Connect(function()
+            HudSystem:toggleRewardGauge()
+        end)
+    else
+        self.rewardButton.onClick = function()
+            HudSystem:toggleRewardGauge()
+        end
+    end
     parent(self.levelLabel, gui)
     parent(self.currencyLabel, gui)
     parent(self.autoButton, gui)
     parent(self.attackButton, gui)
     parent(self.gachaButton, gui)
     parent(self.inventoryButton, gui)
+    parent(self.rewardButton, gui)
     self:update()
 end
 
@@ -147,6 +161,10 @@ function HudSystem:update()
     parent(self.inventoryButton, gui)
     self.inventoryButton.Text = "Inventory"
 
+    self.rewardButton = self.rewardButton or createInstance("TextButton")
+    parent(self.rewardButton, gui)
+    self.rewardButton.Text = string.format("Rewards %d/%d", RewardGaugeSystem.gauge, RewardGaugeSystem.maxGauge)
+
     if UDim2 and UDim2.new then
         self.levelLabel.Position = UDim2.new(0, 20, 0, 10)
         self.currencyLabel.Position = UDim2.new(0, 20, 0, 30)
@@ -154,6 +172,7 @@ function HudSystem:update()
         self.attackButton.Position = UDim2.new(0, 20, 1, -40)
         self.gachaButton.Position = UDim2.new(0, 20, 1, -80)
         self.inventoryButton.Position = UDim2.new(0, 120, 1, -80)
+        self.rewardButton.Position = UDim2.new(0, 220, 1, -80)
     end
 end
 
@@ -182,6 +201,11 @@ end
 function HudSystem:toggleInventory()
     local InventoryUISystem = require(script.Parent:WaitForChild("InventoryUISystem"))
     InventoryUISystem:toggle()
+end
+
+function HudSystem:toggleRewardGauge()
+    local RewardGaugeUISystem = require(script.Parent:WaitForChild("RewardGaugeUISystem"))
+    RewardGaugeUISystem:toggle()
 end
 
 return HudSystem
