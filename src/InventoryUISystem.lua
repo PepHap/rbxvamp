@@ -26,6 +26,9 @@ local InventoryUI = {
     itemSystem = nil,
 }
 
+-- Render order for equipment slots to ensure deterministic layout
+local slotOrder = {"Hat", "Necklace", "Ring", "Armor", "Accessory", "Weapon"}
+
 local ItemSystem = require(script.Parent:WaitForChild("ItemSystem"))
 
 local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
@@ -90,6 +93,12 @@ local function ensureGui()
     return gui
 end
 
+-- Clears any pending inventory or slot selection
+local function clearSelection()
+    InventoryUI.selectedSlot = nil
+    InventoryUI.pendingIndex = nil
+end
+
 ---Initializes the Inventory UI and binds page buttons.
 -- @param items table ItemSystem instance
 function InventoryUI:start(items)
@@ -140,7 +149,8 @@ end
 local function renderEquipment(container, items)
     clearChildren(container)
     local index = 0
-    for slot, item in pairs(items.slots) do
+    for _, slot in ipairs(slotOrder) do
+        local item = items.slots[slot]
         local btn = createInstance("TextButton")
         btn.Name = slot .. "Slot"
         btn.Text = item and item.name or "Empty"
@@ -322,6 +332,9 @@ end
 -- @param on boolean
 function InventoryUI:setVisible(on)
     self.visible = not not on
+    if not self.visible then
+        clearSelection()
+    end
     local gui = ensureGui()
     if gui.Enabled ~= nil then
         gui.Enabled = self.visible
