@@ -14,6 +14,8 @@ local PlayerInputSystem = {
     playerPosition = nil,
     ---Key used to toggle the inventory UI.
     inventoryKey = "B",
+    skillKey = "K",
+    companionKey = "L",
 }
 
 local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
@@ -23,6 +25,8 @@ local LootSystem = require(script.Parent:WaitForChild("LootSystem"))
 local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
 local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
 local InventoryUISystem = require(script.Parent:WaitForChild("InventoryUISystem"))
+local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
+local CompanionUISystem = require(script.Parent:WaitForChild("CompanionUISystem"))
 
 -- Utility to connect Roblox input events when available
 local function connectRoblox()
@@ -61,6 +65,10 @@ function PlayerInputSystem:setKeyState(key, isDown)
     self.keyStates[key] = isDown and true or false
     if key == self.inventoryKey and isDown then
         InventoryUISystem:toggle()
+    elseif key == self.skillKey and isDown then
+        SkillUISystem:toggle()
+    elseif key == self.companionKey and isDown then
+        CompanionUISystem:toggle()
     end
 end
 

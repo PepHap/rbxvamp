@@ -39,4 +39,15 @@ describe("PlayerInputSystem", function()
         PlayerInputSystem:update(1)
         assert.equals(0, PlayerSystem.position.x)
     end)
+
+    it("toggles skill and companion UIs using keys", function()
+        local SkillUISystem = require("src.SkillUISystem")
+        local CompanionUISystem = require("src.CompanionUISystem")
+        SkillUISystem.visible = false
+        CompanionUISystem.visible = false
+        PlayerInputSystem:setKeyState(PlayerInputSystem.skillKey, true)
+        assert.is_true(SkillUISystem.visible)
+        PlayerInputSystem:setKeyState(PlayerInputSystem.companionKey, true)
+        assert.is_true(CompanionUISystem.visible)
+    end)
 end)

@@ -4,6 +4,7 @@
 local SkillUISystem = {
     useRobloxObjects = false,
     gui = nil,
+    visible = false,
     skillSystem = nil,
     skillListFrame = nil,
 }
@@ -49,6 +50,7 @@ end
 function SkillUISystem:start(skillSys)
     self.skillSystem = skillSys or self.skillSystem or SkillSystem.new()
     self:update()
+    self:setVisible(self.visible)
 end
 
 local function clearChildren(container)
@@ -133,6 +135,20 @@ function SkillUISystem:upgrade(index)
         self:update()
     end
     return ok
+end
+
+function SkillUISystem:setVisible(on)
+    self.visible = not not on
+    local gui = ensureGui()
+    if gui.Enabled ~= nil then
+        gui.Enabled = self.visible
+    else
+        gui.Visible = self.visible
+    end
+end
+
+function SkillUISystem:toggle()
+    self:setVisible(not self.visible)
 end
 
 return SkillUISystem

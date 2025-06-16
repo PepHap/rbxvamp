@@ -11,6 +11,8 @@ local HudSystem = {
     gachaButton = nil,
     inventoryButton = nil,
     rewardButton = nil,
+    skillButton = nil,
+    companionButton = nil,
 }
 
 local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
@@ -63,11 +65,15 @@ function HudSystem:start()
     self.gachaButton = createInstance("TextButton")
     self.inventoryButton = createInstance("TextButton")
     self.rewardButton = createInstance("TextButton")
+    self.skillButton = createInstance("TextButton")
+    self.companionButton = createInstance("TextButton")
     self.autoButton.Text = "Auto: OFF"
     self.attackButton.Text = "Attack"
     self.gachaButton.Text = "Gacha"
     self.inventoryButton.Text = "Inventory"
     self.rewardButton.Text = "Rewards"
+    self.skillButton.Text = "Skills"
+    self.companionButton.Text = "Companions"
     if self.autoButton.MouseButton1Click then
         self.autoButton.MouseButton1Click:Connect(function()
             HudSystem:toggleAutoBattle()
@@ -113,6 +119,24 @@ function HudSystem:start()
             HudSystem:toggleRewardGauge()
         end
     end
+    if self.skillButton.MouseButton1Click then
+        self.skillButton.MouseButton1Click:Connect(function()
+            HudSystem:toggleSkillUI()
+        end)
+    else
+        self.skillButton.onClick = function()
+            HudSystem:toggleSkillUI()
+        end
+    end
+    if self.companionButton.MouseButton1Click then
+        self.companionButton.MouseButton1Click:Connect(function()
+            HudSystem:toggleCompanionUI()
+        end)
+    else
+        self.companionButton.onClick = function()
+            HudSystem:toggleCompanionUI()
+        end
+    end
     parent(self.levelLabel, gui)
     parent(self.currencyLabel, gui)
     parent(self.autoButton, gui)
@@ -120,6 +144,8 @@ function HudSystem:start()
     parent(self.gachaButton, gui)
     parent(self.inventoryButton, gui)
     parent(self.rewardButton, gui)
+    parent(self.skillButton, gui)
+    parent(self.companionButton, gui)
     self:update()
 end
 
@@ -165,6 +191,14 @@ function HudSystem:update()
     parent(self.rewardButton, gui)
     self.rewardButton.Text = string.format("Rewards %d/%d", RewardGaugeSystem.gauge, RewardGaugeSystem.maxGauge)
 
+    self.skillButton = self.skillButton or createInstance("TextButton")
+    parent(self.skillButton, gui)
+    self.skillButton.Text = "Skills"
+
+    self.companionButton = self.companionButton or createInstance("TextButton")
+    parent(self.companionButton, gui)
+    self.companionButton.Text = "Companions"
+
     if UDim2 and UDim2.new then
         self.levelLabel.Position = UDim2.new(0, 20, 0, 10)
         self.currencyLabel.Position = UDim2.new(0, 20, 0, 30)
@@ -173,6 +207,8 @@ function HudSystem:update()
         self.gachaButton.Position = UDim2.new(0, 20, 1, -80)
         self.inventoryButton.Position = UDim2.new(0, 120, 1, -80)
         self.rewardButton.Position = UDim2.new(0, 220, 1, -80)
+        self.skillButton.Position = UDim2.new(0, 320, 1, -80)
+        self.companionButton.Position = UDim2.new(0, 420, 1, -80)
     end
 end
 
@@ -206,6 +242,16 @@ end
 function HudSystem:toggleRewardGauge()
     local RewardGaugeUISystem = require(script.Parent:WaitForChild("RewardGaugeUISystem"))
     RewardGaugeUISystem:toggle()
+end
+
+function HudSystem:toggleSkillUI()
+    local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
+    SkillUISystem:toggle()
+end
+
+function HudSystem:toggleCompanionUI()
+    local CompanionUISystem = require(script.Parent:WaitForChild("CompanionUISystem"))
+    CompanionUISystem:toggle()
 end
 
 return HudSystem
