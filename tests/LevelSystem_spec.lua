@@ -112,4 +112,14 @@ describe("LevelSystem", function()
         assert.is_true(scaleAfterNormal > scaleAfterMini)
         assert.is_true(scaleAfterMini > 1)
     end)
+
+    it("respawns a wave when none remain", function()
+        LevelSystem.currentLevel = 1
+        LevelSystem.killCount = 0
+        LevelSystem.requiredKills = 15
+        EnemySystem.enemies = {}
+        LevelSystem:update()
+        assert.is_true(#EnemySystem.enemies > 0)
+        assert.equals(1, EnemySystem.lastWaveLevel)
+    end)
 end)

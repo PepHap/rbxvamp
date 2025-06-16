@@ -81,6 +81,20 @@ function LevelSystem:addKill()
     self:checkAdvance()
 end
 
+---Ensures a new wave is spawned whenever all enemies are defeated.
+--  This keeps gameplay flowing on early floors where only a few foes spawn.
+--  Called every frame by ``GameManager``.
+function LevelSystem:update()
+    -- Do nothing if the player already cleared this stage
+    if self.killCount >= self.requiredKills then
+        return
+    end
+    -- Spawn another wave when no enemies remain
+    if #EnemySystem.enemies == 0 then
+        EnemySystem:spawnWave(self.currentLevel)
+    end
+end
+
 --- Advances the game to the next level and returns the new level value.
 --  The explicit increment keeps compatibility with Lua 5.1.
 --  @return number The current level after the increment
