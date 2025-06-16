@@ -73,6 +73,7 @@ function UISystem:showRewardOptions()
 
     local gui = ensureGui()
     self.rewardButtons = {}
+    gui.rewardButtons = self.rewardButtons
 
     for i, opt in ipairs(opts) do
         local btn = createInstance("TextButton")
@@ -93,6 +94,7 @@ function UISystem:selectReward(index)
     local gui = ensureGui()
     self.selectionLabel = self.selectionLabel or createInstance("TextLabel")
     parent(self.selectionLabel, gui)
+    gui.selectionLabel = self.selectionLabel
 
     if chosen then
         self.selectionLabel.Text = ("Selected %s for %s"):format(chosen.item.name, chosen.slot)
@@ -111,6 +113,7 @@ function UISystem:displayGachaResult(result)
     local gui = ensureGui()
     self.gachaLabel = self.gachaLabel or createInstance("TextLabel")
     parent(self.gachaLabel, gui)
+    gui.gachaLabel = self.gachaLabel
 
     if not result then
         self.gachaLabel.Text = "Gacha: no reward"

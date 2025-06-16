@@ -2,7 +2,6 @@ local QuestUISystem = {
     useRobloxObjects = false,
     gui = nil,
     questSystem = nil,
-    listFrame = nil,
 }
 
 local function createInstance(className)
@@ -53,22 +52,8 @@ function QuestUISystem:update()
     local gui = ensureGui()
     if type(gui) == "table" then
         gui.children = {}
-    elseif self.listFrame and self.listFrame.ClearAllChildren then
-        self.listFrame:ClearAllChildren()
     end
-
-    local container = self.listFrame
-    if not container then
-        if gui.FindFirstChild then
-            container = gui:FindFirstChild("QuestList")
-        end
-    end
-    if not container then
-        container = createInstance("Frame")
-        container.Name = "QuestList"
-    end
-    parent(container, gui)
-    self.listFrame = container
+    local container = gui
 
     for id, q in pairs(qs.quests) do
         local frame = createInstance("Frame")

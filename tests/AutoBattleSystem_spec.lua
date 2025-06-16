@@ -1,5 +1,5 @@
-local AutoBattleSystem = require("../src/AutoBattleSystem")
-local EnemySystem = require("../src/EnemySystem")
+local AutoBattleSystem = require("src.AutoBattleSystem")
+local EnemySystem = require("src.EnemySystem")
 
 
 describe("AutoBattleSystem", function()

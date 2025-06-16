@@ -1,4 +1,4 @@
-local AutoSaveSystem = require("../src/AutoSaveSystem")
+local AutoSaveSystem = require("src.AutoSaveSystem")
 
 local fakeSave = {
     saved = {},
