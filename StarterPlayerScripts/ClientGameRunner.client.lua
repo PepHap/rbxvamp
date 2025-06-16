@@ -14,6 +14,7 @@ local modulesWithUI = {
     require(src:WaitForChild("CompanionUISystem")),
     require(src:WaitForChild("StatUpgradeUISystem")),
     require(src:WaitForChild("QuestUISystem")),
+    require(src:WaitForChild("GachaUISystem")),
     require(src:WaitForChild("UISystem")),
     require(src:WaitForChild("PlayerSystem")),
     require(src:WaitForChild("PlayerInputSystem")),
