@@ -173,7 +173,14 @@ local function renderEquipment(container, items)
         local btn = createInstance("TextButton")
         btn.Name = slot .. "Slot"
         btn.Text = item and item.name or "Empty"
-        btn.Slot = slot
+        if btn.SetAttribute then
+            -- Store the slot identifier as an attribute instead of a direct
+            -- property because Roblox Instances do not allow arbitrary fields.
+            btn:SetAttribute("Slot", slot)
+        elseif type(btn) == "table" then
+            -- In unit tests we use plain tables as mock objects.
+            btn.Slot = slot
+        end
         if UDim2 and UDim2.new then
             btn.Position = UDim2.new(0, 0, 0, index * 25)
             btn.Size = UDim2.new(1, 0, 0, 24)
