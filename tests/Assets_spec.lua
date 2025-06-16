@@ -1,5 +1,6 @@
-local items = require("assets.items")
-local skills = require("assets.skills")
+local assets = game:GetService("ReplicatedStorage"):WaitForChild("assets")
+local items = require(assets:WaitForChild("items"))
+local skills = require(assets:WaitForChild("skills"))
 
 describe("Assets", function()
     it("loads item templates", function()

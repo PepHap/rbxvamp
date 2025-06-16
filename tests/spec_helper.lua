@@ -11,6 +11,12 @@ _G.game = _G.game or {
                                 return "assets." .. sub
                             end
                         }
+                    elseif child == "src" then
+                        return {
+                            WaitForChild = function(_, sub)
+                                return "src." .. sub
+                            end
+                        }
                     end
                 end
             }

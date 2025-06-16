@@ -15,30 +15,7 @@ GachaSystem.rarityWeights = {
     {"SSS", 1e-12},
 }
 
--- Load reward pools
-local ReplicatedStorage
-if game and type(game.GetService) == "function" then
-    local ok, service = pcall(function()
-        return game:GetService("ReplicatedStorage")
-    end)
-    if ok then
-        ReplicatedStorage = service
-    end
-end
-if not ReplicatedStorage then
-    ReplicatedStorage = {
-        WaitForChild = function(_, name)
-            if name == "assets" then
-                return {
-                    WaitForChild = function(_, child)
-                        return require("assets." .. child)
-                    end
-                }
-            end
-            return nil
-        end
-    }
-end
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local assets = ReplicatedStorage:WaitForChild("assets")
 local skillPool = require(assets:WaitForChild("skills"))
 local itemPool = require(assets:WaitForChild("items"))
