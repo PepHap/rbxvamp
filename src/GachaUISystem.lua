@@ -10,6 +10,7 @@ local GachaUI = {
     skillButton = nil,
     companionButton = nil,
     equipmentButton = nil,
+    window = nil,
 }
 
 local function createInstance(className)
@@ -55,21 +56,26 @@ end
 function GachaUI:start(manager)
     self.gameManager = manager or self.gameManager or require(script.Parent:WaitForChild("GameManager"))
     local gui = ensureGui()
+    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
+
+    -- use a plain window frame; banner images were removed
+    self.window = GuiUtil.createWindow("GachaWindow")
+    parent(self.window, gui)
 
     self.resultLabel = createInstance("TextLabel")
-    parent(self.resultLabel, gui)
+    parent(self.resultLabel, self.window)
 
     self.skillButton = createInstance("TextButton")
     self.skillButton.Text = "Roll Skill"
-    parent(self.skillButton, gui)
+    parent(self.skillButton, self.window)
 
     self.companionButton = createInstance("TextButton")
     self.companionButton.Text = "Roll Companion"
-    parent(self.companionButton, gui)
+    parent(self.companionButton, self.window)
 
     self.equipmentButton = createInstance("TextButton")
     self.equipmentButton.Text = "Roll Weapon"
-    parent(self.equipmentButton, gui)
+    parent(self.equipmentButton, self.window)
 
     connect(self.skillButton, function() GachaUI:rollSkill() end)
     connect(self.companionButton, function() GachaUI:rollCompanion() end)
@@ -81,10 +87,11 @@ end
 function GachaUI:setVisible(on)
     self.visible = not not on
     local gui = ensureGui()
-    if gui.Enabled ~= nil then
-        gui.Enabled = self.visible
+    local parentGui = self.window or gui
+    if parentGui.Enabled ~= nil then
+        parentGui.Enabled = self.visible
     else
-        gui.Visible = self.visible
+        parentGui.Visible = self.visible
     end
 end
 
@@ -94,7 +101,7 @@ end
 
 function GachaUI:showResult(result)
     self.resultLabel = self.resultLabel or createInstance("TextLabel")
-    parent(self.resultLabel, ensureGui())
+    parent(self.resultLabel, self.window or ensureGui())
     if not result then
         self.resultLabel.Text = "No reward"
         return

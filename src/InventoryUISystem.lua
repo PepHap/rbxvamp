@@ -22,6 +22,8 @@ local InventoryUI = {
     selectedSlot = nil,
     ---Inventory index awaiting a slot selection
     pendingIndex = nil,
+    ---Window frame containing all inventory UI elements
+    window = nil,
     ---Reference to the active ItemSystem instance provided by GameManager
     itemSystem = nil,
 }
@@ -100,6 +102,11 @@ end
 function InventoryUI:start(items)
     self.itemSystem = items or self.itemSystem
     local gui = ensureGui()
+    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
+
+    -- no bundled images; create a plain window instead
+    self.window = GuiUtil.createWindow("InventoryWindow")
+    parent(self.window, gui)
 
     local prev = gui.FindFirstChild and gui:FindFirstChild("PrevPage") or createInstance("TextButton")
     prev.Name = "PrevPage"
@@ -107,7 +114,7 @@ function InventoryUI:start(items)
     if UDim2 and UDim2.new then
         prev.Position = UDim2.new(0, 10, 1, -40)
     end
-    parent(prev, gui)
+    parent(prev, self.window)
     if prev.MouseButton1Click then
         prev.MouseButton1Click:Connect(function()
             InventoryUI:changePage(-1)
@@ -117,7 +124,7 @@ function InventoryUI:start(items)
             InventoryUI:changePage(-1)
         end
     end
-    if type(gui) == "table" then gui.PrevPage = prev end
+    if type(self.window) == "table" then self.window.PrevPage = prev end
 
     local nextBtn = gui.FindFirstChild and gui:FindFirstChild("NextPage") or createInstance("TextButton")
     nextBtn.Name = "NextPage"
@@ -125,7 +132,7 @@ function InventoryUI:start(items)
     if UDim2 and UDim2.new then
         nextBtn.Position = UDim2.new(0, 50, 1, -40)
     end
-    parent(nextBtn, gui)
+    parent(nextBtn, self.window)
     if nextBtn.MouseButton1Click then
         nextBtn.MouseButton1Click:Connect(function()
             InventoryUI:changePage(1)
@@ -135,7 +142,7 @@ function InventoryUI:start(items)
             InventoryUI:changePage(1)
         end
     end
-    if type(gui) == "table" then gui.NextPage = nextBtn end
+    if type(self.window) == "table" then self.window.NextPage = nextBtn end
 
     self:update()
     self:setVisible(self.visible)
@@ -233,21 +240,22 @@ function InventoryUI:update()
     if type(gui) == "table" then
         gui.children = gui.children or {}
     end
-    local existing = gui.FindFirstChild and gui:FindFirstChild("Equipment")
+    local parentGui = self.window or gui
+    local existing = parentGui.FindFirstChild and parentGui:FindFirstChild("Equipment")
     self.equipmentFrame = self.equipmentFrame or existing or createInstance("Frame")
     self.equipmentFrame.Name = "Equipment"
     if UDim2 and UDim2.new then
         self.equipmentFrame.Position = UDim2.new(0, 10, 0.1, 0)
         self.equipmentFrame.Size = UDim2.new(0, 150, 0, 200)
     end
-    existing = gui.FindFirstChild and gui:FindFirstChild("Inventory")
+    existing = parentGui.FindFirstChild and parentGui:FindFirstChild("Inventory")
     self.inventoryFrame = self.inventoryFrame or existing or createInstance("Frame")
     self.inventoryFrame.Name = "Inventory"
     if UDim2 and UDim2.new then
         self.inventoryFrame.Position = UDim2.new(0, 170, 0.1, 0)
         self.inventoryFrame.Size = UDim2.new(0, 200, 0, 200)
     end
-    existing = gui.FindFirstChild and gui:FindFirstChild("Stats")
+    existing = parentGui.FindFirstChild and parentGui:FindFirstChild("Stats")
     self.statsFrame = self.statsFrame or existing or createInstance("Frame")
     self.statsFrame.Name = "Stats"
     if UDim2 and UDim2.new then
@@ -259,9 +267,9 @@ function InventoryUI:update()
     clearChildren(self.inventoryFrame)
     clearChildren(self.statsFrame)
 
-    parent(self.equipmentFrame, gui)
-    parent(self.inventoryFrame, gui)
-    parent(self.statsFrame, gui)
+    parent(self.equipmentFrame, parentGui)
+    parent(self.inventoryFrame, parentGui)
+    parent(self.statsFrame, parentGui)
 
     local items = self.itemSystem
     if not items then
@@ -332,10 +340,11 @@ function InventoryUI:setVisible(on)
         clearSelection()
     end
     local gui = ensureGui()
-    if gui.Enabled ~= nil then
-        gui.Enabled = self.visible
+    local parentGui = self.window or gui
+    if parentGui.Enabled ~= nil then
+        parentGui.Enabled = self.visible
     else
-        gui.Visible = self.visible
+        parentGui.Visible = self.visible
     end
 end
 

@@ -7,6 +7,7 @@ local CompanionUISystem = {
     visible = false,
     companionSystem = nil,
     listFrame = nil,
+    window = nil,
 }
 
 local CompanionSystem = require(script.Parent:WaitForChild("CompanionSystem"))
@@ -49,6 +50,13 @@ end
 
 function CompanionUISystem:start(compSys)
     self.companionSystem = compSys or self.companionSystem or {companions = {}}
+    local gui = ensureGui()
+    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
+
+    -- create a simple window frame; images are optional and removed to keep the repo text only
+    self.window = GuiUtil.createWindow("CompanionWindow")
+    parent(self.window, gui)
+
     self:update()
     self:setVisible(self.visible)
 end
@@ -103,17 +111,18 @@ function CompanionUISystem:update()
         gui.children = gui.children or {}
     end
 
+    local parentGui = self.window or gui
     local container
     if self.listFrame then
         container = self.listFrame
-    elseif gui.FindFirstChild then
-        container = gui:FindFirstChild("CompanionList")
+    elseif parentGui.FindFirstChild then
+        container = parentGui:FindFirstChild("CompanionList")
     end
     if not container then
         container = createInstance("Frame")
         container.Name = "CompanionList"
     end
-    parent(container, gui)
+    parent(container, parentGui)
     self.listFrame = container
 
     renderCompanions(container, sys)
@@ -133,10 +142,11 @@ end
 function CompanionUISystem:setVisible(on)
     self.visible = not not on
     local gui = ensureGui()
-    if gui.Enabled ~= nil then
-        gui.Enabled = self.visible
+    local parentGui = self.window or gui
+    if parentGui.Enabled ~= nil then
+        parentGui.Enabled = self.visible
     else
-        gui.Visible = self.visible
+        parentGui.Visible = self.visible
     end
 end
 

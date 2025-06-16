@@ -7,6 +7,7 @@ local RewardGaugeUISystem = {
     gaugeLabel = nil,
     optionButtons = nil,
     visible = false,
+    window = nil,
 }
 
 local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
@@ -44,16 +45,23 @@ end
 
 function RewardGaugeUISystem:start()
     local gui = ensureGui()
+    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
+
+    -- simple frame; image removed to keep repository text only
+    self.window = GuiUtil.createWindow("RewardWindow")
+    parent(self.window, gui)
+
     self.gaugeLabel = createInstance("TextLabel")
-    parent(self.gaugeLabel, gui)
+    parent(self.gaugeLabel, self.window)
     self:update()
     self:setVisible(self.visible)
 end
 
 function RewardGaugeUISystem:update()
     local gui = ensureGui()
+    local parentGui = self.window or gui
     self.gaugeLabel = self.gaugeLabel or createInstance("TextLabel")
-    parent(self.gaugeLabel, gui)
+    parent(self.gaugeLabel, parentGui)
     self.gaugeLabel.Text = string.format("Gauge: %d/%d", RewardGaugeSystem.gauge, RewardGaugeSystem.maxGauge)
 end
 
@@ -61,8 +69,9 @@ function RewardGaugeUISystem:showOptions()
     local opts = RewardGaugeSystem:getOptions()
     if not opts then return nil end
     local gui = ensureGui()
+    local parentGui = self.window or gui
     self.optionButtons = {}
-    gui.optionButtons = self.optionButtons
+    parentGui.optionButtons = self.optionButtons
     for i, opt in ipairs(opts) do
         local btn = createInstance("TextButton")
         btn.Text = string.format("%d) %s (%s)", i, opt.item.name, opt.slot)
@@ -75,7 +84,7 @@ function RewardGaugeUISystem:showOptions()
                 RewardGaugeUISystem:choose(i)
             end
         end
-        parent(btn, gui)
+        parent(btn, parentGui)
         table.insert(self.optionButtons, btn)
     end
     return opts
@@ -91,10 +100,11 @@ end
 function RewardGaugeUISystem:setVisible(on)
     self.visible = not not on
     local gui = ensureGui()
-    if gui.Enabled ~= nil then
-        gui.Enabled = self.visible
+    local parentGui = self.window or gui
+    if parentGui.Enabled ~= nil then
+        parentGui.Enabled = self.visible
     else
-        gui.Visible = self.visible
+        parentGui.Visible = self.visible
     end
 end
 
