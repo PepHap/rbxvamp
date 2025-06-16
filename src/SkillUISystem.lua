@@ -12,12 +12,28 @@ local SkillUISystem = {
 
 local SkillSystem = require(script.Parent:WaitForChild("SkillSystem"))
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+local ok, Theme = pcall(function()
+    return require(script.Parent:WaitForChild("UITheme"))
+end)
+if not ok then Theme = nil end
 
 local function createInstance(className)
     if SkillUISystem.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
-        return Instance.new(className)
+        local inst = Instance.new(className)
+        if Theme then
+            if className == "TextLabel" then Theme.styleLabel(inst)
+            elseif className == "TextButton" then Theme.styleButton(inst)
+            elseif className == "Frame" then Theme.styleWindow(inst) end
+        end
+        return inst
     end
-    return {ClassName = className}
+    local tbl = {ClassName = className}
+    if Theme then
+        if className == "TextLabel" then Theme.styleLabel(tbl)
+        elseif className == "TextButton" then Theme.styleButton(tbl)
+        elseif className == "Frame" then Theme.styleWindow(tbl) end
+    end
+    return tbl
 end
 
 local function parent(child, parentObj)

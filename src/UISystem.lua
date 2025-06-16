@@ -18,12 +18,29 @@ local UISystem = {
     gachaLabel = nil,
 }
 
+local ok, Theme = pcall(function()
+    return require(script.Parent:WaitForChild("UITheme"))
+end)
+if not ok then Theme = nil end
+
 -- Helper to create an Instance when available or fall back to a table
 local function createInstance(className)
     if UISystem.useRobloxObjects and typeof ~= nil and Instance ~= nil and type(Instance.new) == "function" then
-        return Instance.new(className)
+        local inst = Instance.new(className)
+        if Theme then
+            if className == "TextLabel" then Theme.styleLabel(inst)
+            elseif className == "TextButton" then Theme.styleButton(inst)
+            elseif className == "Frame" then Theme.styleWindow(inst) end
+        end
+        return inst
     end
-    return {ClassName = className}
+    local tbl = {ClassName = className}
+    if Theme then
+        if className == "TextLabel" then Theme.styleLabel(tbl)
+        elseif className == "TextButton" then Theme.styleButton(tbl)
+        elseif className == "Frame" then Theme.styleWindow(tbl) end
+    end
+    return tbl
 end
 
 -- Parent ``child`` to ``parent`` in both real Roblox and table form

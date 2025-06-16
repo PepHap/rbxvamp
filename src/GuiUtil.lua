@@ -1,5 +1,10 @@
 local GuiUtil = {}
 
+local ok, Theme = pcall(function()
+    return require(script.Parent:WaitForChild("UITheme"))
+end)
+if not ok then Theme = nil end
+
 -- internal helper for creating a Roblox Instance when available
 local function createInstance(className)
     if typeof and Instance and type(Instance.new) == "function" then
@@ -62,6 +67,9 @@ function GuiUtil.createWindow(name, image)
             bg.Size = UDim2.new(1, 0, 1, 0)
         end
         parent(bg, frame)
+    end
+    if Theme and Theme.styleWindow then
+        Theme.styleWindow(frame)
     end
     return frame
 end
