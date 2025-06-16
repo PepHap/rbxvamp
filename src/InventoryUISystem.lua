@@ -34,13 +34,29 @@ local slotOrder = {"Hat", "Necklace", "Ring", "Armor", "Accessory", "Weapon"}
 local ItemSystem = require(script.Parent:WaitForChild("ItemSystem"))
 
 local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
+local ok, Theme = pcall(function()
+    return require(script.Parent:WaitForChild("UITheme"))
+end)
+if not ok then Theme = nil end
 
 -- utility for environment agnostic Instance creation
 local function createInstance(className)
     if InventoryUI.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
-        return Instance.new(className)
+        local inst = Instance.new(className)
+        if Theme then
+            if className == "TextLabel" then Theme.styleLabel(inst)
+            elseif className == "TextButton" then Theme.styleButton(inst)
+            elseif className == "Frame" then Theme.styleWindow(inst) end
+        end
+        return inst
     end
-    return {ClassName = className}
+    local tbl = {ClassName = className}
+    if Theme then
+        if className == "TextLabel" then Theme.styleLabel(tbl)
+        elseif className == "TextButton" then Theme.styleButton(tbl)
+        elseif className == "Frame" then Theme.styleWindow(tbl) end
+    end
+    return tbl
 end
 
 local function parent(child, parentObj)
