@@ -27,10 +27,21 @@ describe("PlayerInputSystem", function()
     it("attacks nearest enemy when space pressed", function()
         local enemy = {health = 1, position = {x = 0, y = 1}}
         EnemySystem.enemies = {enemy}
+        PlayerInputSystem.attackRange = 2
         PlayerInputSystem:setKeyState("Space", true)
         PlayerInputSystem:update(0)
         assert.equals(0, #EnemySystem.enemies)
         assert.equals(1, LevelSystem.killCount)
+    end)
+
+    it("does not attack enemy when out of range", function()
+        local enemy = {health = 1, position = {x = 10, y = 0}}
+        EnemySystem.enemies = {enemy}
+        PlayerInputSystem.attackRange = 2
+        PlayerInputSystem:setKeyState("Space", true)
+        PlayerInputSystem:update(0)
+        assert.equals(1, #EnemySystem.enemies)
+        assert.equals(0, LevelSystem.killCount)
     end)
 
     it("ignores input when auto battle is enabled", function()

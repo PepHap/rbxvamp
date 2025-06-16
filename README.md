@@ -45,6 +45,10 @@ RunService.Heartbeat:Connect(function(dt)
 end)
 ```
 
+### Controls
+Press **B** during gameplay to toggle the inventory UI. The player can also use
+**K** to open skills and **L** for companions.
+
 ### Syncing with Rojo
 Install [Rojo](https://rojo.space/docs) and run the following command to sync
 this repository with Roblox Studio using `default.project.json`:
