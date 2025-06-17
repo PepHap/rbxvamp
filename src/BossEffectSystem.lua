@@ -10,6 +10,8 @@ local BossEffectSystem = {
         brightness = 1,
     },
     effect = nil,
+    useRobloxObjects = false,
+    particle = nil,
 }
 
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
@@ -33,6 +35,24 @@ function BossEffectSystem:enable()
     self.original = LightingSystem.currentSettings
     LightingSystem.apply(self.bossLighting)
     self.effect = {glow = true}
+    if self.useRobloxObjects and game and typeof and typeof(Instance.new)=="function" then
+        local ok, ws = pcall(function() return game:GetService("Workspace") end)
+        if ok and ws then
+            local part = Instance.new("Part")
+            part.Anchored = true
+            part.Transparency = 1
+            part.CanCollide = false
+            part.Position = Vector3.new(0, 0, 0)
+            part.Parent = ws
+            local emitter = Instance.new("ParticleEmitter")
+            emitter.Rate = 50
+            emitter.Color = ColorSequence.new(Color3.new(1,1,0))
+            emitter.Parent = part
+            self.particle = part
+        end
+    else
+        self.particle = {particle = true}
+    end
 end
 
 function BossEffectSystem:disable()
@@ -42,6 +62,12 @@ function BossEffectSystem:disable()
         LightingSystem.apply(self.original)
     end
     self.effect = nil
+    if self.particle then
+        if self.useRobloxObjects and self.particle.Destroy then
+            self.particle:Destroy()
+        end
+        self.particle = nil
+    end
 end
 
 return BossEffectSystem
