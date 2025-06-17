@@ -96,13 +96,14 @@ end
 --  @param enemyType string|nil classification such as "mini" or "boss"
 --  @param name string display name for this enemy
 --  @return table new enemy object
-local function createEnemy(health, damage, position, enemyType, name)
+local function createEnemy(health, damage, position, enemyType, name, prefab)
     return {
         health = health,
         damage = damage,
         position = position,
         type = enemyType,
         name = name,
+        prefab = prefab,
         attackCooldown = EnemySystem.attackCooldown,
         attackTimer = 0
     }
@@ -122,32 +123,58 @@ local function spawnModel(enemy)
             return game:GetService("Workspace")
         end)
         if success and workspaceService then
-            local model = Instance.new("Model")
-            model.Name = enemy.name
-
-            local part = Instance.new("Part")
-            part.Name = enemy.name .. "Part"
-
-            local ok, vectorCtor = pcall(function()
-                return Vector3.new
-            end)
-            if ok and type(vectorCtor) == "function" then
-                part.Position = vectorCtor(enemy.position.x, enemy.position.y, enemy.position.z)
-            else
-                part.Position = {x = enemy.position.x, y = enemy.position.y, z = enemy.position.z}
+            local ss = game:GetService("ServerStorage")
+            local mobsFolder = ss and ss:FindFirstChild("Mobs")
+            local prefab
+            if mobsFolder then
+                prefab = mobsFolder:FindFirstChild(enemy.prefab or "")
             end
 
-            part.Parent = model
-            model.PrimaryPart = part
-
-            local billboardGui = Instance.new("BillboardGui")
-            billboardGui.Adornee = part
-            local textLabel = Instance.new("TextLabel")
-            textLabel.Text = enemy.name
-            textLabel.Parent = billboardGui
-            billboardGui.Parent = model
-
-            model.Parent = workspaceService
+            local model
+            if prefab and prefab.Clone then
+                model = prefab:Clone()
+                model.Name = enemy.name
+                model.Parent = workspaceService
+                if model.PrimaryPart then
+                    local ok, vectorCtor = pcall(function()
+                        return Vector3.new
+                    end)
+                    local pos = ok and vectorCtor(enemy.position.x, enemy.position.y, enemy.position.z)
+                        or {x = enemy.position.x, y = enemy.position.y, z = enemy.position.z}
+                    if model.SetPrimaryPartCFrame then
+                        local ok2, cframeCtor = pcall(function()
+                            return CFrame.new
+                        end)
+                        if ok2 and type(cframeCtor) == "function" then
+                            model:SetPrimaryPartCFrame(cframeCtor(pos.X or pos.x, pos.Y or pos.y, pos.Z or pos.z))
+                        end
+                    elseif model.PrimaryPart.Position then
+                        model.PrimaryPart.Position = pos
+                    end
+                end
+            else
+                model = Instance.new("Model")
+                model.Name = enemy.name
+                local part = Instance.new("Part")
+                part.Name = enemy.name .. "Part"
+                local ok, vectorCtor = pcall(function()
+                    return Vector3.new
+                end)
+                if ok and type(vectorCtor) == "function" then
+                    part.Position = vectorCtor(enemy.position.x, enemy.position.y, enemy.position.z)
+                else
+                    part.Position = {x = enemy.position.x, y = enemy.position.y, z = enemy.position.z}
+                end
+                part.Parent = model
+                model.PrimaryPart = part
+                local billboardGui = Instance.new("BillboardGui")
+                billboardGui.Adornee = part
+                local textLabel = Instance.new("TextLabel")
+                textLabel.Text = enemy.name
+                textLabel.Parent = billboardGui
+                billboardGui.Parent = model
+                model.Parent = workspaceService
+            end
             enemy.model = model
             return model
         end
@@ -217,7 +244,8 @@ function EnemySystem:spawnWave(level, count)
             (baseDamage + damagePerLevel * level) * dScale,
             {x = i, y = 0, z = 0},
             nil,
-            string.format("Enemy %d", i)
+            string.format("Enemy %d", i),
+            "Goblin"
         )
         if self.spawnModels ~= false then
             spawnModel(enemy)
@@ -253,12 +281,14 @@ function EnemySystem:spawnBoss(bossType)
         boss = "Boss",
         location = "Location Boss"
     }
+    local prefabMap = {mini = "Ogre", boss = "Dragon", location = "Dragon"}
     local boss = createEnemy(
         (bossHealth[bossType] or 20) * hScale,
         (bossDamage[bossType] or 2) * dScale,
         {x = 0, y = 0, z = 0},
         bossType,
-        bossNames[bossType] or "Boss"
+        bossNames[bossType] or "Boss",
+        prefabMap[bossType] or "Ogre"
     )
 
     if self.spawnModels ~= false then
