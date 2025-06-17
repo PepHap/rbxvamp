@@ -13,6 +13,9 @@ describe("HudSystem", function()
         HudSystem.gachaButton = nil
         HudSystem.inventoryButton = nil
         HudSystem.rewardButton = nil
+        HudSystem.progressFrame = nil
+        HudSystem.progressFill = nil
+        HudSystem.progressText = nil
         PlayerLevelSystem.level = 1
         PlayerLevelSystem.exp = 0
         PlayerLevelSystem.nextExp = 100
@@ -40,6 +43,16 @@ describe("HudSystem", function()
         HudSystem:update()
         assert.matches("Lv%.2", HudSystem.levelLabel.Text)
         assert.is_truthy(string.find(HudSystem.currencyLabel.Text, "gold"))
+    end)
+
+    it("updates progress bar", function()
+        PlayerLevelSystem.level = 3
+        PlayerLevelSystem.exp = 30
+        PlayerLevelSystem.nextExp = 100
+        HudSystem:start()
+        HudSystem:update()
+        assert.equals("Frame", HudSystem.progressFrame.ClassName)
+        assert.is_truthy(HudSystem.progressFill.FillRatio == 0.3 or HudSystem.progressFill.Size)
     end)
 
     it("creates attack button and triggers manual attack", function()
