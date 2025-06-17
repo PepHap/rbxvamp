@@ -153,6 +153,12 @@ SkillCastSystem.skillSystem = GameManager.skillSystem
 GameManager.skillCastSystem = SkillCastSystem
 GameManager:addSystem("SkillCast", SkillCastSystem)
 
+-- Optional automatic skill casting
+local AutoSkillSystem = require(script.Parent:WaitForChild("AutoSkillSystem"))
+AutoSkillSystem.skillCastSystem = SkillCastSystem
+GameManager.autoSkillSystem = AutoSkillSystem
+GameManager:addSystem("AutoSkill", AutoSkillSystem)
+
 -- Companion management
 local CompanionSystem = require(script.Parent:WaitForChild("CompanionSystem"))
 GameManager.companionSystem = CompanionSystem

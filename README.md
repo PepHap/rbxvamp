@@ -48,7 +48,10 @@ end)
 
 ### Controls
 Press **B** during gameplay to toggle the inventory UI. The player can also use
-**K** to open skills and **L** for companions.
+**K** to open skills, **L** for companions and **M** for the main menu.
+Use the number keys **1**&ndash;**4** to cast the skills in your slots. When
+the AutoSkill system is enabled, skills will fire automatically whenever they
+are off cooldown.
 
 ### Syncing with Rojo
 Install [Rojo](https://rojo.space/docs) and run the following command to sync
