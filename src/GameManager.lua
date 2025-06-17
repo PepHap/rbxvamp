@@ -73,6 +73,11 @@ GameManager:addSystem("Level", LevelSystem)
 local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
 GameManager:addSystem("Location", LocationSystem)
 
+-- Applies UI theme based on the current location
+local ThemeSystem = require(script.Parent:WaitForChild("ThemeSystem"))
+ThemeSystem.locationSystem = LocationSystem
+GameManager:addSystem("Theme", ThemeSystem)
+
 -- Gacha system used for rolling random rewards
 local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
 GameManager:addSystem("Gacha", GachaSystem)
