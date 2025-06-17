@@ -102,9 +102,13 @@ local function clearChildren(container)
     end
 end
 
-local function ensureGui()
+local function ensureGui(parent)
     if InventoryUI.gui then
         return InventoryUI.gui
+    end
+    if parent then
+        InventoryUI.gui = parent
+        return parent
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "InventoryUI"
@@ -130,9 +134,9 @@ end
 
 ---Initializes the Inventory UI and binds page buttons.
 -- @param items table ItemSystem instance
-function InventoryUI:start(items)
+function InventoryUI:start(items, parent)
     self.itemSystem = items or self.itemSystem
-    local gui = ensureGui()
+    local gui = ensureGui(parent)
 
     -- no bundled images; create a plain window instead
     self.window = GuiUtil.createWindow("InventoryWindow")
