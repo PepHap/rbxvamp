@@ -17,6 +17,7 @@ major systems. Game assets should be placed under `assets`.
 - **CompanionSystem.lua** – companion acquisition and upgrades
 - **CompanionAttackSystem.lua** – companion follow and attack logic
 - **DataPersistenceSystem.lua** – saves and loads player data
+- **ThemeSystem.lua** – adjusts UI colors based on the current location
 
 ## Installing Busted
 This project uses the [Busted](https://olivinelabs.com/busted/) testing
