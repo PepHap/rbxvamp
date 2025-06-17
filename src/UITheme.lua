@@ -6,6 +6,8 @@ UITheme.colors = {
     buttonBackground = Color3 and Color3.fromRGB and Color3.fromRGB(40, 60, 90) or {r=40,g=60,b=90},
     buttonText = Color3 and Color3.fromRGB and Color3.fromRGB(255, 255, 255) or {r=1,g=1,b=1},
     labelText = Color3 and Color3.fromRGB and Color3.fromRGB(220, 220, 220) or {r=220,g=220,b=220},
+    -- Slightly brighter background when hovering buttons
+    buttonHover = Color3 and Color3.fromRGB and Color3.fromRGB(60, 80, 120) or {r=60,g=80,b=120},
 }
 
 -- Fallback font if Enum.Font is unavailable
