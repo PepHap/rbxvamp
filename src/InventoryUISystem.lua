@@ -114,9 +114,8 @@ local function ensureGui(parent)
     gui.Name = "InventoryUI"
     InventoryUI.gui = gui
     if gui.Enabled ~= nil then
-        gui.Enabled = true
+        gui.Enabled = InventoryUI.visible
     end
-    gui.Visible = InventoryUI.visible
     if InventoryUI.useRobloxObjects then
         local pgui = GuiUtil.getPlayerGui()
         if pgui then
@@ -363,9 +362,8 @@ function InventoryUI:setVisible(on)
     local gui = ensureGui()
     local parentGui = self.window or gui
     if parentGui.Enabled ~= nil then
-        parentGui.Enabled = true
+        parentGui.Enabled = self.visible
     end
-    parentGui.Visible = self.visible
 end
 
 ---Toggles the visibility of the inventory UI.

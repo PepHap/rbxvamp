@@ -68,9 +68,8 @@ local function ensureGui()
     local gui = createInstance("ScreenGui")
     gui.Name = "RewardGaugeUI"
     if gui.Enabled ~= nil then
-        gui.Enabled = true
+        gui.Enabled = RewardGaugeUISystem.visible
     end
-    gui.Visible = RewardGaugeUISystem.visible
     RewardGaugeUISystem.gui = gui
     if RewardGaugeUISystem.useRobloxObjects then
         local pgui = GuiUtil.getPlayerGui()
@@ -137,9 +136,8 @@ function RewardGaugeUISystem:setVisible(on)
     local gui = ensureGui()
     local parentGui = self.window or gui
     if parentGui.Enabled ~= nil then
-        parentGui.Enabled = true
+        parentGui.Enabled = self.visible
     end
-    parentGui.Visible = self.visible
 end
 
 function RewardGaugeUISystem:toggle()

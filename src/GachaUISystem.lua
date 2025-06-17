@@ -60,9 +60,8 @@ local function ensureGui()
     local gui = createInstance("ScreenGui")
     gui.Name = "GachaUI"
     if gui.Enabled ~= nil then
-        gui.Enabled = true
+        gui.Enabled = GachaUI.visible
     end
-    gui.Visible = GachaUI.visible
     GachaUI.gui = gui
     if GachaUI.useRobloxObjects then
         local pgui = GuiUtil.getPlayerGui()
@@ -113,9 +112,8 @@ function GachaUI:setVisible(on)
     local gui = ensureGui()
     local parentGui = self.window or gui
     if parentGui.Enabled ~= nil then
-        parentGui.Enabled = true
+        parentGui.Enabled = self.visible
     end
-    parentGui.Visible = self.visible
 end
 
 function GachaUI:toggle()
