@@ -61,4 +61,17 @@ describe("PlayerInputSystem", function()
         PlayerInputSystem:setKeyState(PlayerInputSystem.companionKey, true)
         assert.is_true(CompanionUISystem.visible)
     end)
+
+    it("casts skills when number keys are pressed", function()
+        local SkillCastSystem = require("src.SkillCastSystem")
+        SkillCastSystem.skillSystem = {skills = {{}}}
+        SkillCastSystem.cooldowns = {0}
+        PlayerInputSystem.skillCastSystem = SkillCastSystem
+        function SkillCastSystem:useSkill(index)
+            SkillCastSystem.lastUsed = index
+            return true
+        end
+        PlayerInputSystem:setKeyState("One", true)
+        assert.equals(1, SkillCastSystem.lastUsed)
+    end)
 end)
