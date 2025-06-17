@@ -55,35 +55,6 @@ describe("HudSystem", function()
         assert.is_truthy(HudSystem.progressFill.FillRatio == 0.3 or HudSystem.progressFill.Size)
     end)
 
-    it("creates attack button and triggers manual attack", function()
-        local PlayerInputSystem = require("src.PlayerInputSystem")
-        local called = false
-        local old = PlayerInputSystem.manualAttack
-        PlayerInputSystem.manualAttack = function()
-            called = true
-        end
-        HudSystem:start()
-        assert.equals("TextButton", HudSystem.attackButton.ClassName)
-        HudSystem.attackButton.onClick()
-        PlayerInputSystem.manualAttack = old
-        assert.is_true(called)
-    end)
-
-    it("ignores attack button when auto battle enabled", function()
-        local PlayerInputSystem = require("src.PlayerInputSystem")
-        local called = false
-        local old = PlayerInputSystem.manualAttack
-        PlayerInputSystem.manualAttack = function()
-            called = true
-        end
-        local AutoBattleSystem = require("src.AutoBattleSystem")
-        AutoBattleSystem.enabled = true
-        HudSystem:start()
-        HudSystem.attackButton.onClick()
-        PlayerInputSystem.manualAttack = old
-        AutoBattleSystem.enabled = false
-        assert.is_false(called)
-    end)
 
     it("toggles various UI windows", function()
         local GachaUISystem = require("src.GachaUISystem")

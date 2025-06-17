@@ -164,4 +164,10 @@ function ItemSystem:upgradeItem(slot, amount, currencyType)
     return true
 end
 
+---Returns the current inventory list.
+-- @return table
+function ItemSystem:getItems()
+    return self.inventory
+end
+
 return ItemSystem
