@@ -12,7 +12,10 @@ local EventManager = require(script.Parent:WaitForChild("EventManager"))
 local function applyLighting(settings)
     if not settings then return end
     LightingSystem.currentSettings = settings
-    if LightingSystem.useRobloxObjects and game and game:GetService then
+    -- Roblox always exposes GetService on the DataModel, so there's no
+    -- need to check its existence. Use the documented ':' syntax when
+    -- calling the method.
+    if LightingSystem.useRobloxObjects then
         local Lighting = game:GetService("Lighting")
         if Lighting then
             if settings.ambient then Lighting.Ambient = settings.ambient end
