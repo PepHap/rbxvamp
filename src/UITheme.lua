@@ -16,7 +16,10 @@ local function assign(target, props)
         return
     end
     for k, v in pairs(props) do
-        if target[k] ~= nil then
+        local ok, _ = pcall(function()
+            target[k] = v
+        end)
+        if not ok and type(target) == "table" then
             target[k] = v
         end
     end

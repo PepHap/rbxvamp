@@ -134,11 +134,11 @@ function InventoryUI:start(items)
     if UDim2 and UDim2.new then
         prev.Position = UDim2.new(0, 10, 1, -40)
     end
-    parent(prev, self.window)
+    parent(prev, gui)
     GuiUtil.connectButton(prev, function()
         InventoryUI:changePage(-1)
     end)
-    if type(self.window) == "table" then self.window.PrevPage = prev end
+    if type(gui) == "table" then gui.PrevPage = prev end
 
     local nextBtn = gui.FindFirstChild and gui:FindFirstChild("NextPage") or createInstance("TextButton")
     nextBtn.Name = "NextPage"
@@ -146,11 +146,11 @@ function InventoryUI:start(items)
     if UDim2 and UDim2.new then
         nextBtn.Position = UDim2.new(0, 50, 1, -40)
     end
-    parent(nextBtn, self.window)
+    parent(nextBtn, gui)
     GuiUtil.connectButton(nextBtn, function()
         InventoryUI:changePage(1)
     end)
-    if type(self.window) == "table" then self.window.NextPage = nextBtn end
+    if type(gui) == "table" then gui.NextPage = nextBtn end
 
     self:update()
     self:setVisible(self.visible)
