@@ -30,4 +30,13 @@ describe("SkillSystem", function()
         assert.equals(1, SkillSystem.skills[1].level)
         assert.equals(1, CurrencySystem:get("ether"))
     end)
+
+    it("applies module effects when adding a skill", function()
+        SkillSystem.skills = {}
+        local skill = {name = "Fireball", rarity = "B", module = "Fireball", cooldown = 3, level = 10}
+        SkillSystem:addSkill(skill)
+        local added = SkillSystem.skills[1]
+        assert.equals(2, added.cooldown)
+        assert.equals(1, added.extraProjectiles)
+    end)
 end)
