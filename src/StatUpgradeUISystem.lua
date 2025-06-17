@@ -6,6 +6,7 @@ local StatUpgradeUISystem = {
     gui = nil,
     statSystem = nil,
     statListFrame = nil,
+    window = nil,
 }
 
 local StatUpgradeSystem = require(script.Parent:WaitForChild("StatUpgradeSystem"))
@@ -73,6 +74,13 @@ end
 
 function StatUpgradeUISystem:start(statSys)
     self.statSystem = statSys or self.statSystem or StatUpgradeSystem
+    local gui = ensureGui()
+    self.window = GuiUtil.createWindow("StatsWindow")
+    parent(self.window, gui)
+    if UDim2 and UDim2.new then
+        self.window.Size = UDim2.new(0, 260, 0, 200)
+        self.window.Position = UDim2.new(0.5, -130, 0.5, -100)
+    end
     self:update()
 end
 
@@ -127,17 +135,22 @@ function StatUpgradeUISystem:update()
     if type(gui) == "table" then
         gui.children = gui.children or {}
     end
+    local parentGui = self.window or gui
     local container
     if self.statListFrame then
         container = self.statListFrame
-    elseif gui.FindFirstChild then
-        container = gui:FindFirstChild("StatList")
+    elseif parentGui.FindFirstChild then
+        container = parentGui:FindFirstChild("StatList")
     end
     if not container then
         container = createInstance("Frame")
         container.Name = "StatList"
     end
-    parent(container, gui)
+    if UDim2 and UDim2.new then
+        container.Position = UDim2.new(0, 10, 0, 40)
+        container.Size = UDim2.new(1, -20, 1, -50)
+    end
+    parent(container, parentGui)
     self.statListFrame = container
 
     renderStats(container, sys)

@@ -2,6 +2,7 @@ local QuestUISystem = {
     useRobloxObjects = false,
     gui = nil,
     questSystem = nil,
+    window = nil,
 }
 
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
@@ -51,6 +52,13 @@ end
 
 function QuestUISystem:start(questSys)
     self.questSystem = questSys or self.questSystem or require(script.Parent:WaitForChild("QuestSystem"))
+    local gui = ensureGui()
+    self.window = GuiUtil.createWindow("QuestWindow")
+    parent(self.window, gui)
+    if UDim2 and UDim2.new then
+        self.window.Size = UDim2.new(0, 300, 0, 200)
+        self.window.Position = UDim2.new(0.5, -150, 0.5, -100)
+    end
     self:update()
 end
 
@@ -63,11 +71,16 @@ function QuestUISystem:update()
     if type(gui) == "table" then
         gui.children = {}
     end
-    local container = gui
+    local parentGui = self.window or gui
+    local container = parentGui
 
     for id, q in pairs(qs.quests) do
         local frame = createInstance("Frame")
         frame.Name = id .. "Frame"
+        if UDim2 and UDim2.new then
+            frame.Position = UDim2.new(0, 10, 0, 40 + (#container.children or 0)*40)
+            frame.Size = UDim2.new(1, -20, 0, 30)
+        end
         parent(frame, container)
 
         local label = createInstance("TextLabel")
@@ -78,6 +91,10 @@ function QuestUISystem:update()
         local btn = createInstance("TextButton")
         btn.Name = "ClaimButton"
         btn.Text = "Claim"
+        if UDim2 and UDim2.new then
+            btn.Position = UDim2.new(1, -80, 0, 0)
+            btn.Size = UDim2.new(0, 70, 1, 0)
+        end
         parent(btn, frame)
 
         if q.completed and not q.rewarded then

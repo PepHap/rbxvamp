@@ -86,8 +86,16 @@ function RewardGaugeUISystem:start()
     -- simple frame; image removed to keep repository text only
     self.window = GuiUtil.createWindow("RewardWindow")
     parent(self.window, gui)
+    if UDim2 and UDim2.new then
+        self.window.Size = UDim2.new(0, 280, 0, 120)
+        self.window.Position = UDim2.new(0.5, -140, 0.5, -60)
+    end
 
     self.gaugeLabel = createInstance("TextLabel")
+    if UDim2 and UDim2.new then
+        self.gaugeLabel.Position = UDim2.new(0, 10, 0, 10)
+        self.gaugeLabel.Size = UDim2.new(1, -20, 0, 20)
+    end
     parent(self.gaugeLabel, self.window)
     self:update()
     self:setVisible(self.visible)
@@ -115,6 +123,10 @@ function RewardGaugeUISystem:showOptions()
         local btn = createInstance("TextButton")
         btn.Text = string.format("%d) %s (%s)", i, opt.item.name, opt.slot)
         applyRarityColor(btn, opt.item.rarity)
+        if UDim2 and UDim2.new then
+            btn.Position = UDim2.new(0, 10, 0, 30 + (i-1)*35)
+            btn.Size = UDim2.new(1, -20, 0, 30)
+        end
         GuiUtil.connectButton(btn, function()
             RewardGaugeUISystem:choose(i)
         end)

@@ -84,6 +84,10 @@ function CompanionUISystem:start(compSys)
     -- create a simple window frame; images are optional and removed to keep the repo text only
     self.window = GuiUtil.createWindow("CompanionWindow")
     parent(self.window, gui)
+    if UDim2 and UDim2.new then
+        self.window.Size = UDim2.new(0, 300, 0, 200)
+        self.window.Position = UDim2.new(0.5, -150, 0.5, -100)
+    end
 
     self:update()
     self:setVisible(self.visible)
@@ -143,6 +147,10 @@ function CompanionUISystem:update()
     if not container then
         container = createInstance("Frame")
         container.Name = "CompanionList"
+    end
+    if UDim2 and UDim2.new then
+        container.Position = UDim2.new(0, 10, 0, 40)
+        container.Size = UDim2.new(1, -20, 1, -50)
     end
     parent(container, parentGui)
     self.listFrame = container
