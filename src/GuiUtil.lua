@@ -85,6 +85,26 @@ function GuiUtil.createWindow(name, image)
     return frame
 end
 
+---Sets visibility on a GUI element using either ``Enabled`` or ``Visible``.
+---@param obj table|Instance GUI element to modify
+---@param on boolean whether the element should be visible
+function GuiUtil.setVisible(obj, on)
+    if not obj then return end
+    local show = not not on
+    -- try Roblox properties safely
+    local ok = pcall(function()
+        if obj:IsA("ScreenGui") then
+            obj.Enabled = show
+        else
+            obj.Visible = show
+        end
+    end)
+    if not ok and type(obj) == "table" then
+        if obj.Enabled ~= nil then obj.Enabled = show end
+        if obj.Visible ~= nil then obj.Visible = show end
+    end
+end
+
 ---Applies a simple hover effect to a button by changing its background color.
 -- When running inside Roblox, a Tween will smoothly transition the color.
 -- In the test environment, hoverColor is stored on the table object.

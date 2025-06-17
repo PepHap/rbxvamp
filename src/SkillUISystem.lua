@@ -172,9 +172,7 @@ function SkillUISystem:setVisible(on)
     self.visible = not not on
     local gui = ensureGui()
     local parentGui = self.window or gui
-    if parentGui.Enabled ~= nil then
-        parentGui.Enabled = self.visible
-    end
+    GuiUtil.setVisible(parentGui, self.visible)
 end
 
 function SkillUISystem:toggle()
