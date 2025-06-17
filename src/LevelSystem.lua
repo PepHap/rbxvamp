@@ -13,6 +13,7 @@ LevelSystem.highestClearedStage = 0
 local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
 local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
 local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
+local WaveConfig = require(script.Parent:WaitForChild("WaveConfig"))
 
 --- Tracks the player's current level.
 --  Starts at ``1`` when the game begins.
@@ -33,7 +34,12 @@ function LevelSystem:start()
     self.currentLevel = 1
     self.killCount = 0
     self.requiredKills = 15
-    EnemySystem:spawnWave(1, self.waveSize)
+    local cfg = WaveConfig.levels[1]
+    if cfg and not cfg.boss then
+        EnemySystem:spawnWaveForLevel(1, cfg)
+    else
+        EnemySystem:spawnWave(1, self.waveSize)
+    end
     EventManager:Get("LevelStart"):Fire(1)
 end
 
@@ -96,7 +102,12 @@ function LevelSystem:update()
     if #EnemySystem.enemies == 0 then
         local remaining = self.requiredKills - self.killCount
         local count = math.min(self.waveSize, remaining)
-        EnemySystem:spawnWave(self.currentLevel, count)
+        local cfg = WaveConfig.levels[self.currentLevel]
+        if cfg and not cfg.boss then
+            EnemySystem:spawnWaveForLevel(self.currentLevel, cfg)
+        else
+            EnemySystem:spawnWave(self.currentLevel, count)
+        end
     end
 end
 
@@ -134,7 +145,12 @@ function LevelSystem:advance()
     elseif stageType == "mini" then
         EnemySystem:spawnBoss("mini")
     else
-        EnemySystem:spawnWave(self.currentLevel, self.waveSize)
+        local cfg = WaveConfig.levels[self.currentLevel]
+        if cfg and not cfg.boss then
+            EnemySystem:spawnWaveForLevel(self.currentLevel, cfg)
+        else
+            EnemySystem:spawnWave(self.currentLevel, self.waveSize)
+        end
     end
     EventManager:Get("LevelAdvance"):Fire(self.currentLevel, stageType)
     return self.currentLevel

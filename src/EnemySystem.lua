@@ -10,6 +10,8 @@ local EventManager = require(script.Parent:WaitForChild("EventManager"))
 -- inside Roblox Studio.
 local parent = script.Parent
 
+local MobConfig = require(parent:WaitForChild("MobConfig"))
+
 -- Lazily required to avoid circular dependency with AutoBattleSystem
 local AutoBattleSystem
 local PlayerSystem
@@ -221,6 +223,57 @@ EnemySystem.lastWaveLevel = nil
 
 ---Last boss type that was spawned.
 EnemySystem.lastBossType = nil
+
+---Creates and inserts an enemy of the given mob type.
+-- @param mobType string key from MobConfig.Types
+-- @param level number stage level used for scaling
+-- @return table new enemy
+function EnemySystem:createEnemyByType(mobType, level)
+    local cfg = MobConfig.Types[mobType]
+    if not cfg then
+        return nil
+    end
+    local hScale = (self.healthScale or 1) * (MobConfig.LevelMultiplier.Health ^ (level - 1))
+    local dScale = (self.damageScale or 1) * (MobConfig.LevelMultiplier.Damage ^ (level - 1))
+    local enemy = createEnemy(
+        cfg.BaseHealth * hScale,
+        cfg.Damage * dScale,
+        {x = 0, y = 0, z = 0},
+        nil,
+        mobType,
+        cfg.Prefab or mobType,
+        level,
+        0,
+        nil
+    )
+    if self.spawnModels ~= false then
+        spawnModel(enemy)
+    end
+    table.insert(self.enemies, enemy)
+    return enemy
+end
+
+---Spawns enemies based on a configuration table.
+-- ``wave`` should be an array of {type=string, count=number} tables.
+function EnemySystem:spawnWaveForLevel(level, wave)
+    self.lastWaveLevel = level
+    self.enemies = {}
+    if type(wave) == "table" then
+        for _, info in ipairs(wave) do
+            for i = 1, (info.count or 1) do
+                local enemy = self:createEnemyByType(info.type, level)
+                if enemy then
+                    enemy.position.x = i
+                end
+            end
+        end
+    end
+    if #self.enemies == 0 then
+        -- fall back to default behaviour
+        self:spawnWave(level)
+    end
+    EventManager:Get("SpawnWave"):Fire(level, #self.enemies)
+end
 
 ---Returns the nearest enemy to the given position.
 -- @param position table with ``x`` and ``y`` keys
