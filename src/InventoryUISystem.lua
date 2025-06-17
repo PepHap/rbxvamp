@@ -134,9 +134,9 @@ end
 
 ---Initializes the Inventory UI and binds page buttons.
 -- @param items table ItemSystem instance
-function InventoryUI:start(items, parent)
+function InventoryUI:start(items, parentGui)
     self.itemSystem = items or self.itemSystem
-    local gui = ensureGui(parent)
+    local gui = ensureGui(parentGui)
 
     -- no bundled images; create a plain window instead
     self.window = GuiUtil.createWindow("InventoryWindow")
