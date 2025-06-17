@@ -191,6 +191,24 @@ GameManager:addSystem("StatUI", StatUpgradeUISystem)
 local PlayerInputSystem = require(script.Parent:WaitForChild("PlayerInputSystem"))
 GameManager:addSystem("PlayerInput", PlayerInputSystem)
 
+-- Visual effects during boss fights
+local BossEffectSystem = require(script.Parent:WaitForChild("BossEffectSystem"))
+GameManager:addSystem("BossEffects", BossEffectSystem)
+
+-- Track progress across locations
+local ProgressMapSystem = require(script.Parent:WaitForChild("ProgressMapSystem"))
+GameManager.progressMapSystem = ProgressMapSystem
+GameManager:addSystem("ProgressMap", ProgressMapSystem)
+
+-- Simple map UI
+local ProgressMapUISystem = require(script.Parent:WaitForChild("ProgressMapUISystem"))
+ProgressMapUISystem.progressSystem = ProgressMapSystem
+GameManager:addSystem("ProgressMapUI", ProgressMapUISystem)
+
+-- Tutorial hints
+local TutorialSystem = require(script.Parent:WaitForChild("TutorialSystem"))
+GameManager:addSystem("Tutorial", TutorialSystem)
+
 ---Triggers a skill gacha roll.
 function GameManager:rollSkill()
     local reward = GachaSystem:rollSkill()
