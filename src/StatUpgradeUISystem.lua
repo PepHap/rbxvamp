@@ -58,6 +58,9 @@ local function ensureGui()
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "StatUpgradeUI"
+    if gui.Enabled ~= nil then
+        gui.Enabled = true
+    end
     StatUpgradeUISystem.gui = gui
     if StatUpgradeUISystem.useRobloxObjects then
         local pgui = GuiUtil.getPlayerGui()

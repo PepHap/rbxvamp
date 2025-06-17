@@ -68,6 +68,9 @@ local function ensureGui()
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "UISystemGui"
+    if gui.Enabled ~= nil then
+        gui.Enabled = true
+    end
     if type(gui) == "table" then
         gui.children = {}
     end

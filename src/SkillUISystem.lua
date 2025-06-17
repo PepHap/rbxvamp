@@ -65,7 +65,7 @@ local function ensureGui(parent)
     local gui = createInstance("ScreenGui")
     gui.Name = "SkillUI"
     if gui.Enabled ~= nil then
-        gui.Enabled = SkillUISystem.visible
+        gui.Enabled = true
     end
     SkillUISystem.gui = gui
     if SkillUISystem.useRobloxObjects then

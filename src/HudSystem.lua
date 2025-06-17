@@ -75,6 +75,9 @@ local function ensureGui()
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "HudUI"
+    if gui.Enabled ~= nil then
+        gui.Enabled = true
+    end
     HudSystem.gui = gui
     if HudSystem.useRobloxObjects then
         local pgui = GuiUtil.getPlayerGui()

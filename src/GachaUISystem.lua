@@ -60,7 +60,7 @@ local function ensureGui()
     local gui = createInstance("ScreenGui")
     gui.Name = "GachaUI"
     if gui.Enabled ~= nil then
-        gui.Enabled = GachaUI.visible
+        gui.Enabled = true
     end
     GachaUI.gui = gui
     if GachaUI.useRobloxObjects then
