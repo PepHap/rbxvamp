@@ -11,6 +11,24 @@ UITheme.colors = {
 -- Fallback font if Enum.Font is unavailable
 UITheme.font = Enum and Enum.Font and Enum.Font.GothamBold
 
+UITheme.cornerRadius = 8
+
+local function addCorner(obj)
+    if not obj then return end
+    local radius = UITheme.cornerRadius or 0
+    if typeof and typeof(obj) == "Instance" and Instance and type(Instance.new) == "function" then
+        local ok, corner = pcall(function()
+            return Instance.new("UICorner")
+        end)
+        if ok and corner then
+            corner.CornerRadius = UDim.new(0, radius)
+            corner.Parent = obj
+        end
+    else
+        obj.cornerRadius = radius
+    end
+end
+
 local function assign(target, props)
     if type(target) ~= "table" and (typeof and typeof(target) ~= "Instance") then
         return
@@ -30,6 +48,7 @@ function UITheme.styleWindow(frame)
         BackgroundTransparency = 0.1,
         BackgroundColor3 = UITheme.colors.windowBackground,
     })
+    addCorner(frame)
 end
 
 function UITheme.styleButton(btn)
@@ -39,6 +58,7 @@ function UITheme.styleButton(btn)
         BackgroundColor3 = UITheme.colors.buttonBackground,
         AutoButtonColor = false,
     })
+    addCorner(btn)
 end
 
 function UITheme.styleLabel(lbl)
@@ -47,6 +67,7 @@ function UITheme.styleLabel(lbl)
         TextColor3 = UITheme.colors.labelText,
         BackgroundTransparency = lbl.BackgroundTransparency or 1,
     })
+    addCorner(lbl)
 end
 
 return UITheme
