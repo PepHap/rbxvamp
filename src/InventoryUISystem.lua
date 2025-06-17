@@ -1,9 +1,14 @@
 -- InventoryUISystem.lua
 -- Basic inventory GUI handling for equipment slots and stored items
 
+local function detectRoblox()
+    -- typeof and Instance only exist within Roblox
+    return typeof ~= nil and Instance ~= nil and type(Instance.new) == "function"
+end
+
 local InventoryUI = {
     ---When true and running within Roblox, real Instance objects are used.
-    useRobloxObjects = false,
+    useRobloxObjects = detectRoblox(),
     ---Reference to the created ScreenGui container
     gui = nil,
     ---Whether the inventory is currently visible
