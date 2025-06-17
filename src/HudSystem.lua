@@ -13,6 +13,9 @@ local HudSystem = {
     rewardButton = nil,
     skillButton = nil,
     companionButton = nil,
+    progressFrame = nil,
+    progressFill = nil,
+    progressText = nil,
 }
 
 local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
@@ -89,6 +92,10 @@ function HudSystem:start()
     self.rewardButton = createInstance("TextButton")
     self.skillButton = createInstance("TextButton")
     self.companionButton = createInstance("TextButton")
+    self.progressFrame = createInstance("Frame")
+    self.progressFill = createInstance("Frame")
+    self.progressText = createInstance("TextLabel")
+    self.progressText.Text = "Lv.1"
     self.autoButton.Text = "Auto: OFF"
     self.attackButton.Text = "Attack"
     self.gachaButton.Text = "Gacha"
@@ -117,6 +124,9 @@ function HudSystem:start()
     GuiUtil.connectButton(self.companionButton, function()
         HudSystem:toggleCompanionUI()
     end)
+    parent(self.progressFill, self.progressFrame)
+    parent(self.progressText, self.progressFrame)
+    parent(self.progressFrame, gui)
     parent(self.levelLabel, gui)
     parent(self.currencyLabel, gui)
     parent(self.autoButton, gui)
@@ -131,6 +141,12 @@ end
 
 function HudSystem:update()
     local gui = ensureGui()
+    self.progressFrame = self.progressFrame or createInstance("Frame")
+    self.progressFill = self.progressFill or createInstance("Frame")
+    self.progressText = self.progressText or createInstance("TextLabel")
+    parent(self.progressFill, self.progressFrame)
+    parent(self.progressText, self.progressFrame)
+    parent(self.progressFrame, gui)
     self.levelLabel = self.levelLabel or createInstance("TextLabel")
     parent(self.levelLabel, gui)
     local lvl = PlayerLevelSystem.level or 1
@@ -178,6 +194,21 @@ function HudSystem:update()
     self.companionButton = self.companionButton or createInstance("TextButton")
     parent(self.companionButton, gui)
     self.companionButton.Text = "Companions"
+
+    local ratio = nextExp > 0 and exp / nextExp or 0
+    if ratio < 0 then ratio = 0 elseif ratio > 1 then ratio = 1 end
+    self.progressText.Text = string.format("Lv.%d", lvl)
+    if UDim2 and UDim2.new then
+        self.progressFrame.Position = UDim2.new(0.5, -200, 0, 0)
+        self.progressFrame.Size = UDim2.new(0, 400, 0, 20)
+        self.progressFill.BackgroundColor3 = Color3.fromRGB(80, 120, 220)
+        self.progressFill.Size = UDim2.new(ratio, 0, 1, 0)
+        self.progressText.Size = UDim2.new(1, 0, 1, 0)
+        self.progressText.BackgroundTransparency = 1
+        self.progressText.TextScaled = true
+    else
+        self.progressFill.FillRatio = ratio
+    end
 
     if UDim2 and UDim2.new then
         self.levelLabel.Position = UDim2.new(0, 20, 0, 10)
