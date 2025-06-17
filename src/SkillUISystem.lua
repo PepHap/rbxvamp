@@ -78,9 +78,9 @@ local function ensureGui(parent)
     return gui
 end
 
-function SkillUISystem:start(skillSys, parent)
+function SkillUISystem:start(skillSys, parentGui)
     self.skillSystem = skillSys or self.skillSystem or SkillSystem.new()
-    local gui = ensureGui(parent)
+    local gui = ensureGui(parentGui)
 
     -- window backgrounds were removed; use plain window frame
     self.window = GuiUtil.createWindow("SkillWindow")
