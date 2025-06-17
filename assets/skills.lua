@@ -19,6 +19,7 @@ return {
         name = "Fireball",
         rarity = "B",
         image = "rbxassetid://123456",
+        module = "Fireball",
         cooldown = 3,
         damage = 10,
         radius = 4,
@@ -43,3 +44,4 @@ return {
         effects = {"Slow"}
     }
 }
+
