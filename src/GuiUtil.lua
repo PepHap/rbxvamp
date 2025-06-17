@@ -45,14 +45,24 @@ function GuiUtil.getPlayerGui()
     if not ok or not players then
         return nil
     end
-    if players.LocalPlayer and players.LocalPlayer:FindFirstChild("PlayerGui") then
-        return players.LocalPlayer.PlayerGui
+    if players.LocalPlayer then
+        local ok, pgui = pcall(function()
+            return players.LocalPlayer:WaitForChild("PlayerGui", 5)
+        end)
+        if ok and pgui then
+            return pgui
+        end
     end
     local list = players:GetPlayers()
     if list and #list > 0 then
         local p = list[1]
         if p then
-            return p:FindFirstChild("PlayerGui") or (p.WaitForChild and p:WaitForChild("PlayerGui", 5))
+            local ok, pgui = pcall(function()
+                return p:WaitForChild("PlayerGui", 5)
+            end)
+            if ok then
+                return pgui
+            end
         end
     end
     return nil
