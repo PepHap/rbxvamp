@@ -1,9 +1,13 @@
 -- PlayerInputSystem.lua
 -- Allows manual player control and attacks when auto-battle is disabled.
 
+local function detectRoblox()
+    return typeof ~= nil and Instance ~= nil and type(Instance.new) == "function"
+end
+
 local PlayerInputSystem = {
     ---When true and running inside Roblox, connects to UserInputService.
-    useRobloxObjects = false,
+    useRobloxObjects = detectRoblox(),
     ---Movement speed in studs per second.
     moveSpeed = 5,
     ---Damage dealt per manual attack.
