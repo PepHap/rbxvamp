@@ -1,5 +1,9 @@
+local function detectRoblox()
+    return typeof ~= nil and Instance ~= nil and type(Instance.new) == "function"
+end
+
 local MenuUI = {
-    useRobloxObjects = false,
+    useRobloxObjects = detectRoblox(),
     gui = nil,
     window = nil,
     contentFrame = nil,

@@ -1,8 +1,12 @@
 -- CompanionUISystem.lua
 -- Displays owned companions and allows upgrading them with ether.
 
+local function detectRoblox()
+    return typeof ~= nil and Instance ~= nil and type(Instance.new) == "function"
+end
+
 local CompanionUISystem = {
-    useRobloxObjects = false,
+    useRobloxObjects = detectRoblox(),
     gui = nil,
     visible = false,
     companionSystem = nil,

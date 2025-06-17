@@ -203,6 +203,10 @@ if RunService:IsClient() then
     CompanionUISystem.companionSystem = GameManager.companionSystem
     GameManager:addSystem("CompanionUI", CompanionUISystem)
 
+    -- Main menu UI providing access to inventory and skills
+    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
+    GameManager:addSystem("MenuUI", MenuUISystem)
+
     -- UI for upgrading base stats
     local StatUpgradeUISystem = require(script.Parent:WaitForChild("StatUpgradeUISystem"))
     StatUpgradeUISystem.statSystem = StatUpgradeSystem
