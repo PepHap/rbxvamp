@@ -152,7 +152,7 @@ function InventoryUI:start(items, parentGui)
         self.window.Position = UDim2.new(0.5, -300, 0.5, -200)
     end
 
-    if self.useRobloxObjects and game and game:GetService then
+    if self.useRobloxObjects then
         local lighting = game:GetService("Lighting")
         if lighting and not self.blur then
             local ok, effect = pcall(function()
