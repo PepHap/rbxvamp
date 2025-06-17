@@ -5,6 +5,11 @@ local ok, Theme = pcall(function()
 end)
 if not ok then Theme = nil end
 
+local okTween, TweenService = pcall(function()
+    return game:GetService("TweenService")
+end)
+if not okTween then TweenService = nil end
+
 -- internal helper for creating a Roblox Instance when available
 local function createInstance(className)
     if typeof and Instance and type(Instance.new) == "function" then
@@ -80,6 +85,34 @@ function GuiUtil.createWindow(name, image)
     return frame
 end
 
+---Applies a simple hover effect to a button by changing its background color.
+-- When running inside Roblox, a Tween will smoothly transition the color.
+-- In the test environment, hoverColor is stored on the table object.
+---@param button table|Instance TextButton to modify
+function GuiUtil.applyHoverEffect(button)
+    if not button then return end
+    local hoverColor = Theme and Theme.colors and Theme.colors.buttonHover
+    local normalColor = button.BackgroundColor3
+    if button.MouseEnter and button.MouseLeave then
+        if TweenService and hoverColor and normalColor then
+            local enterTween = TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = hoverColor})
+            local leaveTween = TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = normalColor})
+            button.MouseEnter:Connect(function() enterTween:Play() end)
+            button.MouseLeave:Connect(function() leaveTween:Play() end)
+        else
+            button.MouseEnter:Connect(function()
+                if hoverColor then button.BackgroundColor3 = hoverColor end
+            end)
+            button.MouseLeave:Connect(function()
+                if normalColor then button.BackgroundColor3 = normalColor end
+            end)
+        end
+    else
+        -- store hover color for table-based tests
+        button.hoverColor = hoverColor
+    end
+end
+
 ---Connects a button click handler using ``Activated`` when available or
 -- ``MouseButton1Click`` as a fallback. In the test environment where real
 -- events are unavailable, the callback is stored in ``onClick``.
@@ -96,6 +129,7 @@ function GuiUtil.connectButton(button, callback)
     else
         button.onClick = callback
     end
+    GuiUtil.applyHoverEffect(button)
 end
 
 return GuiUtil
