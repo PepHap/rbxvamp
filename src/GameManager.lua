@@ -142,6 +142,11 @@ local SkillSystem = require(script.Parent:WaitForChild("SkillSystem"))
 GameManager.skillSystem = SkillSystem.new()
 GameManager:addSystem("Skills", GameManager.skillSystem)
 
+-- Skill trees for branch upgrades
+local SkillTreeSystem = require(script.Parent:WaitForChild("SkillTreeSystem"))
+GameManager.skillTreeSystem = SkillTreeSystem.new(GameManager.skillSystem)
+GameManager:addSystem("SkillTree", GameManager.skillTreeSystem)
+
 -- Skill casting using mana and cooldowns
 local SkillCastSystem = require(script.Parent:WaitForChild("SkillCastSystem"))
 SkillCastSystem.skillSystem = GameManager.skillSystem
@@ -181,6 +186,10 @@ GameManager:addSystem("HUD", HudSystem)
 local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
 SkillUISystem.skillSystem = GameManager.skillSystem
 GameManager:addSystem("SkillUI", SkillUISystem)
+
+local SkillTreeUISystem = require(script.Parent:WaitForChild("SkillTreeUISystem"))
+SkillTreeUISystem.treeSystem = GameManager.skillTreeSystem
+GameManager:addSystem("SkillTreeUI", SkillTreeUISystem)
 
 local CompanionUISystem = require(script.Parent:WaitForChild("CompanionUISystem"))
 CompanionUISystem.companionSystem = GameManager.companionSystem
