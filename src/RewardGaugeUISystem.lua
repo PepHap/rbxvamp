@@ -89,7 +89,10 @@ function RewardGaugeUISystem:update()
     local parentGui = self.window or gui
     self.gaugeLabel = self.gaugeLabel or createInstance("TextLabel")
     parent(self.gaugeLabel, parentGui)
-    self.gaugeLabel.Text = string.format("Gauge: %d/%d", RewardGaugeSystem.gauge, RewardGaugeSystem.maxGauge)
+    local segments = 10
+    local filled = math.floor((RewardGaugeSystem.gauge / RewardGaugeSystem.maxGauge) * segments)
+    local bar = string.rep("●", filled) .. string.rep("○", segments - filled)
+    self.gaugeLabel.Text = string.format("Gauge: %s %d/%d", bar, RewardGaugeSystem.gauge, RewardGaugeSystem.maxGauge)
 end
 
 function RewardGaugeUISystem:showOptions()

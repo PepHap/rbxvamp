@@ -78,6 +78,11 @@ local ThemeSystem = require(script.Parent:WaitForChild("ThemeSystem"))
 ThemeSystem.locationSystem = LocationSystem
 GameManager:addSystem("Theme", ThemeSystem)
 
+-- Environment lighting adjustments per location
+local LightingSystem = require(script.Parent:WaitForChild("LightingSystem"))
+LightingSystem.locationSystem = LocationSystem
+GameManager:addSystem("Lighting", LightingSystem)
+
 -- Gacha system used for rolling random rewards
 local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
 GameManager:addSystem("Gacha", GachaSystem)
@@ -95,6 +100,12 @@ GameManager:addSystem("Achievements", AchievementSystem)
 local ItemSystem = require(script.Parent:WaitForChild("ItemSystem"))
 GameManager.itemSystem = ItemSystem.new()
 GameManager:addSystem("Items", GameManager.itemSystem)
+
+-- Equipment set bonuses
+local SetBonusSystem = require(script.Parent:WaitForChild("SetBonusSystem"))
+SetBonusSystem.itemSystem = GameManager.itemSystem
+GameManager.setBonusSystem = SetBonusSystem
+GameManager:addSystem("SetBonuses", SetBonusSystem)
 
 -- Quests provide structured objectives and rewards
 local QuestSystem = require(script.Parent:WaitForChild("QuestSystem"))
