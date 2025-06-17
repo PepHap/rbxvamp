@@ -14,6 +14,12 @@ local SkillCastSystem = {
     skillSystem = nil,
 }
 
+local function playRareEffect(skill)
+    if skill.rarity == "S" or skill.rarity == "SS" or skill.rarity == "SSS" then
+        SkillCastSystem.lastEffect = "rare"
+    end
+end
+
 local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
 local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
 local LootSystem = require(script.Parent:WaitForChild("LootSystem"))
@@ -74,6 +80,7 @@ function SkillCastSystem:useSkill(index, target)
     end
     self.mana = self.mana - cost
     self.cooldowns[index] = 5
+    playRareEffect(skill)
     target = target or EnemySystem:getNearestEnemy({x = 0, y = 0})
     if target and target.health then
         target.health = target.health - (skill.damage or 0) * (skill.level or 1)

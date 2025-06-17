@@ -10,6 +10,16 @@ UITheme.colors = {
     buttonHover = Color3 and Color3.fromRGB and Color3.fromRGB(60, 80, 120) or {r=60,g=80,b=120},
 }
 
+UITheme.rarityColors = {
+    C  = Color3 and Color3.fromRGB and Color3.fromRGB(200, 200, 200) or {r=200,g=200,b=200},
+    D  = Color3 and Color3.fromRGB and Color3.fromRGB(180, 220, 255) or {r=180,g=220,b=255},
+    B  = Color3 and Color3.fromRGB and Color3.fromRGB(140, 255, 140) or {r=140,g=255,b=140},
+    A  = Color3 and Color3.fromRGB and Color3.fromRGB(255, 200, 120) or {r=255,g=200,b=120},
+    S  = Color3 and Color3.fromRGB and Color3.fromRGB(255, 150, 150) or {r=255,g=150,b=150},
+    SS = Color3 and Color3.fromRGB and Color3.fromRGB(255, 100, 255) or {r=255,g=100,b=255},
+    SSS= Color3 and Color3.fromRGB and Color3.fromRGB(255, 220, 40) or {r=255,g=220,b=40},
+}
+
 -- Fallback font if Enum.Font is unavailable
 UITheme.font = Enum and Enum.Font and Enum.Font.GothamBold
 

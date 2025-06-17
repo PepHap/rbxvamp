@@ -96,7 +96,7 @@ end
 --  @param enemyType string|nil classification such as "mini" or "boss"
 --  @param name string display name for this enemy
 --  @return table new enemy object
-local function createEnemy(health, damage, position, enemyType, name, prefab, level, armor)
+local function createEnemy(health, damage, position, enemyType, name, prefab, level, armor, behavior)
     return {
         health = health,
         maxHealth = health,
@@ -108,6 +108,7 @@ local function createEnemy(health, damage, position, enemyType, name, prefab, le
         level = level or 1,
         armor = armor or 0,
         maxArmor = armor or 0,
+        behavior = behavior,
         attackCooldown = EnemySystem.attackCooldown,
         attackTimer = 0
     }
@@ -256,6 +257,17 @@ function EnemySystem:spawnWave(level, count)
     local hScale = self.healthScale or 1
     local dScale = self.damageScale or 1
 
+    local function pickBehavior(lvl)
+        if lvl >= 15 then
+            return "shoot"
+        elseif lvl >= 10 then
+            return "jump"
+        elseif lvl >= 5 then
+            return "fast"
+        end
+        return nil
+    end
+
     for i = 1, count do
         local enemy = createEnemy(
             (baseHealth + healthPerLevel * level) * hScale,
@@ -265,7 +277,8 @@ function EnemySystem:spawnWave(level, count)
             string.format("Enemy %d", i),
             "Goblin",
             level,
-            0
+            0,
+            pickBehavior(level)
         )
         if self.spawnModels ~= false then
             spawnModel(enemy)
@@ -310,13 +323,21 @@ function EnemySystem:spawnBoss(bossType)
         bossNames[bossType] or "Boss",
         prefabMap[bossType] or "Ogre",
         1,
-        0
+        0,
+        nil
     )
 
     boss.ability = bossType
 
     if self.spawnModels ~= false then
         spawnModel(boss)
+    end
+
+    if bossType == "location" then
+        AutoBattleSystem = AutoBattleSystem or require(parent:WaitForChild("AutoBattleSystem"))
+        if AutoBattleSystem and AutoBattleSystem.disableForDuration then
+            AutoBattleSystem:disableForDuration(5)
+        end
     end
 
     table.insert(self.enemies, boss)
@@ -361,7 +382,11 @@ function EnemySystem:update(dt)
                 local dx, dy, dz = nx - sx, ny - sy, nz - sz
                 local dist = math.sqrt(dx * dx + dy * dy + dz * dz)
                 if dist > 0 then
-                    local step = math.min(self.moveSpeed * dt, dist)
+                    local speed = self.moveSpeed
+                    if enemy.behavior == "fast" then
+                        speed = speed * 1.5
+                    end
+                    local step = math.min(speed * dt, dist)
                     local tx, ty, tz = sx + dx / dist * step, sy + dy / dist * step, sz + dz / dist * step
                     enemy.position.x, enemy.position.y, enemy.position.z = tx, ty, tz
                     if primaryPart.Position ~= nil then
@@ -372,9 +397,28 @@ function EnemySystem:update(dt)
                 end
                 local pdx, pdy = enemy.position.x - playerPos.x, enemy.position.y - playerPos.y
                 local pdist = math.sqrt(pdx * pdx + pdy * pdy)
-                if pdist <= self.attackRange and enemy.attackTimer <= 0 then
+                if enemy.behavior == "shoot" then
+                    if pdist <= 10 and enemy.attackTimer <= 0 then
+                        PlayerSystem:takeDamage(enemy.damage or 0)
+                        enemy.attackTimer = enemy.attackCooldown or self.attackCooldown
+                    end
+                elseif pdist <= self.attackRange and enemy.attackTimer <= 0 then
                     PlayerSystem:takeDamage(enemy.damage or 0)
                     enemy.attackTimer = enemy.attackCooldown or self.attackCooldown
+                end
+            end
+        end
+        if enemy.behavior == "jump" then
+            enemy.jumpTimer = (enemy.jumpTimer or 0) - dt
+            if enemy.jumpTimer <= 0 then
+                enemy.jumpTimer = 2
+                enemy.position.y = enemy.position.y + 3
+                if primaryPart then
+                    if primaryPart.Position ~= nil then
+                        primaryPart.Position = createVector3(enemy.position.x, enemy.position.y, enemy.position.z)
+                    else
+                        primaryPart.position = {x = enemy.position.x, y = enemy.position.y, z = enemy.position.z}
+                    end
                 end
             end
         end

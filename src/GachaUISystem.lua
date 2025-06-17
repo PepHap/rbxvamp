@@ -131,6 +131,9 @@ function GachaUI:showResult(result)
     end
     local rarity = result.rarity or "?"
     self.resultLabel.Text = string.format("%s [%s]", result.name, rarity)
+    if Theme and Theme.rarityColors and Theme.rarityColors[rarity] then
+        self.resultLabel.TextColor3 = Theme.rarityColors[rarity]
+    end
 end
 
 function GachaUI:rollSkill()

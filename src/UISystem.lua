@@ -101,6 +101,9 @@ function UISystem:showRewardOptions()
     for i, opt in ipairs(opts) do
         local btn = createInstance("TextButton")
         btn.Text = ("%d) %s (%s)"):format(i, opt.item.name, opt.slot)
+        if Theme and Theme.rarityColors and Theme.rarityColors[opt.item.rarity] then
+            btn.TextColor3 = Theme.rarityColors[opt.item.rarity]
+        end
         parent(btn, gui)
         table.insert(self.rewardButtons, btn)
     end
@@ -146,6 +149,9 @@ function UISystem:displayGachaResult(result)
     local extra = result.slot and (" - " .. result.slot) or ""
     local rarity = result.rarity or "?"
     self.gachaLabel.Text = ("Gacha: %s [%s]%s"):format(result.name, rarity, extra)
+    if Theme and Theme.rarityColors and Theme.rarityColors[rarity] then
+        self.gachaLabel.TextColor3 = Theme.rarityColors[rarity]
+    end
 end
 
 ---Rolls a skill through ``GachaSystem`` and displays the outcome.
@@ -188,6 +194,9 @@ function UISystem:showItemChoice(item)
     local gui = ensureGui()
     local btn = createInstance("TextButton")
     btn.Text = item.name
+    if Theme and Theme.rarityColors and Theme.rarityColors[item.rarity] then
+        btn.TextColor3 = Theme.rarityColors[item.rarity]
+    end
     parent(btn, gui)
     return btn
 end
@@ -197,6 +206,9 @@ function UISystem:showSkillChoice(skill)
     local gui = ensureGui()
     local btn = createInstance("TextButton")
     btn.Text = skill.name
+    if Theme and Theme.rarityColors and Theme.rarityColors[skill.rarity] then
+        btn.TextColor3 = Theme.rarityColors[skill.rarity]
+    end
     parent(btn, gui)
     return btn
 end
@@ -206,6 +218,9 @@ function UISystem:showCompanionChoice(companion)
     local gui = ensureGui()
     local btn = createInstance("TextButton")
     btn.Text = companion.name
+    if Theme and Theme.rarityColors and Theme.rarityColors[companion.rarity] then
+        btn.TextColor3 = Theme.rarityColors[companion.rarity]
+    end
     parent(btn, gui)
     return btn
 end
