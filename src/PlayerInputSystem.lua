@@ -22,6 +22,7 @@ local PlayerInputSystem = {
     inventoryKey = "B",
     skillKey = "K",
     companionKey = "L",
+    menuKey = "M",
     ---Reference to the SkillCastSystem for manual skill use.
     skillCastSystem = nil,
     ---Mapping from key names to skill slots.
@@ -37,6 +38,7 @@ local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
 local InventoryUISystem = require(script.Parent:WaitForChild("InventoryUISystem"))
 local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
 local CompanionUISystem = require(script.Parent:WaitForChild("CompanionUISystem"))
+local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
 local SkillCastSystem = require(script.Parent:WaitForChild("SkillCastSystem"))
 
 -- Utility to connect Roblox input events when available
@@ -78,6 +80,8 @@ function PlayerInputSystem:setKeyState(key, isDown)
         SkillUISystem:toggle()
     elseif key == self.companionKey and isDown then
         CompanionUISystem:toggle()
+    elseif key == self.menuKey and isDown then
+        MenuUISystem:toggle()
     elseif isDown and self.skillCastSystem then
         local idx = self.skillKeyMap[key]
         if idx then

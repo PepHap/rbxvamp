@@ -1,8 +1,12 @@
 -- SkillUISystem.lua
 -- Displays owned skills and allows upgrading them with ether.
 
+local function detectRoblox()
+    return typeof ~= nil and Instance ~= nil and type(Instance.new) == "function"
+end
+
 local SkillUISystem = {
-    useRobloxObjects = false,
+    useRobloxObjects = detectRoblox(),
     gui = nil,
     visible = false,
     skillSystem = nil,
