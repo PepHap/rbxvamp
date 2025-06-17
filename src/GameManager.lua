@@ -18,6 +18,8 @@ local GameManager = {
     order = {}
 }
 
+local RunService = game:GetService("RunService")
+
 --- Registers a system for later initialization and updates.
 -- @param name string unique key for the system
 -- @param system table table implementing optional start/update methods
@@ -169,42 +171,43 @@ local CompanionAttackSystem = require(script.Parent:WaitForChild("CompanionAttac
 CompanionAttackSystem.companionSystem = GameManager.companionSystem
 GameManager:addSystem("CompanionAI", CompanionAttackSystem)
 
--- Minimal UI for displaying rewards and gacha results
-local UISystem = require(script.Parent:WaitForChild("UISystem"))
-GameManager:addSystem("UI", UISystem)
+if RunService:IsClient() then
+    -- Minimal UI for displaying rewards and gacha results
+    local UISystem = require(script.Parent:WaitForChild("UISystem"))
+    GameManager:addSystem("UI", UISystem)
 
--- Inventory UI provides equipment and bag management
-local InventoryUISystem = require(script.Parent:WaitForChild("InventoryUISystem"))
-InventoryUISystem.itemSystem = GameManager.itemSystem
+    -- Inventory UI provides equipment and bag management
+    local InventoryUISystem = require(script.Parent:WaitForChild("InventoryUISystem"))
+    InventoryUISystem.itemSystem = GameManager.itemSystem
+    GameManager:addSystem("InventoryUI", InventoryUISystem)
 
-GameManager:addSystem("InventoryUI", InventoryUISystem)
+    -- Gacha UI for rolling rewards
+    local GachaUISystem = require(script.Parent:WaitForChild("GachaUISystem"))
+    GachaUISystem.gameManager = GameManager
+    GameManager:addSystem("GachaUI", GachaUISystem)
 
--- Gacha UI for rolling rewards
-local GachaUISystem = require(script.Parent:WaitForChild("GachaUISystem"))
-GachaUISystem.gameManager = GameManager
-GameManager:addSystem("GachaUI", GachaUISystem)
+    -- Heads-up display with level, experience and currency
+    local HudSystem = require(script.Parent:WaitForChild("HudSystem"))
+    GameManager:addSystem("HUD", HudSystem)
 
--- Heads-up display with level, experience and currency
-local HudSystem = require(script.Parent:WaitForChild("HudSystem"))
-GameManager:addSystem("HUD", HudSystem)
+    -- Skill and companion UI modules
+    local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
+    SkillUISystem.skillSystem = GameManager.skillSystem
+    GameManager:addSystem("SkillUI", SkillUISystem)
 
--- Skill and companion UI modules
-local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
-SkillUISystem.skillSystem = GameManager.skillSystem
-GameManager:addSystem("SkillUI", SkillUISystem)
+    local SkillTreeUISystem = require(script.Parent:WaitForChild("SkillTreeUISystem"))
+    SkillTreeUISystem.treeSystem = GameManager.skillTreeSystem
+    GameManager:addSystem("SkillTreeUI", SkillTreeUISystem)
 
-local SkillTreeUISystem = require(script.Parent:WaitForChild("SkillTreeUISystem"))
-SkillTreeUISystem.treeSystem = GameManager.skillTreeSystem
-GameManager:addSystem("SkillTreeUI", SkillTreeUISystem)
+    local CompanionUISystem = require(script.Parent:WaitForChild("CompanionUISystem"))
+    CompanionUISystem.companionSystem = GameManager.companionSystem
+    GameManager:addSystem("CompanionUI", CompanionUISystem)
 
-local CompanionUISystem = require(script.Parent:WaitForChild("CompanionUISystem"))
-CompanionUISystem.companionSystem = GameManager.companionSystem
-GameManager:addSystem("CompanionUI", CompanionUISystem)
-
--- UI for upgrading base stats
-local StatUpgradeUISystem = require(script.Parent:WaitForChild("StatUpgradeUISystem"))
-StatUpgradeUISystem.statSystem = StatUpgradeSystem
-GameManager:addSystem("StatUI", StatUpgradeUISystem)
+    -- UI for upgrading base stats
+    local StatUpgradeUISystem = require(script.Parent:WaitForChild("StatUpgradeUISystem"))
+    StatUpgradeUISystem.statSystem = StatUpgradeSystem
+    GameManager:addSystem("StatUI", StatUpgradeUISystem)
+end
 
 -- Manual player input when auto battle is disabled
 local PlayerInputSystem = require(script.Parent:WaitForChild("PlayerInputSystem"))
