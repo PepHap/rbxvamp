@@ -96,14 +96,18 @@ end
 --  @param enemyType string|nil classification such as "mini" or "boss"
 --  @param name string display name for this enemy
 --  @return table new enemy object
-local function createEnemy(health, damage, position, enemyType, name, prefab)
+local function createEnemy(health, damage, position, enemyType, name, prefab, level, armor)
     return {
         health = health,
+        maxHealth = health,
         damage = damage,
         position = position,
         type = enemyType,
         name = name,
         prefab = prefab,
+        level = level or 1,
+        armor = armor or 0,
+        maxArmor = armor or 0,
         attackCooldown = EnemySystem.attackCooldown,
         attackTimer = 0
     }
@@ -170,9 +174,19 @@ local function spawnModel(enemy)
                 local billboardGui = Instance.new("BillboardGui")
                 billboardGui.Adornee = part
                 local textLabel = Instance.new("TextLabel")
-                textLabel.Text = enemy.name
+                textLabel.Text = enemy.name .. " Lv." .. tostring(enemy.level or 1)
                 textLabel.Parent = billboardGui
+                local healthBar = Instance.new("Frame")
+                healthBar.Name = "HealthBar"
+                healthBar.Parent = billboardGui
+                local armorBar
+                if enemy.armor and enemy.armor > 0 then
+                    armorBar = Instance.new("Frame")
+                    armorBar.Name = "ArmorBar"
+                    armorBar.Parent = billboardGui
+                end
                 billboardGui.Parent = model
+                model.billboardGui = {textLabel = textLabel, healthBar = healthBar, armorBar = armorBar}
                 model.Parent = workspaceService
             end
             enemy.model = model
@@ -188,8 +202,12 @@ local function spawnModel(enemy)
     }
     model.billboardGui = {
         adornee = model.primaryPart,
-        textLabel = {text = enemy.name}
+        textLabel = {text = enemy.name .. " Lv." .. tostring(enemy.level or 1)},
+        healthBar = {value = enemy.health, max = enemy.maxHealth}
     }
+    if enemy.armor and enemy.armor > 0 then
+        model.billboardGui.armorBar = {value = enemy.armor, max = enemy.maxArmor}
+    end
     enemy.model = model
     return model
 end
@@ -245,7 +263,9 @@ function EnemySystem:spawnWave(level, count)
             {x = i, y = 0, z = 0},
             nil,
             string.format("Enemy %d", i),
-            "Goblin"
+            "Goblin",
+            level,
+            0
         )
         if self.spawnModels ~= false then
             spawnModel(enemy)
@@ -288,7 +308,9 @@ function EnemySystem:spawnBoss(bossType)
         {x = 0, y = 0, z = 0},
         bossType,
         bossNames[bossType] or "Boss",
-        prefabMap[bossType] or "Ogre"
+        prefabMap[bossType] or "Ogre",
+        1,
+        0
     )
 
     if self.spawnModels ~= false then

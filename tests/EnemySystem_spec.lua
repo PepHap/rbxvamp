@@ -58,7 +58,8 @@ describe("EnemySystem", function()
         local enemy = EnemySystem.enemies[1]
         assert.is_table(enemy.model)
         assert.same(enemy.position, enemy.model.primaryPart.position)
-        assert.equals(enemy.name, enemy.model.billboardGui.textLabel.text)
+        assert.equals(enemy.name .. " Lv.1", enemy.model.billboardGui.textLabel.text)
+        assert.equals(enemy.health, enemy.model.billboardGui.healthBar.value)
     end)
 
     it("skips model creation when disabled", function()
@@ -73,7 +74,7 @@ describe("EnemySystem", function()
         EnemySystem.spawnModels = true
         EnemySystem:spawnBoss("mini")
         local boss = EnemySystem.enemies[1]
-        assert.equals(boss.name, boss.model.billboardGui.textLabel.text)
+        assert.equals(boss.name .. " Lv.1", boss.model.billboardGui.textLabel.text)
     end)
 
     it("computes a path toward the player on update", function()
