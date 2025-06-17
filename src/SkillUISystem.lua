@@ -54,9 +54,13 @@ local function parent(child, parentObj)
     end
 end
 
-local function ensureGui()
+local function ensureGui(parent)
     if SkillUISystem.gui then
         return SkillUISystem.gui
+    end
+    if parent then
+        SkillUISystem.gui = parent
+        return parent
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "SkillUI"
@@ -74,9 +78,9 @@ local function ensureGui()
     return gui
 end
 
-function SkillUISystem:start(skillSys)
+function SkillUISystem:start(skillSys, parent)
     self.skillSystem = skillSys or self.skillSystem or SkillSystem.new()
-    local gui = ensureGui()
+    local gui = ensureGui(parent)
 
     -- window backgrounds were removed; use plain window frame
     self.window = GuiUtil.createWindow("SkillWindow")
