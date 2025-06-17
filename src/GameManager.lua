@@ -83,6 +83,10 @@ local LightingSystem = require(script.Parent:WaitForChild("LightingSystem"))
 LightingSystem.locationSystem = LocationSystem
 GameManager:addSystem("Lighting", LightingSystem)
 
+-- Simple post processing effects for boss encounters
+local PostProcessingSystem = require(script.Parent:WaitForChild("PostProcessingSystem"))
+GameManager:addSystem("PostFX", PostProcessingSystem)
+
 -- Gacha system used for rolling random rewards
 local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
 GameManager:addSystem("Gacha", GachaSystem)

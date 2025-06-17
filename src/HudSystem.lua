@@ -16,6 +16,8 @@ local HudSystem = {
     progressFrame = nil,
     progressFill = nil,
     progressText = nil,
+    levelUpTimer = 0,
+    lastLevel = 1,
 }
 
 local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
@@ -28,6 +30,8 @@ local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
 if not ok then Theme = nil end
+
+local levelUpColor = Color3 and Color3.fromRGB(255, 240, 120) or {r=255,g=240,b=120}
 
 local function createInstance(className)
     if HudSystem.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
@@ -139,7 +143,8 @@ function HudSystem:start()
     self:update()
 end
 
-function HudSystem:update()
+function HudSystem:update(dt)
+    dt = dt or 0
     local gui = ensureGui()
     self.progressFrame = self.progressFrame or createInstance("Frame")
     self.progressFill = self.progressFill or createInstance("Frame")
@@ -152,6 +157,10 @@ function HudSystem:update()
     local lvl = PlayerLevelSystem.level or 1
     local exp = PlayerLevelSystem.exp or 0
     local nextExp = PlayerLevelSystem.nextExp or 0
+    if lvl > (self.lastLevel or 1) then
+        self.levelUpTimer = 1
+        self.lastLevel = lvl
+    end
     self.levelLabel.Text = string.format("Lv.%d %d/%d EXP", lvl, exp, nextExp)
 
     self.currencyLabel = self.currencyLabel or createInstance("TextLabel")
@@ -201,12 +210,23 @@ function HudSystem:update()
     if UDim2 and UDim2.new then
         self.progressFrame.Position = UDim2.new(0.5, -200, 0, 0)
         self.progressFrame.Size = UDim2.new(0, 400, 0, 20)
-        self.progressFill.BackgroundColor3 = Color3.fromRGB(80, 120, 220)
+        local fillColor = Color3.fromRGB(80, 120, 220)
+        if self.levelUpTimer > 0 then
+            self.levelUpTimer = math.max(0, self.levelUpTimer - dt)
+            fillColor = levelUpColor
+        end
+        self.progressFill.BackgroundColor3 = fillColor
         self.progressFill.Size = UDim2.new(ratio, 0, 1, 0)
         self.progressText.Size = UDim2.new(1, 0, 1, 0)
         self.progressText.BackgroundTransparency = 1
         self.progressText.TextScaled = true
     else
+        if self.levelUpTimer > 0 then
+            self.levelUpTimer = math.max(0, self.levelUpTimer - dt)
+            self.progressFill.color = levelUpColor
+        else
+            self.progressFill.color = nil
+        end
         self.progressFill.FillRatio = ratio
     end
 

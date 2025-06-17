@@ -17,6 +17,16 @@ end)
 if not ok then Theme = nil end
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 
+local function applyRarityColor(obj, rarity)
+    if not obj or not Theme or not Theme.rarityColors then return end
+    local col = Theme.rarityColors[rarity]
+    if not col then return end
+    local ok = pcall(function() obj.TextColor3 = col end)
+    if not ok and type(obj) == "table" then
+        obj.TextColor3 = col
+    end
+end
+
 local function createInstance(className)
     if RewardGaugeUISystem.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
         local inst = Instance.new(className)
@@ -105,6 +115,7 @@ function RewardGaugeUISystem:showOptions()
     for i, opt in ipairs(opts) do
         local btn = createInstance("TextButton")
         btn.Text = string.format("%d) %s (%s)", i, opt.item.name, opt.slot)
+        applyRarityColor(btn, opt.item.rarity)
         GuiUtil.connectButton(btn, function()
             RewardGaugeUISystem:choose(i)
         end)
