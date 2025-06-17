@@ -65,9 +65,8 @@ local function ensureGui(parent)
     local gui = createInstance("ScreenGui")
     gui.Name = "SkillUI"
     if gui.Enabled ~= nil then
-        gui.Enabled = true
+        gui.Enabled = SkillUISystem.visible
     end
-    gui.Visible = SkillUISystem.visible
     SkillUISystem.gui = gui
     if SkillUISystem.useRobloxObjects then
         local pgui = GuiUtil.getPlayerGui()
@@ -174,9 +173,8 @@ function SkillUISystem:setVisible(on)
     local gui = ensureGui()
     local parentGui = self.window or gui
     if parentGui.Enabled ~= nil then
-        parentGui.Enabled = true
+        parentGui.Enabled = self.visible
     end
-    parentGui.Visible = self.visible
 end
 
 function SkillUISystem:toggle()

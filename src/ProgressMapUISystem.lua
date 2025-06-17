@@ -69,8 +69,7 @@ function ProgressMapUI:setVisible(on)
     self.visible = not not on
     local gui = ensureGui()
     local parentGui = self.window or gui
-    if parentGui.Enabled ~= nil then parentGui.Enabled = true end
-    parentGui.Visible = self.visible
+    if parentGui.Enabled ~= nil then parentGui.Enabled = self.visible end
 end
 
 function ProgressMapUI:toggle()

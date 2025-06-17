@@ -54,8 +54,7 @@ local function ensureGui()
     local gui = createInstance("ScreenGui")
     gui.Name = "MenuUI"
     MenuUI.gui = gui
-    if gui.Enabled ~= nil then gui.Enabled = true end
-    gui.Visible = MenuUI.visible
+    if gui.Enabled ~= nil then gui.Enabled = MenuUI.visible end
     if MenuUI.useRobloxObjects then
         local pgui = GuiUtil.getPlayerGui()
         if pgui then gui.Parent = pgui end
@@ -120,8 +119,7 @@ function MenuUI:setVisible(on)
     self.visible = not not on
     local gui = ensureGui()
     local parentGui = self.window or gui
-    if parentGui.Enabled ~= nil then parentGui.Enabled = true end
-    parentGui.Visible = self.visible
+    if parentGui.Enabled ~= nil then parentGui.Enabled = self.visible end
 end
 
 function MenuUI:toggle()
