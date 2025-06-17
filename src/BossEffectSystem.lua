@@ -8,7 +8,8 @@ local BossEffectSystem = {
         ambient = Color3 and Color3.new(0.1, 0.1, 0.1) or {r=25,g=25,b=25},
         outdoorAmbient = Color3 and Color3.new(0.05, 0.05, 0.05) or {r=15,g=15,b=15},
         brightness = 1,
-    }
+    },
+    effect = nil,
 }
 
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
@@ -31,6 +32,7 @@ function BossEffectSystem:enable()
     self.active = true
     self.original = LightingSystem.currentSettings
     LightingSystem.apply(self.bossLighting)
+    self.effect = {glow = true}
 end
 
 function BossEffectSystem:disable()
@@ -39,6 +41,7 @@ function BossEffectSystem:disable()
     if LightingSystem and self.original then
         LightingSystem.apply(self.original)
     end
+    self.effect = nil
 end
 
 return BossEffectSystem

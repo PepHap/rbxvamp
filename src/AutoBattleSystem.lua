@@ -36,6 +36,8 @@ AutoBattleSystem.lastAttackTarget = nil
 
 ---Indicates whether auto-battle mode is active.
 AutoBattleSystem.enabled = false
+AutoBattleSystem.disabledTimer = 0
+AutoBattleSystem.wasEnabled = false
 
 ---Enables auto-battle mode.
 function AutoBattleSystem:enable()
@@ -47,9 +49,23 @@ function AutoBattleSystem:disable()
     self.enabled = false
 end
 
+function AutoBattleSystem:disableForDuration(duration)
+    local n = tonumber(duration) or 0
+    if n <= 0 then return end
+    self.wasEnabled = self.enabled
+    self.enabled = false
+    self.disabledTimer = n
+end
+
 ---Updates automatic combat behavior when enabled.
 -- @param dt number delta time since last update
 function AutoBattleSystem:update(dt)
+    if self.disabledTimer and self.disabledTimer > 0 then
+        self.disabledTimer = self.disabledTimer - dt
+        if self.disabledTimer <= 0 and self.wasEnabled then
+            self.enabled = true
+        end
+    end
     if not self.enabled then
         return
     end
