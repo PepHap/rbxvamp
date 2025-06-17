@@ -60,6 +60,10 @@ local function ensureGui()
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "SkillUI"
+    if gui.Enabled ~= nil then
+        gui.Enabled = true
+    end
+    gui.Visible = SkillUISystem.visible
     SkillUISystem.gui = gui
     if SkillUISystem.useRobloxObjects then
         local pgui = GuiUtil.getPlayerGui()
@@ -165,22 +169,10 @@ function SkillUISystem:setVisible(on)
     self.visible = not not on
     local gui = ensureGui()
     local parentGui = self.window or gui
-    local useEnabled = false
-    if typeof and typeof(parentGui) == "Instance" then
-        local ok, result = pcall(function()
-            return parentGui:IsA("ScreenGui")
-        end)
-        useEnabled = ok and result
-    else
-        useEnabled = parentGui.Enabled ~= nil
+    if parentGui.Enabled ~= nil then
+        parentGui.Enabled = true
     end
-    if useEnabled then
-        pcall(function()
-            parentGui.Enabled = self.visible
-        end)
-    else
-        parentGui.Visible = self.visible
-    end
+    parentGui.Visible = self.visible
 end
 
 function SkillUISystem:toggle()
