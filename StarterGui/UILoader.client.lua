@@ -34,3 +34,12 @@ for _, mod in ipairs(modules) do
     end
 end
 
+local RunService = game:GetService("RunService")
+RunService.RenderStepped:Connect(function(dt)
+    for _, mod in ipairs(modules) do
+        if type(mod.update) == "function" then
+            mod:update(dt)
+        end
+    end
+end)
+
