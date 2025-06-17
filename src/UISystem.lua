@@ -48,7 +48,13 @@ local function parent(child, parentObj)
     if child == nil or parentObj == nil then
         return
     end
-    child.Parent = parentObj
+    if typeof and typeof(child) == "Instance" then
+        if typeof(parentObj) == "Instance" then
+            child.Parent = parentObj
+        end
+    else
+        child.Parent = parentObj
+    end
     if type(parentObj) == "table" then
         parentObj.children = parentObj.children or {}
         table.insert(parentObj.children, child)
