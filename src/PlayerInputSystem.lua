@@ -43,9 +43,6 @@ local function connectRoblox()
             UIS.InputBegan:Connect(function(input)
                 local name = input.KeyCode.Name
                 PlayerInputSystem:setKeyState(name, true)
-                if name == PlayerInputSystem.inventoryKey then
-                    InventoryUISystem:toggle()
-                end
             end)
             UIS.InputEnded:Connect(function(input)
                 PlayerInputSystem:setKeyState(input.KeyCode.Name, false)
