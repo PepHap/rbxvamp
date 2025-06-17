@@ -29,6 +29,8 @@ local InventoryUI = {
     pendingIndex = nil,
     ---Window frame containing all inventory UI elements
     window = nil,
+    ---Optional blur effect applied when the window is visible
+    blur = nil,
     ---Reference to the active ItemSystem instance provided by GameManager
     itemSystem = nil,
 }
@@ -145,6 +147,24 @@ function InventoryUI:start(items, parentGui)
     -- no bundled images; create a plain window instead
     self.window = GuiUtil.createWindow("InventoryWindow")
     parent(self.window, gui)
+    if UDim2 and UDim2.new then
+        self.window.Size = UDim2.new(0, 600, 0, 400)
+        self.window.Position = UDim2.new(0.5, -300, 0.5, -200)
+    end
+
+    if self.useRobloxObjects and game and game:GetService then
+        local lighting = game:GetService("Lighting")
+        if lighting and not self.blur then
+            local ok, effect = pcall(function()
+                return Instance.new("BlurEffect")
+            end)
+            if ok and effect then
+                effect.Size = 0
+                effect.Parent = lighting
+                self.blur = effect
+            end
+        end
+    end
 
     local prev = gui.FindFirstChild and gui:FindFirstChild("PrevPage") or createInstance("TextButton")
     prev.Name = "PrevPage"
@@ -178,25 +198,26 @@ end
 local function renderEquipment(container, items)
     clearChildren(container)
     local index = 0
+    local cols = 2
+    local cell = 70
     for _, slot in ipairs(slotOrder) do
         local item = items.slots[slot]
         local btn = createInstance("TextButton")
         btn.Name = slot .. "Slot"
-        btn.Text = item and item.name or "Empty"
+        btn.Text = item and item.name or slot
         if item then
             applyRarityColor(btn, item.rarity)
         end
         if btn.SetAttribute then
-            -- Store the slot identifier as an attribute instead of a direct
-            -- property because Roblox Instances do not allow arbitrary fields.
             btn:SetAttribute("Slot", slot)
         elseif type(btn) == "table" then
-            -- In unit tests we use plain tables as mock objects.
             btn.Slot = slot
         end
         if UDim2 and UDim2.new then
-            btn.Position = UDim2.new(0, 0, 0, index * 25)
-            btn.Size = UDim2.new(1, 0, 0, 24)
+            local row = math.floor(index / cols)
+            local col = index % cols
+            btn.Position = UDim2.new(0, col * (cell + 5), 0, row * (cell + 5))
+            btn.Size = UDim2.new(0, cell, 0, cell)
         end
         parent(btn, container)
         GuiUtil.connectButton(btn, function()
@@ -209,6 +230,8 @@ end
 ---Renders inventory item buttons for the current page
 local function renderInventory(container, items, page, perPage)
     clearChildren(container)
+    local cols = 4
+    local cell = 60
     local list = items:getInventoryPage(page, perPage)
     for i, item in ipairs(list) do
         local btn = createInstance("TextButton")
@@ -222,8 +245,10 @@ local function renderInventory(container, items, page, perPage)
             btn.Index = idx
         end
         if UDim2 and UDim2.new then
-            btn.Position = UDim2.new(0, 0, 0, (i - 1) * 25)
-            btn.Size = UDim2.new(1, 0, 0, 24)
+            local row = math.floor((i-1) / cols)
+            local col = (i-1) % cols
+            btn.Position = UDim2.new(0, col * (cell + 5), 0, row * (cell + 5))
+            btn.Size = UDim2.new(0, cell, 0, cell)
         end
         parent(btn, container)
         GuiUtil.connectButton(btn, function()
@@ -270,22 +295,22 @@ function InventoryUI:update()
     self.equipmentFrame = self.equipmentFrame or existing or createInstance("Frame")
     self.equipmentFrame.Name = "Equipment"
     if UDim2 and UDim2.new then
-        self.equipmentFrame.Position = UDim2.new(0, 10, 0.1, 0)
-        self.equipmentFrame.Size = UDim2.new(0, 150, 0, 200)
+        self.equipmentFrame.Position = UDim2.new(0, 20, 0, 50)
+        self.equipmentFrame.Size = UDim2.new(0, 150, 0, 220)
     end
     existing = parentGui.FindFirstChild and parentGui:FindFirstChild("Inventory")
     self.inventoryFrame = self.inventoryFrame or existing or createInstance("Frame")
     self.inventoryFrame.Name = "Inventory"
     if UDim2 and UDim2.new then
-        self.inventoryFrame.Position = UDim2.new(0, 170, 0.1, 0)
-        self.inventoryFrame.Size = UDim2.new(0, 200, 0, 200)
+        self.inventoryFrame.Position = UDim2.new(0, 200, 0, 50)
+        self.inventoryFrame.Size = UDim2.new(0, 260, 0, 260)
     end
     existing = parentGui.FindFirstChild and parentGui:FindFirstChild("Stats")
     self.statsFrame = self.statsFrame or existing or createInstance("Frame")
     self.statsFrame.Name = "Stats"
     if UDim2 and UDim2.new then
-        self.statsFrame.Position = UDim2.new(0, 380, 0.1, 0)
-        self.statsFrame.Size = UDim2.new(0, 150, 0, 200)
+        self.statsFrame.Position = UDim2.new(1, -170, 0, 50)
+        self.statsFrame.Size = UDim2.new(0, 150, 0, 220)
     end
 
     clearChildren(self.equipmentFrame)
@@ -367,6 +392,15 @@ function InventoryUI:setVisible(on)
     local gui = ensureGui()
     local parentGui = self.window or gui
     GuiUtil.setVisible(parentGui, self.visible)
+    if self.blur then
+        local size = self.visible and 10 or 0
+        local ok = pcall(function()
+            self.blur.Size = size
+        end)
+        if not ok and type(self.blur) == "table" then
+            self.blur.Size = size
+        end
+    end
 end
 
 ---Toggles the visibility of the inventory UI.

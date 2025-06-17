@@ -107,6 +107,27 @@ local ItemSystem = require(script.Parent:WaitForChild("ItemSystem"))
 GameManager.itemSystem = ItemSystem.new()
 GameManager:addSystem("Items", GameManager.itemSystem)
 
+do
+    local function clone(tbl)
+        if type(tbl) ~= "table" then return tbl end
+        local c = {}
+        for k, v in pairs(tbl) do
+            c[k] = clone(v)
+        end
+        return c
+    end
+    local t = ItemSystem.templates
+    if t and t.Weapon and t.Weapon[1] then
+        GameManager.itemSystem:equip("Weapon", clone(t.Weapon[1]))
+    end
+    if t and t.Hat and t.Hat[1] then
+        GameManager.itemSystem:addItem(clone(t.Hat[1]))
+    end
+    if t and t.Ring and t.Ring[1] then
+        GameManager.itemSystem:addItem(clone(t.Ring[1]))
+    end
+end
+
 -- Equipment set bonuses
 local SetBonusSystem = require(script.Parent:WaitForChild("SetBonusSystem"))
 SetBonusSystem.itemSystem = GameManager.itemSystem
