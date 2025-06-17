@@ -40,6 +40,16 @@ end)
 if not ok then Theme = nil end
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 
+local function applyRarityColor(obj, rarity)
+    if not obj or not Theme or not Theme.rarityColors then return end
+    local col = Theme.rarityColors[rarity]
+    if not col then return end
+    local ok = pcall(function() obj.TextColor3 = col end)
+    if not ok and type(obj) == "table" then
+        obj.TextColor3 = col
+    end
+end
+
 -- utility for environment agnostic Instance creation
 local function createInstance(className)
     if InventoryUI.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
@@ -165,6 +175,9 @@ local function renderEquipment(container, items)
         local btn = createInstance("TextButton")
         btn.Name = slot .. "Slot"
         btn.Text = item and item.name or "Empty"
+        if item then
+            applyRarityColor(btn, item.rarity)
+        end
         if btn.SetAttribute then
             -- Store the slot identifier as an attribute instead of a direct
             -- property because Roblox Instances do not allow arbitrary fields.
@@ -193,6 +206,7 @@ local function renderInventory(container, items, page, perPage)
         local btn = createInstance("TextButton")
         btn.Name = "Inv" .. i
         btn.Text = item.name
+        applyRarityColor(btn, item.rarity)
         local idx = (page - 1) * perPage + i
         if btn.SetAttribute then
             btn:SetAttribute("Index", idx)
