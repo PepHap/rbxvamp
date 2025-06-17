@@ -68,7 +68,7 @@ local function ensureGui()
     local gui = createInstance("ScreenGui")
     gui.Name = "RewardGaugeUI"
     if gui.Enabled ~= nil then
-        gui.Enabled = RewardGaugeUISystem.visible
+        gui.Enabled = true
     end
     RewardGaugeUISystem.gui = gui
     if RewardGaugeUISystem.useRobloxObjects then

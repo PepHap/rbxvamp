@@ -38,6 +38,9 @@ local function ensureGui()
     if ProgressMapUI.gui then return ProgressMapUI.gui end
     local gui = createInstance("ScreenGui")
     gui.Name = "ProgressMapUI"
+    if gui.Enabled ~= nil then
+        gui.Enabled = true
+    end
     ProgressMapUI.gui = gui
     if ProgressMapUI.useRobloxObjects then
         local pgui = GuiUtil.getPlayerGui()

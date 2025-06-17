@@ -119,7 +119,7 @@ local function ensureGui(parent)
     gui.Name = "InventoryUI"
     InventoryUI.gui = gui
     if gui.Enabled ~= nil then
-        gui.Enabled = InventoryUI.visible
+        gui.Enabled = true
     end
     if InventoryUI.useRobloxObjects then
         local pgui = GuiUtil.getPlayerGui()

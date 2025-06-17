@@ -36,6 +36,9 @@ local function ensureGui()
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "QuestUI"
+    if gui.Enabled ~= nil then
+        gui.Enabled = true
+    end
     QuestUISystem.gui = gui
     if QuestUISystem.useRobloxObjects then
         local pgui = GuiUtil.getPlayerGui()

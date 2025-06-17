@@ -61,7 +61,7 @@ local function ensureGui()
     local gui = createInstance("ScreenGui")
     gui.Name = "CompanionUI"
     if gui.Enabled ~= nil then
-        gui.Enabled = CompanionUISystem.visible
+        gui.Enabled = true
     end
     CompanionUISystem.gui = gui
     if CompanionUISystem.useRobloxObjects then
