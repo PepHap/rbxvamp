@@ -1,9 +1,12 @@
--- InventoryUISystem.lua  •  17 июн 2025 patch
--- Отвечает за создание/обновление окна инвентаря и переключение его клавишей «B».
 
---// Сервисы
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
+-- ========== окружение ==========
+local function inRoblox()
+    -- typeof и Instance существуют лишь в живом клиенте
+    return typeof ~= nil and Instance ~= nil and type(Instance.new) == "function"
+end
+
+local Players = inRoblox() and game:GetService("Players") or nil
+local LocalPlayer = Players and Players.LocalPlayer or nil
 
 -------------------------------------------------------------------- класс
 local InventoryUI = {}
@@ -11,8 +14,9 @@ InventoryUI.__index = InventoryUI
 
 -------------------------------------------------------------------- util
 local function getPlayerGui()
+    if not inRoblox() then return nil end
     -- Гарантированно дождёмся появления PlayerGui
-    return LocalPlayer:WaitForChild("PlayerGui", 10) -- 10 с на старте достаточны
+    return LocalPlayer and LocalPlayer:WaitForChild("PlayerGui", 10) or nil
 end
 
 -------------------------------------------------------------------- ctor
@@ -62,11 +66,22 @@ function InventoryUI:_buildGui()
     self._container = frame
 end
 
-function InventoryUI:_ensureGui()
+function InventoryUI:_ensureGui(parent)
+    -- уже существует и имеет родителя
+    if self._gui and (not inRoblox() or self._gui.Parent) then
+        return self._gui
+    end
+
+    local targetParent = parent or getPlayerGui()
+
     if not self._gui then
         self:_buildGui()
-        self._gui.Parent = getPlayerGui()
     end
+
+    if inRoblox() and targetParent then
+        self._gui.Parent = targetParent
+    end
+    return self._gui
 end
 
 -------------------------------------------------------------------- public
