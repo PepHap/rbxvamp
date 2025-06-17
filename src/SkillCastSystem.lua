@@ -79,11 +79,25 @@ function SkillCastSystem:useSkill(index, target)
         return false
     end
     self.mana = self.mana - cost
-    self.cooldowns[index] = 5
+    local baseCooldown = skill.cooldown or 5
+    self.cooldowns[index] = baseCooldown
     playRareEffect(skill)
     target = target or EnemySystem:getNearestEnemy({x = 0, y = 0})
+    local damage = (skill.damage or 0) * (skill.level or 1)
+    local mod
+    if skill.module then
+        local ok, m = pcall(require, "src.skills." .. skill.module)
+        if ok then mod = m end
+    end
+    local shots = 1 + (skill.extraProjectiles or 0)
+    for _ = 1, shots do
+        if mod and type(mod.cast) == "function" then
+            mod.cast(self.caster, skill, target)
+        end
+    end
+
     if target and target.health then
-        target.health = target.health - (skill.damage or 0) * (skill.level or 1)
+        target.health = target.health - damage
         if target.health <= 0 then
             for i, e in ipairs(EnemySystem.enemies) do
                 if e == target then
@@ -101,4 +115,5 @@ function SkillCastSystem:useSkill(index, target)
 end
 
 return SkillCastSystem
+
 

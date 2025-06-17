@@ -23,9 +23,19 @@ end
 --  ``name`` and ``rarity`` fields. The ``level`` field defaults to ``1``
 --  when omitted.
 -- @param skill table
+local function applySkillModule(skill)
+    if skill.module then
+        local ok, mod = pcall(require, "src.skills." .. skill.module)
+        if ok and mod and type(mod.applyLevel) == "function" then
+            mod.applyLevel(skill)
+        end
+    end
+end
+
 function SkillSystem:addSkill(skill)
     skill.level = skill.level or 1
     table.insert(self.skills, skill)
+    applySkillModule(skill)
 end
 
 
@@ -42,6 +52,7 @@ function SkillSystem:upgradeSkill(index, amount)
         return false
     end
     skill.level = skill.level + amount
+    applySkillModule(skill)
     return true
 end
 
@@ -55,3 +66,4 @@ function SkillSystem:upgrade(index, amount)
 end
 
 return SkillSystem
+
