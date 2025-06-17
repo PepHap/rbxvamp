@@ -313,6 +313,8 @@ function EnemySystem:spawnBoss(bossType)
         0
     )
 
+    boss.ability = bossType
+
     if self.spawnModels ~= false then
         spawnModel(boss)
     end
@@ -335,6 +337,15 @@ function EnemySystem:update(dt)
     local pathService = getPathfindingService()
     for _, enemy in ipairs(self.enemies) do
         enemy.attackTimer = (enemy.attackTimer or 0) - dt
+        if enemy.ability == "mini" and not enemy.arenaShifted then
+            enemy.arenaShifted = true
+            self.moveSpeed = self.moveSpeed * 1.2
+        elseif enemy.ability == "boss" and not enemy.cloned and enemy.health <= enemy.maxHealth/2 then
+            enemy.cloned = true
+            local clone = createEnemy(enemy.maxHealth/2, enemy.damage/2, {x=enemy.position.x+2,y=enemy.position.y,z=enemy.position.z}, nil, enemy.name .. " Clone", enemy.prefab, enemy.level, 0)
+            if self.spawnModels ~= false then spawnModel(clone) end
+            table.insert(self.enemies, clone)
+        end
         local model = enemy.model
         local primaryPart = model and (model.PrimaryPart or model.primaryPart)
         if primaryPart then
