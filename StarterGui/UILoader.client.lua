@@ -4,7 +4,6 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local src = ReplicatedStorage:WaitForChild("src")
-local ItemSystem = require(src:WaitForChild("ItemSystem"))
 
 local HudSystem = require(src:WaitForChild("HudSystem"))
 local InventoryUISystem = require(src:WaitForChild("InventoryUISystem"))
@@ -17,7 +16,7 @@ local RewardGaugeUISystem = require(src:WaitForChild("RewardGaugeUISystem"))
 
 local modules = {
     HudSystem,
-    {mod = InventoryUISystem, args = {ItemSystem}},
+    InventoryUISystem,
     SkillUISystem,
     CompanionUISystem,
     StatUpgradeUISystem,
@@ -26,14 +25,11 @@ local modules = {
     RewardGaugeUISystem,
 }
 
-for _, entry in ipairs(modules) do
-    local mod, args =
-        (typeof(entry) == "table" and entry.mod) and entry.mod or entry,
-        (typeof(entry) == "table" and entry.args) or {}
+for _, mod in ipairs(modules) do
     if type(mod) == "table" then
         mod.useRobloxObjects = true
         if type(mod.start) == "function" then
-            mod:start(table.unpack(args))
+            mod:start()
         end
     end
 end

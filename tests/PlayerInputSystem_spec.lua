@@ -1,14 +1,77 @@
-local InventoryUISystem = require("src.InventoryUISystem")
 local PlayerInputSystem = require("src.PlayerInputSystem")
-local ItemSystem = require("src.ItemSystem")
+local PlayerSystem = require("src.PlayerSystem")
+local AutoBattleSystem = require("src.AutoBattleSystem")
+local EnemySystem = require("src.EnemySystem")
+local LevelSystem = require("src.LevelSystem")
+
+-- Ensure loot/dungeon modules load so callbacks work
+require("src.LootSystem")
+require("src.DungeonSystem")
 
 describe("PlayerInputSystem", function()
-    it("toggles inventory on B press", function()
-        local items = ItemSystem.new()
-        local ui = InventoryUISystem.new(items)
-        local input = PlayerInputSystem.new(ui)
-        local UIS = game:GetService("UserInputService")
-        UIS._callback({KeyCode = Enum.KeyCode.B}, false)
-        assert.is_true(ui._open)
+    before_each(function()
+        PlayerSystem.position = {x = 0, y = 0, z = 0}
+        PlayerInputSystem.playerPosition = PlayerSystem.position
+        PlayerInputSystem.keyStates = {}
+        AutoBattleSystem.enabled = false
+        EnemySystem.enemies = {}
+        LevelSystem.killCount = 0
+    end)
+
+    it("moves the player using key states", function()
+        PlayerInputSystem:setKeyState("D", true)
+        PlayerInputSystem:update(1)
+        assert.equals(PlayerInputSystem.moveSpeed, PlayerSystem.position.x)
+    end)
+
+    it("attacks nearest enemy when space pressed", function()
+        local enemy = {health = 1, position = {x = 0, y = 1}}
+        EnemySystem.enemies = {enemy}
+        PlayerInputSystem.attackRange = 2
+        PlayerInputSystem:setKeyState("Space", true)
+        PlayerInputSystem:update(0)
+        assert.equals(0, #EnemySystem.enemies)
+        assert.equals(1, LevelSystem.killCount)
+    end)
+
+    it("does not attack enemy when out of range", function()
+        local enemy = {health = 1, position = {x = 10, y = 0}}
+        EnemySystem.enemies = {enemy}
+        PlayerInputSystem.attackRange = 2
+        PlayerInputSystem:setKeyState("Space", true)
+        PlayerInputSystem:update(0)
+        assert.equals(1, #EnemySystem.enemies)
+        assert.equals(0, LevelSystem.killCount)
+    end)
+
+    it("ignores input when auto battle is enabled", function()
+        AutoBattleSystem.enabled = true
+        PlayerInputSystem:setKeyState("D", true)
+        PlayerInputSystem:update(1)
+        assert.equals(0, PlayerSystem.position.x)
+    end)
+
+    it("toggles skill and companion UIs using keys", function()
+        local SkillUISystem = require("src.SkillUISystem")
+        local CompanionUISystem = require("src.CompanionUISystem")
+        SkillUISystem.visible = false
+        CompanionUISystem.visible = false
+        PlayerInputSystem:setKeyState(PlayerInputSystem.skillKey, true)
+        assert.is_true(SkillUISystem.visible)
+        PlayerInputSystem:setKeyState(PlayerInputSystem.companionKey, true)
+        assert.is_true(CompanionUISystem.visible)
+    end)
+
+    it("casts skills when number keys are pressed", function()
+        local SkillCastSystem = require("src.SkillCastSystem")
+        SkillCastSystem.skillSystem = {skills = {{}}}
+        SkillCastSystem.cooldowns = {0}
+        PlayerInputSystem.skillCastSystem = SkillCastSystem
+        function SkillCastSystem:useSkill(index)
+            SkillCastSystem.lastUsed = index
+            return true
+        end
+        PlayerInputSystem:setKeyState("One", true)
+        assert.equals(1, SkillCastSystem.lastUsed)
     end)
 end)
