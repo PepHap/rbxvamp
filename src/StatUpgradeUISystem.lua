@@ -6,6 +6,7 @@ local StatUpgradeUISystem = {
     gui = nil,
     statSystem = nil,
     statListFrame = nil,
+    visible = false,
 }
 
 local StatUpgradeSystem = require(script.Parent:WaitForChild("StatUpgradeSystem"))
@@ -74,6 +75,7 @@ end
 function StatUpgradeUISystem:start(statSys)
     self.statSystem = statSys or self.statSystem or StatUpgradeSystem
     self:update()
+    self:setVisible(self.visible)
 end
 
 local function clearChildren(container)
@@ -152,6 +154,19 @@ function StatUpgradeUISystem:upgrade(name)
         self:update()
     end
     return ok
+end
+
+function StatUpgradeUISystem:setVisible(on)
+    self.visible = not not on
+    local gui = ensureGui()
+    GuiUtil.setVisible(gui, self.visible)
+end
+
+function StatUpgradeUISystem:toggle()
+    if not self.gui then
+        self:start(self.statSystem)
+    end
+    self:setVisible(not self.visible)
 end
 
 return StatUpgradeUISystem

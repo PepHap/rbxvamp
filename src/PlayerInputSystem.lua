@@ -22,6 +22,10 @@ local PlayerInputSystem = {
     inventoryKey = "B",
     skillKey = "K",
     companionKey = "L",
+    gachaKey = "G",
+    rewardKey = "R",
+    questKey = "J",
+    statsKey = "U",
     menuKey = "M",
     ---Reference to the SkillCastSystem for manual skill use.
     skillCastSystem = nil,
@@ -40,6 +44,10 @@ local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
 local CompanionUISystem = require(script.Parent:WaitForChild("CompanionUISystem"))
 local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
 local SkillCastSystem = require(script.Parent:WaitForChild("SkillCastSystem"))
+local GachaUISystem = require(script.Parent:WaitForChild("GachaUISystem"))
+local RewardGaugeUISystem = require(script.Parent:WaitForChild("RewardGaugeUISystem"))
+local StatUpgradeUISystem = require(script.Parent:WaitForChild("StatUpgradeUISystem"))
+local QuestUISystem = require(script.Parent:WaitForChild("QuestUISystem"))
 
 -- Utility to connect Roblox input events when available
 local function connectRoblox()
@@ -80,6 +88,14 @@ function PlayerInputSystem:setKeyState(key, isDown)
         SkillUISystem:toggle()
     elseif key == self.companionKey and isDown then
         CompanionUISystem:toggle()
+    elseif key == self.gachaKey and isDown then
+        GachaUISystem:toggle()
+    elseif key == self.rewardKey and isDown then
+        RewardGaugeUISystem:toggle()
+    elseif key == self.questKey and isDown then
+        QuestUISystem:toggle()
+    elseif key == self.statsKey and isDown then
+        StatUpgradeUISystem:toggle()
     elseif key == self.menuKey and isDown then
         MenuUISystem:toggle()
     elseif isDown and self.skillCastSystem then

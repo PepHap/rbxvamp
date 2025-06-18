@@ -2,6 +2,7 @@ local QuestUISystem = {
     useRobloxObjects = false,
     gui = nil,
     questSystem = nil,
+    visible = false,
 }
 
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
@@ -52,6 +53,7 @@ end
 function QuestUISystem:start(questSys)
     self.questSystem = questSys or self.questSystem or require(script.Parent:WaitForChild("QuestSystem"))
     self:update()
+    self:setVisible(self.visible)
 end
 
 function QuestUISystem:update()
@@ -104,6 +106,19 @@ function QuestUISystem:claim(id)
         self:update()
     end
     return ok
+end
+
+function QuestUISystem:setVisible(on)
+    self.visible = not not on
+    local gui = ensureGui()
+    GuiUtil.setVisible(gui, self.visible)
+end
+
+function QuestUISystem:toggle()
+    if not self.gui then
+        self:start(self.questSystem)
+    end
+    self:setVisible(not self.visible)
 end
 
 return QuestUISystem
