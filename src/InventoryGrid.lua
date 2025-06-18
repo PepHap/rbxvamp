@@ -39,13 +39,18 @@ function InventoryGrid.new()
     return self
 end
 
-function InventoryGrid:create(parent, cellSize)
+--
+-- parentContainer: The parent UI object that will contain the grid
+-- cellSize:      The desired size of each cell
+function InventoryGrid:create(parentContainer, cellSize)
     local frame = createInstance("Frame")
     frame.Name = "InventoryGrid"
     if UDim2 and UDim2.new then
         frame.Size = UDim2.new(1, 0, 1, 0)
     end
-    parent(frame, parent)
+    -- avoid clobbering the parent() helper by using a different
+    -- argument name for the container
+    parent(frame, parentContainer)
     local layout = createInstance("UIGridLayout")
     layout.Name = "Layout"
     if UDim2 and UDim2.new then
