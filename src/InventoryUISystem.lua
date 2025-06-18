@@ -35,6 +35,8 @@ local InventoryUI = {
     itemSystem = nil,
     ---Reference to the StatUpgradeSystem for base stats
     statSystem = nil,
+    ---Reference to the SetBonusSystem for applying set bonuses
+    setSystem = nil,
 }
 
 -- Render order for equipment slots to ensure deterministic layout
@@ -142,8 +144,10 @@ end
 
 ---Initializes the Inventory UI and binds page buttons.
 -- @param items table ItemSystem instance
-function InventoryUI:start(items, parentGui)
+function InventoryUI:start(items, parentGui, statSystem, setSystem)
     self.itemSystem = items or self.itemSystem
+    self.statSystem = statSystem or self.statSystem
+    self.setSystem = setSystem or self.setSystem
     local gui = ensureGui(parentGui)
 
     -- no bundled images; create a plain window instead
@@ -260,41 +264,37 @@ local function renderInventory(container, items, page, perPage)
 end
 
 ---Renders a list of basic stats derived from PlayerSystem and equipped items
-local function renderStats(container, items, stats)
+local function renderStats(container, items, stats, setSys)
     clearChildren(container)
-    local health = PlayerSystem.health
-    local attack = 0
+    local combined = {}
     if stats then
         for name, data in pairs(stats.stats) do
-            if name == "Health" then
-                health = health + (data.level - 1) * data.base
-            elseif name == "Attack" then
-                attack = attack + (data.level - 1) * data.base
-            end
+            combined[name] = (data.base or 0) * (data.level or 1)
         end
     end
     for _, itm in pairs(items.slots) do
         if itm and itm.stats then
-            if itm.stats.attack then
-                attack = attack + itm.stats.attack
-            end
-            if itm.stats.health then
-                health = health + itm.stats.health
+            for k, v in pairs(itm.stats) do
+                combined[k] = (combined[k] or 0) + v
             end
         end
     end
+    if setSys and setSys.applyBonuses then
+        combined = setSys:applyBonuses(combined)
+    end
+    local keys = {}
+    for k in pairs(combined) do table.insert(keys, k) end
+    table.sort(keys)
     local y = 0
-    local function addLabel(text)
+    for _, name in ipairs(keys) do
         local lbl = createInstance("TextLabel")
-        lbl.Text = text
+        lbl.Text = string.format("%s: %s", name, tostring(combined[name]))
         if UDim2 and UDim2.new then
             lbl.Position = UDim2.new(0, 0, 0, y)
         end
         parent(lbl, container)
         y = y + 20
     end
-    addLabel("Health: " .. tostring(health))
-    addLabel("Attack: " .. tostring(attack))
 end
 
 ---Updates the whole GUI based on the ItemSystem state
@@ -341,7 +341,7 @@ function InventoryUI:update()
 
     renderEquipment(self.equipmentFrame, items)
     renderInventory(self.inventoryFrame, items, self.page, self.itemsPerPage)
-    renderStats(self.statsFrame, items, self.statSystem)
+    renderStats(self.statsFrame, items, self.statSystem, self.setSystem)
 end
 
 ---Changes the current inventory page and rerenders

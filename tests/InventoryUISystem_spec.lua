@@ -9,6 +9,8 @@ describe("InventoryUISystem", function()
         InventoryUISystem.page = 1
         InventoryUISystem.selectedSlot = nil
         InventoryUISystem.pendingIndex = nil
+        InventoryUISystem.statSystem = nil
+        InventoryUISystem.setSystem = nil
     end)
 
     it("initializes gui and navigation buttons", function()

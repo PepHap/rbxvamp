@@ -31,7 +31,7 @@ for _, mod in ipairs(modules) do
         mod.useRobloxObjects = true
         if type(mod.start) == "function" then
             if mod == InventoryUISystem then
-                mod:start(GameManager.itemSystem)
+                mod:start(GameManager.itemSystem, nil, GameManager.systems.Stats, GameManager.setBonusSystem)
             elseif mod == SkillUISystem then
                 mod:start(GameManager.skillSystem)
             elseif mod == CompanionUISystem then
