@@ -180,6 +180,9 @@ function SkillUISystem:setVisible(on)
 end
 
 function SkillUISystem:toggle()
+    if not self.gui and type(self.start) == "function" then
+        self:start(self.skillSystem)
+    end
     self:setVisible(not self.visible)
 end
 
