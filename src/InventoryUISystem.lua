@@ -157,6 +157,15 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
         self.window.Size = UDim2.new(1, 0, 1, 0)
         self.window.Position = UDim2.new(0, 0, 0, 0)
     end
+    -- slightly visible background for readability
+    if self.window.BackgroundTransparency ~= nil then
+        local ok = pcall(function()
+            self.window.BackgroundTransparency = 0.2
+        end)
+        if not ok and type(self.window) == "table" then
+            self.window.BackgroundTransparency = 0.2
+        end
+    end
 
     if self.useRobloxObjects then
         local lighting = game:GetService("Lighting")
@@ -176,7 +185,7 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     prev.Name = "PrevPage"
     prev.Text = "<"
     if UDim2 and UDim2.new then
-        prev.Position = UDim2.new(0, 10, 1, -40)
+        prev.Position = UDim2.new(0.45, -60, 1, -40)
     end
     parent(prev, gui)
     GuiUtil.connectButton(prev, function()
@@ -188,7 +197,7 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     nextBtn.Name = "NextPage"
     nextBtn.Text = ">"
     if UDim2 and UDim2.new then
-        nextBtn.Position = UDim2.new(0, 50, 1, -40)
+        nextBtn.Position = UDim2.new(0.55, 0, 1, -40)
     end
     parent(nextBtn, gui)
     GuiUtil.connectButton(nextBtn, function()
@@ -201,8 +210,21 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
 end
 
 ---Renders equipment slot buttons
+local function renderSectionTitle(container, text)
+    local lbl = createInstance("TextLabel")
+    lbl.Name = "Title"
+    lbl.Text = text
+    if UDim2 and UDim2.new then
+        lbl.Size = UDim2.new(1, 0, 0, 20)
+        lbl.Position = UDim2.new(0, 0, 0, 0)
+    end
+    parent(lbl, container)
+    return 25
+end
+
 local function renderEquipment(container, items)
     clearChildren(container)
+    local offset = renderSectionTitle(container, "Equipment")
     local index = 0
     local cols = 2
     local cell = 90
@@ -222,7 +244,7 @@ local function renderEquipment(container, items)
         if UDim2 and UDim2.new then
             local row = math.floor(index / cols)
             local col = index % cols
-            btn.Position = UDim2.new(0, col * (cell + 5), 0, row * (cell + 5))
+            btn.Position = UDim2.new(0, col * (cell + 5), 0, offset + row * (cell + 5))
             btn.Size = UDim2.new(0, cell, 0, cell)
         end
         parent(btn, container)
@@ -236,6 +258,7 @@ end
 ---Renders inventory item buttons for the current page
 local function renderInventory(container, items, page, perPage)
     clearChildren(container)
+    local offset = renderSectionTitle(container, "Inventory")
     local cols = 5
     local cell = 80
     local list = items:getInventoryPage(page, perPage)
@@ -253,7 +276,7 @@ local function renderInventory(container, items, page, perPage)
         if UDim2 and UDim2.new then
             local row = math.floor((i-1) / cols)
             local col = (i-1) % cols
-            btn.Position = UDim2.new(0, col * (cell + 5), 0, row * (cell + 5))
+            btn.Position = UDim2.new(0, col * (cell + 5), 0, offset + row * (cell + 5))
             btn.Size = UDim2.new(0, cell, 0, cell)
         end
         parent(btn, container)
@@ -266,6 +289,7 @@ end
 ---Renders a list of basic stats derived from PlayerSystem and equipped items
 local function renderStats(container, items, stats, setSys)
     clearChildren(container)
+    local offset = renderSectionTitle(container, "Stats")
     local combined = {}
     if stats then
         for name, data in pairs(stats.stats) do
@@ -290,7 +314,7 @@ local function renderStats(container, items, stats, setSys)
         local lbl = createInstance("TextLabel")
         lbl.Text = string.format("%s: %s", name, tostring(combined[name]))
         if UDim2 and UDim2.new then
-            lbl.Position = UDim2.new(0, 0, 0, y)
+            lbl.Position = UDim2.new(0, 0, 0, offset + y)
         end
         parent(lbl, container)
         y = y + 20
@@ -308,22 +332,22 @@ function InventoryUI:update()
     self.equipmentFrame = self.equipmentFrame or existing or createInstance("Frame")
     self.equipmentFrame.Name = "Equipment"
     if UDim2 and UDim2.new then
-        self.equipmentFrame.Position = UDim2.new(0, 20, 0, 50)
-        self.equipmentFrame.Size = UDim2.new(0, 180, 1, -70)
+        self.equipmentFrame.Position = UDim2.new(0, 0, 0, 0)
+        self.equipmentFrame.Size = UDim2.new(0.25, 0, 1, 0)
     end
     existing = parentGui.FindFirstChild and parentGui:FindFirstChild("Inventory")
     self.inventoryFrame = self.inventoryFrame or existing or createInstance("Frame")
     self.inventoryFrame.Name = "Inventory"
     if UDim2 and UDim2.new then
-        self.inventoryFrame.Position = UDim2.new(0, 220, 0, 50)
-        self.inventoryFrame.Size = UDim2.new(1, -440, 1, -70)
+        self.inventoryFrame.Position = UDim2.new(0.25, 0, 0, 0)
+        self.inventoryFrame.Size = UDim2.new(0.5, 0, 1, 0)
     end
     existing = parentGui.FindFirstChild and parentGui:FindFirstChild("Stats")
     self.statsFrame = self.statsFrame or existing or createInstance("Frame")
     self.statsFrame.Name = "Stats"
     if UDim2 and UDim2.new then
-        self.statsFrame.Position = UDim2.new(1, -200, 0, 50)
-        self.statsFrame.Size = UDim2.new(0, 180, 1, -70)
+        self.statsFrame.Position = UDim2.new(0.75, 0, 0, 0)
+        self.statsFrame.Size = UDim2.new(0.25, 0, 1, 0)
     end
 
     clearChildren(self.equipmentFrame)
