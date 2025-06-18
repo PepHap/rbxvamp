@@ -65,7 +65,7 @@ function InventorySlots:create(parentFrame)
     parent(layout, frame)
 
     for _, name in ipairs(slotNames) do
-        local btn = createInstance("ImageButton")
+        local btn = createInstance("TextButton")
         btn.Name = name .. "Slot"
         if UDim2 and UDim2.new then
             btn.Size = UDim2.new(0, 80, 0, 80)

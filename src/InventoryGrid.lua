@@ -79,7 +79,7 @@ end
 
 function InventoryGrid:addCell(index, item)
     if not self.container then return nil end
-    local btn = createInstance("ImageButton")
+    local btn = createInstance("TextButton")
     btn.Name = "Cell" .. index
     if UDim2 and UDim2.new then
         btn.Size = self.layout and self.layout.CellSize or UDim2.new(0, 80, 0, 80)
