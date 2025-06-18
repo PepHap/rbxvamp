@@ -37,6 +37,8 @@ local InventoryUI = {
     statSystem = nil,
     ---Reference to the SetBonusSystem for applying set bonuses
     setSystem = nil,
+    ---References to equipment slot buttons
+    slotRefs = nil,
 }
 
 -- Render order for equipment slots to ensure deterministic layout
@@ -50,6 +52,7 @@ local ok, Theme = pcall(function()
 end)
 if not ok then Theme = nil end
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
+local InventorySlots = require(script.Parent:WaitForChild("InventorySlots"))
 
 local function applyRarityColor(obj, rarity)
     if not obj or not Theme or not Theme.rarityColors then return end
@@ -223,35 +226,31 @@ local function renderSectionTitle(container, text)
 end
 
 local function renderEquipment(container, items)
-    clearChildren(container)
-    local offset = renderSectionTitle(container, "Equipment")
-    local index = 0
-    local cols = 2
-    local cell = 90
+    if not InventoryUI.slotRefs then
+        clearChildren(container)
+        renderSectionTitle(container, "Equipment")
+        InventoryUI.slotRefs = InventorySlots:create(container)
+    end
     for _, slot in ipairs(slotOrder) do
-        local item = items.slots[slot]
-        local btn = createInstance("TextButton")
-        btn.Name = slot .. "Slot"
-        btn.Text = item and item.name or slot
-        if item then
-            applyRarityColor(btn, item.rarity)
+        local btn = InventoryUI.slotRefs[slot]
+        if btn then
+            local item = items.slots[slot]
+            btn.Text = item and item.name or slot
+            if item then
+                applyRarityColor(btn, item.rarity)
+            end
+            if btn.SetAttribute then
+                btn:SetAttribute("Slot", slot)
+            elseif type(btn) == "table" then
+                btn.Slot = slot
+            end
+            if not btn._connected then
+                GuiUtil.connectButton(btn, function()
+                    InventoryUI:selectSlot(slot)
+                end)
+                btn._connected = true
+            end
         end
-        if btn.SetAttribute then
-            btn:SetAttribute("Slot", slot)
-        elseif type(btn) == "table" then
-            btn.Slot = slot
-        end
-        if UDim2 and UDim2.new then
-            local row = math.floor(index / cols)
-            local col = index % cols
-            btn.Position = UDim2.new(0, col * (cell + 5), 0, offset + row * (cell + 5))
-            btn.Size = UDim2.new(0, cell, 0, cell)
-        end
-        parent(btn, container)
-        GuiUtil.connectButton(btn, function()
-            InventoryUI:selectSlot(slot)
-        end)
-        index = index + 1
     end
 end
 
