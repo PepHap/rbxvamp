@@ -60,10 +60,12 @@ describe("PlayerInputSystem", function()
         MenuUISystem.visible = false
         PlayerInputSystem:setKeyState(PlayerInputSystem.skillKey, true)
         assert.is_true(SkillUISystem.visible)
+        assert.is_true(MenuUISystem.visible)
+        assert.equals("Skills", MenuUISystem.tabs[MenuUISystem.currentTab].name)
         PlayerInputSystem:setKeyState(PlayerInputSystem.companionKey, true)
         assert.is_true(CompanionUISystem.visible)
         PlayerInputSystem:setKeyState(PlayerInputSystem.menuKey, true)
-        assert.is_true(MenuUISystem.visible)
+        assert.is_false(MenuUISystem.visible)
     end)
 
     it("casts skills when number keys are pressed", function()
