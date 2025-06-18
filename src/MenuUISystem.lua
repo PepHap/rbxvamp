@@ -82,14 +82,14 @@ function MenuUI:start()
     self:addDefaultTabs()
     local gui = ensureGui()
     self.window = GuiUtil.createWindow("MenuWindow")
-    if UDim2 and UDim2.new then
+    if UDim2 and type(UDim2.new)=="function" then
         self.window.Size = UDim2.new(1, 0, 1, 0)
         self.window.Position = UDim2.new(0, 0, 0, 0)
     end
     parent(self.window, gui)
 
     self.contentFrame = createInstance("Frame")
-    if UDim2 and UDim2.new then
+    if UDim2 and type(UDim2.new)=="function" then
         self.contentFrame.Position = UDim2.new(0, 0, 0, 30)
         self.contentFrame.Size = UDim2.new(1, 0, 1, -30)
     end
@@ -98,7 +98,7 @@ function MenuUI:start()
     for i,tab in ipairs(self.tabs) do
         local btn = createInstance("TextButton")
         btn.Text = tab.name
-        if UDim2 and UDim2.new then
+        if UDim2 and type(UDim2.new)=="function" then
             btn.Position = UDim2.new(0, (i-1)*100, 0, 0)
             btn.Size = UDim2.new(0, 100, 0, 30)
         end

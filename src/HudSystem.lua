@@ -210,7 +210,7 @@ function HudSystem:update(dt)
     local ratio = nextExp > 0 and exp / nextExp or 0
     if ratio < 0 then ratio = 0 elseif ratio > 1 then ratio = 1 end
     self.progressText.Text = string.format("Lv.%d", lvl)
-    if UDim2 and UDim2.new then
+    if UDim2 and type(UDim2.new)=="function" then
         self.progressFrame.Position = UDim2.new(0.5, -200, 0, 0)
         self.progressFrame.Size = UDim2.new(0, 400, 0, 20)
         local fillColor = Color3.fromRGB(80, 120, 220)
@@ -233,7 +233,7 @@ function HudSystem:update(dt)
         self.progressFill.FillRatio = ratio
     end
 
-    if UDim2 and UDim2.new then
+    if UDim2 and type(UDim2.new)=="function" then
         self.levelLabel.Position = UDim2.new(0, 20, 0, 10)
         self.currencyLabel.Position = UDim2.new(0, 20, 0, 30)
         self.autoButton.Position = UDim2.new(0, 20, 1, -120)
