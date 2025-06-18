@@ -80,6 +80,18 @@ function GuiUtil.createWindow(name, image)
     if frame.BackgroundTransparency ~= nil then
         frame.BackgroundTransparency = 1
     end
+    if UDim2 and UDim2.new then
+        local defaultSize = UDim2.new(0, 300, 0, 200)
+        local defaultPos = UDim2.new(0.5, -150, 0.5, -100)
+        local ok = pcall(function()
+            if not frame.Size then frame.Size = defaultSize end
+            if not frame.Position then frame.Position = defaultPos end
+        end)
+        if not ok and type(frame) == "table" then
+            frame.Size = frame.Size or defaultSize
+            frame.Position = frame.Position or defaultPos
+        end
+    end
     if image then
         local bg = createInstance("ImageLabel")
         bg.Name = "Background"
