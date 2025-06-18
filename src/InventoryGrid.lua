@@ -34,6 +34,8 @@ function InventoryGrid.new()
     self.cells = {}
     self.container = nil
     self.layout = nil
+    self.columns = 5
+    self.rows = 6
     return self
 end
 
@@ -48,6 +50,7 @@ function InventoryGrid:create(parent, cellSize)
     layout.Name = "Layout"
     if UDim2 and UDim2.new then
         layout.CellSize = cellSize or UDim2.new(0, 80, 0, 80)
+        layout.CellPadding = UDim2.new(0, 5, 0, 5)
         layout.FillDirection = Enum.FillDirection.Horizontal
         layout.SortOrder = Enum.SortOrder.LayoutOrder
     end
@@ -55,6 +58,23 @@ function InventoryGrid:create(parent, cellSize)
     self.container = frame
     self.layout = layout
     return frame
+end
+
+function InventoryGrid:ensureCells(count)
+    for i = 1, count do
+        if not self.cells[i] then
+            self:addCell(i)
+        end
+    end
+    for i = count + 1, #self.cells do
+        self:removeCell(i)
+    end
+end
+
+function InventoryGrid:clear()
+    for i = #self.cells, 1, -1 do
+        self:removeCell(i)
+    end
 end
 
 function InventoryGrid:addCell(index, item)
