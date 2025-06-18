@@ -82,6 +82,10 @@ function MenuUI:start()
     self:addDefaultTabs()
     local gui = ensureGui()
     self.window = GuiUtil.createWindow("MenuWindow")
+    if UDim2 and UDim2.new then
+        self.window.Size = UDim2.new(1, 0, 1, 0)
+        self.window.Position = UDim2.new(0, 0, 0, 0)
+    end
     parent(self.window, gui)
 
     self.contentFrame = createInstance("Frame")
