@@ -269,15 +269,20 @@ local function renderInventory(container, items, page, perPage)
 
     local grid = InventoryGrid.new()
     grid:create(holder, UDim2.new(0, 80, 0, 80))
+    grid:ensureCells(perPage)
 
     local list = items:getInventoryPage(page, perPage)
-    for i, item in ipairs(list) do
+    for i = 1, perPage do
         local idx = (page - 1) * perPage + i
-        local btn = grid:addCell(idx, item)
-        applyRarityColor(btn, item.rarity)
-        GuiUtil.connectButton(btn, function()
-            InventoryUI:selectInventory(idx)
-        end)
+        local item = list[i]
+        grid:updateCell(i, item)
+        local btn = grid.cells[i]
+        if btn then
+            applyRarityColor(btn, item and item.rarity)
+            GuiUtil.connectButton(btn, function()
+                InventoryUI:selectInventory(idx)
+            end)
+        end
     end
 end
 
