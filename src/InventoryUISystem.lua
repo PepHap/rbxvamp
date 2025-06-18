@@ -22,7 +22,7 @@ local InventoryUI = {
     ---Current page index
     page = 1,
     ---Number of inventory items shown per page
-    itemsPerPage = 20,
+    itemsPerPage = 30,
     ---Equipment slot awaiting an item selection
     selectedSlot = nil,
     ---Inventory index awaiting a slot selection
@@ -33,6 +33,8 @@ local InventoryUI = {
     blur = nil,
     ---Reference to the active ItemSystem instance provided by GameManager
     itemSystem = nil,
+    ---Reference to the StatUpgradeSystem for base stats
+    statSystem = nil,
 }
 
 -- Render order for equipment slots to ensure deterministic layout
@@ -148,8 +150,8 @@ function InventoryUI:start(items, parentGui)
     self.window = GuiUtil.createWindow("InventoryWindow")
     parent(self.window, gui)
     if UDim2 and UDim2.new then
-        self.window.Size = UDim2.new(0, 600, 0, 400)
-        self.window.Position = UDim2.new(0.5, -300, 0.5, -200)
+        self.window.Size = UDim2.new(1, 0, 1, 0)
+        self.window.Position = UDim2.new(0, 0, 0, 0)
     end
 
     if self.useRobloxObjects then
@@ -199,7 +201,7 @@ local function renderEquipment(container, items)
     clearChildren(container)
     local index = 0
     local cols = 2
-    local cell = 70
+    local cell = 90
     for _, slot in ipairs(slotOrder) do
         local item = items.slots[slot]
         local btn = createInstance("TextButton")
@@ -230,8 +232,8 @@ end
 ---Renders inventory item buttons for the current page
 local function renderInventory(container, items, page, perPage)
     clearChildren(container)
-    local cols = 4
-    local cell = 60
+    local cols = 5
+    local cell = 80
     local list = items:getInventoryPage(page, perPage)
     for i, item in ipairs(list) do
         local btn = createInstance("TextButton")
@@ -258,30 +260,41 @@ local function renderInventory(container, items, page, perPage)
 end
 
 ---Renders a list of basic stats derived from PlayerSystem and equipped items
-local function renderStats(container, items)
+local function renderStats(container, items, stats)
     clearChildren(container)
     local health = PlayerSystem.health
     local attack = 0
+    if stats then
+        for name, data in pairs(stats.stats) do
+            if name == "Health" then
+                health = health + (data.level - 1) * data.base
+            elseif name == "Attack" then
+                attack = attack + (data.level - 1) * data.base
+            end
+        end
+    end
     for _, itm in pairs(items.slots) do
-        if itm and itm.stats and itm.stats.attack then
-            attack = attack + itm.stats.attack
+        if itm and itm.stats then
+            if itm.stats.attack then
+                attack = attack + itm.stats.attack
+            end
+            if itm.stats.health then
+                health = health + itm.stats.health
+            end
         end
-        if itm and itm.stats and itm.stats.health then
-            health = health + itm.stats.health
+    end
+    local y = 0
+    local function addLabel(text)
+        local lbl = createInstance("TextLabel")
+        lbl.Text = text
+        if UDim2 and UDim2.new then
+            lbl.Position = UDim2.new(0, 0, 0, y)
         end
+        parent(lbl, container)
+        y = y + 20
     end
-    local hLabel = createInstance("TextLabel")
-    hLabel.Text = "Health: " .. tostring(health)
-    if UDim2 and UDim2.new then
-        hLabel.Position = UDim2.new(0, 0, 0, 0)
-    end
-    parent(hLabel, container)
-    local aLabel = createInstance("TextLabel")
-    aLabel.Text = "Attack: " .. tostring(attack)
-    if UDim2 and UDim2.new then
-        aLabel.Position = UDim2.new(0, 0, 0, 20)
-    end
-    parent(aLabel, container)
+    addLabel("Health: " .. tostring(health))
+    addLabel("Attack: " .. tostring(attack))
 end
 
 ---Updates the whole GUI based on the ItemSystem state
@@ -296,21 +309,21 @@ function InventoryUI:update()
     self.equipmentFrame.Name = "Equipment"
     if UDim2 and UDim2.new then
         self.equipmentFrame.Position = UDim2.new(0, 20, 0, 50)
-        self.equipmentFrame.Size = UDim2.new(0, 150, 0, 220)
+        self.equipmentFrame.Size = UDim2.new(0, 180, 1, -70)
     end
     existing = parentGui.FindFirstChild and parentGui:FindFirstChild("Inventory")
     self.inventoryFrame = self.inventoryFrame or existing or createInstance("Frame")
     self.inventoryFrame.Name = "Inventory"
     if UDim2 and UDim2.new then
-        self.inventoryFrame.Position = UDim2.new(0, 200, 0, 50)
-        self.inventoryFrame.Size = UDim2.new(0, 260, 0, 260)
+        self.inventoryFrame.Position = UDim2.new(0, 220, 0, 50)
+        self.inventoryFrame.Size = UDim2.new(1, -440, 1, -70)
     end
     existing = parentGui.FindFirstChild and parentGui:FindFirstChild("Stats")
     self.statsFrame = self.statsFrame or existing or createInstance("Frame")
     self.statsFrame.Name = "Stats"
     if UDim2 and UDim2.new then
-        self.statsFrame.Position = UDim2.new(1, -170, 0, 50)
-        self.statsFrame.Size = UDim2.new(0, 150, 0, 220)
+        self.statsFrame.Position = UDim2.new(1, -200, 0, 50)
+        self.statsFrame.Size = UDim2.new(0, 180, 1, -70)
     end
 
     clearChildren(self.equipmentFrame)
@@ -328,7 +341,7 @@ function InventoryUI:update()
 
     renderEquipment(self.equipmentFrame, items)
     renderInventory(self.inventoryFrame, items, self.page, self.itemsPerPage)
-    renderStats(self.statsFrame, items)
+    renderStats(self.statsFrame, items, self.statSystem)
 end
 
 ---Changes the current inventory page and rerenders
