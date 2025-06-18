@@ -125,6 +125,31 @@ function MenuUI:showTab(index)
     end
 end
 
+---Finds a tab index by its name.
+-- @param name string tab name
+-- @return number? index or nil
+function MenuUI:getTabIndex(name)
+    for i, tab in ipairs(self.tabs) do
+        if tab.name == name then
+            return i
+        end
+    end
+    return nil
+end
+
+---Shows the specified tab by name and ensures the menu is visible.
+-- @param name string tab name
+function MenuUI:openTab(name)
+    if not self.gui then
+        self:start()
+    end
+    local idx = self:getTabIndex(name)
+    if idx then
+        self:showTab(idx)
+    end
+    self:setVisible(true)
+end
+
 function MenuUI:setVisible(on)
     self.visible = not not on
     local gui = ensureGui()
