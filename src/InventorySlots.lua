@@ -49,7 +49,7 @@ function InventorySlots:create(parentFrame)
     end
     local frame = createInstance("Frame")
     frame.Name = "EquipmentSlots"
-    if UDim2 and UDim2.new then
+    if UDim2 and type(UDim2.new)=="function" then
         frame.Size = UDim2.new(1, 0, 1, 0)
     end
     parent(frame, parentFrame)
@@ -57,7 +57,7 @@ function InventorySlots:create(parentFrame)
 
     local layout = createInstance("UIGridLayout")
     layout.Name = "Layout"
-    if UDim2 and UDim2.new then
+    if UDim2 and type(UDim2.new)=="function" then
         layout.CellSize = UDim2.new(0, 80, 0, 80)
         layout.FillDirection = Enum.FillDirection.Horizontal
         layout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -67,7 +67,7 @@ function InventorySlots:create(parentFrame)
     for _, name in ipairs(slotNames) do
         local btn = createInstance("TextButton")
         btn.Name = name .. "Slot"
-        if UDim2 and UDim2.new then
+        if UDim2 and type(UDim2.new)=="function" then
             btn.Size = UDim2.new(0, 80, 0, 80)
         end
         parent(btn, frame)

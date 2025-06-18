@@ -157,7 +157,7 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     -- no bundled images; create a plain window instead
     self.window = GuiUtil.createWindow("InventoryWindow")
     parent(self.window, gui)
-    if UDim2 and UDim2.new then
+    if UDim2 and type(UDim2.new)=="function" then
         self.window.Size = UDim2.new(1, 0, 1, 0)
         self.window.Position = UDim2.new(0, 0, 0, 0)
     end
@@ -188,7 +188,7 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     local prev = gui.FindFirstChild and gui:FindFirstChild("PrevPage") or createInstance("TextButton")
     prev.Name = "PrevPage"
     prev.Text = "<"
-    if UDim2 and UDim2.new then
+    if UDim2 and type(UDim2.new)=="function" then
         prev.Position = UDim2.new(0.45, -60, 1, -40)
     end
     parent(prev, gui)
@@ -200,7 +200,7 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     local nextBtn = gui.FindFirstChild and gui:FindFirstChild("NextPage") or createInstance("TextButton")
     nextBtn.Name = "NextPage"
     nextBtn.Text = ">"
-    if UDim2 and UDim2.new then
+    if UDim2 and type(UDim2.new)=="function" then
         nextBtn.Position = UDim2.new(0.55, 0, 1, -40)
     end
     parent(nextBtn, gui)
@@ -218,7 +218,7 @@ local function renderSectionTitle(container, text)
     local lbl = createInstance("TextLabel")
     lbl.Name = "Title"
     lbl.Text = text
-    if UDim2 and UDim2.new then
+    if UDim2 and type(UDim2.new)=="function" then
         lbl.Size = UDim2.new(1, 0, 0, 20)
         lbl.Position = UDim2.new(0, 0, 0, 0)
     end
@@ -264,7 +264,7 @@ local function renderInventory(container, items, page, perPage)
     local offset = renderSectionTitle(container, "Inventory")
     local holder = createInstance("Frame")
     holder.Name = "GridHolder"
-    if UDim2 and UDim2.new then
+    if UDim2 and type(UDim2.new)=="function" then
         holder.Position = UDim2.new(0, 0, 0, offset)
         holder.Size = UDim2.new(1, 0, 1, -offset)
     end
@@ -316,7 +316,7 @@ local function renderStats(container, items, stats, setSys)
     for _, name in ipairs(keys) do
         local lbl = createInstance("TextLabel")
         lbl.Text = string.format("%s: %s", name, tostring(combined[name]))
-        if UDim2 and UDim2.new then
+        if UDim2 and type(UDim2.new)=="function" then
             lbl.Position = UDim2.new(0, 0, 0, offset + y)
         end
         parent(lbl, container)
@@ -334,21 +334,21 @@ function InventoryUI:update()
     local existing = parentGui.FindFirstChild and parentGui:FindFirstChild("Equipment")
     self.equipmentFrame = self.equipmentFrame or existing or createInstance("Frame")
     self.equipmentFrame.Name = "Equipment"
-    if UDim2 and UDim2.new then
+    if UDim2 and type(UDim2.new)=="function" then
         self.equipmentFrame.Position = UDim2.new(0, 0, 0, 0)
         self.equipmentFrame.Size = UDim2.new(0.25, 0, 1, 0)
     end
     existing = parentGui.FindFirstChild and parentGui:FindFirstChild("Inventory")
     self.inventoryFrame = self.inventoryFrame or existing or createInstance("Frame")
     self.inventoryFrame.Name = "Inventory"
-    if UDim2 and UDim2.new then
+    if UDim2 and type(UDim2.new)=="function" then
         self.inventoryFrame.Position = UDim2.new(0.25, 0, 0, 0)
         self.inventoryFrame.Size = UDim2.new(0.5, 0, 1, 0)
     end
     existing = parentGui.FindFirstChild and parentGui:FindFirstChild("Stats")
     self.statsFrame = self.statsFrame or existing or createInstance("Frame")
     self.statsFrame.Name = "Stats"
-    if UDim2 and UDim2.new then
+    if UDim2 and type(UDim2.new)=="function" then
         self.statsFrame.Position = UDim2.new(0.75, 0, 0, 0)
         self.statsFrame.Size = UDim2.new(0.25, 0, 1, 0)
     end

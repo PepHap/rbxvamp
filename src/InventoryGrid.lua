@@ -8,7 +8,7 @@ end
 InventoryGrid.useRobloxObjects = detectRoblox()
 
 local function createInstance(className)
-    if InventoryGrid.useRobloxObjects then
+    if InventoryGrid.useRobloxObjects and Instance and type(Instance.new)=="function" then
         return Instance.new(className)
     end
     return {ClassName = className}
@@ -45,7 +45,7 @@ end
 function InventoryGrid:create(parentContainer, cellSize)
     local frame = createInstance("Frame")
     frame.Name = "InventoryGrid"
-    if UDim2 and UDim2.new then
+    if UDim2 and type(UDim2.new)=="function" then
         frame.Size = UDim2.new(1, 0, 1, 0)
     end
     -- avoid clobbering the parent() helper by using a different
@@ -53,7 +53,7 @@ function InventoryGrid:create(parentContainer, cellSize)
     parent(frame, parentContainer)
     local layout = createInstance("UIGridLayout")
     layout.Name = "Layout"
-    if UDim2 and UDim2.new then
+    if UDim2 and type(UDim2.new)=="function" then
         layout.CellSize = cellSize or UDim2.new(0, 80, 0, 80)
         layout.CellPadding = UDim2.new(0, 5, 0, 5)
         layout.FillDirection = Enum.FillDirection.Horizontal
@@ -86,7 +86,7 @@ function InventoryGrid:addCell(index, item)
     if not self.container then return nil end
     local btn = createInstance("TextButton")
     btn.Name = "Cell" .. index
-    if UDim2 and UDim2.new then
+    if UDim2 and type(UDim2.new)=="function" then
         btn.Size = self.layout and self.layout.CellSize or UDim2.new(0, 80, 0, 80)
     end
     parent(btn, self.container)
