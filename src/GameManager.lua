@@ -200,6 +200,7 @@ if RunService:IsClient() then
     -- Inventory UI provides equipment and bag management
     local InventoryUISystem = require(script.Parent:WaitForChild("InventoryUISystem"))
     InventoryUISystem.itemSystem = GameManager.itemSystem
+    InventoryUISystem.statSystem = StatUpgradeSystem
     GameManager:addSystem("InventoryUI", InventoryUISystem)
 
     -- Gacha UI for rolling rewards
