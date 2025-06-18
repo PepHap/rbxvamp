@@ -53,6 +53,7 @@ end)
 if not ok then Theme = nil end
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local InventorySlots = require(script.Parent:WaitForChild("InventorySlots"))
+local InventoryGrid = require(script.Parent:WaitForChild("InventoryGrid"))
 
 local function applyRarityColor(obj, rarity)
     if not obj or not Theme or not Theme.rarityColors then return end
@@ -258,27 +259,22 @@ end
 local function renderInventory(container, items, page, perPage)
     clearChildren(container)
     local offset = renderSectionTitle(container, "Inventory")
-    local cols = 5
-    local cell = 80
+    local holder = createInstance("Frame")
+    holder.Name = "GridHolder"
+    if UDim2 and UDim2.new then
+        holder.Position = UDim2.new(0, 0, 0, offset)
+        holder.Size = UDim2.new(1, 0, 1, -offset)
+    end
+    parent(holder, container)
+
+    local grid = InventoryGrid.new()
+    grid:create(holder, UDim2.new(0, 80, 0, 80))
+
     local list = items:getInventoryPage(page, perPage)
     for i, item in ipairs(list) do
-        local btn = createInstance("TextButton")
-        btn.Name = "Inv" .. i
-        btn.Text = item.name
-        applyRarityColor(btn, item.rarity)
         local idx = (page - 1) * perPage + i
-        if btn.SetAttribute then
-            btn:SetAttribute("Index", idx)
-        elseif type(btn) == "table" then
-            btn.Index = idx
-        end
-        if UDim2 and UDim2.new then
-            local row = math.floor((i-1) / cols)
-            local col = (i-1) % cols
-            btn.Position = UDim2.new(0, col * (cell + 5), 0, offset + row * (cell + 5))
-            btn.Size = UDim2.new(0, cell, 0, cell)
-        end
-        parent(btn, container)
+        local btn = grid:addCell(idx, item)
+        applyRarityColor(btn, item.rarity)
         GuiUtil.connectButton(btn, function()
             InventoryUI:selectInventory(idx)
         end)
