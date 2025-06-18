@@ -40,10 +40,10 @@ end
 ---Creates slot buttons inside the given parent frame.
 -- @param parent Frame|table container for the slots
 -- @return table table of slot references indexed by slot name
-function InventorySlots:create(parent)
+function InventorySlots:create(parentFrame)
     if self.container then
-        if parent then
-            parent(self.container, parent)
+        if parentFrame then
+            parent(self.container, parentFrame)
         end
         return self.slots
     end
@@ -52,7 +52,7 @@ function InventorySlots:create(parent)
     if UDim2 and UDim2.new then
         frame.Size = UDim2.new(1, 0, 1, 0)
     end
-    parent(frame, parent)
+    parent(frame, parentFrame)
     self.container = frame
 
     local layout = createInstance("UIGridLayout")
