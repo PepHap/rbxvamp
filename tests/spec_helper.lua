@@ -34,3 +34,9 @@ _G.script = _G.script or {
         end
     }
 }
+
+_G.UDim2 = _G.UDim2 or {
+    new = function(a, b, c, d)
+        return {ScaleX = a, OffsetX = b, ScaleY = c, OffsetY = d}
+    end
+}
