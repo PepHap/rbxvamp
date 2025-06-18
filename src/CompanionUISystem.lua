@@ -169,6 +169,9 @@ function CompanionUISystem:setVisible(on)
 end
 
 function CompanionUISystem:toggle()
+    if not self.gui and type(self.start) == "function" then
+        self:start(self.companionSystem)
+    end
     self:setVisible(not self.visible)
 end
 
