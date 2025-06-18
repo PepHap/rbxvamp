@@ -245,11 +245,14 @@ local function renderEquipment(container, items)
             elseif type(btn) == "table" then
                 btn.Slot = slot
             end
-            if not btn._connected then
+            local connected = btn.GetAttribute and btn:GetAttribute("_connected")
+            if not connected then
                 GuiUtil.connectButton(btn, function()
                     InventoryUI:selectSlot(slot)
                 end)
-                btn._connected = true
+                if btn.SetAttribute then
+                    btn:SetAttribute("_connected", true)
+                end
             end
         end
     end
