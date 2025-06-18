@@ -149,6 +149,13 @@ GameManager:addSystem("Dungeon", DungeonSystem)
 -- Base stats like attack and defense upgrades
 local StatUpgradeSystem = require(script.Parent:WaitForChild("StatUpgradeSystem"))
 GameManager:addSystem("Stats", StatUpgradeSystem)
+-- Define some base player stats used by the inventory display
+StatUpgradeSystem:addStat("Health", 100)
+StatUpgradeSystem:addStat("Attack", 5)
+StatUpgradeSystem:addStat("Defense", 0)
+StatUpgradeSystem:addStat("Magic", 0)
+StatUpgradeSystem:addStat("CritChance", 0.05)
+StatUpgradeSystem:addStat("CritDamage", 1.5)
 
 -- Data persistence for saving and loading progress
 local DataPersistenceSystem = require(script.Parent:WaitForChild("DataPersistenceSystem"))
@@ -201,6 +208,7 @@ if RunService:IsClient() then
     local InventoryUISystem = require(script.Parent:WaitForChild("InventoryUISystem"))
     InventoryUISystem.itemSystem = GameManager.itemSystem
     InventoryUISystem.statSystem = StatUpgradeSystem
+    InventoryUISystem.setSystem = SetBonusSystem
     GameManager:addSystem("InventoryUI", InventoryUISystem)
 
     -- Gacha UI for rolling rewards
