@@ -6,6 +6,10 @@ local PlayerSystem = {}
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
 local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
 
+-- Forward declarations for functions defined later in this file
+local getSpawnPosition
+local spawnModel
+
 ---Indicates if a Roblox model should be created for the player when the game
 --  starts. Tests can disable this to avoid manipulating Instance objects.
 PlayerSystem.spawnModels = true
