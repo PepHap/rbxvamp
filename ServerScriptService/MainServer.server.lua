@@ -2,6 +2,10 @@ local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
 
 
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
 local src = script.Parent:WaitForChild("src")
 local GameManager = require(src:WaitForChild("GameManager"))
 
