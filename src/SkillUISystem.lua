@@ -107,6 +107,12 @@ end
 
 local function renderSkills(container, sys)
     clearChildren(container)
+    if #sys.skills == 0 then
+        local none = createInstance("TextLabel")
+        none.Text = "No skills available"
+        parent(none, container)
+        return
+    end
     for i, skill in ipairs(sys.skills) do
         local frame = createInstance("Frame")
         frame.Name = skill.name .. "Frame"

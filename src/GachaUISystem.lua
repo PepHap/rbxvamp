@@ -86,6 +86,7 @@ function GachaUI:start(manager)
     parent(self.window, gui)
 
     self.resultLabel = createInstance("TextLabel")
+    self.resultLabel.Text = "Roll result"
     parent(self.resultLabel, self.window)
 
     self.skillButton = createInstance("TextButton")
