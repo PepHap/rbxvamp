@@ -243,10 +243,16 @@ if RunService:IsClient() then
     GameManager:addSystem("StatUI", StatUpgradeUISystem)
 
     -- Admin console for privileged commands
-    local AdminConsoleSystem = require(script.Parent:FindFirstChild("AdminConsoleSystem"))
-    if AdminConsoleSystem then
-        AdminConsoleSystem.gameManager = GameManager
-        GameManager:addSystem("AdminConsole", AdminConsoleSystem)
+    local adminModule
+    local ok, result = pcall(function()
+        return require(script.Parent:WaitForChild("AdminConsoleSystem"))
+    end)
+    if ok then
+        adminModule = result
+    end
+    if adminModule then
+        adminModule.gameManager = GameManager
+        GameManager:addSystem("AdminConsole", adminModule)
     end
 end
 

@@ -5,6 +5,9 @@ local CurrencySystem = require("src.CurrencySystem")
 describe("SkillTreeSystem", function()
     before_each(function()
         CurrencySystem.balances = {ether = 10}
+        SkillSystem.rand = function()
+            return 0 -- ensure deterministic upgrades during tests
+        end
     end)
 
     it("chooses a branch and applies upgrades", function()
