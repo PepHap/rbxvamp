@@ -17,6 +17,7 @@ local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local assets = ReplicatedStorage:WaitForChild("assets")
 local itemPool = require(assets:WaitForChild("items"))
+local EquipmentGenerator = require(script.Parent:WaitForChild("EquipmentGenerator"))
 
 -- Precompute a list of available equipment slots
 local slots = {}
@@ -31,17 +32,7 @@ function RewardGaugeSystem:generateOptions()
     for i = 1, 3 do
         local slot = slots[math.random(#slots)]
         local rarity = GachaSystem:rollRarity()
-        local pool = itemPool[slot]
-        local candidates = {}
-        for _, itm in ipairs(pool) do
-            if itm.rarity == rarity then
-                table.insert(candidates, itm)
-            end
-        end
-        if #candidates == 0 then
-            candidates = pool
-        end
-        local choice = candidates[math.random(#candidates)]
+        local choice = EquipmentGenerator.getRandomItem(slot, rarity, itemPool)
         table.insert(opts, {slot = slot, item = choice})
     end
     return opts
