@@ -78,8 +78,8 @@ describe("GachaSystem", function()
         assert.equals("A", r)
         -- restore default for other tests
         GachaSystem:setRarityWeights("skill", {
-            {"C", 80}, {"D", 25}, {"B", 5}, {"A", 1},
-            {"S", 0.1}, {"SS", 0.001}, {"SSS", 1e-12},
+            {"C", 80}, {"D", 15}, {"B", 4}, {"A", 0.9},
+            {"S", 0.09}, {"SS", 0.009}, {"SSS", 0.001},
         })
     end)
 
