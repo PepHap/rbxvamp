@@ -42,14 +42,20 @@ end
 -- Further points are ignored until an option is chosen.
 -- @param amount number amount to add
 function RewardGaugeSystem:addPoints(amount)
-    local n = tonumber(amount) or 0
     if self.options then
         return
     end
+    local n = tonumber(amount)
+    if not n or n <= 0 then
+        return
+    end
     self.gauge = self.gauge + n
-    if self.gauge >= self.maxGauge then
-        self.gauge = 0
+    while self.gauge >= self.maxGauge do
+        self.gauge = self.gauge - self.maxGauge
         self.options = self:generateOptions()
+        if self.options then
+            break
+        end
     end
 end
 
