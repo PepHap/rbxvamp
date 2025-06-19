@@ -56,8 +56,10 @@ function InventoryGrid:create(parentContainer, cellSize)
     if UDim2 and type(UDim2.new)=="function" then
         layout.CellSize = cellSize or UDim2.new(0, 80, 0, 80)
         layout.CellPadding = UDim2.new(0, 5, 0, 5)
-        layout.FillDirection = Enum.FillDirection.Horizontal
-        layout.SortOrder = Enum.SortOrder.LayoutOrder
+        if Enum and Enum.FillDirection and Enum.SortOrder then
+            layout.FillDirection = Enum.FillDirection.Horizontal
+            layout.SortOrder = Enum.SortOrder.LayoutOrder
+        end
     end
     parent(layout, frame)
     self.container = frame
