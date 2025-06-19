@@ -65,6 +65,12 @@ function GuiUtil.getPlayerGui()
             end
         end
     end
+    local okCore, core = pcall(function()
+        return game:GetService("CoreGui")
+    end)
+    if okCore and core then
+        return core
+    end
     return nil
 end
 
