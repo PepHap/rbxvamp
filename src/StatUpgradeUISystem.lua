@@ -73,18 +73,19 @@ local function ensureGui()
     return gui
 end
 
-function StatUpgradeUISystem:start(statSys)
+function StatUpgradeUISystem:start(statSys, parentGui)
     self.statSystem = statSys or self.statSystem or StatUpgradeSystem
-    local gui = ensureGui()
-    if self.statListFrame then
-        if self.statListFrame.Parent ~= gui then
-            parent(self.statListFrame, gui)
-            self.gui = gui
-        end
-        self:update()
-        self:setVisible(self.visible)
-        return
+    local guiRoot = ensureGui()
+    local parentTarget = parentGui or guiRoot
+    if not self.statListFrame then
+        -- create container frame on first run
+        self.statListFrame = createInstance("Frame")
+        self.statListFrame.Name = "StatList"
     end
+    if self.statListFrame.Parent ~= parentTarget then
+        parent(self.statListFrame, parentTarget)
+    end
+    self.gui = parentTarget
     self:update()
     self:setVisible(self.visible)
 end

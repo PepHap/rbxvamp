@@ -77,21 +77,17 @@ local function ensureGui()
     return gui
 end
 
-function CompanionUISystem:start(compSys)
+function CompanionUISystem:start(compSys, parentGui)
     self.companionSystem = compSys or self.companionSystem or {companions = {}}
-    local gui = ensureGui()
-    if self.window then
-        if self.window.Parent ~= gui then
-            parent(self.window, gui)
-            self.gui = gui
-        end
-        return
+    local guiRoot = ensureGui()
+    local parentTarget = parentGui or guiRoot
+    if not self.window then
+        self.window = GuiUtil.createWindow("CompanionWindow")
     end
-
-    -- create a simple window frame; images are optional and removed to keep the repo text only
-    self.window = GuiUtil.createWindow("CompanionWindow")
-    parent(self.window, gui)
-
+    if self.window.Parent ~= parentTarget then
+        parent(self.window, parentTarget)
+    end
+    self.gui = parentTarget
     self:update()
     self:setVisible(self.visible)
 end
