@@ -50,6 +50,7 @@ local assets = ReplicatedStorage:WaitForChild("assets")
 local skillPool = require(assets:WaitForChild("skills"))
 local itemPool = require(assets:WaitForChild("items"))
 local companionPool = require(assets:WaitForChild("companions"))
+local EquipmentGenerator = require(script.Parent:WaitForChild("EquipmentGenerator"))
 
 -- Simple currency storage
 GachaSystem.tickets = {skill = 0, companion = 0, equipment = 0}
@@ -245,12 +246,11 @@ function GachaSystem:rollEquipment(slot)
     if not consumeCurrency(self, "equipment") then
         return nil
     end
-    local pool = itemPool[slot]
-    if not pool then
+    local rarity = self:rollRarity("equipment")
+    local reward = EquipmentGenerator.getRandomItem(slot, rarity, itemPool)
+    if not reward then
         return nil
     end
-    local rarity = self:rollRarity("equipment")
-    local reward = selectByRarity(pool, rarity)
     if self.inventory and self.inventory.AddItem then
         self.inventory:AddItem(reward)
     end
