@@ -2,6 +2,11 @@ local SkillSystem = require("src.SkillSystem")
 local CurrencySystem = require("src.CurrencySystem")
 
 describe("SkillSystem", function()
+    before_each(function()
+        SkillSystem.rand = function()
+            return 0 -- ensure upgrade success in tests
+        end
+    end)
     it("can add a skill", function()
         SkillSystem.skills = {}
         SkillSystem:addSkill({name = "Fireball", rarity = "A"})
