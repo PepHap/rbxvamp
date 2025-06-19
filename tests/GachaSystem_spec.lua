@@ -59,4 +59,10 @@ describe("GachaSystem", function()
         assert.equals(3, GachaSystem.tickets.skill)
         assert.equals(2, GachaSystem.crystals)
     end)
+
+    it("rolls multiple rewards until currency runs out", function()
+        GachaSystem.tickets.skill = 2
+        local rewards = GachaSystem:rollSkills(3)
+        assert.equals(2, #rewards)
+    end)
 end)
