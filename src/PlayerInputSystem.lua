@@ -85,7 +85,11 @@ end
 function PlayerInputSystem:setKeyState(key, isDown)
     self.keyStates[key] = isDown and true or false
     if key == self.inventoryKey and isDown then
-        MenuUISystem:openTab("Inventory")
+        if MenuUISystem.toggleTab then
+            MenuUISystem:toggleTab("Inventory")
+        else
+            MenuUISystem:openTab("Inventory")
+        end
     elseif key == self.skillKey and isDown then
         MenuUISystem:openTab("Skills")
     elseif key == self.companionKey and isDown then
