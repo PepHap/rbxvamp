@@ -241,6 +241,13 @@ if RunService:IsClient() then
     local StatUpgradeUISystem = require(script.Parent:WaitForChild("StatUpgradeUISystem"))
     StatUpgradeUISystem.statSystem = StatUpgradeSystem
     GameManager:addSystem("StatUI", StatUpgradeUISystem)
+
+    -- Admin console for privileged commands
+    local AdminConsoleSystem = require(script.Parent:FindFirstChild("AdminConsoleSystem"))
+    if AdminConsoleSystem then
+        AdminConsoleSystem.gameManager = GameManager
+        GameManager:addSystem("AdminConsole", AdminConsoleSystem)
+    end
 end
 
 -- Manual player input when auto battle is disabled
