@@ -125,4 +125,22 @@ function CrystalExchangeSystem:sellInventoryItem(itemSystem, index)
     return true
 end
 
+---Sells an equipped item from a slot for crystals.
+-- @param itemSystem table item system instance
+-- @param slot string equipment slot to sell
+-- @return boolean success
+function CrystalExchangeSystem:sellEquippedItem(itemSystem, slot)
+    if type(itemSystem) ~= "table" or not itemSystem.unequip then
+        return false
+    end
+    local item = itemSystem:unequip(slot)
+    if not item then
+        return false
+    end
+    local rarity = item.rarity
+    local reward = self.sellPrices[rarity] or 0
+    GachaSystem:addCrystals(reward)
+    return true
+end
+
 return CrystalExchangeSystem
