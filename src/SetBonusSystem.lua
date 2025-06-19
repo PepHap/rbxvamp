@@ -3,11 +3,11 @@
 
 local SetBonusSystem = {
     itemSystem = nil,
-    sets = {
-        {requirements = {Hat = "Mage Hat", Ring = "Mage Ring"}, bonus = {magic = 5}},
-        {requirements = {Armor = "Knight Armor", Weapon = "Knight Sword"}, bonus = {defense = 10}},
-    }
 }
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local assets = ReplicatedStorage:WaitForChild("assets")
+SetBonusSystem.sets = require(assets:WaitForChild("set_bonuses"))
 
 ---Returns a list of bonus tables for all active sets.
 function SetBonusSystem:getActiveBonuses()
