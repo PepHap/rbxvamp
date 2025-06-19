@@ -433,12 +433,13 @@ function GameManager:applySaveData(data)
     self.skillSystem:loadData(data.skills)
     self.companionSystem:loadData(data.companions)
     StatUpgradeSystem:loadData(data.stats)
+end
 
 ---Salvages an item from the inventory into currency and crystals.
 -- @param index number inventory index
 -- @return boolean success
 function GameManager:salvageInventoryItem(index)
-    local itemSys = self.inventory and self.inventory.itemSystem or self.itemSystem
+    local itemSys = self.itemSystem or (self.inventory and self.inventory.itemSystem)
     if not self.itemSalvageSystem or not itemSys then
         return false
     end
@@ -449,7 +450,7 @@ end
 -- @param slot string equipment slot name
 -- @return boolean success
 function GameManager:salvageEquippedItem(slot)
-    local itemSys = self.inventory and self.inventory.itemSystem or self.itemSystem
+    local itemSys = self.itemSystem or (self.inventory and self.inventory.itemSystem)
     if not self.itemSalvageSystem or not itemSys then
         return false
     end
