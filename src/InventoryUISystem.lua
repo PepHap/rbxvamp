@@ -166,20 +166,17 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     -- Clear cached slot references when restarting so elements
     -- are recreated properly even if children were destroyed
     self.slotRefs = nil
-    local gui = ensureGui(parentGui)
-    if self.window then
-        if parentGui and self.window.Parent ~= gui then
-            parent(self.window, gui)
-            self.gui = gui
-        end
-        return
+    local guiRoot = ensureGui()
+    local parentTarget = parentGui or guiRoot
+    if not self.window then
+        -- no bundled images; create a plain window instead
+        self.window = GuiUtil.createWindow("InventoryWindow")
+        GuiUtil.setVisible(self.window, self.visible)
     end
-
-    -- no bundled images; create a plain window instead
-    self.window = GuiUtil.createWindow("InventoryWindow")
-    -- hide the window before parenting to avoid a visible flicker
-    GuiUtil.setVisible(self.window, self.visible)
-    parent(self.window, gui)
+    if self.window.Parent ~= parentTarget then
+        parent(self.window, parentTarget)
+    end
+    self.gui = parentTarget
     if UDim2 and type(UDim2.new)=="function" then
         self.window.Size = UDim2.new(1, 0, 1, 0)
         self.window.Position = UDim2.new(0, 0, 0, 0)
@@ -208,43 +205,43 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
         end
     end
 
-    local prev = gui.FindFirstChild and gui:FindFirstChild("PrevPage") or createInstance("TextButton")
+    local prev = parentTarget.FindFirstChild and parentTarget:FindFirstChild("PrevPage") or createInstance("TextButton")
     prev.Name = "PrevPage"
     prev.Text = "<"
     if UDim2 and type(UDim2.new)=="function" then
         prev.Position = UDim2.new(0.45, -60, 1, -40)
     end
-    parent(prev, gui)
+    parent(prev, parentTarget)
     GuiUtil.connectButton(prev, function()
         InventoryUI:changePage(-1)
     end)
-    if type(gui) == "table" then gui.PrevPage = prev end
+    if type(parentTarget) == "table" then parentTarget.PrevPage = prev end
 
-    local nextBtn = gui.FindFirstChild and gui:FindFirstChild("NextPage") or createInstance("TextButton")
+    local nextBtn = parentTarget.FindFirstChild and parentTarget:FindFirstChild("NextPage") or createInstance("TextButton")
     nextBtn.Name = "NextPage"
     nextBtn.Text = ">"
     if UDim2 and type(UDim2.new)=="function" then
         nextBtn.Position = UDim2.new(0.55, 0, 1, -40)
     end
-    parent(nextBtn, gui)
+    parent(nextBtn, parentTarget)
     GuiUtil.connectButton(nextBtn, function()
         InventoryUI:changePage(1)
     end)
-    if type(gui) == "table" then gui.NextPage = nextBtn end
+    if type(parentTarget) == "table" then parentTarget.NextPage = nextBtn end
 
-    local upgradeBtn = gui.FindFirstChild and gui:FindFirstChild("Upgrade") or createInstance("TextButton")
+    local upgradeBtn = parentTarget.FindFirstChild and parentTarget:FindFirstChild("Upgrade") or createInstance("TextButton")
     upgradeBtn.Name = "Upgrade"
     upgradeBtn.Text = "Upgrade"
     if UDim2 and type(UDim2.new)=="function" then
         upgradeBtn.Position = UDim2.new(0.8, 0, 1, -40)
     end
-    parent(upgradeBtn, gui)
+    parent(upgradeBtn, parentTarget)
     GuiUtil.connectButton(upgradeBtn, function()
         if InventoryUI.selectedSlot then
             InventoryUI:upgradeSlot(InventoryUI.selectedSlot)
         end
     end)
-    if type(gui) == "table" then gui.Upgrade = upgradeBtn end
+    if type(parentTarget) == "table" then parentTarget.Upgrade = upgradeBtn end
     self.upgradeButton = upgradeBtn
 
     self:update()

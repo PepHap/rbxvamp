@@ -82,22 +82,16 @@ local function ensureGui(parent)
 end
 
 function SkillUISystem:start(skillSys, parentGui)
-    if self.window then
-        -- Re-parent when opened from a new GUI container
-        local gui = ensureGui(parentGui)
-        if gui and self.window.Parent ~= gui then
-            parent(self.window, gui)
-            self.gui = gui
-        end
-        return
-    end
     self.skillSystem = skillSys or self.skillSystem or SkillSystem.new()
-    local gui = ensureGui(parentGui)
-
-    -- window backgrounds were removed; use plain window frame
-    self.window = GuiUtil.createWindow("SkillWindow")
-    parent(self.window, gui)
-
+    local guiRoot = ensureGui()
+    local parentTarget = parentGui or guiRoot
+    if not self.window then
+        self.window = GuiUtil.createWindow("SkillWindow")
+    end
+    if self.window.Parent ~= parentTarget then
+        parent(self.window, parentTarget)
+    end
+    self.gui = parentTarget
     self:update()
     self:setVisible(self.visible)
 end
