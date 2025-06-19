@@ -90,10 +90,9 @@ function PlayerInputSystem:setKeyState(key, isDown)
         local invIndex = MenuUISystem:getTabIndex("Inventory")
         if MenuUISystem.visible and invIndex == MenuUISystem.currentTab then
             MenuUISystem:toggle()
-
-      if MenuUISystem.toggleTab then
+        end
+        if MenuUISystem.toggleTab then
             MenuUISystem:toggleTab("Inventory")
-
         else
             MenuUISystem:openTab("Inventory")
         end
