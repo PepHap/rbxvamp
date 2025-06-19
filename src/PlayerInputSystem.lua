@@ -27,6 +27,7 @@ local PlayerInputSystem = {
     questKey = "J",
     statsKey = "U",
     menuKey = "M",
+    adminKey = "F10",
     ---Reference to the SkillCastSystem for manual skill use.
     skillCastSystem = nil,
     ---Mapping from key names to skill slots.
@@ -48,6 +49,7 @@ local GachaUISystem = require(script.Parent:WaitForChild("GachaUISystem"))
 local RewardGaugeUISystem = require(script.Parent:WaitForChild("RewardGaugeUISystem"))
 local StatUpgradeUISystem = require(script.Parent:WaitForChild("StatUpgradeUISystem"))
 local QuestUISystem = require(script.Parent:WaitForChild("QuestUISystem"))
+local AdminConsoleSystem = require(script.Parent:FindFirstChild("AdminConsoleSystem"))
 
 -- Utility to connect Roblox input events when available
 local function connectRoblox()
@@ -98,6 +100,10 @@ function PlayerInputSystem:setKeyState(key, isDown)
         StatUpgradeUISystem:toggle()
     elseif key == self.menuKey and isDown then
         MenuUISystem:toggle()
+    elseif key == self.adminKey and isDown then
+        if AdminConsoleSystem then
+            AdminConsoleSystem:toggle()
+        end
     elseif isDown and self.skillCastSystem then
         local idx = self.skillKeyMap[key]
         if idx then
