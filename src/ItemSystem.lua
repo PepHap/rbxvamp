@@ -5,6 +5,7 @@ local ItemSystem = {}
 ItemSystem.__index = ItemSystem
 
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+local SlotConstants = require(script.Parent:WaitForChild("SlotConstants"))
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local assets = ReplicatedStorage:WaitForChild("assets")
@@ -26,14 +27,7 @@ do
     ItemSystem.maxLevel = max
 end
 
-local validSlots = {
-    Hat = true,
-    Necklace = true,
-    Ring = true,
-    Armor = true,
-    Accessory = true,
-    Weapon = true
-}
+local validSlots = SlotConstants.valid
 
 ---Returns a table of stats for the item taking the upgrade level into account.
 -- Each level adds a 10% bonus to the base stats.
@@ -58,15 +52,12 @@ end
 ---Creates a new item system instance with empty equipment slots.
 -- @return table ItemSystem instance
 function ItemSystem.new()
+    local slotTbl = {}
+    for _, name in ipairs(SlotConstants.list) do
+        slotTbl[name] = nil
+    end
     return setmetatable({
-        slots = {
-            Hat = nil,
-            Necklace = nil,
-            Ring = nil,
-            Armor = nil,
-            Accessory = nil,
-            Weapon = nil,
-        },
+        slots = slotTbl,
         ---List of unequipped item tables stored in the inventory.
         inventory = {},
     }, ItemSystem)

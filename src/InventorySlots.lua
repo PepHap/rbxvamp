@@ -11,7 +11,8 @@ local InventorySlots = {
     container = nil,
 }
 
-local slotNames = {"Hat", "Necklace", "Ring", "Armor", "Accessory", "Weapon"}
+local SlotConstants = require(script.Parent:WaitForChild("SlotConstants"))
+local slotNames = SlotConstants.list
 
 local function createInstance(className)
     if InventorySlots.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
