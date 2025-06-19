@@ -10,10 +10,11 @@ local ItemSalvageSystem = require(script.Parent:WaitForChild("ItemSalvageSystem"
 
 ---Creates a new InventoryModule instance.
 -- @param statSystem table optional stat system for base stats
-function InventoryModule.new(statSystem)
+function InventoryModule.new(statSystem, setSystem)
     local self = setmetatable({}, InventoryModule)
     self.itemSystem = ItemSystem.new()
     self.statSystem = statSystem or StatUpgradeSystem
+    self.setSystem = setSystem
     return self
 end
 
@@ -100,6 +101,9 @@ function InventoryModule:GetStats()
                 combined[k] = (combined[k] or 0) + v
             end
         end
+    end
+    if self.setSystem and self.setSystem.applyBonuses then
+        combined = self.setSystem:applyBonuses(combined)
     end
     return combined
 end
