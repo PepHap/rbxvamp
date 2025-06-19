@@ -129,7 +129,80 @@ end
 
 function AdminConsole:runCommand(text)
     if not text or text == "" then return end
-    local result = "Executed: "..text
+
+    -- Split the command string into words
+    local args = {}
+    for word in string.gmatch(text, "%S+") do
+        table.insert(args, word)
+    end
+    local cmd = table.remove(args, 1)
+    local result = "Executed: " .. text
+
+    -- Command handlers for basic game functionality
+    local handlers = {
+        currency = function(self, a)
+            local kind = a[1]
+            local amount = tonumber(a[2]) or 0
+            local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+            if kind then
+                CurrencySystem:add(kind, amount)
+                return string.format("Added %d %s", amount, kind)
+            end
+        end,
+        ticket = function(self, a)
+            local kind = a[1]
+            local amount = tonumber(a[2]) or 1
+            local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
+            if kind then
+                GachaSystem:addTickets(kind, amount)
+                return string.format("Added %d %s tickets", amount, kind)
+            end
+        end,
+        crystals = function(self, a)
+            local amount = tonumber(a[1]) or 1
+            local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
+            GachaSystem:addCrystals(amount)
+            return string.format("Added %d crystals", amount)
+        end,
+        roll = function(self, a)
+            if not self.gameManager then return "No manager" end
+            local kind = a[1]
+            if kind == "skill" then
+                local r = self.gameManager:rollSkill()
+                return r and ("Rolled " .. r.name) or "No currency"
+            elseif kind == "companion" then
+                local r = self.gameManager:rollCompanion()
+                return r and ("Rolled " .. r.name) or "No currency"
+            elseif kind == "equipment" then
+                local slot = a[2] or "Weapon"
+                local r = self.gameManager:rollEquipment(slot)
+                return r and string.format("Rolled %s (%s)", r.name, slot) or "No currency"
+            end
+        end,
+        upgrade = function(self, a)
+            if not self.gameManager then return "No manager" end
+            local slot = a[1]
+            local amount = tonumber(a[2]) or 1
+            local currency = a[3] or "gold"
+            local itemSys = self.gameManager.itemSystem
+            if itemSys and slot then
+                local ok = itemSys:upgradeItem(slot, amount, currency)
+                if ok then
+                    return string.format("Upgraded %s by %d", slot, amount)
+                end
+            end
+            return "Upgrade failed"
+        end,
+    }
+
+    local handler = handlers[cmd]
+    if handler then
+        local ok, msg = pcall(handler, self, args)
+        if ok and msg then
+            result = "Executed: " .. text .. " - " .. msg
+        end
+    end
+
     if type(self.outputLabel) == "table" then
         self.outputLabel.Text = result
     else
