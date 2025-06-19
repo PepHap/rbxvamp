@@ -81,6 +81,18 @@ local function ensureGui()
     return gui
 end
 
+local function clearChildren(container)
+    if typeof and typeof(container) == "Instance" and container.GetChildren then
+        for _, child in ipairs(container:GetChildren()) do
+            if child.Destroy then
+                child:Destroy()
+            end
+        end
+    elseif type(container) == "table" then
+        container.children = {}
+    end
+end
+
 function RewardGaugeUISystem:start()
     local gui = ensureGui()
     if self.window then
@@ -117,6 +129,13 @@ function RewardGaugeUISystem:showOptions()
     if not opts then return nil end
     local gui = ensureGui()
     local parentGui = self.window or gui
+    if self.optionButtons then
+        for _, btn in ipairs(self.optionButtons) do
+            if btn.Destroy then
+                btn:Destroy()
+            end
+        end
+    end
     self.optionButtons = {}
     parentGui.optionButtons = self.optionButtons
     for i, opt in ipairs(opts) do
@@ -134,6 +153,13 @@ end
 
 function RewardGaugeUISystem:choose(index)
     local chosen = RewardGaugeSystem:choose(index)
+    if self.optionButtons then
+        for _, btn in ipairs(self.optionButtons) do
+            if btn.Destroy then
+                btn:Destroy()
+            end
+        end
+    end
     self.optionButtons = nil
     self:update()
     return chosen
