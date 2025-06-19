@@ -118,6 +118,23 @@ function GachaSystem:rollSkill()
     return selectByRarity(skillPool, rarity)
 end
 
+---Rolls multiple skills and returns the list of rewards.
+--  Currency is consumed per roll until exhausted.
+-- @param count number quantity of rolls
+-- @return table list of skill tables
+function GachaSystem:rollSkills(count)
+    local results = {}
+    local n = tonumber(count) or 1
+    for i = 1, n do
+        local reward = self:rollSkill()
+        if not reward then
+            break
+        end
+        table.insert(results, reward)
+    end
+    return results
+end
+
 ---Rolls a companion reward using available currency.
 -- @return table|nil selected companion
 function GachaSystem:rollCompanion()
@@ -126,6 +143,22 @@ function GachaSystem:rollCompanion()
     end
     local rarity = self:rollRarity()
     return selectByRarity(companionPool, rarity)
+end
+
+---Rolls multiple companions.
+-- @param count number quantity of rolls
+-- @return table list of companion tables
+function GachaSystem:rollCompanions(count)
+    local results = {}
+    local n = tonumber(count) or 1
+    for i = 1, n do
+        local reward = self:rollCompanion()
+        if not reward then
+            break
+        end
+        table.insert(results, reward)
+    end
+    return results
 end
 
 ---Rolls an equipment reward for the given slot.
@@ -141,6 +174,23 @@ function GachaSystem:rollEquipment(slot)
     end
     local rarity = self:rollRarity()
     return selectByRarity(pool, rarity)
+end
+
+---Rolls equipment multiple times for the given slot.
+-- @param slot string item slot
+-- @param count number quantity of rolls
+-- @return table list of item tables
+function GachaSystem:rollEquipmentMultiple(slot, count)
+    local results = {}
+    local n = tonumber(count) or 1
+    for i = 1, n do
+        local reward = self:rollEquipment(slot)
+        if not reward then
+            break
+        end
+        table.insert(results, reward)
+    end
+    return results
 end
 
 return GachaSystem
