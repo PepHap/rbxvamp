@@ -296,7 +296,9 @@ GameManager:addSystem("ProgressMap", ProgressMapSystem)
 -- Simple map UI
 local ProgressMapUISystem = require(script.Parent:WaitForChild("ProgressMapUISystem"))
 ProgressMapUISystem.progressSystem = ProgressMapSystem
-GameManager:addSystem("ProgressMapUI", ProgressMapUISystem)
+if RunService:IsClient() then
+    GameManager:addSystem("ProgressMapUI", ProgressMapUISystem)
+end
 
 -- Tutorial hints
 local TutorialSystem = require(script.Parent:WaitForChild("TutorialSystem"))

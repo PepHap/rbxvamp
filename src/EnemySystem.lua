@@ -200,7 +200,11 @@ local function spawnModel(enemy)
                     armorBar.Parent = billboardGui
                 end
                 billboardGui.Parent = model
-                model.billboardGui = {textLabel = textLabel, healthBar = healthBar, armorBar = armorBar}
+                if EnemySystem.useRobloxObjects then
+                    enemy.billboardGui = {textLabel = textLabel, healthBar = healthBar, armorBar = armorBar}
+                else
+                    model.billboardGui = {textLabel = textLabel, healthBar = healthBar, armorBar = armorBar}
+                end
                 model.Parent = workspaceService
             end
             enemy.model = model
