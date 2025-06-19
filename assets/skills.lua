@@ -44,6 +44,36 @@ return {
         damage = 8,
         radius = 3,
         effects = {"Slow"}
+    },
+    {
+        name = "Wind Slash",
+        rarity = "C",
+        image = "rbxassetid://123459",
+        module = "WindSlash",
+        cooldown = 2,
+        damage = 6,
+        radius = 3,
+        effects = {"Bleed"}
+    },
+    {
+        name = "Arcane Burst",
+        rarity = "S",
+        image = "rbxassetid://123460",
+        module = "ArcaneBurst",
+        cooldown = 8,
+        damage = 25,
+        radius = 6,
+        effects = {"Burn"}
+    },
+    {
+        name = "Meteor Strike",
+        rarity = "SS",
+        image = "rbxassetid://123461",
+        module = "MeteorStrike",
+        cooldown = 12,
+        damage = 40,
+        radius = 8,
+        effects = {"Burn"}
     }
 }
 
