@@ -247,9 +247,16 @@ local function renderEquipment(container, items)
         local btn = InventoryUI.slotRefs[slot]
         if btn then
             local item = items.slots[slot]
-            btn.Text = item and item.name or slot
             if item then
+                local lvl = tonumber(item.level)
+                if lvl and lvl > 1 then
+                    btn.Text = string.format("%s Lv%d", item.name, lvl)
+                else
+                    btn.Text = item.name
+                end
                 applyRarityColor(btn, item.rarity)
+            else
+                btn.Text = slot
             end
             if btn.SetAttribute then
                 btn:SetAttribute("Slot", slot)
