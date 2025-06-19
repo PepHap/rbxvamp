@@ -136,6 +136,11 @@ SetBonusSystem.itemSystem = GameManager.itemSystem
 GameManager.setBonusSystem = SetBonusSystem
 GameManager:addSystem("SetBonuses", SetBonusSystem)
 
+-- Item salvage handling for converting equipment into currency
+local ItemSalvageSystem = require(script.Parent:WaitForChild("ItemSalvageSystem"))
+GameManager.itemSalvageSystem = ItemSalvageSystem
+GameManager:addSystem("ItemSalvage", ItemSalvageSystem)
+
 -- Quests provide structured objectives and rewards
 local QuestSystem = require(script.Parent:WaitForChild("QuestSystem"))
 GameManager:addSystem("Quest", QuestSystem)
@@ -390,6 +395,32 @@ function GameManager:upgradeItemWithCrystals(slot, amount, currencyType)
     -- Fall back to the one provided by the inventory module.
     local itemSys = self.itemSystem or (self.inventory and self.inventory.itemSystem)
     return self.crystalExchangeSystem:upgradeItemWithCrystals(itemSys, slot, amount, currencyType)
+end
+
+---Salvages an item from the inventory into currency and crystals.
+-- @param index number inventory index
+-- @return boolean success
+function GameManager:salvageInventoryItem(index)
+    local itemSys = self.inventory and self.inventory.itemSystem or self.itemSystem
+    if not self.itemSalvageSystem or not itemSys then
+        return false
+    end
+    return self.itemSalvageSystem:salvageFromInventory(itemSys, index)
+end
+
+---Salvages an equipped item from the given slot.
+-- @param slot string equipment slot name
+-- @return boolean success
+function GameManager:salvageEquippedItem(slot)
+    local itemSys = self.inventory and self.inventory.itemSystem or self.itemSystem
+    if not self.itemSalvageSystem or not itemSys then
+        return false
+    end
+    local itm = itemSys:unequip(slot)
+    if not itm then
+        return false
+    end
+    return self.itemSalvageSystem:salvageItem(itm)
 end
 
 ---Loads persistent data for a player using the Save system.
