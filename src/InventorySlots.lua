@@ -43,10 +43,18 @@ end
 -- @return table table of slot references indexed by slot name
 function InventorySlots:create(parentFrame)
     if self.container then
-        if parentFrame then
-            parent(self.container, parentFrame)
+        local ok, parentProp = pcall(function()
+            return self.container.Parent
+        end)
+        if not ok or parentProp == nil then
+            self.container = nil
+            self.slots = {}
+        else
+            if parentFrame then
+                parent(self.container, parentFrame)
+            end
+            return self.slots
         end
-        return self.slots
     end
     local frame = createInstance("Frame")
     frame.Name = "EquipmentSlots"
