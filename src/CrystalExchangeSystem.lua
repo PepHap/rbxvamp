@@ -100,4 +100,33 @@ function CrystalExchangeSystem:upgradeItemWithCrystals(itemSystem, slot, amount,
     return ok
 end
 
+---Price in crystals when selling equipment by rarity
+CrystalExchangeSystem.sellPrices = {
+    C = 1,
+    D = 1,
+    B = 3,
+    A = 5,
+    S = 10,
+    SS = 20,
+    SSS = 50,
+}
+
+---Sells an inventory item for crystals.
+-- @param itemSystem table item system instance
+-- @param index number inventory index to sell
+-- @return boolean success
+function CrystalExchangeSystem:sellInventoryItem(itemSystem, index)
+    if type(itemSystem) ~= "table" then
+        return false
+    end
+    local item = itemSystem:removeItem(index)
+    if not item then
+        return false
+    end
+    local rarity = item.rarity
+    local reward = self.sellPrices[rarity] or 0
+    GachaSystem.crystals = (GachaSystem.crystals or 0) + reward
+    return true
+end
+
 return CrystalExchangeSystem
