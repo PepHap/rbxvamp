@@ -105,7 +105,16 @@ function InventoryGrid:updateCell(index, item)
     else
         btn.Index = index
     end
-    btn.Text = item and item.name or ""
+    if item then
+        local lvl = tonumber(item.level)
+        if lvl and lvl > 1 then
+            btn.Text = string.format("%s Lv%d", item.name, lvl)
+        else
+            btn.Text = item.name
+        end
+    else
+        btn.Text = ""
+    end
 end
 
 function InventoryGrid:removeCell(index)
