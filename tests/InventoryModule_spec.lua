@@ -74,5 +74,16 @@ describe("InventoryModule", function()
         assert.equals(3, CurrencySystem:get("gold"))
         assert.equals(1, GachaSystem.crystals)
     end)
+
+    it("returns a copy of equipped items", function()
+        local inv = InventoryModule.new(StatUpgradeSystem)
+        inv:EquipItem("Hat", {name="Cap", slot="Hat"})
+        local eq = inv:GetEquippedItems()
+        assert.is_table(eq)
+        assert.equals("Cap", eq.Hat.name)
+        -- modify returned table should not affect stored item
+        eq.Hat.name = "Other"
+        assert.equals("Cap", inv.itemSystem.slots.Hat.name)
+    end)
 end)
 

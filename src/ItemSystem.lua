@@ -155,6 +155,22 @@ function ItemSystem:unequip(slot)
     return removed
 end
 
+---Returns a copy of the currently equipped items keyed by slot name.
+-- @return table slot->item table
+function ItemSystem:getEquippedItems()
+    local result = {}
+    for slot, itm in pairs(self.slots) do
+        if itm then
+            local copy = {}
+            for k, v in pairs(itm) do
+                copy[k] = v
+            end
+            result[slot] = copy
+        end
+    end
+    return result
+end
+
 ---Upgrades the level of the item in the specified slot when enough currency
 --  is provided. Costs for each level are defined in the ``upgradeCosts`` asset
 --  table.
