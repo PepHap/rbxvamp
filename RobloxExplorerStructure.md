@@ -13,6 +13,7 @@ ServerScriptService
         GachaSystem (ModuleScript)
         GameManager (ModuleScript)
         ItemSystem (ModuleScript)
+        ItemSalvageSystem (ModuleScript)
         KeySystem (ModuleScript)
         LevelSystem (ModuleScript)
         PlayerLevelSystem (ModuleScript)
