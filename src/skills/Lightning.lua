@@ -1,4 +1,14 @@
-local EnvironmentUtil = require(script.Parent.Parent:WaitForChild("EnvironmentUtil"))
+local EnvironmentUtil
+do
+    local ok, mod = pcall(function()
+        return script.Parent.Parent:WaitForChild("EnvironmentUtil")
+    end)
+    if ok and mod then
+        EnvironmentUtil = require(mod)
+    else
+        EnvironmentUtil = require("src.EnvironmentUtil")
+    end
+end
 local Lightning = {
     useRobloxObjects = EnvironmentUtil.detectRoblox(),
 }
