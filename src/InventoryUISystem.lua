@@ -152,6 +152,9 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     self.itemSystem = items or self.itemSystem
     self.statSystem = statSystem or self.statSystem
     self.setSystem = setSystem or self.setSystem
+    -- Clear cached slot references when restarting so elements
+    -- are recreated properly even if children were destroyed
+    self.slotRefs = nil
     local gui = ensureGui(parentGui)
 
     -- no bundled images; create a plain window instead
