@@ -32,10 +32,9 @@ function CrystalExchangeSystem:buyTickets(kind, amount)
         return false
     end
     local total = price * n
-    if (GachaSystem.crystals or 0) < total then
+    if not GachaSystem:spendCrystals(total) then
         return false
     end
-    GachaSystem.crystals = GachaSystem.crystals - total
     GachaSystem.tickets[kind] = (GachaSystem.tickets[kind] or 0) + n
     return true
 end
@@ -51,10 +50,9 @@ function CrystalExchangeSystem:buyCurrency(kind, amount)
         return false
     end
     local total = price * n
-    if (GachaSystem.crystals or 0) < total then
+    if not GachaSystem:spendCrystals(total) then
         return false
     end
-    GachaSystem.crystals = GachaSystem.crystals - total
     CurrencySystem:add(kind, n)
     return true
 end
@@ -90,11 +88,9 @@ function CrystalExchangeSystem:upgradeItemWithCrystals(itemSystem, slot, amount,
     end
 
     local crystalCost = currencyNeeded * price
-    if (GachaSystem.crystals or 0) < crystalCost then
+    if not GachaSystem:spendCrystals(crystalCost) then
         return false
     end
-
-    GachaSystem.crystals = GachaSystem.crystals - crystalCost
     CurrencySystem:add(currencyType, currencyNeeded)
     local ok = itemSystem:upgradeItem(slot, target - current, currencyType)
     return ok
@@ -125,7 +121,7 @@ function CrystalExchangeSystem:sellInventoryItem(itemSystem, index)
     end
     local rarity = item.rarity
     local reward = self.sellPrices[rarity] or 0
-    GachaSystem.crystals = (GachaSystem.crystals or 0) + reward
+    GachaSystem:addCrystals(reward)
     return true
 end
 

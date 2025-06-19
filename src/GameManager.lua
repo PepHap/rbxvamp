@@ -433,6 +433,7 @@ function GameManager:applySaveData(data)
     self.skillSystem:loadData(data.skills)
     self.companionSystem:loadData(data.companions)
     StatUpgradeSystem:loadData(data.stats)
+end
 
 ---Salvages an item from the inventory into currency and crystals.
 -- @param index number inventory index

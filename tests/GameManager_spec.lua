@@ -139,6 +139,7 @@ describe("GameManager", function()
         assert.equals(5, CurrencySystem:get("gold"))
         assert.equals(2, GachaSystem.tickets.skill)
         assert.equals(3, StatUpgradeSystem.stats.Health.level)
+    end)
 
     it("salvages inventory items via GameManager", function()
         local ItemSystem = require("src.ItemSystem")
@@ -146,6 +147,7 @@ describe("GameManager", function()
         local items = ItemSystem.new()
         items:addItem({name = "Cap", slot = "Hat", rarity = "C"})
         GameManager.itemSystem = items
+        GameManager.inventory.itemSystem = items
         Salvage.called = false
         Salvage.salvageFromInventory = function(_, itemSys, index)
             Salvage.called = {itemSys, index}
@@ -163,6 +165,7 @@ describe("GameManager", function()
         local items = ItemSystem.new()
         items:equip("Ring", {name = "Ring", slot = "Ring", rarity = "C"})
         GameManager.itemSystem = items
+        GameManager.inventory.itemSystem = items
         Salvage.calledItem = nil
         Salvage.salvageItem = function(_, itm)
             Salvage.calledItem = itm

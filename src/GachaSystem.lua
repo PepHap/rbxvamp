@@ -82,6 +82,21 @@ function GachaSystem:addCrystals(amount)
     self.crystals = self.crystals + n
 end
 
+---Attempts to spend the requested number of crystals.
+-- @param amount number quantity to deduct
+-- @return boolean success
+function GachaSystem:spendCrystals(amount)
+    local n = tonumber(amount) or 0
+    if n <= 0 then
+        return false
+    end
+    if self.crystals >= n then
+        self.crystals = self.crystals - n
+        return true
+    end
+    return false
+end
+
 ---Adds gacha tickets of the given kind.
 -- @param kind string ticket type
 -- @param amount number quantity
