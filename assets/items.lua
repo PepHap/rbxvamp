@@ -61,5 +61,5 @@ return {
         {name = "Void Edge", rarity = "SS", slot = "Weapon", stats = {attack = 20}},
         {name = "Mythic Blade", rarity = "SS", slot = "Weapon", stats = {attack = 20}},
         {name = "Omega Breaker", rarity = "SSS", slot = "Weapon", stats = {attack = 40}},
-    }
+    },
 }
