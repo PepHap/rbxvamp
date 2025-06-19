@@ -19,7 +19,7 @@ PlayerSystem.position = {x = 0, y = 0, z = 0}
 ---Reference to the player's model table or Instance.
 PlayerSystem.model = nil
 
-local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+local LevelSystem -- lazy loaded to avoid circular dependency
 local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
 
 ---Maximum player health.
@@ -50,7 +50,13 @@ end
 
 ---Handles player death and notifies the LevelSystem.
 function PlayerSystem:onDeath()
-    LevelSystem:onPlayerDeath()
+    -- load LevelSystem here to avoid circular require error
+    if not LevelSystem then
+        LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+    end
+    if LevelSystem and LevelSystem.onPlayerDeath then
+        LevelSystem:onPlayerDeath()
+    end
     self.health = self.maxHealth
     EventManager:Get("PlayerDied"):Fire()
 end
