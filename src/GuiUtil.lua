@@ -121,7 +121,13 @@ function GuiUtil.createWindow(name, image)
     local frame = createInstance("Frame")
     frame.Name = name or "Window"
     if frame.BackgroundTransparency ~= nil then
-        frame.BackgroundTransparency = 1
+        -- Provide a visible background when no theme is available
+        frame.BackgroundTransparency = Theme and 1 or 0.2
+    end
+    if frame.BackgroundColor3 ~= nil and not Theme then
+        local col = Color3 and Color3.fromRGB and Color3.fromRGB(20, 20, 30)
+            or {r = 20, g = 20, b = 30}
+        frame.BackgroundColor3 = toColor3(col)
     end
     if UDim2 and type(UDim2.new)=="function" then
         local defaultSize = UDim2.new(0, 300, 0, 200)

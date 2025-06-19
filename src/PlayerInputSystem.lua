@@ -85,8 +85,15 @@ end
 function PlayerInputSystem:setKeyState(key, isDown)
     self.keyStates[key] = isDown and true or false
     if key == self.inventoryKey and isDown then
-        if MenuUISystem.toggleTab then
+
+    -- Toggle the inventory tab when it is already active
+        local invIndex = MenuUISystem:getTabIndex("Inventory")
+        if MenuUISystem.visible and invIndex == MenuUISystem.currentTab then
+            MenuUISystem:toggle()
+
+      if MenuUISystem.toggleTab then
             MenuUISystem:toggleTab("Inventory")
+
         else
             MenuUISystem:openTab("Inventory")
         end
