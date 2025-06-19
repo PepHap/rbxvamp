@@ -177,6 +177,8 @@ end
 function CompanionUISystem:toggle()
     if not self.gui and type(self.start) == "function" then
         self:start(self.companionSystem)
+    elseif self.window and self.window.Parent ~= self.gui then
+        parent(self.window, self.gui)
     end
     self:setVisible(not self.visible)
 end

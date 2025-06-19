@@ -120,17 +120,12 @@ local function clearChildren(container)
     end
 end
 
-local function ensureGui(parent)
+local function ensureGui()
     if InventoryUI.gui then
         return InventoryUI.gui
     end
-    if parent then
-        InventoryUI.gui = parent
-        return parent
-    end
     local gui = createInstance("ScreenGui")
     gui.Name = "InventoryUI"
-    InventoryUI.gui = gui
     if gui.Enabled ~= nil then
         gui.Enabled = true
     end
@@ -140,6 +135,7 @@ local function ensureGui(parent)
             gui.Parent = pgui
         end
     end
+    InventoryUI.gui = gui
     return gui
 end
 
@@ -166,11 +162,11 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     -- Clear cached slot references when restarting so elements
     -- are recreated properly even if children were destroyed
     self.slotRefs = nil
-    local gui = ensureGui(parentGui)
+    local rootGui = ensureGui()
+    local targetGui = parentGui or rootGui
     if self.window then
-        if parentGui and self.window.Parent ~= gui then
-            parent(self.window, gui)
-            self.gui = gui
+        if self.window.Parent ~= targetGui then
+            parent(self.window, targetGui)
         end
         return
     end
@@ -179,7 +175,7 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     self.window = GuiUtil.createWindow("InventoryWindow")
     -- hide the window before parenting to avoid a visible flicker
     GuiUtil.setVisible(self.window, self.visible)
-    parent(self.window, gui)
+    parent(self.window, targetGui)
     if UDim2 and type(UDim2.new)=="function" then
         self.window.Size = UDim2.new(1, 0, 1, 0)
         self.window.Position = UDim2.new(0, 0, 0, 0)
@@ -208,43 +204,43 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
         end
     end
 
-    local prev = gui.FindFirstChild and gui:FindFirstChild("PrevPage") or createInstance("TextButton")
+    local prev = targetGui.FindFirstChild and targetGui:FindFirstChild("PrevPage") or createInstance("TextButton")
     prev.Name = "PrevPage"
     prev.Text = "<"
     if UDim2 and type(UDim2.new)=="function" then
         prev.Position = UDim2.new(0.45, -60, 1, -40)
     end
-    parent(prev, gui)
+    parent(prev, targetGui)
     GuiUtil.connectButton(prev, function()
         InventoryUI:changePage(-1)
     end)
-    if type(gui) == "table" then gui.PrevPage = prev end
+    if type(targetGui) == "table" then targetGui.PrevPage = prev end
 
-    local nextBtn = gui.FindFirstChild and gui:FindFirstChild("NextPage") or createInstance("TextButton")
+    local nextBtn = targetGui.FindFirstChild and targetGui:FindFirstChild("NextPage") or createInstance("TextButton")
     nextBtn.Name = "NextPage"
     nextBtn.Text = ">"
     if UDim2 and type(UDim2.new)=="function" then
         nextBtn.Position = UDim2.new(0.55, 0, 1, -40)
     end
-    parent(nextBtn, gui)
+    parent(nextBtn, targetGui)
     GuiUtil.connectButton(nextBtn, function()
         InventoryUI:changePage(1)
     end)
-    if type(gui) == "table" then gui.NextPage = nextBtn end
+    if type(targetGui) == "table" then targetGui.NextPage = nextBtn end
 
-    local upgradeBtn = gui.FindFirstChild and gui:FindFirstChild("Upgrade") or createInstance("TextButton")
+    local upgradeBtn = targetGui.FindFirstChild and targetGui:FindFirstChild("Upgrade") or createInstance("TextButton")
     upgradeBtn.Name = "Upgrade"
     upgradeBtn.Text = "Upgrade"
     if UDim2 and type(UDim2.new)=="function" then
         upgradeBtn.Position = UDim2.new(0.8, 0, 1, -40)
     end
-    parent(upgradeBtn, gui)
+    parent(upgradeBtn, targetGui)
     GuiUtil.connectButton(upgradeBtn, function()
         if InventoryUI.selectedSlot then
             InventoryUI:upgradeSlot(InventoryUI.selectedSlot)
         end
     end)
-    if type(gui) == "table" then gui.Upgrade = upgradeBtn end
+    if type(targetGui) == "table" then targetGui.Upgrade = upgradeBtn end
     self.upgradeButton = upgradeBtn
 
     self:update()
@@ -511,6 +507,9 @@ end
 function InventoryUI:toggle()
     if not self.gui then
         self:start(self.itemSystem)
+    elseif self.window and self.window.Parent ~= self.gui then
+        -- ensure the window is parented to the root gui when toggled directly
+        parent(self.window, self.gui)
     end
     self:setVisible(not self.visible)
 end

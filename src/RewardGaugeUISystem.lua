@@ -110,6 +110,16 @@ function RewardGaugeUISystem:showOptions()
     if not opts then return nil end
     local gui = ensureGui()
     local parentGui = self.window or gui
+    -- remove any existing option buttons before creating new ones
+    if self.optionButtons then
+        for _, btn in ipairs(self.optionButtons) do
+            if btn.Destroy then
+                btn:Destroy()
+            elseif btn.Parent then
+                btn.Parent = nil
+            end
+        end
+    end
     self.optionButtons = {}
     parentGui.optionButtons = self.optionButtons
     for i, opt in ipairs(opts) do
@@ -127,6 +137,16 @@ end
 
 function RewardGaugeUISystem:choose(index)
     local chosen = RewardGaugeSystem:choose(index)
+    -- clear option buttons after a choice is made
+    if self.optionButtons then
+        for _, btn in ipairs(self.optionButtons) do
+            if btn.Destroy then
+                btn:Destroy()
+            elseif btn.Parent then
+                btn.Parent = nil
+            end
+        end
+    end
     self.optionButtons = nil
     self:update()
     return chosen

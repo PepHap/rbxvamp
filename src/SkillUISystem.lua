@@ -58,36 +58,33 @@ local function parent(child, parentObj)
     end
 end
 
-local function ensureGui(parent)
+local function ensureGui()
     if SkillUISystem.gui then
         return SkillUISystem.gui
-    end
-    if parent then
-        SkillUISystem.gui = parent
-        return parent
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "SkillUI"
     if gui.Enabled ~= nil then
         gui.Enabled = true
     end
-    SkillUISystem.gui = gui
     if SkillUISystem.useRobloxObjects then
         local pgui = GuiUtil.getPlayerGui()
         if pgui then
             gui.Parent = pgui
         end
     end
+    SkillUISystem.gui = gui
     return gui
 end
 
 function SkillUISystem:start(skillSys, parentGui)
     self.skillSystem = skillSys or self.skillSystem or SkillSystem.new()
-    local gui = ensureGui(parentGui)
+    local rootGui = ensureGui()
+    local container = parentGui or rootGui
 
     -- window backgrounds were removed; use plain window frame
     self.window = GuiUtil.createWindow("SkillWindow")
-    parent(self.window, gui)
+    parent(self.window, container)
 
     self:update()
     self:setVisible(self.visible)
@@ -188,6 +185,8 @@ end
 function SkillUISystem:toggle()
     if not self.gui and type(self.start) == "function" then
         self:start(self.skillSystem)
+    elseif self.window and self.window.Parent ~= self.gui then
+        parent(self.window, self.gui)
     end
     self:setVisible(not self.visible)
 end
