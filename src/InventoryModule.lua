@@ -6,6 +6,7 @@ InventoryModule.__index = InventoryModule
 
 local ItemSystem = require(script.Parent:WaitForChild("ItemSystem"))
 local StatUpgradeSystem = require(script.Parent:WaitForChild("StatUpgradeSystem"))
+local ItemSalvageSystem = require(script.Parent:WaitForChild("ItemSalvageSystem"))
 
 ---Creates a new InventoryModule instance.
 -- @param statSystem table optional stat system for base stats
@@ -67,6 +68,20 @@ end
 -- @return boolean success
 function InventoryModule:UpgradeItem(slot, amount, currencyType)
     return self.itemSystem:upgradeItem(slot, amount, currencyType)
+end
+
+---Salvages an item from the inventory into currency and crystals.
+-- @param index number inventory index
+-- @return boolean success
+function InventoryModule:SalvageInventoryItem(index)
+    return ItemSalvageSystem:salvageFromInventory(self.itemSystem, index)
+end
+
+---Salvages an equipped item from the specified slot.
+-- @param slot string equipment slot name
+-- @return boolean success
+function InventoryModule:SalvageEquippedItem(slot)
+    return ItemSalvageSystem:salvageFromSlot(self.itemSystem, slot)
 end
 
 ---Returns a table of combined stats from base values and equipped items.

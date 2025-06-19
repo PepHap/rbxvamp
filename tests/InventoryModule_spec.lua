@@ -57,5 +57,22 @@ describe("InventoryModule", function()
         assert.is_true(ok)
         assert.equals(2, inv.itemSystem.slots.Weapon.level)
     end)
+
+    it("salvages inventory and equipped items", function()
+        local CurrencySystem = require("src.CurrencySystem")
+        local GachaSystem = require("src.GachaSystem")
+        CurrencySystem.balances = {gold = 0}
+        GachaSystem.crystals = 0
+        local inv = InventoryModule.new(StatUpgradeSystem)
+        inv:AddItem({name="Cap", slot="Hat", rarity="C"})
+        assert.is_true(inv:SalvageInventoryItem(1))
+        assert.equals(1, CurrencySystem:get("gold"))
+
+        inv:EquipItem("Weapon", {name="Sword", slot="Weapon", rarity="B"})
+        assert.is_true(inv:SalvageEquippedItem("Weapon"))
+        assert.is_nil(inv.itemSystem.slots.Weapon)
+        assert.equals(3, CurrencySystem:get("gold"))
+        assert.equals(1, GachaSystem.crystals)
+    end)
 end)
 
