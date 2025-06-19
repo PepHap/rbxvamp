@@ -149,6 +149,14 @@ end
 ---Initializes the Inventory UI and binds page buttons.
 -- @param items table ItemSystem instance
 function InventoryUI:start(items, parentGui, statSystem, setSystem)
+    if not items then
+        local ok, ItemSystemMod = pcall(function()
+            return require(script.Parent:WaitForChild("ItemSystem"))
+        end)
+        if ok and ItemSystemMod and ItemSystemMod.new then
+            items = ItemSystemMod.new()
+        end
+    end
     self.itemSystem = items or self.itemSystem
     self.statSystem = statSystem or self.statSystem
     self.setSystem = setSystem or self.setSystem
