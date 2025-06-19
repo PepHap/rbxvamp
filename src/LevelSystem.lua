@@ -14,7 +14,7 @@ local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
 local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
 local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
 local WaveConfig = require(script.Parent:WaitForChild("WaveConfig"))
-local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
+local PlayerSystem -- loaded on demand to avoid circular dependency
 
 --- Tracks the player's current level.
 --  Starts at ``1`` when the game begins.
@@ -116,6 +116,10 @@ end
 --  The explicit increment keeps compatibility with Lua 5.1.
 --  @return number The current level after the increment
 function LevelSystem:advance()
+    -- load PlayerSystem lazily to avoid circular require issues
+    if not PlayerSystem then
+        PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
+    end
     local nextLevel = self.currentLevel + 1
     local stageType = getStageType(nextLevel)
 
