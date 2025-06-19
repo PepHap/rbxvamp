@@ -76,4 +76,34 @@ function AchievementSystem:claim(id)
     return true
 end
 
+---Serializes achievement progress for saving.
+-- @return table table keyed by achievement id
+function AchievementSystem:saveData()
+    local data = {}
+    for _, def in ipairs(self.definitions) do
+        local p = ensureProgress(def.id)
+        data[def.id] = {
+            value = p.value,
+            completed = p.completed,
+            rewarded = p.rewarded,
+        }
+    end
+    return data
+end
+
+---Restores achievement progress from a saved table.
+-- @param data table table previously produced by ``saveData``
+function AchievementSystem:loadData(data)
+    if type(data) ~= "table" then return end
+    for _, def in ipairs(self.definitions) do
+        local entry = data[def.id]
+        if entry then
+            local p = ensureProgress(def.id)
+            p.value = tonumber(entry.value) or 0
+            p.completed = entry.completed or false
+            p.rewarded = entry.rewarded or false
+        end
+    end
+end
+
 return AchievementSystem

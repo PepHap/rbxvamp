@@ -116,6 +116,10 @@ describe("GameManager", function()
         CurrencySystem.balances = {gold = 5}
         GachaSystem.tickets.skill = 2
         StatUpgradeSystem.stats = {Health = {base = 10, level = 3}}
+        local AchievementSystem = require("src.AchievementSystem")
+        AchievementSystem.progress = {}
+        AchievementSystem:start()
+        AchievementSystem:addProgress("kills", 10)
 
         GameManager.itemSystem:equip("Weapon", {name = "Sword", slot = "Weapon"})
         GameManager.skillSystem:addSkill({name = "Fireball", rarity = "C"})
@@ -130,6 +134,8 @@ describe("GameManager", function()
         CurrencySystem.balances = {}
         GachaSystem.tickets.skill = 0
         StatUpgradeSystem.stats = {Health = {base = 10, level = 1}}
+        AchievementSystem.progress = {}
+        AchievementSystem:start()
 
         GameManager:applySaveData(data)
 
@@ -139,6 +145,7 @@ describe("GameManager", function()
         assert.equals(5, CurrencySystem:get("gold"))
         assert.equals(2, GachaSystem.tickets.skill)
         assert.equals(3, StatUpgradeSystem.stats.Health.level)
+        assert.equals(10, AchievementSystem.progress.kills_10.value)
     end)
 
     it("salvages inventory items via GameManager", function()
