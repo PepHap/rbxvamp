@@ -108,12 +108,23 @@ local function clearChildren(container)
 end
 
 local function ensureGui(parent)
-    if InventoryUI.gui then
+    if InventoryUI.gui and (not InventoryUI.useRobloxObjects or InventoryUI.gui.Parent) then
         return InventoryUI.gui
     end
     if parent then
         InventoryUI.gui = parent
         return parent
+    end
+    local pgui
+    if InventoryUI.useRobloxObjects then
+        pgui = GuiUtil.getPlayerGui()
+        if pgui then
+            local existing = pgui:FindFirstChild("InventoryUI")
+            if existing then
+                InventoryUI.gui = existing
+                return existing
+            end
+        end
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "InventoryUI"
@@ -121,11 +132,8 @@ local function ensureGui(parent)
     if gui.Enabled ~= nil then
         gui.Enabled = true
     end
-    if InventoryUI.useRobloxObjects then
-        local pgui = GuiUtil.getPlayerGui()
-        if pgui then
-            gui.Parent = pgui
-        end
+    if InventoryUI.useRobloxObjects and pgui then
+        gui.Parent = pgui
     end
     return gui
 end

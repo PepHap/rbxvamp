@@ -47,8 +47,19 @@ local function parent(child, parentObj)
 end
 
 local function ensureGui()
-    if CompanionUISystem.gui then
+    if CompanionUISystem.gui and (not CompanionUISystem.useRobloxObjects or CompanionUISystem.gui.Parent) then
         return CompanionUISystem.gui
+    end
+    local pgui
+    if CompanionUISystem.useRobloxObjects then
+        pgui = GuiUtil.getPlayerGui()
+        if pgui then
+            local existing = pgui:FindFirstChild("CompanionUI")
+            if existing then
+                CompanionUISystem.gui = existing
+                return existing
+            end
+        end
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "CompanionUI"
@@ -56,11 +67,8 @@ local function ensureGui()
         gui.Enabled = true
     end
     CompanionUISystem.gui = gui
-    if CompanionUISystem.useRobloxObjects then
-        local pgui = GuiUtil.getPlayerGui()
-        if pgui then
-            gui.Parent = pgui
-        end
+    if CompanionUISystem.useRobloxObjects and pgui then
+        gui.Parent = pgui
     end
     return gui
 end

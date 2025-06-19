@@ -26,16 +26,28 @@ local function parent(child, parentObj)
 end
 
 local function ensureGui()
-    if ProgressMapUI.gui then return ProgressMapUI.gui end
+    if ProgressMapUI.gui and (not ProgressMapUI.useRobloxObjects or ProgressMapUI.gui.Parent) then
+        return ProgressMapUI.gui
+    end
+    local pgui
+    if ProgressMapUI.useRobloxObjects then
+        pgui = GuiUtil.getPlayerGui()
+        if pgui then
+            local existing = pgui:FindFirstChild("ProgressMapUI")
+            if existing then
+                ProgressMapUI.gui = existing
+                return existing
+            end
+        end
+    end
     local gui = createInstance("ScreenGui")
     gui.Name = "ProgressMapUI"
     if gui.Enabled ~= nil then
         gui.Enabled = true
     end
     ProgressMapUI.gui = gui
-    if ProgressMapUI.useRobloxObjects then
-        local pgui = GuiUtil.getPlayerGui()
-        if pgui then gui.Parent = pgui end
+    if ProgressMapUI.useRobloxObjects and pgui then
+        gui.Parent = pgui
     end
     return gui
 end

@@ -47,12 +47,23 @@ local function parent(child, parentObj)
 end
 
 local function ensureGui(parent)
-    if SkillUISystem.gui then
+    if SkillUISystem.gui and (not SkillUISystem.useRobloxObjects or SkillUISystem.gui.Parent) then
         return SkillUISystem.gui
     end
     if parent then
         SkillUISystem.gui = parent
         return parent
+    end
+    local pgui
+    if SkillUISystem.useRobloxObjects then
+        pgui = GuiUtil.getPlayerGui()
+        if pgui then
+            local existing = pgui:FindFirstChild("SkillUI")
+            if existing then
+                SkillUISystem.gui = existing
+                return existing
+            end
+        end
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "SkillUI"
@@ -60,11 +71,8 @@ local function ensureGui(parent)
         gui.Enabled = true
     end
     SkillUISystem.gui = gui
-    if SkillUISystem.useRobloxObjects then
-        local pgui = GuiUtil.getPlayerGui()
-        if pgui then
-            gui.Parent = pgui
-        end
+    if SkillUISystem.useRobloxObjects and pgui then
+        gui.Parent = pgui
     end
     return gui
 end
