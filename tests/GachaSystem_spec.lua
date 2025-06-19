@@ -39,4 +39,15 @@ describe("GachaSystem", function()
         local reward = GachaSystem:rollSkill()
         assert.is_nil(reward)
     end)
+
+    it("saves and loads state", function()
+        GachaSystem.tickets.skill = 2
+        GachaSystem.crystals = 5
+        local saved = GachaSystem:saveData()
+        GachaSystem.tickets.skill = 0
+        GachaSystem.crystals = 0
+        GachaSystem:loadData(saved)
+        assert.equals(2, GachaSystem.tickets.skill)
+        assert.equals(5, GachaSystem.crystals)
+    end)
 end)

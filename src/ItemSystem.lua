@@ -174,4 +174,41 @@ function ItemSystem:upgradeItem(slot, amount, currencyType)
     return true
 end
 
+local function copy(tbl)
+    if type(tbl) ~= "table" then return tbl end
+    local t = {}
+    for k, v in pairs(tbl) do
+        t[k] = copy(v)
+    end
+    return t
+end
+
+---Serializes the current state of equipped and stored items.
+-- @return table data table
+function ItemSystem:toData()
+    return {
+        slots = copy(self.slots),
+        inventory = copy(self.inventory),
+    }
+end
+
+---Creates a new ItemSystem instance using saved data.
+-- @param data table serialized state
+-- @return table ItemSystem instance
+function ItemSystem.fromData(data)
+    local inst = ItemSystem.new()
+    if type(data) ~= "table" then
+        return inst
+    end
+    for slot, itm in pairs(data.slots or {}) do
+        if validSlots[slot] then
+            inst.slots[slot] = copy(itm)
+        end
+    end
+    for _, itm in ipairs(data.inventory or {}) do
+        table.insert(inst.inventory, copy(itm))
+    end
+    return inst
+end
+
 return ItemSystem
