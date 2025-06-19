@@ -139,6 +139,7 @@ describe("GameManager", function()
         assert.equals(5, CurrencySystem:get("gold"))
         assert.equals(2, GachaSystem.tickets.skill)
         assert.equals(3, StatUpgradeSystem.stats.Health.level)
+    end)
 
     it("salvages inventory items via GameManager", function()
         local ItemSystem = require("src.ItemSystem")
