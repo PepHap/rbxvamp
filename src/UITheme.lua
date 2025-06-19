@@ -82,4 +82,16 @@ function UITheme.styleLabel(lbl)
     addCorner(lbl)
 end
 
+---Styles an input TextBox control with the theme colors.
+-- Adds consistent font and rounded corners similar to buttons.
+-- @param input table|Instance TextBox object
+function UITheme.styleInput(input)
+    assign(input, {
+        Font = UITheme.font,
+        TextColor3 = UITheme.colors.labelText,
+        BackgroundColor3 = UITheme.colors.buttonBackground,
+    })
+    addCorner(input)
+end
+
 return UITheme
