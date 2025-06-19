@@ -355,6 +355,41 @@ function GameManager:chooseReward(index)
     return chosen
 end
 
+---Purchases gacha tickets using the crystal exchange system.
+-- @param kind string ticket type
+-- @param amount number number of tickets
+-- @return boolean success
+function GameManager:buyTickets(kind, amount)
+    if self.crystalExchangeSystem and self.crystalExchangeSystem.buyTickets then
+        return self.crystalExchangeSystem:buyTickets(kind, amount)
+    end
+    return false
+end
+
+---Purchases upgrade currency using crystals through the exchange system.
+-- @param kind string currency type
+-- @param amount number quantity to buy
+-- @return boolean success
+function GameManager:buyCurrency(kind, amount)
+    if self.crystalExchangeSystem and self.crystalExchangeSystem.buyCurrency then
+        return self.crystalExchangeSystem:buyCurrency(kind, amount)
+    end
+    return false
+end
+
+---Upgrades an equipped item by spending crystals instead of currency.
+-- @param slot string equipment slot name
+-- @param amount number levels to upgrade
+-- @param currencyType string currency used for pricing
+-- @return boolean success
+function GameManager:upgradeItemWithCrystals(slot, amount, currencyType)
+    if not self.crystalExchangeSystem then
+        return false
+    end
+    local itemSys = self.inventory and self.inventory.itemSystem or self.itemSystem
+    return self.crystalExchangeSystem:upgradeItemWithCrystals(itemSys, slot, amount, currencyType)
+end
+
 ---Loads persistent data for a player using the Save system.
 -- @param playerId string|number player identifier
 -- @return table data table

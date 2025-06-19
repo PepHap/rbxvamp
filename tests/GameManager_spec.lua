@@ -60,4 +60,44 @@ describe("GameManager", function()
         local MenuUISystem = require("src.MenuUISystem")
         assert.equals(MenuUISystem, GameManager.systems.MenuUI)
     end)
+
+    it("delegates ticket purchases to CrystalExchangeSystem", function()
+        local CrystalExchangeSystem = require("src.CrystalExchangeSystem")
+        CrystalExchangeSystem.last = nil
+        CrystalExchangeSystem.buyTickets = function(_, kind, amount)
+            CrystalExchangeSystem.last = {kind, amount}
+            return true
+        end
+        local ok = GameManager:buyTickets("skill", 2)
+        assert.is_true(ok)
+        assert.same({"skill", 2}, CrystalExchangeSystem.last)
+    end)
+
+    it("delegates currency purchases to CrystalExchangeSystem", function()
+        local CrystalExchangeSystem = require("src.CrystalExchangeSystem")
+        CrystalExchangeSystem.last = nil
+        CrystalExchangeSystem.buyCurrency = function(_, kind, amount)
+            CrystalExchangeSystem.last = {kind, amount}
+            return true
+        end
+        local ok = GameManager:buyCurrency("gold", 3)
+        assert.is_true(ok)
+        assert.same({"gold", 3}, CrystalExchangeSystem.last)
+    end)
+
+    it("upgrades items with crystals via GameManager", function()
+        local ItemSystem = require("src.ItemSystem")
+        local items = ItemSystem.new()
+        items:equip("Weapon", {name = "Sword", slot = "Weapon"})
+        GameManager.itemSystem = items
+        local CrystalExchangeSystem = require("src.CrystalExchangeSystem")
+        CrystalExchangeSystem.args = nil
+        CrystalExchangeSystem.upgradeItemWithCrystals = function(_, itemSys, slot, amount, currency)
+            CrystalExchangeSystem.args = {itemSys, slot, amount, currency}
+            return true
+        end
+        local ok = GameManager:upgradeItemWithCrystals("Weapon", 1, "gold")
+        assert.is_true(ok)
+        assert.same({items, "Weapon", 1, "gold"}, CrystalExchangeSystem.args)
+    end)
 end)
