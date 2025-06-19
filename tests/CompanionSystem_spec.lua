@@ -39,4 +39,15 @@ describe("CompanionSystem", function()
         assert.is_false(ok)
         assert.equals(1, CompanionSystem.companions[1].level)
     end)
+
+    it("serializes and loads companions", function()
+        CompanionSystem.companions = {}
+        CompanionSystem:add({name = "Wolf", rarity = "C", level = 2})
+        local data = CompanionSystem:saveData()
+        CompanionSystem.companions = {}
+        CompanionSystem:loadData(data)
+        assert.equals(1, #CompanionSystem.companions)
+        assert.equals("Wolf", CompanionSystem.companions[1].name)
+        assert.equals(2, CompanionSystem.companions[1].level)
+    end)
 end)

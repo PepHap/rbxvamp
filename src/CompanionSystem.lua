@@ -41,4 +41,29 @@ function CompanionSystem:upgradeCompanion(index, amount)
     return true
 end
 
+---Serializes all owned companions.
+function CompanionSystem:saveData()
+    local out = {}
+    for i, c in ipairs(self.companions) do
+        out[i] = {name = c.name, rarity = c.rarity, level = c.level}
+    end
+    return out
+end
+
+---Loads companion data from a previously saved table.
+-- @param data table list of companions
+function CompanionSystem:loadData(data)
+    self.companions = {}
+    if type(data) ~= "table" then
+        return
+    end
+    for _, c in ipairs(data) do
+        table.insert(self.companions, {
+            name = c.name,
+            rarity = c.rarity,
+            level = c.level or 1,
+        })
+    end
+end
+
 return CompanionSystem
