@@ -89,4 +89,18 @@ describe("GachaSystem", function()
         local rewards = GachaSystem:rollSkills(3)
         assert.equals(2, #rewards)
     end)
+
+    it("spends crystals when enough", function()
+        GachaSystem.crystals = 5
+        local ok = GachaSystem:spendCrystals(3)
+        assert.is_true(ok)
+        assert.equals(2, GachaSystem.crystals)
+    end)
+
+    it("fails spend when insufficient", function()
+        GachaSystem.crystals = 2
+        local ok = GachaSystem:spendCrystals(3)
+        assert.is_false(ok)
+        assert.equals(2, GachaSystem.crystals)
+    end)
 end)
