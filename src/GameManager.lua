@@ -167,6 +167,11 @@ local AutoSaveSystem = require(script.Parent:WaitForChild("AutoSaveSystem"))
 GameManager.autoSaveSystem = AutoSaveSystem
 GameManager:addSystem("AutoSave", AutoSaveSystem)
 
+-- Exchange crystals for tickets or upgrade currency
+local CrystalExchangeSystem = require(script.Parent:WaitForChild("CrystalExchangeSystem"))
+GameManager.crystalExchangeSystem = CrystalExchangeSystem
+GameManager:addSystem("CrystalExchange", CrystalExchangeSystem)
+
 -- Skill management and upgrades
 local SkillSystem = require(script.Parent:WaitForChild("SkillSystem"))
 GameManager.skillSystem = SkillSystem.new()

@@ -35,6 +35,9 @@ _G.script = _G.script or {
     Parent = {
         WaitForChild = function(_, name)
             return "src." .. name
+        end,
+        FindFirstChild = function(_, name)
+            return "src." .. name
         end
     }
 }
