@@ -170,6 +170,11 @@ local AutoSaveSystem = require(script.Parent:WaitForChild("AutoSaveSystem"))
 GameManager.autoSaveSystem = AutoSaveSystem
 GameManager:addSystem("AutoSave", AutoSaveSystem)
 
+-- Simple currency tracking
+local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+GameManager.currencySystem = CurrencySystem
+GameManager:addSystem("Currency", CurrencySystem)
+
 -- Exchange crystals for tickets or upgrade currency
 local CrystalExchangeSystem = require(script.Parent:WaitForChild("CrystalExchangeSystem"))
 GameManager.crystalExchangeSystem = CrystalExchangeSystem
@@ -388,6 +393,38 @@ function GameManager:upgradeItemWithCrystals(slot, amount, currencyType)
     end
     local itemSys = self.inventory and self.inventory.itemSystem or self.itemSystem
     return self.crystalExchangeSystem:upgradeItemWithCrystals(itemSys, slot, amount, currencyType)
+end
+
+---Collects save data from major systems for persistence.
+-- @return table aggregated data table
+function GameManager:getSaveData()
+    return {
+        currency = CurrencySystem:saveData(),
+        gacha = GachaSystem:saveData(),
+        items = self.itemSystem:toData(),
+        skills = self.skillSystem:saveData(),
+        companions = self.companionSystem:saveData(),
+        stats = StatUpgradeSystem:saveData(),
+    }
+end
+
+---Applies saved data to restore player state.
+-- @param data table aggregated save data
+function GameManager:applySaveData(data)
+    if type(data) ~= "table" then return end
+    CurrencySystem:loadData(data.currency)
+    GachaSystem:loadData(data.gacha)
+    local newItems = ItemSystem.fromData(data.items or {})
+    self.itemSystem = newItems
+    if self.inventory then
+        self.inventory.itemSystem = newItems
+    end
+    if self.setBonusSystem then
+        self.setBonusSystem.itemSystem = newItems
+    end
+    self.skillSystem:loadData(data.skills)
+    self.companionSystem:loadData(data.companions)
+    StatUpgradeSystem:loadData(data.stats)
 end
 
 ---Loads persistent data for a player using the Save system.

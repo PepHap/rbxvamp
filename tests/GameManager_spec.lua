@@ -100,4 +100,44 @@ describe("GameManager", function()
         assert.is_true(ok)
         assert.same({items, "Weapon", 1, "gold"}, CrystalExchangeSystem.args)
     end)
+
+    it("serializes and restores game state", function()
+        local ItemSystem = require("src.ItemSystem")
+        local SkillSystem = require("src.SkillSystem")
+        local CurrencySystem = require("src.CurrencySystem")
+        local GachaSystem = require("src.GachaSystem")
+        local CompanionSystem = require("src.CompanionSystem")
+        local StatUpgradeSystem = require("src.StatUpgradeSystem")
+
+        GameManager.itemSystem = ItemSystem.new()
+        GameManager.inventory.itemSystem = GameManager.itemSystem
+        GameManager.skillSystem = SkillSystem.new()
+        GameManager.companionSystem.companions = {}
+        CurrencySystem.balances = {gold = 5}
+        GachaSystem.tickets.skill = 2
+        StatUpgradeSystem.stats = {Health = {base = 10, level = 3}}
+
+        GameManager.itemSystem:equip("Weapon", {name = "Sword", slot = "Weapon"})
+        GameManager.skillSystem:addSkill({name = "Fireball", rarity = "C"})
+        GameManager.companionSystem:add({name = "Wolf", rarity = "C"})
+
+        local data = GameManager:getSaveData()
+
+        GameManager.itemSystem = ItemSystem.new()
+        GameManager.inventory.itemSystem = GameManager.itemSystem
+        GameManager.skillSystem = SkillSystem.new()
+        GameManager.companionSystem.companions = {}
+        CurrencySystem.balances = {}
+        GachaSystem.tickets.skill = 0
+        StatUpgradeSystem.stats = {Health = {base = 10, level = 1}}
+
+        GameManager:applySaveData(data)
+
+        assert.equals("Sword", GameManager.itemSystem.slots.Weapon.name)
+        assert.equals(1, #GameManager.skillSystem.skills)
+        assert.equals(1, #GameManager.companionSystem.companions)
+        assert.equals(5, CurrencySystem:get("gold"))
+        assert.equals(2, GachaSystem.tickets.skill)
+        assert.equals(3, StatUpgradeSystem.stats.Health.level)
+    end)
 end)
