@@ -64,6 +64,42 @@ local function parent(child, parentObj)
     end
 end
 
+local function clearChildren(container)
+    if typeof and typeof(container) == "Instance" and container.GetChildren then
+        for _, child in ipairs(container:GetChildren()) do
+            if child.Destroy then
+                child:Destroy()
+            end
+        end
+    elseif type(container) == "table" then
+        container.children = {}
+    end
+end
+
+local function clearOptionButtons()
+    if not RewardGaugeUISystem.optionButtons then
+        return
+    end
+    for _, btn in ipairs(RewardGaugeUISystem.optionButtons) do
+        if typeof and typeof(btn) == "Instance" then
+            if btn.Destroy then
+                btn:Destroy()
+            end
+        elseif type(btn) == "table" then
+            -- remove from parent table if present
+            if btn.Parent and type(btn.Parent) == "table" and btn.Parent.children then
+                for i, child in ipairs(btn.Parent.children) do
+                    if child == btn then
+                        table.remove(btn.Parent.children, i)
+                        break
+                    end
+                end
+            end
+        end
+    end
+    RewardGaugeUISystem.optionButtons = nil
+end
+
 local function ensureGui()
     if RewardGaugeUISystem.gui then return RewardGaugeUISystem.gui end
     local gui = createInstance("ScreenGui")
@@ -110,6 +146,7 @@ function RewardGaugeUISystem:showOptions()
     if not opts then return nil end
     local gui = ensureGui()
     local parentGui = self.window or gui
+    clearOptionButtons()
     self.optionButtons = {}
     parentGui.optionButtons = self.optionButtons
     for i, opt in ipairs(opts) do
@@ -127,7 +164,7 @@ end
 
 function RewardGaugeUISystem:choose(index)
     local chosen = RewardGaugeSystem:choose(index)
-    self.optionButtons = nil
+    clearOptionButtons()
     self:update()
     return chosen
 end

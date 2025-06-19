@@ -32,6 +32,18 @@ local function parent(child, parentObj)
     end
 end
 
+local function clearChildren(container)
+    if typeof and typeof(container) == "Instance" and container.GetChildren then
+        for _, child in ipairs(container:GetChildren()) do
+            if child.Destroy then
+                child:Destroy()
+            end
+        end
+    elseif type(container) == "table" then
+        container.children = {}
+    end
+end
+
 local function ensureGui()
     if QuestUISystem.gui then
         return QuestUISystem.gui
@@ -63,9 +75,7 @@ function QuestUISystem:update()
         return
     end
     local gui = ensureGui()
-    if type(gui) == "table" then
-        gui.children = {}
-    end
+    clearChildren(gui)
     local container = gui
 
     for id, q in pairs(qs.quests) do
