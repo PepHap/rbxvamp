@@ -42,6 +42,23 @@ local function createInstance(className)
     return tbl
 end
 
+local function parent(child, parentObj)
+    if not child or not parentObj then
+        return
+    end
+    if typeof and typeof(child) == "Instance" then
+        if typeof(parentObj) == "Instance" then
+            child.Parent = parentObj
+        end
+    else
+        child.Parent = parentObj
+    end
+    if type(parentObj) == "table" then
+        parentObj.children = parentObj.children or {}
+        table.insert(parentObj.children, child)
+    end
+end
+
 local function ensureGui()
     if AdminConsole.gui then return AdminConsole.gui end
     local gui = createInstance("ScreenGui")
@@ -67,11 +84,7 @@ function AdminConsole:start(manager, admins)
     window.Name = "Window"
     window.Visible = self.visible
     self.window = window
-    if typeof and typeof(window)=="Instance" then
-        window.Parent = gui
-    else
-        window.Parent = gui
-    end
+    parent(window, gui)
 
     self.commandBox = createInstance("TextBox")
     self.commandBox.PlaceholderText = "Enter command"
@@ -97,10 +110,9 @@ function AdminConsole:start(manager, admins)
         AdminConsole:runCommand(self.commandBox.Text)
     end)
 
-    window.children = window.children or {}
-    table.insert(window.children, self.commandBox)
-    table.insert(window.children, self.outputLabel)
-    table.insert(window.children, self.executeBtn)
+    parent(self.commandBox, window)
+    parent(self.outputLabel, window)
+    parent(self.executeBtn, window)
 
     return gui
 end
