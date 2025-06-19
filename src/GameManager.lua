@@ -386,7 +386,9 @@ function GameManager:upgradeItemWithCrystals(slot, amount, currencyType)
     if not self.crystalExchangeSystem then
         return false
     end
-    local itemSys = self.inventory and self.inventory.itemSystem or self.itemSystem
+    -- Prefer a directly assigned item system instance when available.
+    -- Fall back to the one provided by the inventory module.
+    local itemSys = self.itemSystem or (self.inventory and self.inventory.itemSystem)
     return self.crystalExchangeSystem:upgradeItemWithCrystals(itemSys, slot, amount, currencyType)
 end
 
