@@ -104,30 +104,28 @@ function spawnModel()
         return nil
     end
 
-    if PlayerSystem.useRobloxObjects and typeof ~= nil and Instance ~= nil and game ~= nil then
-        local ok, workspaceService = pcall(function()
-            return game:GetService("Workspace")
+    if PlayerSystem.useRobloxObjects and game ~= nil then
+        local ok, players = pcall(function()
+            return game:GetService("Players")
         end)
-        if ok and workspaceService then
-            local model = Instance.new("Model")
-            model.Name = "Player"
-
-            local part = Instance.new("Part")
-            part.Name = "PlayerPart"
-            part.Position = createVector3(PlayerSystem.position.x, PlayerSystem.position.y, PlayerSystem.position.z)
-            part.Parent = model
-            model.PrimaryPart = part
-
-            local billboardGui = Instance.new("BillboardGui")
-            billboardGui.Adornee = part
-            local textLabel = Instance.new("TextLabel")
-            textLabel.Text = "Player"
-            textLabel.Parent = billboardGui
-            billboardGui.Parent = model
-
-            model.Parent = workspaceService
-            PlayerSystem.model = model
-            return model
+        if ok and players then
+            local localPlayer
+            local runService = game:GetService("RunService")
+            if runService:IsClient() then
+                localPlayer = players.LocalPlayer
+            else
+                localPlayer = players:GetPlayers()[1]
+            end
+            if localPlayer then
+                local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+                PlayerSystem.model = character
+                local hrp = character:FindFirstChild("HumanoidRootPart") or character.PrimaryPart
+                if hrp then
+                    local pos = hrp.Position
+                    PlayerSystem.position = {x = pos.X, y = pos.Y, z = pos.Z}
+                end
+                return character
+            end
         end
     end
 
@@ -180,6 +178,25 @@ function PlayerSystem:start()
     AutoBattleSystem.playerPosition = self.position
     if self.spawnModels ~= false then
         spawnModel()
+    end
+end
+
+---Updates the cached player position from the Roblox character when available.
+-- @param dt number delta time (unused)
+function PlayerSystem:update(dt)
+    if not self.useRobloxObjects then
+        return
+    end
+    local model = self.model
+    if model and model.Parent then
+        local hrp = model:FindFirstChild("HumanoidRootPart") or model.PrimaryPart
+        if hrp and hrp.Position then
+            local pos = hrp.Position
+            self.position.x = pos.X
+            self.position.y = pos.Y
+            self.position.z = pos.Z
+            AutoBattleSystem.playerPosition = self.position
+        end
     end
 end
 
