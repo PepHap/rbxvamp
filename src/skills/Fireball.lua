@@ -1,6 +1,7 @@
+local EnvironmentUtil = require(script.Parent.Parent:WaitForChild("EnvironmentUtil"))
 local Fireball = {
     -- Set to true when running inside Roblox to use actual objects
-    useRobloxObjects = false,
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
 }
 
 -- Spawns a red projectile moving forward from the caster

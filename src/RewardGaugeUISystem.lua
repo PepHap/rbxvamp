@@ -1,8 +1,9 @@
 -- RewardGaugeUISystem.lua
 -- Displays reward gauge progress and allows selecting options
 
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local RewardGaugeUISystem = {
-    useRobloxObjects = false,
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
     gui = nil,
     gaugeLabel = nil,
     optionButtons = nil,
@@ -139,6 +140,9 @@ function RewardGaugeUISystem:setVisible(on)
 end
 
 function RewardGaugeUISystem:toggle()
+    if not self.gui then
+        self:start()
+    end
     self:setVisible(not self.visible)
 end
 

@@ -1,8 +1,9 @@
 -- HudSystem.lua
 -- Displays player level, experience and currency in a simple GUI
 
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local HudSystem = {
-    useRobloxObjects = false,
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
     gui = nil,
     levelLabel = nil,
     currencyLabel = nil,

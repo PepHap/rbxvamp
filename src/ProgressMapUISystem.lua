@@ -1,8 +1,9 @@
 -- ProgressMapUISystem.lua
 -- Simple UI displaying progress through locations and stages.
 
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local ProgressMapUI = {
-    useRobloxObjects = false,
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
     gui = nil,
     window = nil,
     label = nil,
@@ -78,6 +79,9 @@ function ProgressMapUI:setVisible(on)
 end
 
 function ProgressMapUI:toggle()
+    if not self.gui then
+        self:start(self.progressSystem)
+    end
     self:setVisible(not self.visible)
 end
 

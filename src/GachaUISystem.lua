@@ -1,8 +1,9 @@
 -- GachaUISystem.lua
 -- Provides a simple interface to roll gacha rewards via buttons
 
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local GachaUI = {
-    useRobloxObjects = false,
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
     gui = nil,
     visible = false,
     gameManager = nil,
@@ -116,6 +117,9 @@ function GachaUI:setVisible(on)
 end
 
 function GachaUI:toggle()
+    if not self.gui then
+        self:start(self.gameManager)
+    end
     self:setVisible(not self.visible)
 end
 

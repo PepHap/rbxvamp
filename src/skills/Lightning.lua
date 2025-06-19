@@ -1,5 +1,6 @@
+local EnvironmentUtil = require(script.Parent.Parent:WaitForChild("EnvironmentUtil"))
 local Lightning = {
-    useRobloxObjects = false,
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
 }
 
 -- Spawns a blue projectile at the caster or target

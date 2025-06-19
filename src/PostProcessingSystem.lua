@@ -1,8 +1,9 @@
 -- PostProcessingSystem.lua
 -- Applies simple color correction effects and reacts to boss events.
 
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local PostProcessingSystem = {
-    useRobloxObjects = false,
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
     colorEffect = nil,
     bossTint = Color3 and Color3.new(1, 0.9, 0.9) or {r=255,g=230,b=230},
     normalTint = Color3 and Color3.new(1,1,1) or {r=255,g=255,b=255},

@@ -1,5 +1,6 @@
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local QuestUISystem = {
-    useRobloxObjects = false,
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
     gui = nil,
     questSystem = nil,
     visible = false,

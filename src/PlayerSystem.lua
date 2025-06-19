@@ -1,6 +1,7 @@
 -- PlayerSystem.lua
 -- Tracks player health and handles death events.
 
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local PlayerSystem = {}
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
 local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
@@ -11,7 +12,7 @@ PlayerSystem.spawnModels = true
 
 ---When enabled and running inside Roblox, real Instances will be created
 --  rather than simple Lua tables.
-PlayerSystem.useRobloxObjects = false
+PlayerSystem.useRobloxObjects = EnvironmentUtil.detectRoblox()
 
 ---Current player position in the world.
 PlayerSystem.position = {x = 0, y = 0, z = 0}

@@ -1,8 +1,9 @@
 -- StatUpgradeUISystem.lua
 -- Simple UI for upgrading basic stats using currency
 
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local StatUpgradeUISystem = {
-    useRobloxObjects = false,
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
     gui = nil,
     statSystem = nil,
     statListFrame = nil,

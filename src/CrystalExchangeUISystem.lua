@@ -1,8 +1,9 @@
 -- CrystalExchangeUISystem.lua
 -- UI for purchasing gacha tickets and upgrade currency with crystals
 
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local CrystalExchangeUI = {
-    useRobloxObjects = false,
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
     gui = nil,
     visible = false,
     exchangeSystem = nil,

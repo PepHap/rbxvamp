@@ -1,8 +1,9 @@
 -- SkillTreeUISystem.lua
 -- UI for selecting skill branches and upgrading within them
 
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local SkillTreeUISystem = {
-    useRobloxObjects = false,
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
     gui = nil,
     treeSystem = nil,
     listFrame = nil,
