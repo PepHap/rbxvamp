@@ -11,6 +11,14 @@ local src = ReplicatedStorage:WaitForChild("src")
 local PlayerInputSystem = require(src:WaitForChild("PlayerInputSystem"))
 PlayerInputSystem.useRobloxObjects = true
 
+-- Start core gameplay systems on the client so UI modules
+-- have initialized data like quests and inventory.
+local GameManager = require(src:WaitForChild("GameManager"))
+GameManager:start()
+if GameManager.systems and GameManager.systems.AutoBattle then
+    GameManager.systems.AutoBattle:enable()
+end
+
 -- Load saved data from the server and apply it to the local GameManager
 local GameManager = require(src:WaitForChild("GameManager"))
 
@@ -40,6 +48,10 @@ end
 
 local RunService = game:GetService("RunService")
 RunService.RenderStepped:Connect(function(dt)
+    -- Update main game systems client-side
+    if type(GameManager.update) == "function" then
+        GameManager:update(dt)
+    end
     if type(PlayerInputSystem.update) == "function" then
         PlayerInputSystem:update(dt)
     end
