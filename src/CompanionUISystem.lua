@@ -95,6 +95,12 @@ local function renderCompanions(container, sys)
     elseif container.ClearAllChildren then
         container:ClearAllChildren()
     end
+    if #sys.companions == 0 then
+        local none = createInstance("TextLabel")
+        none.Text = "No companions"
+        parent(none, container)
+        return
+    end
     for i, comp in ipairs(sys.companions) do
         local frame = createInstance("Frame")
         frame.Name = comp.name .. "Frame"

@@ -20,6 +20,10 @@ _G.game = _G.game or {
                     end
                 end
             }
+        elseif name == "RunService" then
+            return {
+                IsClient = function() return true end
+            }
         end
         return nil
     end
@@ -39,4 +43,18 @@ _G.UDim2 = _G.UDim2 or {
     new = function(a, b, c, d)
         return {ScaleX = a, OffsetX = b, ScaleY = c, OffsetY = d}
     end
+}
+
+_G.Color3 = _G.Color3 or {
+    fromRGB = function(r, g, b)
+        return {r=r,g=g,b=b}
+    end,
+    new = function(r, g, b)
+        return {r=r,g=g,b=b}
+    end
+}
+
+_G.Enum = _G.Enum or {
+    FillDirection = {Horizontal="Horizontal"},
+    SortOrder = {LayoutOrder="LayoutOrder"}
 }
