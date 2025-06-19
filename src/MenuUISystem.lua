@@ -78,6 +78,20 @@ function MenuUI:addDefaultTabs()
     self:addTab("Skills", SkillUISystem)
 end
 
+---Toggles the menu visibility, showing the specified tab when opening.
+--@param name string tab name
+function MenuUI:toggleTab(name)
+    if not self.gui then
+        self:start()
+    end
+    local idx = self:getTabIndex(name)
+    if self.visible and idx and idx == self.currentTab then
+        self:setVisible(false)
+    else
+        self:openTab(name)
+    end
+end
+
 function MenuUI:addTab(name, system)
     table.insert(self.tabs, {name=name, system=system})
 end
@@ -167,6 +181,15 @@ function MenuUI:setVisible(on)
     local gui = ensureGui()
     local parentGui = self.window or gui
     GuiUtil.setVisible(parentGui, self.visible)
+    if not self.visible then
+        for _, tab in ipairs(self.tabs) do
+            if tab.system and tab.system.setVisible then
+                tab.system:setVisible(false)
+            end
+        end
+    else
+        self:showTab(self.currentTab)
+    end
 end
 
 function MenuUI:toggle()
