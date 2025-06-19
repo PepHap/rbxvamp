@@ -23,9 +23,10 @@ describe("InventoryModule", function()
 
     it("returns combined stats", function()
         local inv = InventoryModule.new(StatUpgradeSystem)
-        inv:EquipItem("Hat", {name = "Cap", stats = {Health = 5}})
+        inv:EquipItem("Hat", {name = "Cap", level = 2, stats = {Health = 5}})
         local stats = inv:GetStats()
-        assert.equals(25, stats.Health)
+        -- base health = 10 * level 2 = 20, item contributes 5 *1.1 = 5.5
+        assert.is_true(math.abs(stats.Health - 25.5) < 0.01)
     end)
 end)
 

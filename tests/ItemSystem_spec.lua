@@ -91,6 +91,13 @@ describe("ItemSystem", function()
         assert.equals(ItemSystem.maxLevel, items.slots.Weapon.level)
     end)
 
+    it("calculates stats with item level", function()
+        local itm = {name = "Cap", slot = "Hat", level = 3, stats = {Health = 5}}
+        local stats = ItemSystem.getItemStats(itm)
+        -- level 3 should apply 20% bonus (10% per level beyond 1)
+        assert.is_true(math.abs(stats.Health - 6) < 0.01)
+    end)
+
     it("serializes and loads correctly", function()
         local items = ItemSystem.new()
         items:equip("Hat", {name = "Cap", slot = "Hat", level = 2})

@@ -41,8 +41,9 @@ function InventoryModule:GetStats()
         end
     end
     for _, itm in pairs(self.itemSystem.slots) do
-        if itm and itm.stats then
-            for k, v in pairs(itm.stats) do
+        if itm then
+            local statsTbl = ItemSystem.getItemStats(itm)
+            for k, v in pairs(statsTbl) do
                 combined[k] = (combined[k] or 0) + v
             end
         end
