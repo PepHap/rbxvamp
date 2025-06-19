@@ -23,6 +23,12 @@ PlayerSystem.model = nil
 local LevelSystem -- lazy loaded to avoid circular dependency
 local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
 
+-- Forward declare helper functions so they can be referenced inside
+-- PlayerSystem methods defined above them.
+local createVector3
+local getSpawnPosition
+local spawnModel
+
 ---Maximum player health.
 PlayerSystem.maxHealth = 100
 
@@ -69,7 +75,7 @@ end
 
 ---Utility converting coordinates into ``Vector3`` values when running inside
 --  Roblox. Falls back to simple tables in a test environment.
-local function createVector3(x, y, z)
+function createVector3(x, y, z)
     local ok, ctor = pcall(function()
         return Vector3.new
     end)
@@ -79,7 +85,7 @@ local function createVector3(x, y, z)
     return {x = x, y = y, z = z}
 end
 
-local function getSpawnPosition()
+function getSpawnPosition()
     local loc = LocationSystem and LocationSystem.getCurrent and LocationSystem:getCurrent()
     if loc and loc.coordinates then
         return {x = loc.coordinates.x, y = loc.coordinates.y, z = loc.coordinates.z}
@@ -89,7 +95,7 @@ end
 
 ---Spawns a very simple Roblox model for the player or a table representation
 --  during tests. The model/instance is stored in ``PlayerSystem.model``.
-local function spawnModel()
+function spawnModel()
     if PlayerSystem.spawnModels == false then
         return nil
     end
