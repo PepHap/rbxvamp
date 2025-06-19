@@ -25,6 +25,17 @@ describe("GachaSystem", function()
         assert.equals("Wooden Sword", reward.name)
     end)
 
+    it("stores rolled equipment in the inventory when set", function()
+        local InventoryModule = require("src.InventoryModule")
+        local inv = InventoryModule.new()
+        GachaSystem.inventory = inv
+        GachaSystem.tickets.equipment = 1
+        local reward = GachaSystem:rollEquipment("Weapon")
+        assert.equals(1, #inv.itemSystem.inventory)
+        assert.equals(reward.name, inv.itemSystem.inventory[1].name)
+        GachaSystem.inventory = nil
+    end)
+
     it("consumes crystals when no tickets", function()
         GachaSystem.tickets.skill = 0
         GachaSystem.crystals = 1

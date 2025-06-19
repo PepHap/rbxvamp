@@ -24,6 +24,8 @@ local companionPool = require(assets:WaitForChild("companions"))
 -- Simple currency storage
 GachaSystem.tickets = {skill = 0, companion = 0, equipment = 0}
 GachaSystem.crystals = 0
+---Optional inventory module for automatically storing rolled items
+GachaSystem.inventory = nil
 
 ---Adds crystals to the gacha currency pool.
 -- @param amount number quantity to add
@@ -41,6 +43,12 @@ function GachaSystem:addTickets(kind, amount)
     end
     local n = tonumber(amount) or 0
     self.tickets[kind] = self.tickets[kind] + n
+end
+
+---Sets the inventory module used to store rolled equipment.
+-- @param inv table inventory module instance
+function GachaSystem:setInventory(inv)
+    self.inventory = inv
 end
 
 ---Serializes tickets and crystal counts.
@@ -173,7 +181,11 @@ function GachaSystem:rollEquipment(slot)
         return nil
     end
     local rarity = self:rollRarity()
-    return selectByRarity(pool, rarity)
+    local reward = selectByRarity(pool, rarity)
+    if self.inventory and self.inventory.AddItem then
+        self.inventory:AddItem(reward)
+    end
+    return reward
 end
 
 ---Rolls equipment multiple times for the given slot.

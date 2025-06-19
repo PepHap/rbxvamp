@@ -9,6 +9,9 @@ describe("RewardGaugeSystem", function()
         RewardGaugeSystem.maxGauge = 100
         GameManager.itemSystem = ItemSystem.new()
         GameManager.systems["Items"] = GameManager.itemSystem
+        if GameManager.inventory then
+            GameManager.inventory.itemSystem = GameManager.itemSystem
+        end
     end)
 
     it("accumulates points", function()
