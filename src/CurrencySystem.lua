@@ -33,4 +33,24 @@ function CurrencySystem:spend(kind, amount)
     return false
 end
 
+---Serializes all currency balances.
+-- @return table balances table
+function CurrencySystem:saveData()
+    local copy = {}
+    for k, v in pairs(self.balances) do
+        copy[k] = v
+    end
+    return copy
+end
+
+---Loads balances from the provided table.
+-- @param data table balance table
+function CurrencySystem:loadData(data)
+    self.balances = {}
+    if type(data) ~= "table" then return end
+    for k, v in pairs(data) do
+        self.balances[k] = v
+    end
+end
+
 return CurrencySystem

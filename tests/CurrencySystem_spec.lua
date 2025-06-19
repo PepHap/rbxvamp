@@ -14,6 +14,15 @@ describe("CurrencySystem", function()
         assert.equals(2, CurrencySystem:get("gold"))
     end)
 
+    it("saves and loads balances", function()
+        CurrencySystem.balances = {gold = 5, ore = 2}
+        local data = CurrencySystem:saveData()
+        CurrencySystem.balances = {}
+        CurrencySystem:loadData(data)
+        assert.equals(5, CurrencySystem:get("gold"))
+        assert.equals(2, CurrencySystem:get("ore"))
+    end)
+
     it("fails to spend when insufficient", function()
         CurrencySystem.balances = {gold = 2}
         local ok = CurrencySystem:spend("gold", 5)

@@ -25,6 +25,29 @@ local companionPool = require(assets:WaitForChild("companions"))
 GachaSystem.tickets = {skill = 0, companion = 0, equipment = 0}
 GachaSystem.crystals = 0
 
+---Serializes tickets and crystal counts.
+-- @return table data table
+function GachaSystem:saveData()
+    return {
+        crystals = self.crystals,
+        tickets = {
+            skill = self.tickets.skill or 0,
+            companion = self.tickets.companion or 0,
+            equipment = self.tickets.equipment or 0,
+        }
+    }
+end
+
+---Restores ticket and crystal counts from data.
+-- @param data table serialized state
+function GachaSystem:loadData(data)
+    if type(data) ~= "table" then return end
+    self.crystals = tonumber(data.crystals) or 0
+    self.tickets.skill = data.tickets and data.tickets.skill or 0
+    self.tickets.companion = data.tickets and data.tickets.companion or 0
+    self.tickets.equipment = data.tickets and data.tickets.equipment or 0
+end
+
 ---Selects a rarity based on the configured weights.
 -- @return string rarity key
 function GachaSystem:rollRarity()
