@@ -2,6 +2,10 @@
 -- Initializes client-only gameplay systems.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
 local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
 

@@ -2,6 +2,10 @@
 -- Initializes UI modules client-side using a LocalScript so
 -- each player gets their own interface rendered locally.
 
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local src = ReplicatedStorage:WaitForChild("src")
 
