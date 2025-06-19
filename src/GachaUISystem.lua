@@ -45,18 +45,28 @@ local function parent(child, parentObj)
 end
 
 local function ensureGui()
-    if GachaUI.gui then return GachaUI.gui end
+    if GachaUI.gui and (not GachaUI.useRobloxObjects or GachaUI.gui.Parent) then
+        return GachaUI.gui
+    end
+    local pgui
+    if GachaUI.useRobloxObjects then
+        pgui = GuiUtil.getPlayerGui()
+        if pgui then
+            local existing = pgui:FindFirstChild("GachaUI")
+            if existing then
+                GachaUI.gui = existing
+                return existing
+            end
+        end
+    end
     local gui = createInstance("ScreenGui")
     gui.Name = "GachaUI"
     if gui.Enabled ~= nil then
         gui.Enabled = true
     end
     GachaUI.gui = gui
-    if GachaUI.useRobloxObjects then
-        local pgui = GuiUtil.getPlayerGui()
-        if pgui then
-            gui.Parent = pgui
-        end
+    if GachaUI.useRobloxObjects and pgui then
+        gui.Parent = pgui
     end
     return gui
 end

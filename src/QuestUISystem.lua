@@ -21,8 +21,19 @@ local function parent(child, parentObj)
 end
 
 local function ensureGui()
-    if QuestUISystem.gui then
+    if QuestUISystem.gui and (not QuestUISystem.useRobloxObjects or QuestUISystem.gui.Parent) then
         return QuestUISystem.gui
+    end
+    local pgui
+    if QuestUISystem.useRobloxObjects then
+        pgui = GuiUtil.getPlayerGui()
+        if pgui then
+            local existing = pgui:FindFirstChild("QuestUI")
+            if existing then
+                QuestUISystem.gui = existing
+                return existing
+            end
+        end
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "QuestUI"
@@ -30,11 +41,8 @@ local function ensureGui()
         gui.Enabled = true
     end
     QuestUISystem.gui = gui
-    if QuestUISystem.useRobloxObjects then
-        local pgui = GuiUtil.getPlayerGui()
-        if pgui then
-            gui.Parent = pgui
-        end
+    if QuestUISystem.useRobloxObjects and pgui then
+        gui.Parent = pgui
     end
     return gui
 end

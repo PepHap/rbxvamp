@@ -48,14 +48,26 @@ local function parent(child, parentObj)
 end
 
 local function ensureGui()
-    if AdminConsole.gui then return AdminConsole.gui end
+    if AdminConsole.gui and (not AdminConsole.useRobloxObjects or AdminConsole.gui.Parent) then
+        return AdminConsole.gui
+    end
+    local pgui
+    if AdminConsole.useRobloxObjects then
+        pgui = GuiUtil.getPlayerGui()
+        if pgui then
+            local existing = pgui:FindFirstChild("AdminConsole")
+            if existing then
+                AdminConsole.gui = existing
+                return existing
+            end
+        end
+    end
     local gui = createInstance("ScreenGui")
     gui.Name = "AdminConsole"
     if gui.Enabled ~= nil then gui.Enabled = true end
     AdminConsole.gui = gui
-    if AdminConsole.useRobloxObjects then
-        local pgui = GuiUtil.getPlayerGui()
-        if pgui then gui.Parent = pgui end
+    if AdminConsole.useRobloxObjects and pgui then
+        gui.Parent = pgui
     end
     return gui
 end

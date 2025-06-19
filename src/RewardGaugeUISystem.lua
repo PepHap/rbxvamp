@@ -53,18 +53,28 @@ local function parent(child, parentObj)
 end
 
 local function ensureGui()
-    if RewardGaugeUISystem.gui then return RewardGaugeUISystem.gui end
+    if RewardGaugeUISystem.gui and (not RewardGaugeUISystem.useRobloxObjects or RewardGaugeUISystem.gui.Parent) then
+        return RewardGaugeUISystem.gui
+    end
+    local pgui
+    if RewardGaugeUISystem.useRobloxObjects then
+        pgui = GuiUtil.getPlayerGui()
+        if pgui then
+            local existing = pgui:FindFirstChild("RewardGaugeUI")
+            if existing then
+                RewardGaugeUISystem.gui = existing
+                return existing
+            end
+        end
+    end
     local gui = createInstance("ScreenGui")
     gui.Name = "RewardGaugeUI"
     if gui.Enabled ~= nil then
         gui.Enabled = true
     end
     RewardGaugeUISystem.gui = gui
-    if RewardGaugeUISystem.useRobloxObjects then
-        local pgui = GuiUtil.getPlayerGui()
-        if pgui then
-            gui.Parent = pgui
-        end
+    if RewardGaugeUISystem.useRobloxObjects and pgui then
+        gui.Parent = pgui
     end
     return gui
 end

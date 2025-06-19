@@ -43,8 +43,19 @@ local function parent(child, parentObj)
 end
 
 local function ensureGui()
-    if StatUpgradeUISystem.gui then
+    if StatUpgradeUISystem.gui and (not StatUpgradeUISystem.useRobloxObjects or StatUpgradeUISystem.gui.Parent) then
         return StatUpgradeUISystem.gui
+    end
+    local pgui
+    if StatUpgradeUISystem.useRobloxObjects then
+        pgui = GuiUtil.getPlayerGui()
+        if pgui then
+            local existing = pgui:FindFirstChild("StatUpgradeUI")
+            if existing then
+                StatUpgradeUISystem.gui = existing
+                return existing
+            end
+        end
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "StatUpgradeUI"
@@ -52,11 +63,8 @@ local function ensureGui()
         gui.Enabled = true
     end
     StatUpgradeUISystem.gui = gui
-    if StatUpgradeUISystem.useRobloxObjects then
-        local pgui = GuiUtil.getPlayerGui()
-        if pgui then
-            gui.Parent = pgui
-        end
+    if StatUpgradeUISystem.useRobloxObjects and pgui then
+        gui.Parent = pgui
     end
     return gui
 end

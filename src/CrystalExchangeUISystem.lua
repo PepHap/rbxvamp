@@ -43,14 +43,26 @@ local function parent(child, parentObj)
 end
 
 local function ensureGui()
-    if CrystalExchangeUI.gui then return CrystalExchangeUI.gui end
+    if CrystalExchangeUI.gui and (not CrystalExchangeUI.useRobloxObjects or CrystalExchangeUI.gui.Parent) then
+        return CrystalExchangeUI.gui
+    end
+    local pgui
+    if CrystalExchangeUI.useRobloxObjects then
+        pgui = GuiUtil.getPlayerGui()
+        if pgui then
+            local existing = pgui:FindFirstChild("CrystalExchangeUI")
+            if existing then
+                CrystalExchangeUI.gui = existing
+                return existing
+            end
+        end
+    end
     local gui = createInstance("ScreenGui")
     gui.Name = "CrystalExchangeUI"
     if gui.Enabled ~= nil then gui.Enabled = true end
     CrystalExchangeUI.gui = gui
-    if CrystalExchangeUI.useRobloxObjects then
-        local pgui = GuiUtil.getPlayerGui()
-        if pgui then gui.Parent = pgui end
+    if CrystalExchangeUI.useRobloxObjects and pgui then
+        gui.Parent = pgui
     end
     return gui
 end

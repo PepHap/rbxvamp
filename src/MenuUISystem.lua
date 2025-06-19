@@ -46,16 +46,28 @@ local function parent(child, parentObj)
 end
 
 local function ensureGui()
-    if MenuUI.gui then return MenuUI.gui end
+    if MenuUI.gui and (not MenuUI.useRobloxObjects or MenuUI.gui.Parent) then
+        return MenuUI.gui
+    end
+    local pgui
+    if MenuUI.useRobloxObjects then
+        pgui = GuiUtil.getPlayerGui()
+        if pgui then
+            local existing = pgui:FindFirstChild("MenuUI")
+            if existing then
+                MenuUI.gui = existing
+                return existing
+            end
+        end
+    end
     local gui = createInstance("ScreenGui")
     gui.Name = "MenuUI"
     MenuUI.gui = gui
     if gui.Enabled ~= nil then
         gui.Enabled = true
     end
-    if MenuUI.useRobloxObjects then
-        local pgui = GuiUtil.getPlayerGui()
-        if pgui then gui.Parent = pgui end
+    if MenuUI.useRobloxObjects and pgui then
+        gui.Parent = pgui
     end
     return gui
 end

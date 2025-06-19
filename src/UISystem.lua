@@ -52,8 +52,20 @@ end
 
 -- Lazily creates and returns the ScreenGui
 local function ensureGui()
-    if UISystem.gui then
+    if UISystem.gui and (not UISystem.useRobloxObjects or UISystem.gui.Parent) then
         return UISystem.gui
+    end
+    local pgui
+    if UISystem.useRobloxObjects then
+        local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
+        pgui = GuiUtil.getPlayerGui()
+        if pgui then
+            local existing = pgui:FindFirstChild("UISystemGui")
+            if existing then
+                UISystem.gui = existing
+                return existing
+            end
+        end
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "UISystemGui"
@@ -64,12 +76,8 @@ local function ensureGui()
         gui.children = {}
     end
     UISystem.gui = gui
-    if UISystem.useRobloxObjects then
-        local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
-        local pgui = GuiUtil.getPlayerGui()
-        if pgui then
-            gui.Parent = pgui
-        end
+    if UISystem.useRobloxObjects and pgui then
+        gui.Parent = pgui
     end
     return gui
 end

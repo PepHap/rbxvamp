@@ -59,8 +59,19 @@ local function parent(child, parentObj)
 end
 
 local function ensureGui()
-    if HudSystem.gui then
+    if HudSystem.gui and (not HudSystem.useRobloxObjects or HudSystem.gui.Parent) then
         return HudSystem.gui
+    end
+    local pgui
+    if HudSystem.useRobloxObjects then
+        pgui = GuiUtil.getPlayerGui()
+        if pgui then
+            local existing = pgui:FindFirstChild("HudUI")
+            if existing then
+                HudSystem.gui = existing
+                return existing
+            end
+        end
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "HudUI"
@@ -68,11 +79,8 @@ local function ensureGui()
         gui.Enabled = true
     end
     HudSystem.gui = gui
-    if HudSystem.useRobloxObjects then
-        local pgui = GuiUtil.getPlayerGui()
-        if pgui then
-            gui.Parent = pgui
-        end
+    if HudSystem.useRobloxObjects and pgui then
+        gui.Parent = pgui
     end
     return gui
 end
