@@ -51,4 +51,20 @@ function SalvageSystem:salvageFromInventory(itemSystem, index)
     return true
 end
 
+---Salvages an equipped item from the given slot.
+-- @param itemSystem table ItemSystem instance
+-- @param slot string equipment slot name
+-- @return boolean success
+function SalvageSystem:salvageFromSlot(itemSystem, slot)
+    if type(itemSystem) ~= "table" or not itemSystem.unequip then
+        return false
+    end
+    local itm = itemSystem:unequip(slot)
+    if not itm then
+        return false
+    end
+    self:salvageItem(itm)
+    return true
+end
+
 return SalvageSystem
