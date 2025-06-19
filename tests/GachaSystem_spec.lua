@@ -50,4 +50,13 @@ describe("GachaSystem", function()
         assert.equals(2, GachaSystem.tickets.skill)
         assert.equals(5, GachaSystem.crystals)
     end)
+
+    it("adds currency via helper functions", function()
+        GachaSystem.tickets.skill = 0
+        GachaSystem.crystals = 0
+        GachaSystem:addTickets("skill", 3)
+        GachaSystem:addCrystals(2)
+        assert.equals(3, GachaSystem.tickets.skill)
+        assert.equals(2, GachaSystem.crystals)
+    end)
 end)

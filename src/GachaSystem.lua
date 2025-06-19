@@ -25,6 +25,24 @@ local companionPool = require(assets:WaitForChild("companions"))
 GachaSystem.tickets = {skill = 0, companion = 0, equipment = 0}
 GachaSystem.crystals = 0
 
+---Adds crystals to the gacha currency pool.
+-- @param amount number quantity to add
+function GachaSystem:addCrystals(amount)
+    local n = tonumber(amount) or 0
+    self.crystals = self.crystals + n
+end
+
+---Adds gacha tickets of the given kind.
+-- @param kind string ticket type
+-- @param amount number quantity
+function GachaSystem:addTickets(kind, amount)
+    if self.tickets[kind] == nil then
+        return
+    end
+    local n = tonumber(amount) or 0
+    self.tickets[kind] = self.tickets[kind] + n
+end
+
 ---Serializes tickets and crystal counts.
 -- @return table data table
 function GachaSystem:saveData()

@@ -35,6 +35,26 @@ local validSlots = {
     Weapon = true
 }
 
+---Returns a table of stats for the item taking the upgrade level into account.
+-- Each level adds a 10% bonus to the base stats.
+-- @param item table item entry with a ``stats`` field
+-- @return table calculated stat values
+function ItemSystem.getItemStats(item)
+    if not item or type(item.stats) ~= "table" then
+        return {}
+    end
+    local mult = 1
+    local lvl = tonumber(item.level)
+    if lvl and lvl > 1 then
+        mult = 1 + 0.1 * (lvl - 1)
+    end
+    local result = {}
+    for k, v in pairs(item.stats) do
+        result[k] = v * mult
+    end
+    return result
+end
+
 ---Creates a new item system instance with empty equipment slots.
 -- @return table ItemSystem instance
 function ItemSystem.new()
