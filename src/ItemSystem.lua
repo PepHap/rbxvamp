@@ -58,8 +58,13 @@ end
 
 function ItemSystem:equip(slot, item)
     assertValidSlot(slot)
+    assert(type(item) == "table", "item table expected")
+    if item.slot and item.slot ~= slot then
+        return false
+    end
     item.level = item.level or 1
     self.slots[slot] = item
+    return true
 end
 
 ---Adds an item table to the inventory list.
@@ -109,7 +114,12 @@ function ItemSystem:equipFromInventory(index, slot)
     if not item then
         return false
     end
-    self:equip(slot, item)
+    local ok = self:equip(slot, item)
+    if not ok then
+        -- put the item back if it could not be equipped
+        table.insert(self.inventory, index, item)
+        return false
+    end
     return true
 end
 

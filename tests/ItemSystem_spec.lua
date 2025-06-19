@@ -9,13 +9,21 @@ describe("ItemSystem", function()
 
     it("equips an item in a slot", function()
         local items = ItemSystem.new()
-        items:equip("Weapon", {name = "Sword"})
+        local ok = items:equip("Weapon", {name = "Sword", slot = "Weapon"})
+        assert.is_true(ok)
         assert.equals("Sword", items.slots.Weapon.name)
+    end)
+
+    it("rejects items that do not match the slot", function()
+        local items = ItemSystem.new()
+        local ok = items:equip("Hat", {name = "Sword", slot = "Weapon"})
+        assert.is_false(ok)
+        assert.is_nil(items.slots.Hat)
     end)
 
     it("unequips an item and returns it", function()
         local items = ItemSystem.new()
-        items:equip("Hat", {name = "Cap"})
+        items:equip("Hat", {name = "Cap", slot = "Hat"})
         local removed = items:unequip("Hat")
         assert.equals("Cap", removed.name)
         assert.is_nil(items.slots.Hat)
@@ -23,7 +31,7 @@ describe("ItemSystem", function()
 
     it("upgrades an item when enough currency", function()
         local items = ItemSystem.new()
-        items:equip("Weapon", {name = "Sword"})
+        items:equip("Weapon", {name = "Sword", slot = "Weapon"})
         CurrencySystem.balances = {gold = 5}
         local ok = items:upgradeItem("Weapon", 1, "gold")
         assert.is_true(ok)
@@ -33,7 +41,7 @@ describe("ItemSystem", function()
 
     it("upgrades an item up to the maximum level", function()
         local items = ItemSystem.new()
-        items:equip("Weapon", {name = "Sword"})
+        items:equip("Weapon", {name = "Sword", slot = "Weapon"})
         local cost = 0
         for lvl = 2, ItemSystem.maxLevel do
             cost = cost + (ItemSystem.upgradeCosts[lvl] or 0)
@@ -47,7 +55,7 @@ describe("ItemSystem", function()
 
     it("fails upgrade without sufficient currency", function()
         local items = ItemSystem.new()
-        items:equip("Weapon", {name = "Sword"})
+        items:equip("Weapon", {name = "Sword", slot = "Weapon"})
         CurrencySystem.balances = {gold = 0}
         local ok = items:upgradeItem("Weapon", 1, "gold")
         assert.is_false(ok)
@@ -57,7 +65,7 @@ describe("ItemSystem", function()
 
     it("rejects invalid upgrade amounts", function()
         local items = ItemSystem.new()
-        items:equip("Weapon", {name = "Sword"})
+        items:equip("Weapon", {name = "Sword", slot = "Weapon"})
         CurrencySystem.balances = {gold = 10}
         local ok = items:upgradeItem("Weapon", {}, "gold")
         assert.is_false(ok)
@@ -76,7 +84,7 @@ describe("ItemSystem", function()
 
     it("prevents upgrading beyond the maximum level", function()
         local items = ItemSystem.new()
-        items:equip("Weapon", {name = "Sword", level = ItemSystem.maxLevel})
+        items:equip("Weapon", {name = "Sword", slot = "Weapon", level = ItemSystem.maxLevel})
         CurrencySystem.balances = {gold = 100}
         local ok = items:upgradeItem("Weapon", 1, "gold")
         assert.is_false(ok)
