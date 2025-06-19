@@ -84,9 +84,16 @@ end
 function RewardGaugeUISystem:start()
     local gui = ensureGui()
 
-    -- simple frame; image removed to keep repository text only
-    self.window = GuiUtil.createWindow("RewardWindow")
-    parent(self.window, gui)
+    if self.window then
+        if gui and self.window.Parent ~= gui then
+            parent(self.window, gui)
+            self.gui = gui
+        end
+    else
+        -- simple frame; image removed to keep repository text only
+        self.window = GuiUtil.createWindow("RewardWindow")
+        parent(self.window, gui)
+    end
 
     self.gaugeLabel = createInstance("TextLabel")
     parent(self.gaugeLabel, self.window)
@@ -110,6 +117,15 @@ function RewardGaugeUISystem:showOptions()
     if not opts then return nil end
     local gui = ensureGui()
     local parentGui = self.window or gui
+    if self.optionButtons then
+        for _, btn in ipairs(self.optionButtons) do
+            if btn.Destroy then
+                btn:Destroy()
+            else
+                if btn.Parent then btn.Parent = nil end
+            end
+        end
+    end
     self.optionButtons = {}
     parentGui.optionButtons = self.optionButtons
     for i, opt in ipairs(opts) do
@@ -127,6 +143,15 @@ end
 
 function RewardGaugeUISystem:choose(index)
     local chosen = RewardGaugeSystem:choose(index)
+    if self.optionButtons then
+        for _, btn in ipairs(self.optionButtons) do
+            if btn.Destroy then
+                btn:Destroy()
+            else
+                if btn.Parent then btn.Parent = nil end
+            end
+        end
+    end
     self.optionButtons = nil
     self:update()
     return chosen
@@ -140,7 +165,7 @@ function RewardGaugeUISystem:setVisible(on)
 end
 
 function RewardGaugeUISystem:toggle()
-    if not self.gui then
+    if not self.gui or not self.window then
         self:start()
     end
     self:setVisible(not self.visible)

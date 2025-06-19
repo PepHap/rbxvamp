@@ -69,8 +69,15 @@ function CrystalExchangeUI:start(exchangeSys)
     self.exchangeSystem = exchangeSys or self.exchangeSystem or CrystalExchangeSystem
     local gui = ensureGui()
 
-    self.window = GuiUtil.createWindow("CrystalExchangeWindow")
-    parent(self.window, gui)
+    if self.window then
+        if gui and self.window.Parent ~= gui then
+            parent(self.window, gui)
+            self.gui = gui
+        end
+    else
+        self.window = GuiUtil.createWindow("CrystalExchangeWindow")
+        parent(self.window, gui)
+    end
 
     local actions = {
         {"Buy Skill Ticket", function() self:buyTicket("skill") end},
@@ -112,7 +119,7 @@ function CrystalExchangeUI:setVisible(on)
 end
 
 function CrystalExchangeUI:toggle()
-    if not self.gui then
+    if not self.gui or not self.window then
         self:start(self.exchangeSystem)
     end
     self:setVisible(not self.visible)

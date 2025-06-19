@@ -81,9 +81,16 @@ function CompanionUISystem:start(compSys)
     self.companionSystem = compSys or self.companionSystem or {companions = {}}
     local gui = ensureGui()
 
-    -- create a simple window frame; images are optional and removed to keep the repo text only
-    self.window = GuiUtil.createWindow("CompanionWindow")
-    parent(self.window, gui)
+    if self.window then
+        if gui and self.window.Parent ~= gui then
+            parent(self.window, gui)
+            self.gui = gui
+        end
+    else
+        -- create a simple window frame; images are optional and removed to keep the repo text only
+        self.window = GuiUtil.createWindow("CompanionWindow")
+        parent(self.window, gui)
+    end
 
     self:update()
     self:setVisible(self.visible)
@@ -175,7 +182,7 @@ function CompanionUISystem:setVisible(on)
 end
 
 function CompanionUISystem:toggle()
-    if not self.gui and type(self.start) == "function" then
+    if (not self.gui or not self.window) and type(self.start) == "function" then
         self:start(self.companionSystem)
     end
     self:setVisible(not self.visible)

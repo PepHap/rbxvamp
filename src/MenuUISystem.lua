@@ -81,12 +81,19 @@ end
 function MenuUI:start()
     self:addDefaultTabs()
     local gui = ensureGui()
-    self.window = GuiUtil.createWindow("MenuWindow")
-    if UDim2 and type(UDim2.new)=="function" then
-        self.window.Size = UDim2.new(1, 0, 1, 0)
-        self.window.Position = UDim2.new(0, 0, 0, 0)
+    if self.window then
+        if gui and self.window.Parent ~= gui then
+            parent(self.window, gui)
+            self.gui = gui
+        end
+    else
+        self.window = GuiUtil.createWindow("MenuWindow")
+        if UDim2 and type(UDim2.new)=="function" then
+            self.window.Size = UDim2.new(1, 0, 1, 0)
+            self.window.Position = UDim2.new(0, 0, 0, 0)
+        end
+        parent(self.window, gui)
     end
-    parent(self.window, gui)
 
     self.contentFrame = createInstance("Frame")
     if UDim2 and type(UDim2.new)=="function" then
@@ -158,7 +165,7 @@ function MenuUI:setVisible(on)
 end
 
 function MenuUI:toggle()
-    if not self.gui then
+    if not self.gui or not self.window then
         self:start()
     end
     self:setVisible(not self.visible)

@@ -509,7 +509,7 @@ end
 
 ---Toggles the visibility of the inventory UI.
 function InventoryUI:toggle()
-    if not self.gui then
+    if not self.gui or not self.window then
         self:start(self.itemSystem)
     end
     self:setVisible(not self.visible)

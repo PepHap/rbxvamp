@@ -116,7 +116,7 @@ function QuestUISystem:setVisible(on)
 end
 
 function QuestUISystem:toggle()
-    if not self.gui then
+    if not self.gui or not self.window then
         self:start(self.questSystem)
     end
     self:setVisible(not self.visible)

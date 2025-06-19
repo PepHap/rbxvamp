@@ -120,7 +120,7 @@ function GachaUI:setVisible(on)
 end
 
 function GachaUI:toggle()
-    if not self.gui then
+    if not self.gui or not self.window then
         self:start(self.gameManager)
     end
     self:setVisible(not self.visible)

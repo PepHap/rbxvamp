@@ -85,9 +85,16 @@ function SkillUISystem:start(skillSys, parentGui)
     self.skillSystem = skillSys or self.skillSystem or SkillSystem.new()
     local gui = ensureGui(parentGui)
 
-    -- window backgrounds were removed; use plain window frame
-    self.window = GuiUtil.createWindow("SkillWindow")
-    parent(self.window, gui)
+    if self.window then
+        if gui and self.window.Parent ~= gui then
+            parent(self.window, gui)
+            self.gui = gui
+        end
+    else
+        -- window backgrounds were removed; use plain window frame
+        self.window = GuiUtil.createWindow("SkillWindow")
+        parent(self.window, gui)
+    end
 
     self:update()
     self:setVisible(self.visible)
@@ -186,7 +193,7 @@ function SkillUISystem:setVisible(on)
 end
 
 function SkillUISystem:toggle()
-    if not self.gui and type(self.start) == "function" then
+    if (not self.gui or not self.window) and type(self.start) == "function" then
         self:start(self.skillSystem)
     end
     self:setVisible(not self.visible)
