@@ -125,5 +125,41 @@ function SkillSystem:upgrade(index, amount)
     end
 end
 
+---Serializes the current list of skills into a plain table.
+-- @return table serialized skill list
+function SkillSystem:saveData()
+    local out = {}
+    for i, s in ipairs(self.skills) do
+        out[i] = {
+            name = s.name,
+            rarity = s.rarity,
+            level = s.level,
+            bonusPercent = s.bonusPercent,
+            module = s.module,
+        }
+    end
+    return out
+end
+
+---Restores skills from serialized data.
+-- @param data table list previously produced by ``saveData``
+function SkillSystem:loadData(data)
+    self.skills = {}
+    if type(data) ~= "table" then
+        return
+    end
+    for _, s in ipairs(data) do
+        local skill = {
+            name = s.name,
+            rarity = s.rarity,
+            level = s.level or 1,
+            bonusPercent = s.bonusPercent,
+            module = s.module,
+        }
+        table.insert(self.skills, skill)
+        applySkillModule(skill)
+    end
+end
+
 return SkillSystem
 

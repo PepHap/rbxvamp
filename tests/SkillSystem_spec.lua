@@ -44,4 +44,15 @@ describe("SkillSystem", function()
         assert.equals(2, added.cooldown)
         assert.equals(1, added.extraProjectiles)
     end)
+
+    it("serializes and loads skills", function()
+        SkillSystem.skills = {}
+        SkillSystem:addSkill({name = "Ice", rarity = "C", level = 4})
+        local data = SkillSystem:saveData()
+        SkillSystem.skills = {}
+        SkillSystem:loadData(data)
+        assert.equals(1, #SkillSystem.skills)
+        assert.equals("Ice", SkillSystem.skills[1].name)
+        assert.equals(4, SkillSystem.skills[1].level)
+    end)
 end)
