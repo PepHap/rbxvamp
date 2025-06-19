@@ -193,6 +193,70 @@ function AdminConsole:runCommand(text)
             end
             return "Upgrade failed"
         end,
+        -- Purchase gacha tickets using crystals
+        buyticket = function(self, a)
+            if not self.gameManager then return "No manager" end
+            local kind = a[1]
+            local amount = tonumber(a[2]) or 1
+            if kind then
+                local ok = self.gameManager:buyTickets(kind, amount)
+                if ok then
+                    return string.format("Bought %d %s tickets", amount, kind)
+                end
+            end
+            return "Ticket purchase failed"
+        end,
+        -- Purchase upgrade currency using crystals
+        buycurrency = function(self, a)
+            if not self.gameManager then return "No manager" end
+            local kind = a[1]
+            local amount = tonumber(a[2]) or 1
+            if kind then
+                local ok = self.gameManager:buyCurrency(kind, amount)
+                if ok then
+                    return string.format("Bought %d %s", amount, kind)
+                end
+            end
+            return "Currency purchase failed"
+        end,
+        -- Upgrade an item by spending crystals
+        upgradec = function(self, a)
+            if not self.gameManager then return "No manager" end
+            local slot = a[1]
+            local amount = tonumber(a[2]) or 1
+            local currency = a[3]
+            if slot then
+                local ok = self.gameManager:upgradeItemWithCrystals(slot, amount, currency)
+                if ok then
+                    return string.format("Crystal upgraded %s", slot)
+                end
+            end
+            return "Crystal upgrade failed"
+        end,
+        -- Salvage an inventory item into currency
+        salvageinv = function(self, a)
+            if not self.gameManager then return "No manager" end
+            local index = tonumber(a[1])
+            if index then
+                local ok = self.gameManager:salvageInventoryItem(index)
+                if ok then
+                    return string.format("Salvaged inventory %d", index)
+                end
+            end
+            return "Salvage failed"
+        end,
+        -- Salvage an equipped item from a slot
+        salvageslot = function(self, a)
+            if not self.gameManager then return "No manager" end
+            local slot = a[1]
+            if slot then
+                local ok = self.gameManager:salvageEquippedItem(slot)
+                if ok then
+                    return string.format("Salvaged %s", slot)
+                end
+            end
+            return "Salvage failed"
+        end,
     }
 
     local handler = handlers[cmd]
