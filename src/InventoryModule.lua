@@ -31,6 +31,44 @@ function InventoryModule:RemoveItem(slot)
     return self.itemSystem:unequip(slot)
 end
 
+---Equips an item from the inventory list into the given slot.
+-- @param index number inventory index
+-- @param slot string equipment slot
+function InventoryModule:EquipFromInventory(index, slot)
+    return self.itemSystem:equipFromInventory(index, slot)
+end
+
+---Unequips an item from the slot and stores it in the inventory.
+-- @param slot string equipment slot
+-- @return table|nil removed item
+function InventoryModule:UnequipToInventory(slot)
+    return self.itemSystem:unequipToInventory(slot)
+end
+
+---Retrieves a page of items from the inventory.
+-- @param page number page index starting at 1
+-- @param perPage number items per page
+-- @return table list of item entries
+function InventoryModule:GetInventoryPage(page, perPage)
+    return self.itemSystem:getInventoryPage(page, perPage)
+end
+
+---Returns the number of inventory pages for the given size.
+-- @param perPage number items per page
+-- @return number page count
+function InventoryModule:GetInventoryPageCount(perPage)
+    return self.itemSystem:getInventoryPageCount(perPage)
+end
+
+---Upgrades the item in the specified slot when enough currency is available.
+-- @param slot string equipment slot
+-- @param amount number number of levels to add
+-- @param currencyType string currency identifier
+-- @return boolean success
+function InventoryModule:UpgradeItem(slot, amount, currencyType)
+    return self.itemSystem:upgradeItem(slot, amount, currencyType)
+end
+
 ---Returns a table of combined stats from base values and equipped items.
 function InventoryModule:GetStats()
     local combined = {}
