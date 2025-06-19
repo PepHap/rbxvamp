@@ -20,7 +20,6 @@ if GameManager.systems and GameManager.systems.AutoBattle then
 end
 
 -- Load saved data from the server and apply it to the local GameManager
-local GameManager = require(src:WaitForChild("GameManager"))
 
 local function applySaveData()
     local player = Players.LocalPlayer
