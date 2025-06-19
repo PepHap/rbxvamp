@@ -256,7 +256,7 @@ local function renderSectionTitle(container, text)
 end
 
 local function renderEquipment(container, items)
-    if not InventoryUI.slotRefs then
+    if not InventoryUI.slotRefs or not InventorySlots.container then
         clearChildren(container)
         renderSectionTitle(container, "Equipment")
         InventoryUI.slotRefs = InventorySlots:create(container)
