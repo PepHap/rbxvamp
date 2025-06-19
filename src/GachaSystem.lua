@@ -7,33 +7,36 @@ local GachaSystem = {}
 -- a list of tuples ``{rarity, weight}`` where the weight acts as a relative
 -- probability.  The values intentionally do not sum to 100 so additional
 -- rarities can be inserted without recalculating the entire table.
+-- The drop probabilities roughly match the design notes. The values are
+-- normalized so the total weight equals ``100`` which keeps math simple
+-- when customizing the tables. Rarer ranks use fractional percentages.
 local defaultWeights = {
     skill = {
         {"C", 80},
-        {"D", 25},
-        {"B", 5},
-        {"A", 1},
-        {"S", 0.1},
-        {"SS", 0.001},
-        {"SSS", 1e-12},
+        {"D", 15},
+        {"B", 4},
+        {"A", 0.9},
+        {"S", 0.09},
+        {"SS", 0.009},
+        {"SSS", 0.001},
     },
     companion = {
         {"C", 80},
-        {"D", 25},
-        {"B", 5},
-        {"A", 1},
-        {"S", 0.1},
-        {"SS", 0.001},
-        {"SSS", 1e-12},
+        {"D", 15},
+        {"B", 4},
+        {"A", 0.9},
+        {"S", 0.09},
+        {"SS", 0.009},
+        {"SSS", 0.001},
     },
     equipment = {
         {"C", 80},
-        {"D", 25},
-        {"B", 5},
-        {"A", 1},
-        {"S", 0.1},
-        {"SS", 0.001},
-        {"SSS", 1e-12},
+        {"D", 15},
+        {"B", 4},
+        {"A", 0.9},
+        {"S", 0.09},
+        {"SS", 0.009},
+        {"SSS", 0.001},
     }
 }
 
