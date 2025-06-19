@@ -39,4 +39,13 @@ describe("StatUpgradeSystem", function()
         assert.is_false(ok)
         assert.equals(1, StatUpgradeSystem.stats.defense.level)
     end)
+
+    it("saves and loads stat levels", function()
+        StatUpgradeSystem:addStat("attack", 10)
+        StatUpgradeSystem.stats.attack.level = 4
+        local data = StatUpgradeSystem:saveData()
+        StatUpgradeSystem.stats.attack.level = 1
+        StatUpgradeSystem:loadData(data)
+        assert.equals(4, StatUpgradeSystem.stats.attack.level)
+    end)
 end)

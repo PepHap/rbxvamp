@@ -37,5 +37,38 @@ function StatUpgradeSystem:upgradeStat(name, amount, currency)
     return true
 end
 
+---Serializes the stat table for persistence.
+-- @return table serialized stats
+function StatUpgradeSystem:saveData()
+    local data = {}
+    for name, info in pairs(self.stats) do
+        data[name] = {level = info.level, base = info.base}
+    end
+    return data
+end
+
+---Loads stat levels from a saved table.
+-- Unknown stats are added automatically.
+-- @param data table stats previously produced by ``saveData``
+function StatUpgradeSystem:loadData(data)
+    if type(data) ~= "table" then return end
+    for name, info in pairs(data) do
+        local stat = self.stats[name]
+        if stat then
+            if type(info.level) == "number" then
+                stat.level = info.level
+            end
+            if type(info.base) == "number" then
+                stat.base = info.base
+            end
+        else
+            self.stats[name] = {
+                level = info.level or 1,
+                base = info.base or 0,
+            }
+        end
+    end
+end
+
 return StatUpgradeSystem
 
