@@ -11,6 +11,7 @@ local EventManager = require(script.Parent:WaitForChild("EventManager"))
 local parent = script.Parent
 
 local MobConfig = require(parent:WaitForChild("MobConfig"))
+local LocationSystem = require(parent:WaitForChild("LocationSystem"))
 
 -- Lazily required to avoid circular dependency with AutoBattleSystem
 local AutoBattleSystem
@@ -87,6 +88,15 @@ local function getCoords(v)
         end
     end
     return 0, 0, 0
+end
+
+---Returns the coordinate offset for the current location.
+local function getSpawnOffset()
+    local loc = LocationSystem and LocationSystem.getCurrent and LocationSystem:getCurrent()
+    if loc and loc.coordinates then
+        return loc.coordinates
+    end
+    return {x = 0, y = 0, z = 0}
 end
 
 
@@ -228,7 +238,7 @@ EnemySystem.lastBossType = nil
 -- @param mobType string key from MobConfig.Types
 -- @param level number stage level used for scaling
 -- @return table new enemy
-function EnemySystem:createEnemyByType(mobType, level)
+function EnemySystem:createEnemyByType(mobType, level, position)
     local cfg = MobConfig.Types[mobType]
     if not cfg then
         return nil
@@ -238,7 +248,7 @@ function EnemySystem:createEnemyByType(mobType, level)
     local enemy = createEnemy(
         cfg.BaseHealth * hScale,
         cfg.Damage * dScale,
-        {x = 0, y = 0, z = 0},
+        position or {x = 0, y = 0, z = 0},
         nil,
         mobType,
         cfg.Prefab or mobType,
@@ -258,13 +268,12 @@ end
 function EnemySystem:spawnWaveForLevel(level, wave)
     self.lastWaveLevel = level
     self.enemies = {}
+    local offset = getSpawnOffset()
     if type(wave) == "table" then
         for _, info in ipairs(wave) do
             for i = 1, (info.count or 1) do
-                local enemy = self:createEnemyByType(info.type, level)
-                if enemy then
-                    enemy.position.x = i
-                end
+                local pos = {x = offset.x + i, y = offset.y, z = offset.z}
+                local enemy = self:createEnemyByType(info.type, level, pos)
             end
         end
     end
@@ -321,11 +330,12 @@ function EnemySystem:spawnWave(level, count)
         return nil
     end
 
+    local offset = getSpawnOffset()
     for i = 1, count do
         local enemy = createEnemy(
             (baseHealth + healthPerLevel * level) * hScale,
             (baseDamage + damagePerLevel * level) * dScale,
-            {x = i, y = 0, z = 0},
+            {x = offset.x + i, y = offset.y, z = offset.z},
             nil,
             string.format("Enemy %d", i),
             "Goblin",
@@ -368,10 +378,11 @@ function EnemySystem:spawnBoss(bossType)
         location = "Location Boss"
     }
     local prefabMap = {mini = "Ogre", boss = "Dragon", location = "Dragon"}
+    local offset = getSpawnOffset()
     local boss = createEnemy(
         (bossHealth[bossType] or 20) * hScale,
         (bossDamage[bossType] or 2) * dScale,
-        {x = 0, y = 0, z = 0},
+        {x = offset.x, y = offset.y, z = offset.z},
         bossType,
         bossNames[bossType] or "Boss",
         prefabMap[bossType] or "Ogre",

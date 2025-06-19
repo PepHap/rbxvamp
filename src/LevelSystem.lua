@@ -14,6 +14,7 @@ local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
 local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
 local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
 local WaveConfig = require(script.Parent:WaitForChild("WaveConfig"))
+local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
 
 --- Tracks the player's current level.
 --  Starts at ``1`` when the game begins.
@@ -124,6 +125,10 @@ function LevelSystem:advance()
             return nil
         end
         LocationSystem:advance()
+        local loc = LocationSystem:getCurrent()
+        if loc and loc.coordinates and PlayerSystem and PlayerSystem.setPosition then
+            PlayerSystem:setPosition(loc.coordinates)
+        end
     end
 
     self.currentLevel = nextLevel

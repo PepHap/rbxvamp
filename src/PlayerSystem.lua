@@ -3,6 +3,7 @@
 
 local PlayerSystem = {}
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
+local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
 
 ---Indicates if a Roblox model should be created for the player when the game
 --  starts. Tests can disable this to avoid manipulating Instance objects.
@@ -66,6 +67,14 @@ local function createVector3(x, y, z)
     return {x = x, y = y, z = z}
 end
 
+local function getSpawnPosition()
+    local loc = LocationSystem and LocationSystem.getCurrent and LocationSystem:getCurrent()
+    if loc and loc.coordinates then
+        return {x = loc.coordinates.x, y = loc.coordinates.y, z = loc.coordinates.z}
+    end
+    return {x = 0, y = 0, z = 0}
+end
+
 ---Spawns a very simple Roblox model for the player or a table representation
 --  during tests. The model/instance is stored in ``PlayerSystem.model``.
 local function spawnModel()
@@ -118,10 +127,34 @@ local function spawnModel()
     return model
 end
 
+function PlayerSystem:setPosition(pos)
+    pos = pos or {x = 0, y = 0, z = 0}
+    if self.position then
+        self.position.x = pos.x
+        self.position.y = pos.y
+        self.position.z = pos.z
+    else
+        self.position = {x = pos.x, y = pos.y, z = pos.z}
+    end
+    AutoBattleSystem.playerPosition = self.position
+    local model = self.model
+    if model then
+        local part = model.PrimaryPart or model.primaryPart
+        if part then
+            if part.Position ~= nil then
+                part.Position = createVector3(pos.x, pos.y, pos.z)
+            else
+                part.position = {x = pos.x, y = pos.y, z = pos.z}
+            end
+        end
+    end
+end
+
 ---Initializes the player state and spawns a model when the game starts.
 function PlayerSystem:start()
     self.health = self.maxHealth
-    self.position = {x = 0, y = 0, z = 0}
+    local pos = getSpawnPosition()
+    self.position = {x = pos.x, y = pos.y, z = pos.z}
     AutoBattleSystem.playerPosition = self.position
     if self.spawnModels ~= false then
         spawnModel()
