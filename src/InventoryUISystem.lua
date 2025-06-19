@@ -392,6 +392,10 @@ function InventoryUI:update()
     clearChildren(self.equipmentFrame)
     clearChildren(self.inventoryFrame)
     clearChildren(self.statsFrame)
+    -- reset slot references to avoid using destroyed instances
+    self.slotRefs = nil
+    InventorySlots.slots = {}
+    InventorySlots.container = nil
 
     parent(self.equipmentFrame, parentGui)
     parent(self.inventoryFrame, parentGui)
