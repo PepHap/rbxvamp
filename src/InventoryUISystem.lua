@@ -167,6 +167,13 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     -- are recreated properly even if children were destroyed
     self.slotRefs = nil
     local gui = ensureGui(parentGui)
+    if self.window then
+        if parentGui and self.window.Parent ~= gui then
+            parent(self.window, gui)
+            self.gui = gui
+        end
+        return
+    end
 
     -- no bundled images; create a plain window instead
     self.window = GuiUtil.createWindow("InventoryWindow")

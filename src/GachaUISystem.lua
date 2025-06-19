@@ -80,6 +80,9 @@ end
 
 function GachaUI:start(manager)
     self.gameManager = manager or self.gameManager or require(script.Parent:WaitForChild("GameManager"))
+    if self.window then
+        return
+    end
     local gui = ensureGui()
 
     -- use a plain window frame; banner images were removed
