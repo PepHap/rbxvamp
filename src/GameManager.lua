@@ -103,8 +103,10 @@ GameManager.achievementSystem = AchievementSystem
 GameManager:addSystem("Achievements", AchievementSystem)
 
 -- Equipment handling
+local InventoryModule = require(script.Parent:WaitForChild("InventoryModule"))
 local ItemSystem = require(script.Parent:WaitForChild("ItemSystem"))
-GameManager.itemSystem = ItemSystem.new()
+GameManager.inventory = InventoryModule.new()
+GameManager.itemSystem = GameManager.inventory.itemSystem
 GameManager:addSystem("Items", GameManager.itemSystem)
 
 do
@@ -149,6 +151,7 @@ GameManager:addSystem("Dungeon", DungeonSystem)
 -- Base stats like attack and defense upgrades
 local StatUpgradeSystem = require(script.Parent:WaitForChild("StatUpgradeSystem"))
 GameManager:addSystem("Stats", StatUpgradeSystem)
+GameManager.inventory.statSystem = StatUpgradeSystem
 -- Define some base player stats used by the inventory display
 StatUpgradeSystem:addStat("Health", 100)
 StatUpgradeSystem:addStat("Attack", 5)
@@ -318,7 +321,11 @@ end
 function GameManager:rollEquipment(slot)
     local reward = GachaSystem:rollEquipment(slot)
     if reward then
-        self.itemSystem:addItem(reward)
+        if self.inventory and self.inventory.AddItem then
+            self.inventory:AddItem(reward)
+        else
+            self.itemSystem:addItem(reward)
+        end
     end
     return reward
 end
@@ -339,7 +346,11 @@ end
 function GameManager:chooseReward(index)
     local chosen = RewardGaugeSystem:choose(index)
     if chosen then
-        self.itemSystem:equip(chosen.slot, chosen.item)
+        if self.inventory and self.inventory.EquipItem then
+            self.inventory:EquipItem(chosen.slot, chosen.item)
+        else
+            self.itemSystem:equip(chosen.slot, chosen.item)
+        end
     end
     return chosen
 end
