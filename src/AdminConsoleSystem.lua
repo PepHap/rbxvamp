@@ -66,7 +66,7 @@ function AdminConsole:start(manager, admins)
     end
     window.Name = "Window"
     window.Visible = self.visible
-    gui.Window = window
+    self.window = window
     if typeof and typeof(window)=="Instance" then
         window.Parent = gui
     else
@@ -108,7 +108,7 @@ end
 function AdminConsole:setVisible(on)
     self.visible = not not on
     local gui = ensureGui()
-    local parentGui = gui.Window or gui
+    local parentGui = self.window or gui
     GuiUtil.setVisible(parentGui, self.visible)
 end
 
