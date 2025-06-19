@@ -14,6 +14,13 @@ return {
         {name = "Dragon Necklace", rarity = "S", slot = "Necklace", stats = {attack = 5}},
         {name = "Eternal Pendant", rarity = "SS", slot = "Necklace", stats = {magic = 8}},
         {name = "Cosmic Relic", rarity = "SSS", slot = "Necklace", stats = {magic = 16}},
+        {name = "Wizard Hat", rarity = "B", slot = "Hat", stats = {magic = 4, attackSpeed = 0.1}},
+        {name = "Royal Crown", rarity = "S", slot = "Hat", stats = {health = 20, critChance = 0.05}},
+    },
+    Necklace = {
+        {name = "Bronze Necklace", rarity = "C", slot = "Necklace", stats = {health = 2}},
+        {name = "Silver Necklace", rarity = "B", slot = "Necklace", stats = {health = 5}},
+        {name = "Ruby Pendant", rarity = "A", slot = "Necklace", stats = {magic = 3}},
     },
     Ring = {
         {name = "Simple Ring", rarity = "C", slot = "Ring", stats = {attack = 1}},
@@ -23,6 +30,8 @@ return {
         {name = "Shadow Ring", rarity = "S", slot = "Ring", stats = {attack = 6}},
         {name = "Astral Ring", rarity = "SS", slot = "Ring", stats = {magic = 9}},
         {name = "Infinity Ring", rarity = "SSS", slot = "Ring", stats = {magic = 18}},
+        {name = "Silver Ring", rarity = "B", slot = "Ring", stats = {attack = 2}},
+        {name = "Platinum Ring", rarity = "S", slot = "Ring", stats = {critDamage = 0.2}},
     },
     Armor = {
         {name = "Leather Armor", rarity = "C", slot = "Armor", stats = {health = 10}},
@@ -41,6 +50,12 @@ return {
         {name = "Spirit Token", rarity = "S", slot = "Accessory", stats = {critChance = 0.1}},
         {name = "Ancient Talisman", rarity = "SS", slot = "Accessory", stats = {magic = 12}},
         {name = "Divine Sigil", rarity = "SSS", slot = "Accessory", stats = {magic = 24}},
+        {name = "Chain Mail", rarity = "B", slot = "Armor", stats = {defense = 3}},
+        {name = "Wizard Robe", rarity = "A", slot = "Armor", stats = {magic = 4}},
+    },
+    Accessory = {
+        {name = "Lucky Charm", rarity = "B", slot = "Accessory", stats = {critChance = 0.05}},
+        {name = "Magic Charm", rarity = "A", slot = "Accessory", stats = {manaRegen = 0.1}},
     },
     Weapon = {
         {name = "Wooden Sword", rarity = "C", slot = "Weapon", stats = {attack = 3}},
@@ -50,5 +65,8 @@ return {
         {name = "Phoenix Claw", rarity = "S", slot = "Weapon", stats = {attack = 12}},
         {name = "Void Edge", rarity = "SS", slot = "Weapon", stats = {attack = 20}},
         {name = "Omega Breaker", rarity = "SSS", slot = "Weapon", stats = {attack = 40}},
+        {name = "Great Axe", rarity = "A", slot = "Weapon", stats = {attack = 8}},
+        {name = "Legendary Sword", rarity = "S", slot = "Weapon", stats = {attack = 12}},
+        {name = "Mythic Blade", rarity = "SS", slot = "Weapon", stats = {attack = 20}},
     }
 }

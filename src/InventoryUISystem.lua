@@ -44,7 +44,8 @@ local InventoryUI = {
 }
 
 -- Render order for equipment slots to ensure deterministic layout
-local slotOrder = {"Hat", "Necklace", "Ring", "Armor", "Accessory", "Weapon"}
+local SlotConstants = require(script.Parent:WaitForChild("SlotConstants"))
+local slotOrder = SlotConstants.list
 
 local ItemSystem = require(script.Parent:WaitForChild("ItemSystem"))
 
