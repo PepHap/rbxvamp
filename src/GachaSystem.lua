@@ -3,16 +3,46 @@
 
 local GachaSystem = {}
 
--- Rarity weights used when rolling. Values do not need to sum to 100 and
--- are treated as relative chances.
+-- Default rarity weight tables used for all reward categories. Each entry is
+-- a list of tuples ``{rarity, weight}`` where the weight acts as a relative
+-- probability.  The values intentionally do not sum to 100 so additional
+-- rarities can be inserted without recalculating the entire table.
+local defaultWeights = {
+    skill = {
+        {"C", 80},
+        {"D", 25},
+        {"B", 5},
+        {"A", 1},
+        {"S", 0.1},
+        {"SS", 0.001},
+        {"SSS", 1e-12},
+    },
+    companion = {
+        {"C", 80},
+        {"D", 25},
+        {"B", 5},
+        {"A", 1},
+        {"S", 0.1},
+        {"SS", 0.001},
+        {"SSS", 1e-12},
+    },
+    equipment = {
+        {"C", 80},
+        {"D", 25},
+        {"B", 5},
+        {"A", 1},
+        {"S", 0.1},
+        {"SS", 0.001},
+        {"SSS", 1e-12},
+    }
+}
+
+-- Active weight configuration.  This table can be changed at runtime via
+-- ``setRarityWeights`` to alter drop chances per category.
 GachaSystem.rarityWeights = {
-    {"C", 80},
-    {"D", 25},
-    {"B", 5},
-    {"A", 1},
-    {"S", 0.1},
-    {"SS", 0.001},
-    {"SSS", 1e-12},
+    skill = defaultWeights.skill,
+    companion = defaultWeights.companion,
+    equipment = defaultWeights.equipment,
 }
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -26,6 +56,24 @@ GachaSystem.tickets = {skill = 0, companion = 0, equipment = 0}
 GachaSystem.crystals = 0
 ---Optional inventory module for automatically storing rolled items
 GachaSystem.inventory = nil
+
+---Sets custom rarity weights for the given category. The ``weights`` argument
+-- should be a list of ``{rarity, weight}`` tuples.
+-- @param category string reward category (skill/companion/equipment)
+-- @param weights table list of weight entries
+function GachaSystem:setRarityWeights(category, weights)
+    if type(category) ~= "string" or type(weights) ~= "table" then
+        return
+    end
+    self.rarityWeights[category] = weights
+end
+
+---Retrieves the active weight table for the category.
+-- @param category string reward category
+-- @return table weight list
+function GachaSystem:getRarityWeights(category)
+    return self.rarityWeights[category]
+end
 
 ---Adds crystals to the gacha currency pool.
 -- @param amount number quantity to add
@@ -76,14 +124,20 @@ end
 
 ---Selects a rarity based on the configured weights.
 -- @return string rarity key
-function GachaSystem:rollRarity()
+---Selects a rarity based on the configured weights for ``category``.
+-- When ``category`` is omitted, ``"skill"`` weights are used.
+-- @param category string|nil reward category
+-- @return string rarity key
+function GachaSystem:rollRarity(category)
+    category = category or "skill"
+    local weights = self.rarityWeights[category] or defaultWeights.skill
     local total = 0
-    for _, entry in ipairs(self.rarityWeights) do
+    for _, entry in ipairs(weights) do
         total = total + entry[2]
     end
     local r = math.random() * total
     local acc = 0
-    for _, entry in ipairs(self.rarityWeights) do
+    for _, entry in ipairs(weights) do
         acc = acc + entry[2]
         if r <= acc then
             return entry[1]
@@ -122,7 +176,7 @@ function GachaSystem:rollSkill()
     if not consumeCurrency(self, "skill") then
         return nil
     end
-    local rarity = self:rollRarity()
+    local rarity = self:rollRarity("skill")
     return selectByRarity(skillPool, rarity)
 end
 
@@ -149,7 +203,7 @@ function GachaSystem:rollCompanion()
     if not consumeCurrency(self, "companion") then
         return nil
     end
-    local rarity = self:rollRarity()
+    local rarity = self:rollRarity("companion")
     return selectByRarity(companionPool, rarity)
 end
 
@@ -180,7 +234,7 @@ function GachaSystem:rollEquipment(slot)
     if not pool then
         return nil
     end
-    local rarity = self:rollRarity()
+    local rarity = self:rollRarity("equipment")
     local reward = selectByRarity(pool, rarity)
     if self.inventory and self.inventory.AddItem then
         self.inventory:AddItem(reward)

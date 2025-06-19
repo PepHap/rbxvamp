@@ -71,6 +71,18 @@ describe("GachaSystem", function()
         assert.equals(2, GachaSystem.crystals)
     end)
 
+    it("allows overriding rarity weights per category", function()
+        local custom = {{"A", 1}}
+        GachaSystem:setRarityWeights("skill", custom)
+        local r = GachaSystem:rollRarity("skill")
+        assert.equals("A", r)
+        -- restore default for other tests
+        GachaSystem:setRarityWeights("skill", {
+            {"C", 80}, {"D", 25}, {"B", 5}, {"A", 1},
+            {"S", 0.1}, {"SS", 0.001}, {"SSS", 1e-12},
+        })
+    end)
+
     it("rolls multiple rewards until currency runs out", function()
         GachaSystem.tickets.skill = 2
         GachaSystem.crystals = 0 -- ensure no extra currency available
