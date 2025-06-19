@@ -247,6 +247,11 @@ if RunService:IsClient() then
     StatUpgradeUISystem.statSystem = StatUpgradeSystem
     GameManager:addSystem("StatUI", StatUpgradeUISystem)
 
+    -- UI for exchanging crystals into tickets or currency
+    local CrystalExchangeUISystem = require(script.Parent:WaitForChild("CrystalExchangeUISystem"))
+    CrystalExchangeUISystem.exchangeSystem = CrystalExchangeSystem
+    GameManager:addSystem("CrystalExchangeUI", CrystalExchangeUISystem)
+
     -- Admin console for privileged commands
     local adminModule
     local ok, result = pcall(function()
