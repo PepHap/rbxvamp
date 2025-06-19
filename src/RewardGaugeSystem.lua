@@ -51,9 +51,12 @@ function RewardGaugeSystem:addPoints(amount)
     end
     self.gauge = self.gauge + n
     while self.gauge >= self.maxGauge do
+        -- Once the gauge fills, reset it and generate reward options.
         self.gauge = self.gauge - self.maxGauge
         self.options = self:generateOptions()
         if self.options then
+            -- Any leftover points are discarded when options appear
+            self.gauge = 0
             break
         end
     end
