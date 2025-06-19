@@ -53,6 +53,15 @@ end
 function ProgressMapUI:start(ps)
     self.progressSystem = ps or self.progressSystem or require(script.Parent:WaitForChild("ProgressMapSystem"))
     local gui = ensureGui()
+    if self.window then
+        if self.window.Parent ~= gui then
+            parent(self.window, gui)
+            self.gui = gui
+        end
+        self:update()
+        self:setVisible(self.visible)
+        return
+    end
     self.window = GuiUtil.createWindow("ProgressMapWindow")
     parent(self.window, gui)
     self.label = createInstance("TextLabel")

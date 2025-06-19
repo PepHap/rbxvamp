@@ -80,6 +80,13 @@ end
 function CompanionUISystem:start(compSys)
     self.companionSystem = compSys or self.companionSystem or {companions = {}}
     local gui = ensureGui()
+    if self.window then
+        if self.window.Parent ~= gui then
+            parent(self.window, gui)
+            self.gui = gui
+        end
+        return
+    end
 
     -- create a simple window frame; images are optional and removed to keep the repo text only
     self.window = GuiUtil.createWindow("CompanionWindow")

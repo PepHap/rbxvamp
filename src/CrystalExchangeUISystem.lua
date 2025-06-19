@@ -68,6 +68,13 @@ end
 function CrystalExchangeUI:start(exchangeSys)
     self.exchangeSystem = exchangeSys or self.exchangeSystem or CrystalExchangeSystem
     local gui = ensureGui()
+    if self.window then
+        if self.window.Parent ~= gui then
+            parent(self.window, gui)
+            self.gui = gui
+        end
+        return
+    end
 
     self.window = GuiUtil.createWindow("CrystalExchangeWindow")
     parent(self.window, gui)

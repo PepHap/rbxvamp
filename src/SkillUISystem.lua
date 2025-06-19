@@ -82,6 +82,15 @@ local function ensureGui(parent)
 end
 
 function SkillUISystem:start(skillSys, parentGui)
+    if self.window then
+        -- Re-parent when opened from a new GUI container
+        local gui = ensureGui(parentGui)
+        if gui and self.window.Parent ~= gui then
+            parent(self.window, gui)
+            self.gui = gui
+        end
+        return
+    end
     self.skillSystem = skillSys or self.skillSystem or SkillSystem.new()
     local gui = ensureGui(parentGui)
 

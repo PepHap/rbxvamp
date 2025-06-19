@@ -91,6 +91,21 @@ end
 
 function HudSystem:start()
     local gui = ensureGui()
+    if self.levelLabel then
+        if self.levelLabel.Parent ~= gui then
+            parent(self.levelLabel, gui)
+            parent(self.currencyLabel, gui)
+            parent(self.autoButton, gui)
+            parent(self.attackButton, gui)
+            parent(self.gachaButton, gui)
+            parent(self.inventoryButton, gui)
+            parent(self.rewardButton, gui)
+            parent(self.skillButton, gui)
+            parent(self.companionButton, gui)
+            parent(self.progressFrame, gui)
+        end
+        return
+    end
     self.levelLabel = createInstance("TextLabel")
     self.currencyLabel = createInstance("TextLabel")
     self.autoButton = createInstance("TextButton")

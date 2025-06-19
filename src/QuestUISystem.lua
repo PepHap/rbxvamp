@@ -53,6 +53,11 @@ end
 
 function QuestUISystem:start(questSys)
     self.questSystem = questSys or self.questSystem or require(script.Parent:WaitForChild("QuestSystem"))
+    if self.gui then
+        self:update()
+        self:setVisible(self.visible)
+        return
+    end
     self:update()
     self:setVisible(self.visible)
 end
@@ -65,6 +70,8 @@ function QuestUISystem:update()
     local gui = ensureGui()
     if type(gui) == "table" then
         gui.children = {}
+    elseif gui.ClearAllChildren then
+        gui:ClearAllChildren()
     end
     local container = gui
 

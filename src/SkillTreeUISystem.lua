@@ -70,6 +70,14 @@ end
 function SkillTreeUISystem:start(treeSys)
     self.treeSystem = treeSys or self.treeSystem
     local gui = ensureGui()
+    if self.window then
+        if self.window.Parent ~= gui then
+            parent(self.window, gui)
+            self.gui = gui
+        end
+        self:update()
+        return
+    end
     self.window = GuiUtil.createWindow("SkillTreeWindow")
     parent(self.window, gui)
     self:update()
