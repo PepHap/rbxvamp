@@ -205,43 +205,45 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
         end
     end
 
-    local prev = parentTarget.FindFirstChild and parentTarget:FindFirstChild("PrevPage") or createInstance("TextButton")
+    local btnParent = self.window
+
+    local prev = btnParent.FindFirstChild and btnParent:FindFirstChild("PrevPage") or createInstance("TextButton")
     prev.Name = "PrevPage"
     prev.Text = "<"
     if UDim2 and type(UDim2.new)=="function" then
         prev.Position = UDim2.new(0.45, -60, 1, -40)
     end
-    parent(prev, parentTarget)
+    parent(prev, btnParent)
     GuiUtil.connectButton(prev, function()
         InventoryUI:changePage(-1)
     end)
-    if type(parentTarget) == "table" then parentTarget.PrevPage = prev end
+    if type(btnParent) == "table" then btnParent.PrevPage = prev end
 
-    local nextBtn = parentTarget.FindFirstChild and parentTarget:FindFirstChild("NextPage") or createInstance("TextButton")
+    local nextBtn = btnParent.FindFirstChild and btnParent:FindFirstChild("NextPage") or createInstance("TextButton")
     nextBtn.Name = "NextPage"
     nextBtn.Text = ">"
     if UDim2 and type(UDim2.new)=="function" then
         nextBtn.Position = UDim2.new(0.55, 0, 1, -40)
     end
-    parent(nextBtn, parentTarget)
+    parent(nextBtn, btnParent)
     GuiUtil.connectButton(nextBtn, function()
         InventoryUI:changePage(1)
     end)
-    if type(parentTarget) == "table" then parentTarget.NextPage = nextBtn end
+    if type(btnParent) == "table" then btnParent.NextPage = nextBtn end
 
-    local upgradeBtn = parentTarget.FindFirstChild and parentTarget:FindFirstChild("Upgrade") or createInstance("TextButton")
+    local upgradeBtn = btnParent.FindFirstChild and btnParent:FindFirstChild("Upgrade") or createInstance("TextButton")
     upgradeBtn.Name = "Upgrade"
     upgradeBtn.Text = "Upgrade"
     if UDim2 and type(UDim2.new)=="function" then
         upgradeBtn.Position = UDim2.new(0.8, 0, 1, -40)
     end
-    parent(upgradeBtn, parentTarget)
+    parent(upgradeBtn, btnParent)
     GuiUtil.connectButton(upgradeBtn, function()
         if InventoryUI.selectedSlot then
             InventoryUI:upgradeSlot(InventoryUI.selectedSlot)
         end
     end)
-    if type(parentTarget) == "table" then parentTarget.Upgrade = upgradeBtn end
+    if type(btnParent) == "table" then btnParent.Upgrade = upgradeBtn end
     self.upgradeButton = upgradeBtn
 
     self:update()
