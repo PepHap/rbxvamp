@@ -46,20 +46,8 @@ end
 
 -- Parent ``child`` to ``parent`` in both real Roblox and table form
 local function parent(child, parentObj)
-    if child == nil or parentObj == nil then
-        return
-    end
-    if typeof and typeof(child) == "Instance" then
-        if typeof(parentObj) == "Instance" then
-            child.Parent = parentObj
-        end
-    else
-        child.Parent = parentObj
-    end
-    if type(parentObj) == "table" then
-        parentObj.children = parentObj.children or {}
-        table.insert(parentObj.children, child)
-    end
+    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
+    GuiUtil.parent(child, parentObj)
 end
 
 -- Lazily creates and returns the ScreenGui

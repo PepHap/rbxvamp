@@ -37,9 +37,20 @@ local function createInstance(className)
 end
 
 local function parent(child, parentObj)
-    if not child or not parentObj then
-        return
+    if not child or not parentObj then return end
+    -- remove from previous parent table if necessary
+    if type(child) == "table" and child.Parent and child.Parent ~= parentObj then
+        local prev = child.Parent
+        if type(prev) == "table" and prev.children then
+            for i, c in ipairs(prev.children) do
+                if c == child then
+                    table.remove(prev.children, i)
+                    break
+                end
+            end
+        end
     end
+
     if typeof and typeof(child) == "Instance" then
         if typeof(parentObj) == "Instance" then
             child.Parent = parentObj
@@ -47,11 +58,19 @@ local function parent(child, parentObj)
     else
         child.Parent = parentObj
     end
+
     if type(parentObj) == "table" then
         parentObj.children = parentObj.children or {}
+        for _, c in ipairs(parentObj.children) do
+            if c == child then
+                return
+            end
+        end
         table.insert(parentObj.children, child)
     end
 end
+
+GuiUtil.parent = parent
 
 function GuiUtil.getPlayerGui()
     if not game or type(game.GetService) ~= "function" then

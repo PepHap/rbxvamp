@@ -22,20 +22,8 @@ local function createInstance(className)
 end
 
 local function parent(child, parentObj)
-    if not child or not parentObj then
-        return
-    end
-    if typeof and typeof(child) == "Instance" then
-        if typeof(parentObj) == "Instance" then
-            child.Parent = parentObj
-        end
-    else
-        child.Parent = parentObj
-    end
-    if type(parentObj) == "table" then
-        parentObj.children = parentObj.children or {}
-        table.insert(parentObj.children, child)
-    end
+    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
+    GuiUtil.parent(child, parentObj)
 end
 
 ---Creates slot buttons inside the given parent frame.
