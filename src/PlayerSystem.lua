@@ -59,6 +59,11 @@ function PlayerSystem:onDeath()
         LevelSystem:onPlayerDeath()
     end
     self.health = self.maxHealth
+    local spawnPos = getSpawnPosition()
+    self:setPosition(spawnPos)
+    if not self.model then
+        spawnModel()
+    end
     EventManager:Get("PlayerDied"):Fire()
 end
 
