@@ -170,6 +170,8 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
 
     -- no bundled images; create a plain window instead
     self.window = GuiUtil.createWindow("InventoryWindow")
+    -- hide the window before parenting to avoid a visible flicker
+    GuiUtil.setVisible(self.window, self.visible)
     parent(self.window, gui)
     if UDim2 and type(UDim2.new)=="function" then
         self.window.Size = UDim2.new(1, 0, 1, 0)
