@@ -104,5 +104,13 @@ function InventoryModule:GetStats()
     return combined
 end
 
+---Returns a copy of all equipped items keyed by slot name.
+function InventoryModule:GetEquippedItems()
+    if self.itemSystem and self.itemSystem.getEquippedItems then
+        return self.itemSystem:getEquippedItems()
+    end
+    return {}
+end
+
 return InventoryModule
 
