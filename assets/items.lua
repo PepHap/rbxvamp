@@ -68,5 +68,5 @@ return {
         {name = "Great Axe", rarity = "A", slot = "Weapon", stats = {attack = 8}},
         {name = "Legendary Sword", rarity = "S", slot = "Weapon", stats = {attack = 12}},
         {name = "Mythic Blade", rarity = "SS", slot = "Weapon", stats = {attack = 20}},
-    }
+    },
 }
