@@ -100,4 +100,38 @@ describe("GameManager", function()
         assert.is_true(ok)
         assert.same({items, "Weapon", 1, "gold"}, CrystalExchangeSystem.args)
     end)
+
+    it("salvages inventory items via GameManager", function()
+        local ItemSystem = require("src.ItemSystem")
+        local Salvage = require("src.ItemSalvageSystem")
+        local items = ItemSystem.new()
+        items:addItem({name = "Cap", slot = "Hat", rarity = "C"})
+        GameManager.itemSystem = items
+        Salvage.called = false
+        Salvage.salvageFromInventory = function(_, itemSys, index)
+            Salvage.called = {itemSys, index}
+            return true
+        end
+        GameManager.itemSalvageSystem = Salvage
+        local ok = GameManager:salvageInventoryItem(1)
+        assert.is_true(ok)
+        assert.same({items, 1}, Salvage.called)
+    end)
+
+    it("salvages equipped items via GameManager", function()
+        local ItemSystem = require("src.ItemSystem")
+        local Salvage = require("src.ItemSalvageSystem")
+        local items = ItemSystem.new()
+        items:equip("Ring", {name = "Ring", slot = "Ring", rarity = "C"})
+        GameManager.itemSystem = items
+        Salvage.calledItem = nil
+        Salvage.salvageItem = function(_, itm)
+            Salvage.calledItem = itm
+            return true
+        end
+        GameManager.itemSalvageSystem = Salvage
+        local ok = GameManager:salvageEquippedItem("Ring")
+        assert.is_true(ok)
+        assert.equals("Ring", Salvage.calledItem.slot)
+    end)
 end)
