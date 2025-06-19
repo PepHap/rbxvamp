@@ -157,6 +157,7 @@ GameManager:addSystem("Dungeon", DungeonSystem)
 local StatUpgradeSystem = require(script.Parent:WaitForChild("StatUpgradeSystem"))
 GameManager:addSystem("Stats", StatUpgradeSystem)
 GameManager.inventory.statSystem = StatUpgradeSystem
+GameManager.inventory.setSystem = SetBonusSystem
 -- Define some base player stats used by the inventory display
 StatUpgradeSystem:addStat("Health", 100)
 StatUpgradeSystem:addStat("Attack", 5)
