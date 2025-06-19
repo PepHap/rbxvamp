@@ -27,6 +27,8 @@ local InventoryUI = {
     selectedSlot = nil,
     ---Inventory index awaiting a slot selection
     pendingIndex = nil,
+    ---Reference to the upgrade button
+    upgradeButton = nil,
     ---Window frame containing all inventory UI elements
     window = nil,
     ---Optional blur effect applied when the window is visible
@@ -219,6 +221,21 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
         InventoryUI:changePage(1)
     end)
     if type(gui) == "table" then gui.NextPage = nextBtn end
+
+    local upgradeBtn = gui.FindFirstChild and gui:FindFirstChild("Upgrade") or createInstance("TextButton")
+    upgradeBtn.Name = "Upgrade"
+    upgradeBtn.Text = "Upgrade"
+    if UDim2 and type(UDim2.new)=="function" then
+        upgradeBtn.Position = UDim2.new(0.8, 0, 1, -40)
+    end
+    parent(upgradeBtn, gui)
+    GuiUtil.connectButton(upgradeBtn, function()
+        if InventoryUI.selectedSlot then
+            InventoryUI:upgradeSlot(InventoryUI.selectedSlot)
+        end
+    end)
+    if type(gui) == "table" then gui.Upgrade = upgradeBtn end
+    self.upgradeButton = upgradeBtn
 
     self:update()
     self:setVisible(self.visible)
@@ -438,6 +455,21 @@ function InventoryUI:selectSlot(slot)
         end
     end
     self:update()
+end
+
+---Attempts to upgrade the specified equipment slot using gold.
+-- @param slot string equipment slot name
+-- @return boolean success
+function InventoryUI:upgradeSlot(slot)
+    if not self.itemSystem then
+        return false
+    end
+    local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+    local ok = self.itemSystem:upgradeItem(slot, 1, "gold")
+    if ok then
+        self:update()
+    end
+    return ok
 end
 
 ---Sets whether the inventory UI is visible.

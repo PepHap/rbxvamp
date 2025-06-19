@@ -39,5 +39,16 @@ describe("InventoryUISystem", function()
         InventoryUISystem:toggle()
         assert.is_true(InventoryUISystem.visible)
     end)
+
+    it("upgrades selected slot", function()
+        local items = ItemSystem.new()
+        items:equip("Weapon", {name = "Sword", slot = "Weapon"})
+        local CurrencySystem = require("src.CurrencySystem")
+        CurrencySystem.balances = {gold = 5}
+        InventoryUISystem:start(items)
+        local ok = InventoryUISystem:upgradeSlot("Weapon")
+        assert.is_true(ok)
+        assert.equals(2, items.slots.Weapon.level)
+    end)
 end)
 
