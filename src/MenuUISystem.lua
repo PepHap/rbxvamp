@@ -128,6 +128,25 @@ function MenuUI:start()
     end
 end
 
+---Toggles visibility of a specific tab. If the menu is already visible and the
+-- target tab is showing, the menu will be hidden.
+-- @param name string tab name
+function MenuUI:toggleTab(name)
+    if not self.gui then
+        self:start()
+    end
+    local idx = self:getTabIndex(name)
+    if not idx then
+        return
+    end
+    if self.visible and self.currentTab == idx then
+        self:setVisible(false)
+    else
+        self:showTab(idx)
+        self:setVisible(true)
+    end
+end
+
 function MenuUI:showTab(index)
     self.currentTab = index
     for i,tab in ipairs(self.tabs) do
@@ -167,6 +186,15 @@ function MenuUI:setVisible(on)
     local gui = ensureGui()
     local parentGui = self.window or gui
     GuiUtil.setVisible(parentGui, self.visible)
+    if self.visible then
+        self:showTab(self.currentTab)
+    else
+        for _,tab in ipairs(self.tabs) do
+            if tab.system and tab.system.setVisible then
+                tab.system:setVisible(false)
+            end
+        end
+    end
 end
 
 function MenuUI:toggle()
