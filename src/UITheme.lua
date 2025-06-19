@@ -25,6 +25,23 @@ UITheme.font = Enum and Enum.Font and Enum.Font.GothamBold
 
 UITheme.cornerRadius = 8
 
+-- Convert RGB table values returned in test environments to actual Color3
+-- values when running inside Roblox. This prevents type mismatches when
+-- assigning colors to GUI properties or using TweenService.
+local function toColor3(value)
+    if typeof and typeof(value) == "Color3" then
+        return value
+    end
+    if type(value) == "table" and value.r and value.g and value.b and Color3 then
+        if Color3.fromRGB then
+            return Color3.fromRGB(value.r, value.g, value.b)
+        elseif Color3.new then
+            return Color3.new(value.r/255, value.g/255, value.b/255)
+        end
+    end
+    return value
+end
+
 local function addCorner(obj)
     if not obj then return end
     local radius = UITheme.cornerRadius or 0
@@ -58,7 +75,7 @@ end
 function UITheme.styleWindow(frame)
     assign(frame, {
         BackgroundTransparency = 0.1,
-        BackgroundColor3 = UITheme.colors.windowBackground,
+        BackgroundColor3 = toColor3(UITheme.colors.windowBackground),
     })
     addCorner(frame)
 end
@@ -66,8 +83,8 @@ end
 function UITheme.styleButton(btn)
     assign(btn, {
         Font = UITheme.font,
-        TextColor3 = UITheme.colors.buttonText,
-        BackgroundColor3 = UITheme.colors.buttonBackground,
+        TextColor3 = toColor3(UITheme.colors.buttonText),
+        BackgroundColor3 = toColor3(UITheme.colors.buttonBackground),
         AutoButtonColor = false,
     })
     addCorner(btn)
@@ -76,7 +93,7 @@ end
 function UITheme.styleLabel(lbl)
     assign(lbl, {
         Font = UITheme.font,
-        TextColor3 = UITheme.colors.labelText,
+        TextColor3 = toColor3(UITheme.colors.labelText),
         BackgroundTransparency = lbl.BackgroundTransparency or 1,
     })
     addCorner(lbl)
@@ -88,8 +105,8 @@ end
 function UITheme.styleInput(input)
     assign(input, {
         Font = UITheme.font,
-        TextColor3 = UITheme.colors.labelText,
-        BackgroundColor3 = UITheme.colors.buttonBackground,
+        TextColor3 = toColor3(UITheme.colors.labelText),
+        BackgroundColor3 = toColor3(UITheme.colors.buttonBackground),
     })
     addCorner(input)
 end

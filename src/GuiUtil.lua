@@ -10,6 +10,24 @@ local okTween, TweenService = pcall(function()
 end)
 if not okTween then TweenService = nil end
 
+-- Utility to ensure we always pass a Color3 to Roblox APIs.
+-- When running in a test environment the theme tables may contain
+-- simple RGB fields instead of a Color3. Convert those tables when
+-- possible so TweenService:Create never receives a plain Lua table.
+local function toColor3(value)
+    if typeof and typeof(value) == "Color3" then
+        return value
+    end
+    if type(value) == "table" and value.r and value.g and value.b and Color3 then
+        if Color3.fromRGB then
+            return Color3.fromRGB(value.r, value.g, value.b)
+        elseif Color3.new then
+            return Color3.new(value.r/255, value.g/255, value.b/255)
+        end
+    end
+    return value
+end
+
 -- internal helper for creating a Roblox Instance when available
 local function createInstance(className)
     if typeof and Instance and type(Instance.new) == "function" then
@@ -139,8 +157,8 @@ end
 ---@param button table|Instance TextButton to modify
 function GuiUtil.applyHoverEffect(button)
     if not button then return end
-    local hoverColor = Theme and Theme.colors and Theme.colors.buttonHover
-    local normalColor = button.BackgroundColor3
+    local hoverColor = Theme and Theme.colors and toColor3(Theme.colors.buttonHover)
+    local normalColor = toColor3(button.BackgroundColor3)
     if button.MouseEnter and button.MouseLeave then
         if TweenService and hoverColor and normalColor then
             local enterTween = TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = hoverColor})
