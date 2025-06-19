@@ -416,6 +416,7 @@ function GameManager:getSaveData()
         skills = self.skillSystem:saveData(),
         companions = self.companionSystem:saveData(),
         stats = StatUpgradeSystem:saveData(),
+        achievements = AchievementSystem:saveData(),
     }
 end
 
@@ -436,6 +437,7 @@ function GameManager:applySaveData(data)
     self.skillSystem:loadData(data.skills)
     self.companionSystem:loadData(data.companions)
     StatUpgradeSystem:loadData(data.stats)
+    AchievementSystem:loadData(data.achievements)
 end
 
 ---Salvages an item from the inventory into currency and crystals.

@@ -27,4 +27,13 @@ describe("AchievementSystem", function()
         assert.is_true(AchievementSystem:claim("kills_10"))
         assert.is_false(AchievementSystem:claim("kills_10"))
     end)
+
+    it("saves and loads progress", function()
+        AchievementSystem:addProgress("kills", 5)
+        local data = AchievementSystem:saveData()
+        AchievementSystem.progress = {}
+        AchievementSystem:start()
+        AchievementSystem:loadData(data)
+        assert.equals(5, AchievementSystem.progress.kills_10.value)
+    end)
 end)
