@@ -59,4 +59,45 @@ function CrystalExchangeSystem:buyCurrency(kind, amount)
     return true
 end
 
+---Upgrades an item directly using crystals.
+-- Converts the required upgrade currency into crystals and performs the upgrade.
+-- @param itemSystem table item system instance
+-- @param slot string equipment slot name
+-- @param amount number levels to upgrade
+-- @param currencyType string currency used for the upgrade cost
+-- @return boolean success
+function CrystalExchangeSystem:upgradeItemWithCrystals(itemSystem, slot, amount, currencyType)
+    currencyType = currencyType or "gold"
+    local price = self.currencyPrices[currencyType]
+    if not price or type(itemSystem) ~= "table" then
+        return false
+    end
+    local item = itemSystem.slots[slot]
+    local n = tonumber(amount) or 1
+    if not item or n <= 0 then
+        return false
+    end
+
+    local current = item.level or 1
+    local target = math.min(itemSystem.maxLevel, current + n)
+    if target <= current then
+        return false
+    end
+
+    local currencyNeeded = 0
+    for lvl = current + 1, target do
+        currencyNeeded = currencyNeeded + (itemSystem.upgradeCosts[lvl] or 0)
+    end
+
+    local crystalCost = currencyNeeded * price
+    if (GachaSystem.crystals or 0) < crystalCost then
+        return false
+    end
+
+    GachaSystem.crystals = GachaSystem.crystals - crystalCost
+    CurrencySystem:add(currencyType, currencyNeeded)
+    local ok = itemSystem:upgradeItem(slot, target - current, currencyType)
+    return ok
+end
+
 return CrystalExchangeSystem
