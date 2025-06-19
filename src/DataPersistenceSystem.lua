@@ -1,9 +1,10 @@
 -- DataPersistenceSystem.lua
 -- Handles saving and loading player data using DataStoreService when available.
 
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local DataPersistenceSystem = {
     ---When true and running inside Roblox, DataStoreService will be used.
-    useRobloxObjects = false,
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
     ---DataStore instance when available.
     datastore = nil,
     ---DataStore name

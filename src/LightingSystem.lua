@@ -1,8 +1,9 @@
 -- LightingSystem.lua
 -- Adjusts environment lighting based on the current location theme
 
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local LightingSystem = {
-    useRobloxObjects = false,
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
     locationSystem = nil,
     currentSettings = nil,
 }

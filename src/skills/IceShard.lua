@@ -1,5 +1,6 @@
+local EnvironmentUtil = require(script.Parent.Parent:WaitForChild("EnvironmentUtil"))
 local IceShard = {
-    useRobloxObjects = false,
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
 }
 
 -- Spawns a cyan shard moving forward

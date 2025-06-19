@@ -1,6 +1,7 @@
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local UISystem = {
     ---When true and running inside Roblox, real Instances will be created.
-    useRobloxObjects = false,
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
 
     ---ScreenGui container for all UI elements created by this system.
     gui = nil,

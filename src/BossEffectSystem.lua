@@ -1,6 +1,7 @@
 -- BossEffectSystem.lua
 -- Darkens the lighting when a boss spawns and restores it afterwards.
 
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local BossEffectSystem = {
     active = false,
     original = nil,
@@ -10,7 +11,7 @@ local BossEffectSystem = {
         brightness = 1,
     },
     effect = nil,
-    useRobloxObjects = false,
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
     particle = nil,
 }
 

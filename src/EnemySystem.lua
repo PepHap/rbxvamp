@@ -1,6 +1,7 @@
 -- EnemySystem.lua
 -- Spawns waves of enemies and bosses.
 
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local EnemySystem = {}
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
 
@@ -43,7 +44,7 @@ EnemySystem.spawnModels = true
 ---When enabled the system will attempt to create real Roblox Instances rather
 --  than simple Lua tables. This is disabled during unit tests where the Roblox
 --  APIs are unavailable.
-EnemySystem.useRobloxObjects = false
+EnemySystem.useRobloxObjects = EnvironmentUtil.detectRoblox()
 
 ---Movement speed in studs per second used when advancing along a path.
 EnemySystem.moveSpeed = 1
