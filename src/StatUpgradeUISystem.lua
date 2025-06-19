@@ -75,6 +75,16 @@ end
 
 function StatUpgradeUISystem:start(statSys)
     self.statSystem = statSys or self.statSystem or StatUpgradeSystem
+    local gui = ensureGui()
+    if self.statListFrame then
+        if self.statListFrame.Parent ~= gui then
+            parent(self.statListFrame, gui)
+            self.gui = gui
+        end
+        self:update()
+        self:setVisible(self.visible)
+        return
+    end
     self:update()
     self:setVisible(self.visible)
 end

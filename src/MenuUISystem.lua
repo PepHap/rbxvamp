@@ -79,6 +79,14 @@ function MenuUI:addTab(name, system)
 end
 
 function MenuUI:start()
+    if self.window then
+        local gui = ensureGui()
+        if self.window.Parent ~= gui then
+            parent(self.window, gui)
+            self.gui = gui
+        end
+        return
+    end
     self:addDefaultTabs()
     local gui = ensureGui()
     self.window = GuiUtil.createWindow("MenuWindow")

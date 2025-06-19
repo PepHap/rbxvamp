@@ -83,6 +83,13 @@ end
 
 function RewardGaugeUISystem:start()
     local gui = ensureGui()
+    if self.window then
+        if self.window.Parent ~= gui then
+            parent(self.window, gui)
+            self.gui = gui
+        end
+        return
+    end
 
     -- simple frame; image removed to keep repository text only
     self.window = GuiUtil.createWindow("RewardWindow")
