@@ -16,6 +16,7 @@ local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
 local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
@@ -100,6 +101,22 @@ function DungeonUI:start(dungeonSys)
     end
     parent(self.progressLabel, self.window)
 
+    if NetworkSystem and NetworkSystem.onClientEvent then
+        NetworkSystem:onClientEvent("DungeonState", function(active, count, req)
+            DungeonSystem.active = active
+            DungeonSystem.killCount = count or 0
+            if active and DungeonSystem.dungeons[active] then
+                DungeonSystem.dungeons[active].kills = req or DungeonSystem.dungeons[active].kills
+            end
+            DungeonUI:update()
+        end)
+        NetworkSystem:onClientEvent("DungeonProgress", function(count, req, active)
+            DungeonSystem.active = active or DungeonSystem.active
+            DungeonSystem.killCount = count or 0
+            DungeonUI:update()
+        end)
+    end
+
     self:update()
     self:setVisible(self.visible)
 end
@@ -182,6 +199,9 @@ function DungeonUI:update()
 end
 
 function DungeonUI:startDungeon(kind)
+    if NetworkSystem and NetworkSystem.fireServer then
+        NetworkSystem:fireServer("DungeonRequest", kind)
+    end
     if not self.dungeonSystem then return false end
     local ok = self.dungeonSystem:start(kind)
     if ok then

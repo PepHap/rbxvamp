@@ -76,6 +76,14 @@ function GameManager:start()
                 self.networkSystem:fireClient(player, "GaugeOptions", opts)
             end
         end)
+        self.networkSystem:onServerEvent("DungeonRequest", function(player, kind)
+            local ok = GameManager:startDungeon(kind)
+            if ok then
+                self.networkSystem:fireClient(player, "DungeonState", kind, 0, DungeonSystem.dungeons[kind] and DungeonSystem.dungeons[kind].kills or 0)
+            else
+                self.networkSystem:fireClient(player, "DungeonState", nil, 0, 0)
+            end
+        end)
     end
 end
 
@@ -579,6 +587,16 @@ function GameManager:upgradeItemWithCrystals(slot, amount, currencyType)
     -- Fall back to the one provided by the inventory module.
     local itemSys = self.itemSystem or (self.inventory and self.inventory.itemSystem)
     return self.crystalExchangeSystem:upgradeItemWithCrystals(itemSys, slot, amount, currencyType)
+end
+
+---Starts a dungeon by forwarding the request to ``DungeonSystem``.
+-- @param kind string dungeon identifier
+-- @return boolean success
+function GameManager:startDungeon(kind)
+    if not DungeonSystem or not DungeonSystem.start then
+        return false
+    end
+    return DungeonSystem:start(kind)
 end
 
 
