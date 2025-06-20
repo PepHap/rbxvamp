@@ -32,6 +32,7 @@ local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
 local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
@@ -190,6 +191,17 @@ function HudSystem:start()
     parent(self.exchangeButton, gui)
     parent(self.dungeonButton, gui)
     parent(self.partyButton, gui)
+
+    NetworkSystem:onClientEvent("StageAdvance", function(level)
+        if HudSystem.progressText then
+            HudSystem.progressText.Text = string.format("Lv.%d", level)
+        end
+    end)
+    NetworkSystem:onClientEvent("StageRollback", function(level)
+        if HudSystem.progressText then
+            HudSystem.progressText.Text = string.format("Lv.%d", level)
+        end
+    end)
     self:update()
 end
 
