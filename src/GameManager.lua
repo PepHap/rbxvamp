@@ -218,6 +218,11 @@ local CompanionAttackSystem = require(script.Parent:WaitForChild("CompanionAttac
 CompanionAttackSystem.companionSystem = GameManager.companionSystem
 GameManager:addSystem("CompanionAI", CompanionAttackSystem)
 
+-- Social lobby for trading
+local LobbySystem = require(script.Parent:WaitForChild("LobbySystem"))
+GameManager.lobbySystem = LobbySystem
+GameManager:addSystem("Lobby", LobbySystem)
+
 if RunService:IsClient() then
     -- Minimal UI for displaying rewards and gacha results
     local UISystem = require(script.Parent:WaitForChild("UISystem"))
@@ -273,6 +278,10 @@ if RunService:IsClient() then
     local DungeonUISystem = require(script.Parent:WaitForChild("DungeonUISystem"))
     DungeonUISystem.dungeonSystem = DungeonSystem
     GameManager:addSystem("DungeonUI", DungeonUISystem)
+
+    local LobbyUISystem = require(script.Parent:WaitForChild("LobbyUISystem"))
+    LobbyUISystem.lobbySystem = LobbySystem
+    GameManager:addSystem("LobbyUI", LobbyUISystem)
 
     -- Admin console for privileged commands
     local adminModule
