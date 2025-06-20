@@ -406,6 +406,9 @@ if RunService:IsClient() then
     local PlayerUISystem = require(script.Parent:WaitForChild("PlayerUISystem"))
     GameManager:addSystem("PlayerUI", PlayerUISystem)
 
+    local ScoreboardUISystem = require(script.Parent:WaitForChild("ScoreboardUISystem"))
+    GameManager:addSystem("ScoreboardUI", ScoreboardUISystem)
+
     -- Admin console for privileged commands
     local adminModule
     local ok, result = pcall(function()
@@ -432,6 +435,11 @@ GameManager:addSystem("BossEffects", BossEffectSystem)
 local ProgressMapSystem = require(script.Parent:WaitForChild("ProgressMapSystem"))
 GameManager.progressMapSystem = ProgressMapSystem
 GameManager:addSystem("ProgressMap", ProgressMapSystem)
+
+-- Leaderboard tracking highest cleared stages
+local ScoreboardSystem = require(script.Parent:WaitForChild("ScoreboardSystem"))
+GameManager.scoreboardSystem = ScoreboardSystem
+GameManager:addSystem("Scoreboard", ScoreboardSystem)
 
 -- Simple map UI
 local ProgressMapUISystem = require(script.Parent:WaitForChild("ProgressMapUISystem"))
