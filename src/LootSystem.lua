@@ -41,6 +41,9 @@ function LootSystem:onEnemyKilled(enemy)
     RewardGaugeSystem:addPoints(r.gauge)
     AchievementSystem:addProgress("kills", 1)
     EventManager:Get("EnemyKilled"):Fire(enemy)
+    if enemy.type == "boss" or enemy.type == "location" then
+        EventManager:Get("BossKilled"):Fire(enemy)
+    end
 end
 
 return LootSystem
