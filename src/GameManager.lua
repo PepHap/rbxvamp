@@ -149,6 +149,17 @@ GameManager:addSystem("Quest", QuestSystem)
 local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
 GameManager:addSystem("Keys", KeySystem)
 
+-- Cooperative party management
+local PartySystem = require(script.Parent:WaitForChild("PartySystem"))
+GameManager.partySystem = PartySystem
+GameManager:addSystem("Party", PartySystem)
+
+-- Raid encounters built around parties
+local RaidSystem = require(script.Parent:WaitForChild("RaidSystem"))
+RaidSystem.partySystem = PartySystem
+GameManager.raidSystem = RaidSystem
+GameManager:addSystem("Raid", RaidSystem)
+
 -- Optional dungeon runs for earning upgrade currency
 local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
 GameManager:addSystem("Dungeon", DungeonSystem)
@@ -481,6 +492,38 @@ function GameManager:salvageEquippedItem(slot)
         return false
     end
     return self.itemSalvageSystem:salvageItem(itm)
+end
+
+---Creates a new party lead by the given player reference.
+function GameManager:createParty(player)
+    if self.partySystem and self.partySystem.createParty then
+        return self.partySystem:createParty(player)
+    end
+    return nil
+end
+
+---Adds the player to an existing party.
+function GameManager:joinParty(id, player)
+    if self.partySystem and self.partySystem.addMember then
+        return self.partySystem:addMember(id, player)
+    end
+    return false
+end
+
+---Removes the player from a party.
+function GameManager:leaveParty(id, player)
+    if self.partySystem and self.partySystem.removeMember then
+        return self.partySystem:removeMember(id, player)
+    end
+    return false
+end
+
+---Begins a raid encounter for the current party.
+function GameManager:startRaid()
+    if self.raidSystem and self.raidSystem.startRaid then
+        return self.raidSystem:startRaid()
+    end
+    return false
 end
 
 ---Loads persistent data for a player using the Save system.
