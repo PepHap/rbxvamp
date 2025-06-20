@@ -52,6 +52,7 @@ function NetworkSystem:start()
     self.events.GaugeReset = createRemoteEvent("GaugeReset")
     self.events.RewardChoice = createRemoteEvent("RewardChoice")
     self.events.RewardResult = createRemoteEvent("RewardResult")
+    self.events.RewardReroll = createRemoteEvent("RewardReroll")
     -- Events for synchronizing enemy state with clients
     self.events.EnemySpawn = createRemoteEvent("EnemySpawn")
     self.events.EnemyRemove = createRemoteEvent("EnemyRemove")
