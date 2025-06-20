@@ -12,6 +12,9 @@ RewardGaugeSystem.maxGauge = 100
 ---Number of reward options generated when the gauge fills.
 RewardGaugeSystem.optionCount = 3
 
+---Crystals required to reroll existing options.
+RewardGaugeSystem.rerollCost = 1
+
 ---Table of reward options when the gauge fills.
 RewardGaugeSystem.options = nil
 
@@ -113,6 +116,21 @@ function RewardGaugeSystem:choose(index)
     end
 
     return chosen
+end
+
+---Rerolls the current reward options by spending crystals.
+--  When enough crystals are available, new options are generated and sent
+--  to all clients. Returns the new option table or nil on failure.
+function RewardGaugeSystem:reroll()
+    if not self.options or self.rerollCost <= 0 then
+        return nil
+    end
+    if not GachaSystem:spendCrystals(self.rerollCost) then
+        return nil
+    end
+    self.options = self:generateOptions()
+    NetworkSystem:fireAllClients("GaugeOptions", self.options)
+    return self.options
 end
 
 ---Resets the gauge to zero discarding any stored options.
