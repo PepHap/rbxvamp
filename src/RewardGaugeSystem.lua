@@ -18,6 +18,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local assets = ReplicatedStorage:WaitForChild("assets")
 local itemPool = require(assets:WaitForChild("items"))
 local EquipmentGenerator = require(script.Parent:WaitForChild("EquipmentGenerator"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 
 -- Precompute a list of available equipment slots
 local slots = {}
@@ -50,6 +51,7 @@ function RewardGaugeSystem:addPoints(amount)
         return
     end
     self.gauge = self.gauge + n
+    NetworkSystem:fireAllClients("GaugeUpdate", self.gauge, self.maxGauge)
     while self.gauge >= self.maxGauge do
         -- Once the gauge fills, reset it and generate reward options.
         self.gauge = self.gauge - self.maxGauge
@@ -57,6 +59,7 @@ function RewardGaugeSystem:addPoints(amount)
         if self.options then
             -- Any leftover points are discarded when options appear
             self.gauge = 0
+            NetworkSystem:fireAllClients("GaugeOptions", self.options)
             break
         end
     end
@@ -77,6 +80,7 @@ function RewardGaugeSystem:choose(index)
     end
     local chosen = opts[index]
     self.options = nil
+    NetworkSystem:fireAllClients("GaugeOptions", nil)
     return chosen
 end
 
@@ -92,6 +96,7 @@ function RewardGaugeSystem:loadData(data)
     if type(data) ~= "table" then return end
     if type(data.gauge) == "number" then
         self.gauge = data.gauge
+        NetworkSystem:fireAllClients("GaugeUpdate", self.gauge, self.maxGauge)
     end
 end
 
