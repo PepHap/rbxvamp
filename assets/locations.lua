@@ -95,4 +95,28 @@ return {
             brightness = 2,
         },
     },
+    {
+        name = "Sky Castle",
+        coordinates = {x = 400, y = 100, z = 0},
+        placeId = 0,
+        levelStart = 121,
+        levelEnd = 150,
+        floors = 30,
+        bosses = {
+            [5] = "Sky Knight",
+            [10] = "Storm Dragon",
+            [30] = "Celestial Emperor",
+        },
+        currency = "crystal",
+        theme = {
+            windowBackground = {r = 90, g = 90, b = 110},
+            buttonBackground = {r = 160, g = 160, b = 200},
+            buttonHover = {r = 180, g = 180, b = 220},
+        },
+        lighting = {
+            ambient = Color3 and Color3.fromRGB and Color3.fromRGB(120, 120, 150) or {r=120,g=120,b=150},
+            outdoorAmbient = Color3 and Color3.fromRGB and Color3.fromRGB(90, 90, 120) or {r=90,g=90,b=120},
+            brightness = 2,
+        },
+    },
 }
