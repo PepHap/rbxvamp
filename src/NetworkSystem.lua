@@ -37,6 +37,9 @@ function NetworkSystem:start()
     -- Create default events used by PartySystem and RaidSystem
     self.events.PartyUpdated = createRemoteEvent("PartyUpdated")
     self.events.RaidStatus = createRemoteEvent("RaidStatus")
+    -- Events used for client requests
+    self.events.PartyRequest = createRemoteEvent("PartyRequest")
+    self.events.RaidRequest = createRemoteEvent("RaidRequest")
 end
 
 function NetworkSystem:getEvent(name)
@@ -56,6 +59,15 @@ function NetworkSystem:fireClient(player, name, ...)
     local ev = self:getEvent(name)
     if ev and ev.FireClient then
         ev:FireClient(player, ...)
+    elseif ev and ev.Fire then
+        ev:Fire(...)
+    end
+end
+
+function NetworkSystem:fireServer(name, ...)
+    local ev = self:getEvent(name)
+    if ev and ev.FireServer then
+        ev:FireServer(...)
     elseif ev and ev.Fire then
         ev:Fire(...)
     end
