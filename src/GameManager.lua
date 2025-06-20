@@ -159,6 +159,7 @@ local TeleportSystem = require(script.Parent:WaitForChild("TeleportSystem"))
 GameManager.teleportSystem = TeleportSystem
 GameManager:addSystem("Teleport", TeleportSystem)
 TeleportSystem.raidPlaceId = 0
+TeleportSystem.lobbyPlaceId = 0
 
 -- Cooperative party management
 local PartySystem = require(script.Parent:WaitForChild("PartySystem"))

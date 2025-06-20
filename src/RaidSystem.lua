@@ -70,8 +70,8 @@ function RaidSystem:startRaid(player)
     if not KeySystem:useKey("raid") then
         return false
     end
-    if TeleportSystem and TeleportSystem.teleportParty then
-        TeleportSystem:teleportParty(members)
+    if TeleportSystem and TeleportSystem.teleportRaid then
+        TeleportSystem:teleportRaid(members)
     end
     self.currentPartyId = partyId
     self.active = true
