@@ -21,6 +21,7 @@ local CompanionUISystem = require(script.Parent:WaitForChild("CompanionUISystem"
 local StatUpgradeUISystem = require(script.Parent:WaitForChild("StatUpgradeUISystem"))
 local GachaUISystem = require(script.Parent:WaitForChild("GachaUISystem"))
 local QuestUISystem = require(script.Parent:WaitForChild("QuestUISystem"))
+local DungeonUISystem = require(script.Parent:WaitForChild("DungeonUISystem"))
 local CrystalExchangeUISystem = require(script.Parent:WaitForChild("CrystalExchangeUISystem"))
 local ProgressMapUISystem = require(script.Parent:WaitForChild("ProgressMapUISystem"))
 
@@ -89,6 +90,7 @@ function MenuUI:addDefaultTabs()
     self:addTab("Stats", StatUpgradeUISystem)
     self:addTab("Gacha", GachaUISystem)
     self:addTab("Quests", QuestUISystem)
+    self:addTab("Dungeons", DungeonUISystem)
     self:addTab("Exchange", CrystalExchangeUISystem)
     self:addTab("Progress", ProgressMapUISystem)
 end

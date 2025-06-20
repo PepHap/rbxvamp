@@ -17,6 +17,7 @@ local HudSystem = {
     questButton = nil,
     progressButton = nil,
     exchangeButton = nil,
+    dungeonButton = nil,
     progressFrame = nil,
     progressFill = nil,
     progressText = nil,
@@ -117,6 +118,7 @@ function HudSystem:start()
     self.questButton = createInstance("TextButton")
     self.progressButton = createInstance("TextButton")
     self.exchangeButton = createInstance("TextButton")
+    self.dungeonButton = createInstance("TextButton")
     self.progressFrame = createInstance("Frame")
     self.progressFill = createInstance("Frame")
     self.progressText = createInstance("TextLabel")
@@ -131,6 +133,7 @@ function HudSystem:start()
     self.questButton.Text = "Quests"
     self.progressButton.Text = "Map"
     self.exchangeButton.Text = "Exchange"
+    self.dungeonButton.Text = "Dungeon"
     GuiUtil.connectButton(self.autoButton, function()
         HudSystem:toggleAutoBattle()
     end)
@@ -161,6 +164,9 @@ function HudSystem:start()
     GuiUtil.connectButton(self.exchangeButton, function()
         HudSystem:toggleExchangeUI()
     end)
+    GuiUtil.connectButton(self.dungeonButton, function()
+        HudSystem:toggleDungeonUI()
+    end)
     parent(self.progressFill, self.progressFrame)
     parent(self.progressText, self.progressFrame)
     parent(self.progressFrame, gui)
@@ -176,6 +182,7 @@ function HudSystem:start()
     parent(self.questButton, gui)
     parent(self.progressButton, gui)
     parent(self.exchangeButton, gui)
+    parent(self.dungeonButton, gui)
     self:update()
 end
 
@@ -252,6 +259,10 @@ function HudSystem:update(dt)
     parent(self.exchangeButton, gui)
     self.exchangeButton.Text = "Exchange"
 
+    self.dungeonButton = self.dungeonButton or createInstance("TextButton")
+    parent(self.dungeonButton, gui)
+    self.dungeonButton.Text = "Dungeon"
+
     local ratio = nextExp > 0 and exp / nextExp or 0
     if ratio < 0 then ratio = 0 elseif ratio > 1 then ratio = 1 end
     self.progressText.Text = string.format("Lv.%d", lvl)
@@ -291,6 +302,7 @@ function HudSystem:update(dt)
         self.questButton.Position = UDim2.new(0, 520, 1, -80)
         self.progressButton.Position = UDim2.new(0, 620, 1, -80)
         self.exchangeButton.Position = UDim2.new(0, 720, 1, -80)
+        self.dungeonButton.Position = UDim2.new(0, 820, 1, -80)
     end
 end
 
@@ -349,6 +361,11 @@ end
 function HudSystem:toggleExchangeUI()
     local CrystalExchangeUISystem = require(script.Parent:WaitForChild("CrystalExchangeUISystem"))
     CrystalExchangeUISystem:toggle()
+end
+
+function HudSystem:toggleDungeonUI()
+    local DungeonUISystem = require(script.Parent:WaitForChild("DungeonUISystem"))
+    DungeonUISystem:toggle()
 end
 
 return HudSystem

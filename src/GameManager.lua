@@ -270,6 +270,10 @@ if RunService:IsClient() then
     CrystalExchangeUISystem.exchangeSystem = CrystalExchangeSystem
     GameManager:addSystem("CrystalExchangeUI", CrystalExchangeUISystem)
 
+    local DungeonUISystem = require(script.Parent:WaitForChild("DungeonUISystem"))
+    DungeonUISystem.dungeonSystem = DungeonSystem
+    GameManager:addSystem("DungeonUI", DungeonUISystem)
+
     -- Admin console for privileged commands
     local adminModule
     local ok, result = pcall(function()
