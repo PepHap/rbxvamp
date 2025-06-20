@@ -11,6 +11,7 @@ local AdminConsole = {
     visible = false,
     commandBox = nil,
     outputLabel = nil,
+    hintLabel = nil,
     adminIds = {},
     gameManager = nil,
 }
@@ -20,6 +21,21 @@ local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
 if not ok then Theme = nil end
+
+local commandList = {
+    currency = "currency <kind> <amount>",
+    ticket = "ticket <kind> [amount]",
+    crystals = "crystals <amount>",
+    roll = "roll <skill|companion|equipment> [slot]",
+    upgrade = "upgrade <slot> [amount] [currency]",
+    buyticket = "buyticket <kind> [amount]",
+    buycurrency = "buycurrency <kind> [amount]",
+    upgradec = "upgradec <slot> [amount] [currency]",
+    salvageinv = "salvageinv <index>",
+    salvageslot = "salvageslot <slot>",
+    help = "help",
+}
+AdminConsole.commandList = commandList
 
 local function createInstance(className)
     if AdminConsole.useRobloxObjects and typeof and Instance and type(Instance.new)=="function" then
@@ -95,9 +111,16 @@ function AdminConsole:start(manager, admins)
     self.outputLabel = createInstance("TextLabel")
     if UDim2 and type(UDim2.new)=="function" then
         self.outputLabel.Position = UDim2.new(0,5,0,35)
-        self.outputLabel.Size = UDim2.new(1,-10,1,-40)
+        self.outputLabel.Size = UDim2.new(1,-10,1,-65)
     end
     self.outputLabel.Text = ""
+
+    self.hintLabel = createInstance("TextLabel")
+    self.hintLabel.Text = "Type 'help' for commands"
+    if UDim2 and type(UDim2.new)=="function" then
+        self.hintLabel.Position = UDim2.new(0,5,1,-55)
+        self.hintLabel.Size = UDim2.new(1,-10,0,20)
+    end
 
     self.executeBtn = createInstance("TextButton")
     self.executeBtn.Text = "Run"
@@ -112,8 +135,9 @@ function AdminConsole:start(manager, admins)
 
     parent(self.commandBox, window)
     parent(self.outputLabel, window)
+    parent(self.hintLabel, window)
     parent(self.executeBtn, window)
-
+    self:showHelp()
     return gui
 end
 
@@ -139,6 +163,19 @@ function AdminConsole:isAdmin(userId)
     return false
 end
 
+function AdminConsole:showHelp()
+    local lines = {}
+    for _, desc in pairs(self.commandList) do
+        table.insert(lines, desc)
+    end
+    table.sort(lines)
+    local text = table.concat(lines, "\n")
+    if self.outputLabel then
+        self.outputLabel.Text = text
+    end
+    return text
+end
+
 function AdminConsole:runCommand(text)
     if not text or text == "" then return end
 
@@ -152,6 +189,9 @@ function AdminConsole:runCommand(text)
 
     -- Command handlers for basic game functionality
     local handlers = {
+        help = function(self)
+            return self:showHelp()
+        end,
         currency = function(self, a)
             local kind = a[1]
             local amount = tonumber(a[2]) or 0
@@ -275,7 +315,11 @@ function AdminConsole:runCommand(text)
     if handler then
         local ok, msg = pcall(handler, self, args)
         if ok and msg then
-            result = "Executed: " .. text .. " - " .. msg
+            if cmd == "help" then
+                result = msg
+            else
+                result = "Executed: " .. text .. " - " .. msg
+            end
         end
     end
 
