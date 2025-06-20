@@ -80,4 +80,19 @@ function RewardGaugeSystem:choose(index)
     return chosen
 end
 
+---Serializes the gauge state so progress persists across sessions.
+-- @return table data table containing ``gauge`` value
+function RewardGaugeSystem:saveData()
+    return {gauge = self.gauge}
+end
+
+---Loads gauge progress from a table produced by ``saveData``.
+-- @param data table saved gauge state
+function RewardGaugeSystem:loadData(data)
+    if type(data) ~= "table" then return end
+    if type(data.gauge) == "number" then
+        self.gauge = data.gauge
+    end
+end
+
 return RewardGaugeSystem
