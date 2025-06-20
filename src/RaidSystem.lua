@@ -126,6 +126,9 @@ function RaidSystem:onBossKilled()
     if self.partySystem and self.currentPartyId then
         for _, member in ipairs(self.partySystem:getMembers(self.currentPartyId)) do
             self.partySystem:setReady(member, false)
+            if TeleportSystem and TeleportSystem.teleportHome then
+                TeleportSystem:teleportHome({member})
+            end
         end
         self.currentPartyId = nil
     end

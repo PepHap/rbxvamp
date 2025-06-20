@@ -49,6 +49,7 @@ function NetworkSystem:start()
     self.events.CurrencyUpdate = createRemoteEvent("CurrencyUpdate")
     self.events.GaugeUpdate = createRemoteEvent("GaugeUpdate")
     self.events.GaugeOptions = createRemoteEvent("GaugeOptions")
+    self.events.GaugeReset = createRemoteEvent("GaugeReset")
     self.events.RewardChoice = createRemoteEvent("RewardChoice")
     self.events.RewardResult = createRemoteEvent("RewardResult")
     -- Events for synchronizing enemy state with clients

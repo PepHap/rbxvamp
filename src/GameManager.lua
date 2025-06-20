@@ -209,6 +209,9 @@ if IS_SERVER then
     GameManager:addSystem("Teleport", TeleportSystem)
     TeleportSystem.raidPlaceId = 0
     TeleportSystem.lobbyPlaceId = 0
+    if TeleportSystem.start then
+        TeleportSystem:start()
+    end
 end
 
 local PartySystem
@@ -495,6 +498,11 @@ end
 function GameManager:chooseReward(index)
     return RewardGaugeSystem:choose(index)
 end
+
+---Resets the reward gauge completely.
+function GameManager:resetRewardGauge()
+    if RewardGaugeSystem.resetGauge then
+        RewardGaugeSystem:resetGauge()
 
 ---Adjusts the gauge threshold for earning rewards.
 -- @param value number new gauge requirement

@@ -107,10 +107,21 @@ function RewardGaugeSystem:choose(index)
     local chosen = opts[index]
     self.options = nil
     NetworkSystem:fireAllClients("GaugeOptions", nil)
+    NetworkSystem:fireAllClients("GaugeReset")
     if self.onSelect then
         pcall(self.onSelect, chosen)
     end
+
     return chosen
+end
+
+---Resets the gauge to zero discarding any stored options.
+function RewardGaugeSystem:resetGauge()
+    self.gauge = 0
+    self.options = nil
+    NetworkSystem:fireAllClients("GaugeUpdate", self.gauge, self.maxGauge)
+    NetworkSystem:fireAllClients("GaugeOptions", nil)
+    NetworkSystem:fireAllClients("GaugeReset")
 end
 
 ---Serializes the gauge state so progress persists across sessions.
