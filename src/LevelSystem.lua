@@ -29,7 +29,12 @@ LevelSystem.killCount = 0
 LevelSystem.requiredKills = 15
 
 ---Number of enemies spawned per wave.
-LevelSystem.waveSize = 5
+LevelSystem.baseWaveSize = 5
+LevelSystem.waveSize = LevelSystem.baseWaveSize
+
+local function updateWaveSize()
+    LevelSystem.waveSize = LevelSystem.baseWaveSize + math.floor((LevelSystem.currentLevel - 1) / 3)
+end
 
 local function broadcastProgress()
     if NetworkSystem and NetworkSystem.fireAllClients then
@@ -48,6 +53,7 @@ function LevelSystem:start()
     self.currentLevel = 1
     self.killCount = 0
     self.requiredKills = 15
+    updateWaveSize()
     local cfg = WaveConfig.levels[1]
     if cfg and not cfg.boss then
         EnemySystem:spawnWaveForLevel(1, cfg)
@@ -157,6 +163,7 @@ function LevelSystem:advance()
     self.currentLevel = nextLevel
     self.killCount = 0
     self.requiredKills = self.requiredKills + 5
+    updateWaveSize()
 
     -- Record the highest stage cleared which is the previous level.
     if self.currentLevel - 1 > self.highestClearedStage then
@@ -194,6 +201,7 @@ function LevelSystem:onPlayerDeath()
         self.currentLevel = math.max(lvl - 1, 1)
         self.killCount = 0
         self.requiredKills = self.requiredKills - 5
+        updateWaveSize()
     end
     EventManager:Get("PlayerDeath"):Fire(lvl)
     broadcastProgress()
@@ -222,6 +230,7 @@ function LevelSystem:loadData(data)
     if type(data.highest) == "number" then
         self.highestClearedStage = data.highest
     end
+    updateWaveSize()
 end
 
 return LevelSystem
