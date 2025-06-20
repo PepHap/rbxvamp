@@ -21,6 +21,9 @@ RaidSystem.killCount = 0
 ---Number of kills required before spawning a boss.
 RaidSystem.killsForBoss = 20
 
+---Difficulty scaling applied per additional party member
+RaidSystem.difficultyPerMember = 0.5
+
 function RaidSystem:start()
     NetworkSystem:onServerEvent("RaidRequest", function(player)
         if player then
@@ -50,10 +53,12 @@ function RaidSystem:startRaid(player)
     end
     self.active = true
     self.killCount = 0
-    EnemySystem.healthScale = (EnemySystem.healthScale or 1) * 1.5
-    EnemySystem.damageScale = (EnemySystem.damageScale or 1) * 1.5
+    local size = #members
+    local scale = 1 + math.max(size - 1, 0) * (self.difficultyPerMember or 0)
+    EnemySystem.healthScale = (EnemySystem.healthScale or 1) * scale
+    EnemySystem.damageScale = (EnemySystem.damageScale or 1) * scale
     EventManager:Get("RaidStart"):Fire()
-    NetworkSystem:fireAllClients("RaidStatus", "start")
+    NetworkSystem:fireAllClients("RaidStatus", "start", size)
     return true
 end
 
@@ -67,7 +72,7 @@ function RaidSystem:onEnemyKilled()
         self.killCount = 0
         EnemySystem:spawnBoss("boss")
     end
-    NetworkSystem:fireAllClients("RaidStatus", "progress", self.killCount)
+    NetworkSystem:fireAllClients("RaidStatus", "progress", self.killCount, self.killsForBoss)
 end
 
 ---Ends the raid when the boss is defeated.

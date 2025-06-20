@@ -3,6 +3,10 @@
 
 local PartySystem = {}
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local Players = game:GetService("Players")
+
+---Pending invites indexed by invitee player object
+PartySystem.invites = {}
 
 ---Active party tables keyed by party id.
 PartySystem.parties = {}
@@ -30,6 +34,23 @@ function PartySystem:start()
             end
         end
     end)
+
+    NetworkSystem:onServerEvent("PartyInvite", function(player, targetName)
+        if not targetName or targetName == "" then return end
+        local target
+        if typeof(targetName) == "Instance" then
+            target = targetName
+        elseif Players then
+            target = Players:FindFirstChild(tostring(targetName))
+        end
+        if target then
+            PartySystem:sendInvite(player, target)
+        end
+    end)
+
+    NetworkSystem:onServerEvent("PartyResponse", function(player, response)
+        PartySystem:respondInvite(player, response == "accept")
+    end)
 end
 
 ---Creates a new party with the given leader.
@@ -54,6 +75,28 @@ function PartySystem:addMember(id, player)
     self.playerParty[player] = id
     NetworkSystem:fireAllClients("PartyUpdated", id, self:getMembers(id))
     return true
+end
+
+---Sends an invite from one player to another.
+function PartySystem:sendInvite(fromPlayer, toPlayer)
+    if not fromPlayer or not toPlayer then return end
+    self.invites[toPlayer] = fromPlayer
+    NetworkSystem:fireClient(toPlayer, "PartyInvite", fromPlayer)
+end
+
+---Handles a player response to an invite.
+function PartySystem:respondInvite(player, accept)
+    local inviter = self.invites[player]
+    self.invites[player] = nil
+    if not inviter then return end
+    if accept then
+        local id = self:getPartyId(inviter)
+        if not id then
+            id = self:createParty(inviter)
+        end
+        self:addMember(id, player)
+    end
+    NetworkSystem:fireClient(inviter, "PartyResponse", player, accept and "accept" or "decline")
 end
 
 ---Removes a player from a party and deletes empty parties.

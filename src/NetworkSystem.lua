@@ -37,6 +37,9 @@ function NetworkSystem:start()
     -- Create default events used by PartySystem and RaidSystem
     self.events.PartyUpdated = createRemoteEvent("PartyUpdated")
     self.events.RaidStatus = createRemoteEvent("RaidStatus")
+    self.events.PartyInvite = createRemoteEvent("PartyInvite")
+    self.events.PartyResponse = createRemoteEvent("PartyResponse")
+    self.events.PlayerState = createRemoteEvent("PlayerState")
     -- Events used for client requests
     self.events.PartyRequest = createRemoteEvent("PartyRequest")
     self.events.RaidRequest = createRemoteEvent("RaidRequest")
