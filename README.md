@@ -20,6 +20,7 @@ major systems. Game assets should be placed under `assets`.
 - **ThemeSystem.lua** – adjusts UI colors based on the current location
 - **PartySystem.lua** – manages cooperative parties
 - **RaidSystem.lua** – coordinates raid encounters for groups
+- **TeleportSystem.lua** – teleports parties to lobby or raid places
 
 ## Installing Busted
 This project uses the [Busted](https://olivinelabs.com/busted/) testing
@@ -56,7 +57,9 @@ the AutoSkill system is enabled, skills will fire automatically whenever they
 are off cooldown.
 
 Quest rewards now include raid keys which allow parties to initiate raid runs
-through the **Party** interface.
+through the **Party** interface. When the raid begins, the `TeleportSystem`
+teleports all party members to the dedicated raid place using
+`TeleportService:TeleportPartyAsync`.
 
 ### Syncing with Rojo
 Install [Rojo](https://rojo.space/docs) and run the following command to sync

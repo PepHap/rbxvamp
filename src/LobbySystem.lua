@@ -8,12 +8,14 @@ local LobbySystem = {
     activePlayers = {},
     returnPositions = {},
     playerSystem = nil,
+    teleportSystem = nil,
 }
 
 local Players = game:GetService("Players")
 
 function LobbySystem:start(playerSys)
     self.playerSystem = playerSys or self.playerSystem or require(script.Parent:WaitForChild("PlayerSystem"))
+    self.teleportSystem = self.teleportSystem or require(script.Parent:WaitForChild("TeleportSystem"))
 end
 
 ---Moves the given player into the lobby and stores their previous position.
@@ -26,7 +28,11 @@ function LobbySystem:enter(player)
             y = self.playerSystem.position.y,
             z = self.playerSystem.position.z,
         }
-        self.playerSystem:setPosition(self.lobbyCoordinates)
+        if self.teleportSystem and self.teleportSystem.lobbyPlaceId ~= 0 then
+            self.teleportSystem:teleportLobby({p})
+        else
+            self.playerSystem:setPosition(self.lobbyCoordinates)
+        end
     end
     self.activePlayers[p] = true
 end
@@ -39,7 +45,11 @@ function LobbySystem:leave(player)
     self.activePlayers[p] = nil
     self.returnPositions[p] = nil
     if pos and self.playerSystem and self.playerSystem.setPosition then
-        self.playerSystem:setPosition(pos)
+        if self.teleportSystem and self.teleportSystem.lobbyPlaceId ~= 0 then
+            self.teleportSystem:teleportHome({p})
+        else
+            self.playerSystem:setPosition(pos)
+        end
     end
 end
 
