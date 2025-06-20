@@ -38,6 +38,19 @@ function ScoreboardSystem:start(levelSys, netSys)
     EventManager:Get("LevelAdvance"):Connect(function()
         ScoreboardSystem:recordProgress()
     end)
+    if self.useRobloxObjects then
+        local ok, players = pcall(function()
+            return game:GetService("Players")
+        end)
+        if ok and players and players.PlayerAdded then
+            players.PlayerAdded:Connect(function(p)
+                local top = ScoreboardSystem:getTop(10)
+                if self.networkSystem and self.networkSystem.fireClient then
+                    self.networkSystem:fireClient(p, "ScoreboardUpdate", top)
+                end
+            end)
+        end
+    end
     self:broadcast()
 end
 
@@ -76,19 +89,23 @@ end
 
 ---Records the player's new highest stage when it increases.
 function ScoreboardSystem:recordProgress()
-    if not self.useRobloxObjects then return end
-    local players = game:GetService("Players")
-    if not players then return end
-    local player = players:GetPlayers()[1]
-    if not player then return end
-    local stage = self.levelSystem.highestClearedStage or 0
-    local key = tostring(player.UserId)
-    local entry = self.scores[key]
-    if not entry or stage > entry.stage then
-        self.scores[key] = {name = player.Name, stage = stage}
-        self:save()
-        self:broadcast()
+    if not self.useRobloxObjects then
+        return
     end
+    local playersService = game:GetService("Players")
+    if not playersService then
+        return
+    end
+    local stage = self.levelSystem.highestClearedStage or 0
+    for _, player in ipairs(playersService:GetPlayers()) do
+        local key = tostring(player.UserId)
+        local entry = self.scores[key]
+        if not entry or stage > entry.stage then
+            self.scores[key] = {name = player.Name, stage = stage}
+        end
+    end
+    self:save()
+    self:broadcast()
 end
 
 return ScoreboardSystem
