@@ -45,6 +45,7 @@ return {
         {name = "Old Trinket", rarity = "D", slot = "Accessory", stats = {health = 1}},
         {name = "Lucky Charm", rarity = "B", slot = "Accessory", stats = {critChance = 0.05}},
         {name = "Magic Charm", rarity = "A", slot = "Accessory", stats = {manaRegen = 0.1}},
+        {name = "Healing Pendant", rarity = "B", slot = "Accessory", stats = {healthRegen = 0.5}},
         {name = "Winged Emblem", rarity = "A", slot = "Accessory", stats = {speed = 0.1}},
         {name = "Spirit Token", rarity = "S", slot = "Accessory", stats = {critChance = 0.1}},
         {name = "Ancient Talisman", rarity = "SS", slot = "Accessory", stats = {magic = 12}},
