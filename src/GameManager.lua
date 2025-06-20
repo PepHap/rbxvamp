@@ -299,6 +299,9 @@ if RunService:IsClient() then
     LobbyUISystem.lobbySystem = LobbySystem
     GameManager:addSystem("LobbyUI", LobbyUISystem)
 
+    local PartyUISystem = require(script.Parent:WaitForChild("PartyUISystem"))
+    GameManager:addSystem("PartyUI", PartyUISystem)
+
     -- Admin console for privileged commands
     local adminModule
     local ok, result = pcall(function()
@@ -524,9 +527,9 @@ function GameManager:leaveParty(id, player)
 end
 
 ---Begins a raid encounter for the current party.
-function GameManager:startRaid()
+function GameManager:startRaid(player)
     if self.raidSystem and self.raidSystem.startRaid then
-        return self.raidSystem:startRaid()
+        return self.raidSystem:startRaid(player)
     end
     return false
 end

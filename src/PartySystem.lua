@@ -13,6 +13,25 @@ PartySystem.nextId = 1
 ---Mapping of player references to their party id.
 PartySystem.playerParty = {}
 
+function PartySystem:start()
+    NetworkSystem:onServerEvent("PartyRequest", function(player, action, ...)
+        if action == "create" then
+            local id = PartySystem:createParty(player)
+            NetworkSystem:fireClient(player, "PartyUpdated", id, PartySystem:getMembers(id))
+        elseif action == "join" then
+            local id = ...
+            if PartySystem:addMember(id, player) then
+                NetworkSystem:fireAllClients("PartyUpdated", id, PartySystem:getMembers(id))
+            end
+        elseif action == "leave" then
+            local id = PartySystem:getPartyId(player)
+            if id then
+                PartySystem:removeMember(id, player)
+            end
+        end
+    end)
+end
+
 ---Creates a new party with the given leader.
 -- @param leader any player identifier
 -- @return number new party id

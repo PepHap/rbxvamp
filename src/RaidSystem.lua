@@ -22,6 +22,11 @@ RaidSystem.killCount = 0
 RaidSystem.killsForBoss = 20
 
 function RaidSystem:start()
+    NetworkSystem:onServerEvent("RaidRequest", function(player)
+        if player then
+            RaidSystem:startRaid(player)
+        end
+    end)
     EventManager:Get("EnemyKilled"):Connect(function(enemy)
         RaidSystem:onEnemyKilled(enemy)
     end)
@@ -31,8 +36,13 @@ function RaidSystem:start()
 end
 
 ---Begins a raid if the party has the required key.
-function RaidSystem:startRaid()
+function RaidSystem:startRaid(player)
     if self.active then
+        return false
+    end
+    local partyId = self.partySystem and self.partySystem:getPartyId(player)
+    local members = partyId and self.partySystem:getMembers(partyId) or {}
+    if #members < 2 then
         return false
     end
     if not KeySystem:useKey("raid") then
