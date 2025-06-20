@@ -18,10 +18,41 @@ PlayerLevelSystem.unlocked = {}
 
 -- Milestone table mapping levels to content keys that unlock at that level.
 local milestones = {
-    [5] = "skills",
-    [10] = "companions",
-    [20] = "new_area"
+    [5] = {
+        unlock = "skills",
+        reward = {crystals = 3, tickets = {skill = 1}},
+    },
+    [10] = {
+        unlock = "companions",
+        reward = {crystals = 5},
+    },
+    [20] = {
+        unlock = "new_area",
+        reward = {keys = {location = 1}},
+    },
 }
+
+---Grants milestone rewards such as currency, tickets or keys.
+-- @param reward table reward descriptor
+local function grantMilestoneReward(reward)
+    if not reward then return end
+    local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+    local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
+    local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
+    if reward.crystals then
+        CurrencySystem:add("crystal", reward.crystals)
+    end
+    if reward.tickets then
+        for kind, amt in pairs(reward.tickets) do
+            GachaSystem.tickets[kind] = (GachaSystem.tickets[kind] or 0) + amt
+        end
+    end
+    if reward.keys then
+        for kind, amt in pairs(reward.keys) do
+            KeySystem:addKey(kind, amt)
+        end
+    end
+end
 
 ---Returns ``true`` when the specified content identifier has been unlocked.
 -- @param key string content identifier
@@ -35,12 +66,18 @@ function PlayerLevelSystem:isUnlocked(key)
     return false
 end
 
----Unlocks content when a milestone level is reached.
+---Unlocks content and applies milestone rewards when a level is reached.
 -- @param lvl number level that was reached
 function PlayerLevelSystem:unlockForLevel(lvl)
-    local content = milestones[lvl]
-    if content then
-        table.insert(self.unlocked, content)
+    local entry = milestones[lvl]
+    if not entry then return end
+    if type(entry) == "string" then
+        table.insert(self.unlocked, entry)
+    elseif type(entry) == "table" then
+        if entry.unlock then
+            table.insert(self.unlocked, entry.unlock)
+        end
+        grantMilestoneReward(entry.reward)
     end
 end
 
