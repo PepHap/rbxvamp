@@ -85,6 +85,17 @@ function InventoryModule:SalvageEquippedItem(slot)
     return ItemSalvageSystem:salvageFromSlot(self.itemSystem, slot)
 end
 
+---Transfers an item in this inventory to another inventory.
+-- @param index number inventory index to transfer
+-- @param target table destination InventoryModule
+-- @return boolean success
+function InventoryModule:TransferItem(index, target)
+    if not target or not target.itemSystem then
+        return false
+    end
+    return self.itemSystem:transferItem(index, target.itemSystem)
+end
+
 ---Returns a table of combined stats from base values and equipped items.
 function InventoryModule:GetStats()
     local combined = {}

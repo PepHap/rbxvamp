@@ -92,6 +92,22 @@ function ItemSystem:removeItem(index)
     return itm
 end
 
+---Transfers an item to another ItemSystem instance.
+-- @param index number inventory index to transfer
+-- @param target table destination ItemSystem
+-- @return boolean success
+function ItemSystem:transferItem(index, target)
+    if not target or not target.addItem then
+        return false
+    end
+    local itm = self:removeItem(index)
+    if not itm then
+        return false
+    end
+    target:addItem(itm)
+    return true
+end
+
 ---Retrieves a slice of the inventory for the requested page.
 -- @param page number page index starting at 1
 -- @param perPage number items per page

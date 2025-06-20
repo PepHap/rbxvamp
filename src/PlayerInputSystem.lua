@@ -29,6 +29,7 @@ local PlayerInputSystem = {
     statsKey = "U",
     progressKey = "P",
     exchangeKey = "C",
+    lobbyKey = "O",
     menuKey = "M",
     adminKey = "F10",
     ---Reference to the SkillCastSystem for manual skill use.
@@ -56,6 +57,8 @@ local AchievementUISystem = require(script.Parent:WaitForChild("AchievementUISys
 local CrystalExchangeUISystem = require(script.Parent:WaitForChild("CrystalExchangeUISystem"))
 local ProgressMapUISystem = require(script.Parent:WaitForChild("ProgressMapUISystem"))
 local AdminConsoleSystem = require(script.Parent:FindFirstChild("AdminConsoleSystem"))
+local LobbySystem = require(script.Parent:WaitForChild("LobbySystem"))
+local LobbyUISystem = require(script.Parent:WaitForChild("LobbyUISystem"))
 
 -- Utility to connect Roblox input events when available
 local function connectRoblox()
@@ -118,6 +121,9 @@ function PlayerInputSystem:setKeyState(key, isDown)
         ProgressMapUISystem:toggle()
     elseif key == self.exchangeKey and isDown then
         CrystalExchangeUISystem:toggle()
+    elseif key == self.lobbyKey and isDown then
+        LobbySystem:enter()
+        LobbyUISystem:toggle()
     elseif key == self.statsKey and isDown then
         StatUpgradeUISystem:toggle()
     elseif key == self.menuKey and isDown then
