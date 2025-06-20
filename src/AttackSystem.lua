@@ -28,7 +28,17 @@ function AttackSystem:handleAttack(player)
     local dy = target.position.y - pos.y
     local distSq = dx * dx + dy * dy
     if distSq <= (self.range or 5) * (self.range or 5) then
-        target.health = target.health - (self.damage or 1)
+        local dmg = self.damage or 1
+        if target.armor and target.armor > 0 then
+            if target.armor >= dmg then
+                target.armor = target.armor - dmg
+                dmg = 0
+            else
+                dmg = dmg - target.armor
+                target.armor = 0
+            end
+        end
+        target.health = target.health - dmg
         if target.health <= 0 then
             for i, e in ipairs(EnemySystem.enemies) do
                 if e == target then
@@ -41,7 +51,7 @@ function AttackSystem:handleAttack(player)
             DungeonSystem:onEnemyKilled(target)
             LootSystem:onEnemyKilled(target)
         else
-            NetworkSystem:fireAllClients("EnemyUpdate", target.name, target.health, target.position)
+            NetworkSystem:fireAllClients("EnemyUpdate", target.name, target.position, target.health, target.armor)
         end
     end
 end
