@@ -59,6 +59,7 @@ local ProgressMapUISystem = require(script.Parent:WaitForChild("ProgressMapUISys
 local AdminConsoleSystem = require(script.Parent:FindFirstChild("AdminConsoleSystem"))
 local LobbySystem = require(script.Parent:WaitForChild("LobbySystem"))
 local LobbyUISystem = require(script.Parent:WaitForChild("LobbyUISystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 
 -- Utility to connect Roblox input events when available
 local function connectRoblox()
@@ -135,38 +136,14 @@ function PlayerInputSystem:setKeyState(key, isDown)
     elseif isDown and self.skillCastSystem then
         local idx = self.skillKeyMap[key]
         if idx then
-            self.skillCastSystem:useSkill(idx)
+            NetworkSystem:fireServer("SkillRequest", idx)
         end
     end
 end
 
 ---Performs a manual attack against the nearest enemy.
 function PlayerInputSystem:manualAttack()
-    local pos = self.playerPosition
-    local target = EnemySystem:getNearestEnemy(pos)
-    if not target then
-        return
-    end
-    -- Ensure the target is within attack range before applying damage
-    local dx = target.position.x - pos.x
-    local dy = target.position.y - pos.y
-    local distSq = dx * dx + dy * dy
-    if distSq <= self.attackRange * self.attackRange then
-        if target.health then
-            target.health = target.health - self.damage
-            if target.health <= 0 then
-                for i, e in ipairs(EnemySystem.enemies) do
-                    if e == target then
-                        table.remove(EnemySystem.enemies, i)
-                        break
-                    end
-                end
-                LevelSystem:addKill()
-                DungeonSystem:onEnemyKilled(target)
-                LootSystem:onEnemyKilled(target)
-            end
-        end
-    end
+    NetworkSystem:fireServer("AttackRequest")
 end
 
 ---Updates the player position and handles attack input.
