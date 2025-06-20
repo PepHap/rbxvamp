@@ -51,21 +51,23 @@ function GameManager:update(dt)
     end
 end
 
+-- Integrate the default enemy system only on the server
 if IS_SERVER then
-    -- Integrate the default enemy system on load
     local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
     GameManager:addSystem("Enemy", EnemySystem)
+end
 
 -- Auto battle functionality can optionally control the player's actions
 local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
 GameManager:addSystem("AutoBattle", AutoBattleSystem)
 
-    -- Handle player attack requests on the server
+-- Handle player attack requests strictly on the server
+if IS_SERVER then
     local AttackSystem = require(script.Parent:WaitForChild("AttackSystem"))
     GameManager:addSystem("Attack", AttackSystem)
+end
 
-
--- Player progression handling
+-- Player progression handling available on both client and server
 local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
 GameManager:addSystem("PlayerLevel", PlayerLevelSystem)
 
@@ -160,23 +162,32 @@ local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 GameManager.networkSystem = NetworkSystem
 GameManager:addSystem("Network", NetworkSystem)
 
--- Handles teleporting groups between places
-local TeleportSystem = require(script.Parent:WaitForChild("TeleportSystem"))
-GameManager.teleportSystem = TeleportSystem
-GameManager:addSystem("Teleport", TeleportSystem)
-TeleportSystem.raidPlaceId = 0
-TeleportSystem.lobbyPlaceId = 0
+-- Handles teleporting groups between places (server only)
+local TeleportSystem
+if IS_SERVER then
+    TeleportSystem = require(script.Parent:WaitForChild("TeleportSystem"))
+    GameManager.teleportSystem = TeleportSystem
+    GameManager:addSystem("Teleport", TeleportSystem)
+    TeleportSystem.raidPlaceId = 0
+    TeleportSystem.lobbyPlaceId = 0
+end
 
--- Cooperative party management
-local PartySystem = require(script.Parent:WaitForChild("PartySystem"))
-GameManager.partySystem = PartySystem
-GameManager:addSystem("Party", PartySystem)
+local PartySystem
+if IS_SERVER then
+    PartySystem = require(script.Parent:WaitForChild("PartySystem"))
+    GameManager.partySystem = PartySystem
+    GameManager:addSystem("Party", PartySystem)
+end
 
--- Raid encounters built around parties
-local RaidSystem = require(script.Parent:WaitForChild("RaidSystem"))
-RaidSystem.partySystem = PartySystem
-GameManager.raidSystem = RaidSystem
-GameManager:addSystem("Raid", RaidSystem)
+local RaidSystem
+if IS_SERVER then
+    RaidSystem = require(script.Parent:WaitForChild("RaidSystem"))
+    if PartySystem then
+        RaidSystem.partySystem = PartySystem
+    end
+    GameManager.raidSystem = RaidSystem
+    GameManager:addSystem("Raid", RaidSystem)
+end
 
 -- Optional dungeon runs for earning upgrade currency
 local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
@@ -195,10 +206,13 @@ StatUpgradeSystem:addStat("Magic", 0)
 StatUpgradeSystem:addStat("CritChance", 0.05)
 StatUpgradeSystem:addStat("CritDamage", 1.5)
 
--- Data persistence for saving and loading progress
-local DataPersistenceSystem = require(script.Parent:WaitForChild("DataPersistenceSystem"))
-GameManager:addSystem("Save", DataPersistenceSystem)
-GameManager.saveSystem = DataPersistenceSystem
+-- Data persistence for saving and loading progress (server only)
+local DataPersistenceSystem
+if IS_SERVER then
+    DataPersistenceSystem = require(script.Parent:WaitForChild("DataPersistenceSystem"))
+    GameManager:addSystem("Save", DataPersistenceSystem)
+    GameManager.saveSystem = DataPersistenceSystem
+end
 
 -- Automatically saves player progress at intervals
 local AutoSaveSystem = require(script.Parent:WaitForChild("AutoSaveSystem"))
@@ -252,8 +266,6 @@ GameManager:addSystem("CompanionAI", CompanionAttackSystem)
 local LobbySystem = require(script.Parent:WaitForChild("LobbySystem"))
 GameManager.lobbySystem = LobbySystem
 GameManager:addSystem("Lobby", LobbySystem)
-
-end -- IS_SERVER block
 
 if RunService:IsClient() then
     -- Minimal UI for displaying rewards and gacha results
