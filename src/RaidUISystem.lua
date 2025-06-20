@@ -89,6 +89,9 @@ function RaidUI:start()
     NetworkSystem:onClientEvent("RaidStatus", function(action, a, b)
         RaidUI:onStatus(action, a, b)
     end)
+    NetworkSystem:onClientEvent("RaidReward", function(kind, amount)
+        RaidUI:onReward(kind, amount)
+    end)
 end
 
 function RaidUI:onStatus(action, a, b)
@@ -104,6 +107,13 @@ function RaidUI:onStatus(action, a, b)
         self.statusLabel.Text = "Raid Complete"
         self.hideDelay = 3
     end
+end
+
+function RaidUI:onReward(kind, amount)
+    if not self.statusLabel then return end
+    self.statusLabel.Text = string.format("Reward: %s %s", tostring(kind), tostring(amount))
+    self.hideDelay = 3
+    self:setVisible(true)
 end
 
 function RaidUI:update(dt)

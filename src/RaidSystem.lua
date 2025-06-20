@@ -6,6 +6,9 @@ local RaidSystem = {}
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local TeleportSystem = require(script.Parent:WaitForChild("TeleportSystem"))
 local LobbySystem = require(script.Parent:WaitForChild("LobbySystem"))
+local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+local SlotConstants = require(script.Parent:WaitForChild("SlotConstants"))
+local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
 
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
 local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
@@ -22,6 +25,9 @@ RaidSystem.killCount = 0
 
 ---Number of kills required before spawning a boss.
 RaidSystem.killsForBoss = 20
+
+---Crystals granted to each party member when the raid is completed.
+RaidSystem.rewardCrystals = 3
 
 ---Difficulty scaling applied per additional party member
 RaidSystem.difficultyPerMember = 0.5
@@ -108,6 +114,7 @@ function RaidSystem:onBossKilled()
     self.active = false
     EnemySystem.healthScale = self.prevHealthScale or 1
     EnemySystem.damageScale = self.prevDamageScale or 1
+    self:awardRewards()
     EventManager:Get("RaidComplete"):Fire()
     NetworkSystem:fireAllClients("RaidStatus", "complete")
     if self.partySystem and self.currentPartyId then
@@ -115,6 +122,24 @@ function RaidSystem:onBossKilled()
             self.partySystem:setReady(member, false)
         end
         self.currentPartyId = nil
+    end
+end
+
+---Distributes raid rewards to all party members.
+function RaidSystem:awardRewards()
+    if not self.partySystem or not self.currentPartyId then
+        return
+    end
+    local members = self.partySystem:getMembers(self.currentPartyId)
+    local crystals = self.rewardCrystals or 0
+    for _, player in ipairs(members) do
+        CurrencySystem:add("crystal", crystals)
+        NetworkSystem:fireClient(player, "RaidReward", "crystal", crystals)
+        local slot = SlotConstants.list[math.random(#SlotConstants.list)]
+        local item = GachaSystem:rollEquipment(slot)
+        if item then
+            NetworkSystem:fireClient(player, "RaidReward", slot, item.name)
+        end
     end
 end
 
