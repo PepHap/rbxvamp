@@ -80,6 +80,12 @@ local function getStageType(level)
         return "normal"
     end
 end
+
+-- Expose stage classification so other systems like the scoreboard
+-- or dungeon logic can easily query the current stage type.
+function LevelSystem.getStageType(level)
+    return getStageType(level)
+end
 --- Internal helper that increases monster stats based on the stage type.
 -- @param stageType string type returned by ``getStageType``
 function LevelSystem:strengthenMonsters(stageType)

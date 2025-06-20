@@ -6,6 +6,7 @@ local DungeonSystem = {}
 local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 local RaidSystem = require(script.Parent:WaitForChild("RaidSystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 
 -- Definition of available dungeons. Each dungeon specifies the key
 -- type required to enter, the currency rewarded and the number of
@@ -35,6 +36,10 @@ function DungeonSystem:start(kind)
     end
     self.active = kind
     self.killCount = 0
+    if NetworkSystem and NetworkSystem.fireAllClients then
+        NetworkSystem:fireAllClients("DungeonState", self.active, self.killCount, d.kills)
+        NetworkSystem:fireAllClients("DungeonProgress", self.killCount, d.kills, self.active)
+    end
     return true
 end
 
@@ -45,6 +50,9 @@ function DungeonSystem:addKill()
     end
     local d = self.dungeons[self.active]
     self.killCount = self.killCount + 1
+    if NetworkSystem and NetworkSystem.fireAllClients then
+        NetworkSystem:fireAllClients("DungeonProgress", self.killCount, d.kills, self.active)
+    end
     if self.killCount >= d.kills then
         self:complete()
     end
@@ -61,6 +69,9 @@ function DungeonSystem:complete()
     CurrencySystem:add(d.currency, d.reward)
     self.active = nil
     self.killCount = 0
+    if NetworkSystem and NetworkSystem.fireAllClients then
+        NetworkSystem:fireAllClients("DungeonState", nil, 0, 0)
+    end
     return true
 end
 
@@ -68,6 +79,9 @@ end
 function DungeonSystem:abort()
     self.active = nil
     self.killCount = 0
+    if NetworkSystem and NetworkSystem.fireAllClients then
+        NetworkSystem:fireAllClients("DungeonState", nil, 0, 0)
+    end
 end
 
 ---Proxy called when an enemy is killed to track dungeon progress.
