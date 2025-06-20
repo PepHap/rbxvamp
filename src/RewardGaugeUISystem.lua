@@ -98,17 +98,43 @@ function RewardGaugeUISystem:start()
             parent(self.window, gui)
             self.gui = gui
         end
-        return
+    else
+        -- simple frame; image removed to keep repository text only
+        self.window = GuiUtil.createWindow("RewardWindow")
+        parent(self.window, gui)
+
+        self.gaugeLabel = createInstance("TextLabel")
+        parent(self.gaugeLabel, self.window)
     end
-
-    -- simple frame; image removed to keep repository text only
-    self.window = GuiUtil.createWindow("RewardWindow")
-    parent(self.window, gui)
-
-    self.gaugeLabel = createInstance("TextLabel")
-    parent(self.gaugeLabel, self.window)
     self:update()
     self:setVisible(self.visible)
+
+    if NetworkSystem and NetworkSystem.onClientEvent then
+        NetworkSystem:onClientEvent("GaugeUpdate", function(g, maxG)
+            RewardGaugeSystem.gauge = g
+            RewardGaugeSystem.maxGauge = maxG
+            RewardGaugeUISystem:update()
+        end)
+        NetworkSystem:onClientEvent("GaugeOptions", function(opts)
+            RewardGaugeSystem.options = opts
+            if opts then
+                RewardGaugeUISystem:showOptions()
+            else
+                if RewardGaugeUISystem.optionButtons then
+                    for _, btn in ipairs(RewardGaugeUISystem.optionButtons) do
+                        if btn.Destroy then
+                            btn:Destroy()
+                        end
+                    end
+                end
+                RewardGaugeUISystem.optionButtons = nil
+                RewardGaugeUISystem:update()
+            end
+        end)
+        NetworkSystem:onClientEvent("RewardResult", function()
+            RewardGaugeUISystem:update()
+        end)
+    end
 end
 
 function RewardGaugeUISystem:update()
@@ -150,6 +176,9 @@ function RewardGaugeUISystem:showOptions()
 end
 
 function RewardGaugeUISystem:choose(index)
+    if NetworkSystem and NetworkSystem.fireServer then
+        NetworkSystem:fireServer("RewardChoice", index)
+    end
     local chosen = RewardGaugeSystem:choose(index)
     if self.optionButtons then
         for _, btn in ipairs(self.optionButtons) do
