@@ -39,6 +39,24 @@ function GameManager:start()
             system:start()
         end
     end
+
+    -- Bind server-only remote events after all systems are ready
+    if IS_SERVER and self.networkSystem and self.networkSystem.onServerEvent then
+        self.networkSystem:onServerEvent("SalvageRequest", function(player, kind, arg)
+            local result = false
+            if kind == "inventory" then
+                local index = tonumber(arg)
+                if index then
+                    result = self:salvageInventoryItem(index)
+                end
+            elseif kind == "equipped" then
+                if type(arg) == "string" then
+                    result = self:salvageEquippedItem(arg)
+                end
+            end
+            self.networkSystem:fireClient(player, "SalvageResult", result)
+        end)
+    end
 end
 
 function GameManager:update(dt)
