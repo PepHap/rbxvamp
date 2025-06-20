@@ -20,7 +20,7 @@ local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
 local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
 local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
-local LootSystem = require(script.Parent:WaitForChild("LootSystem"))
+local EventManager = require(script.Parent:WaitForChild("EventManager"))
 local CompanionSystem = require(script.Parent:WaitForChild("CompanionSystem"))
 
 ---Initializes companion positions and stores the system reference.
@@ -84,7 +84,7 @@ function CompanionAttackSystem:update(dt)
                         end
                         LevelSystem:addKill()
                         DungeonSystem:onEnemyKilled(enemy)
-                        LootSystem:onEnemyKilled(enemy)
+                        EventManager:Get("EnemyDefeated"):Fire(enemy)
                     end
                 end
             end

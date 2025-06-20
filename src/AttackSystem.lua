@@ -6,9 +6,9 @@ local AttackSystem = {}
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
 local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
-local LootSystem = require(script.Parent:WaitForChild("LootSystem"))
 local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
 local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
+local EventManager = require(script.Parent:WaitForChild("EventManager"))
 
 AttackSystem.damage = 1
 AttackSystem.range = 5
@@ -49,7 +49,7 @@ function AttackSystem:handleAttack(player)
             end
             LevelSystem:addKill()
             DungeonSystem:onEnemyKilled(target)
-            LootSystem:onEnemyKilled(target)
+            EventManager:Get("EnemyDefeated"):Fire(target)
         else
             NetworkSystem:fireAllClients("EnemyUpdate", target.name, target.position, target.health, target.armor)
         end
