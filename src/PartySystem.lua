@@ -2,6 +2,7 @@
 -- Manages groups of players for co-op features.
 
 local PartySystem = {}
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 
 ---Active party tables keyed by party id.
 PartySystem.parties = {}
@@ -20,6 +21,7 @@ function PartySystem:createParty(leader)
     self.nextId = id + 1
     self.parties[id] = {leader = leader, members = {[leader] = true}}
     self.playerParty[leader] = id
+    NetworkSystem:fireAllClients("PartyUpdated", id, self:getMembers(id))
     return id
 end
 
@@ -31,6 +33,7 @@ function PartySystem:addMember(id, player)
     end
     p.members[player] = true
     self.playerParty[player] = id
+    NetworkSystem:fireAllClients("PartyUpdated", id, self:getMembers(id))
     return true
 end
 
@@ -45,6 +48,7 @@ function PartySystem:removeMember(id, player)
     if next(p.members) == nil then
         self.parties[id] = nil
     end
+    NetworkSystem:fireAllClients("PartyUpdated", id, self:getMembers(id))
     return true
 end
 

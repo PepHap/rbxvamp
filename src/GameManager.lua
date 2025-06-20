@@ -149,6 +149,11 @@ GameManager:addSystem("Quest", QuestSystem)
 local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
 GameManager:addSystem("Keys", KeySystem)
 
+-- Remote event networking
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+GameManager.networkSystem = NetworkSystem
+GameManager:addSystem("Network", NetworkSystem)
+
 -- Cooperative party management
 local PartySystem = require(script.Parent:WaitForChild("PartySystem"))
 GameManager.partySystem = PartySystem
