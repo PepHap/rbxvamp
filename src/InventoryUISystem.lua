@@ -29,6 +29,8 @@ local InventoryUI = {
     pendingIndex = nil,
     ---Reference to the upgrade button
     upgradeButton = nil,
+    ---Button used for salvaging items
+    salvageButton = nil,
     ---Window frame containing all inventory UI elements
     window = nil,
     ---Optional blur effect applied when the window is visible
@@ -245,6 +247,24 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     end)
     if type(btnParent) == "table" then btnParent.Upgrade = upgradeBtn end
     self.upgradeButton = upgradeBtn
+
+    local salvageBtn = btnParent.FindFirstChild and btnParent:FindFirstChild("Salvage") or createInstance("TextButton")
+    salvageBtn.Name = "Salvage"
+    salvageBtn.Text = "Salvage"
+    if UDim2 and type(UDim2.new)=="function" then
+        salvageBtn.Position = UDim2.new(0.8, 0, 1, -70)
+    end
+    parent(salvageBtn, btnParent)
+    GuiUtil.connectButton(salvageBtn, function()
+        if InventoryUI.selectedSlot then
+            InventoryUI:salvageSlot(InventoryUI.selectedSlot)
+        elseif InventoryUI.pendingIndex then
+            InventoryUI:salvageInventoryItem(InventoryUI.pendingIndex)
+            InventoryUI.pendingIndex = nil
+        end
+    end)
+    if type(btnParent) == "table" then btnParent.Salvage = salvageBtn end
+    self.salvageButton = salvageBtn
 
     self:update()
     self:setVisible(self.visible)
@@ -479,6 +499,38 @@ function InventoryUI:upgradeSlot(slot)
     end
     local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
     local ok = self.itemSystem:upgradeItem(slot, 1, "gold")
+    if ok then
+        self:update()
+    end
+    return ok
+end
+
+---Salvages the equipment in the specified slot for crystals and currency.
+-- @param slot string equipment slot name
+function InventoryUI:salvageSlot(slot)
+    if not self.itemSystem then
+        return false
+    end
+    local ItemSalvageSystem = require(script.Parent:WaitForChild("ItemSalvageSystem"))
+    local itm = self.itemSystem:unequip(slot)
+    if not itm then
+        return false
+    end
+    local ok = ItemSalvageSystem:salvageItem(itm)
+    if ok then
+        self:update()
+    end
+    return ok
+end
+
+---Salvages an item from the inventory list.
+-- @param index number inventory index
+function InventoryUI:salvageInventoryItem(index)
+    if not self.itemSystem then
+        return false
+    end
+    local ItemSalvageSystem = require(script.Parent:WaitForChild("ItemSalvageSystem"))
+    local ok = ItemSalvageSystem:salvageFromInventory(self.itemSystem, index)
     if ok then
         self:update()
     end

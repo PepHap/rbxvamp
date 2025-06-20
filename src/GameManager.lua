@@ -252,6 +252,10 @@ if RunService:IsClient() then
     CompanionUISystem.companionSystem = GameManager.companionSystem
     GameManager:addSystem("CompanionUI", CompanionUISystem)
 
+    local AchievementUISystem = require(script.Parent:WaitForChild("AchievementUISystem"))
+    AchievementUISystem.achievementSystem = AchievementSystem
+    GameManager:addSystem("AchievementUI", AchievementUISystem)
+
     -- Main menu UI providing access to inventory and skills
     local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
     GameManager:addSystem("MenuUI", MenuUISystem)

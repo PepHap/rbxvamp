@@ -25,6 +25,7 @@ local PlayerInputSystem = {
     gachaKey = "G",
     rewardKey = "R",
     questKey = "J",
+    achievementKey = "H",
     statsKey = "U",
     menuKey = "M",
     adminKey = "F10",
@@ -49,6 +50,7 @@ local GachaUISystem = require(script.Parent:WaitForChild("GachaUISystem"))
 local RewardGaugeUISystem = require(script.Parent:WaitForChild("RewardGaugeUISystem"))
 local StatUpgradeUISystem = require(script.Parent:WaitForChild("StatUpgradeUISystem"))
 local QuestUISystem = require(script.Parent:WaitForChild("QuestUISystem"))
+local AchievementUISystem = require(script.Parent:WaitForChild("AchievementUISystem"))
 local AdminConsoleSystem = require(script.Parent:FindFirstChild("AdminConsoleSystem"))
 
 -- Utility to connect Roblox input events when available
@@ -106,6 +108,8 @@ function PlayerInputSystem:setKeyState(key, isDown)
         RewardGaugeUISystem:toggle()
     elseif key == self.questKey and isDown then
         QuestUISystem:toggle()
+    elseif key == self.achievementKey and isDown then
+        AchievementUISystem:toggle()
     elseif key == self.statsKey and isDown then
         StatUpgradeUISystem:toggle()
     elseif key == self.menuKey and isDown then
