@@ -119,8 +119,10 @@ function PartySystem:removeMember(id, player)
     self.playerParty[player] = nil
     if next(p.members) == nil then
         self.parties[id] = nil
+        NetworkSystem:fireAllClients("PartyDisband", id)
+    else
+        NetworkSystem:fireAllClients("PartyUpdated", id, self:getMembers(id))
     end
-    NetworkSystem:fireAllClients("PartyUpdated", id, self:getMembers(id))
     return true
 end
 
