@@ -58,6 +58,8 @@ local skillPool = require(assets:WaitForChild("skills"))
 local itemPool = require(assets:WaitForChild("items"))
 local companionPool = require(assets:WaitForChild("companions"))
 local EquipmentGenerator = require(script.Parent:WaitForChild("EquipmentGenerator"))
+local RunService = game:GetService("RunService")
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 
 -- Simple currency storage
 GachaSystem.tickets = {skill = 0, companion = 0, equipment = 0}
@@ -88,6 +90,9 @@ end
 function GachaSystem:addCrystals(amount)
     local n = tonumber(amount) or 0
     self.crystals = self.crystals + n
+    if RunService:IsServer() then
+        NetworkSystem:fireAllClients("CurrencyUpdate", "crystal", self.crystals)
+    end
 end
 
 ---Attempts to spend the requested number of crystals.

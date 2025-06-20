@@ -4,6 +4,7 @@ local LootSystem = {}
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
 
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
 local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
 local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
 local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
@@ -21,10 +22,10 @@ end
 
 ---Internal helper applying rewards based on enemy type.
 local rewards = {
-    normal   = {coins = 1,   exp = 5,   gauge = 10, ether = 0},
-    mini     = {coins = 5,   exp = 20,  gauge = 20, ether = 1},
-    boss     = {coins = 10,  exp = 50,  gauge = 30, ether = 2},
-    location = {coins = 20,  exp = 100, gauge = 50, ether = 3},
+    normal   = {coins = 1,   exp = 5,   gauge = 10, ether = 0, crystals = 0},
+    mini     = {coins = 5,   exp = 20,  gauge = 20, ether = 1, crystals = 1},
+    boss     = {coins = 10,  exp = 50,  gauge = 30, ether = 2, crystals = 2},
+    location = {coins = 20,  exp = 100, gauge = 50, ether = 3, crystals = 3},
 }
 
 ---Grants loot when an enemy is killed.
@@ -38,6 +39,9 @@ function LootSystem:onEnemyKilled(enemy)
     CurrencySystem:add(currency, r.coins * lvl)
     if r.ether and r.ether > 0 then
         CurrencySystem:add("ether", r.ether)
+    end
+    if r.crystals and r.crystals > 0 then
+        GachaSystem:addCrystals(r.crystals)
     end
     PlayerLevelSystem:addExperience(r.exp)
     RewardGaugeSystem:addPoints(r.gauge)
