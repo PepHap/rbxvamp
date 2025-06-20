@@ -71,4 +71,28 @@ return {
             brightness = 1.5,
         },
     },
+    {
+        name = "Volcano",
+        coordinates = {x = 300, y = 0, z = 0},
+        placeId = 0,
+        levelStart = 91,
+        levelEnd = 120,
+        floors = 30,
+        bosses = {
+            [5] = "Flame Knight",
+            [10] = "Lava Behemoth",
+            [30] = "Magma Lord",
+        },
+        currency = "crystal",
+        theme = {
+            windowBackground = {r = 70, g = 30, b = 30},
+            buttonBackground = {r = 150, g = 60, b = 40},
+            buttonHover = {r = 170, g = 80, b = 60},
+        },
+        lighting = {
+            ambient = Color3 and Color3.fromRGB and Color3.fromRGB(100, 60, 50) or {r=100,g=60,b=50},
+            outdoorAmbient = Color3 and Color3.fromRGB and Color3.fromRGB(50, 30, 20) or {r=50,g=30,b=20},
+            brightness = 2,
+        },
+    },
 }

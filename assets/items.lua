@@ -7,6 +7,7 @@ return {
         {name = "Royal Crown", rarity = "S", slot = "Hat", stats = {health = 15}},
         {name = "Ancient Halo", rarity = "SS", slot = "Hat", stats = {magic = 10}},
         {name = "Eternal Halo", rarity = "SSS", slot = "Hat", stats = {magic = 20}},
+        {name = "Sturdy Helm", rarity = "C", slot = "Hat", stats = {defense = 2}},
     },
     Necklace = {
         {name = "Bronze Necklace", rarity = "C", slot = "Necklace", stats = {health = 2}},
@@ -17,6 +18,7 @@ return {
         {name = "Dragon Necklace", rarity = "S", slot = "Necklace", stats = {attack = 5}},
         {name = "Eternal Pendant", rarity = "SS", slot = "Necklace", stats = {magic = 8}},
         {name = "Cosmic Relic", rarity = "SSS", slot = "Necklace", stats = {magic = 16}},
+        {name = "Emerald Pendant", rarity = "B", slot = "Necklace", stats = {health = 4, magic = 1}},
     },
     Ring = {
         {name = "Simple Ring", rarity = "C", slot = "Ring", stats = {attack = 1}},
@@ -28,6 +30,7 @@ return {
         {name = "Astral Ring", rarity = "SS", slot = "Ring", stats = {magic = 9}},
         {name = "Infinity Ring", rarity = "SSS", slot = "Ring", stats = {magic = 18}},
         {name = "Platinum Ring", rarity = "S", slot = "Ring", stats = {critDamage = 0.2}},
+        {name = "Titan Ring", rarity = "A", slot = "Ring", stats = {attack = 3, defense = 1}},
     },
     Armor = {
         {name = "Leather Armor", rarity = "C", slot = "Armor", stats = {health = 10}},
@@ -36,6 +39,7 @@ return {
         {name = "Knight Armor", rarity = "B", slot = "Armor", stats = {defense = 4}},
         {name = "Wizard Robe", rarity = "A", slot = "Armor", stats = {magic = 4}},
         {name = "Golden Armor", rarity = "A", slot = "Armor", stats = {defense = 8}},
+        {name = "Shadow Cloak", rarity = "A", slot = "Armor", stats = {defense = 2, speed = 0.1}},
         {name = "Dragon Scale", rarity = "S", slot = "Armor", stats = {defense = 15}},
         {name = "Celestial Plate", rarity = "SS", slot = "Armor", stats = {health = 25}},
         {name = "Eternal Guard", rarity = "SSS", slot = "Armor", stats = {defense = 35}},
@@ -48,6 +52,7 @@ return {
         {name = "Magic Charm", rarity = "A", slot = "Accessory", stats = {manaRegen = 0.1}},
         {name = "Healing Pendant", rarity = "B", slot = "Accessory", stats = {healthRegen = 0.5}},
         {name = "Winged Emblem", rarity = "A", slot = "Accessory", stats = {speed = 0.1}},
+        {name = "Spirit Charm", rarity = "A", slot = "Accessory", stats = {manaRegen = 0.15}},
         {name = "Spirit Token", rarity = "S", slot = "Accessory", stats = {critChance = 0.1}},
         {name = "Ancient Talisman", rarity = "SS", slot = "Accessory", stats = {magic = 12}},
         {name = "Divine Sigil", rarity = "SSS", slot = "Accessory", stats = {magic = 24}},
@@ -58,6 +63,7 @@ return {
         {name = "Knight Sword", rarity = "B", slot = "Weapon", stats = {attack = 5}},
         {name = "Great Axe", rarity = "A", slot = "Weapon", stats = {attack = 8}},
         {name = "Longsword", rarity = "A", slot = "Weapon", stats = {attack = 7}},
+        {name = "Battle Hammer", rarity = "A", slot = "Weapon", stats = {attack = 9, critDamage = 0.1}},
         {name = "Legendary Sword", rarity = "S", slot = "Weapon", stats = {attack = 12}},
         {name = "Phoenix Claw", rarity = "S", slot = "Weapon", stats = {attack = 12}},
         {name = "Void Edge", rarity = "SS", slot = "Weapon", stats = {attack = 20}},
