@@ -47,11 +47,13 @@ function NetworkSystem:start()
     self.events.RaidReady = createRemoteEvent("RaidReady")
     self.events.LevelProgress = createRemoteEvent("LevelProgress")
     self.events.CurrencyUpdate = createRemoteEvent("CurrencyUpdate")
+    self.events.PlayerLevelUpdate = createRemoteEvent("PlayerLevelUpdate")
     self.events.GaugeUpdate = createRemoteEvent("GaugeUpdate")
     self.events.GaugeOptions = createRemoteEvent("GaugeOptions")
     self.events.GaugeReset = createRemoteEvent("GaugeReset")
     self.events.RewardChoice = createRemoteEvent("RewardChoice")
     self.events.RewardResult = createRemoteEvent("RewardResult")
+    self.events.ScoreboardUpdate = createRemoteEvent("ScoreboardUpdate")
 
     -- Player level notifications
     self.events.PlayerLevelUp = createRemoteEvent("PlayerLevelUp")

@@ -8,13 +8,13 @@ local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
 
 -- Base reward values per rarity. Values are multiplied by the item level
 SalvageSystem.rarityValues = {
-    C = {gold = 1, crystals = 0},
-    D = {gold = 0, crystals = 0},
-    B = {gold = 2, crystals = 1},
-    A = {gold = 3, crystals = 2},
-    S = {gold = 5, crystals = 3},
-    SS = {gold = 8, crystals = 5},
-    SSS = {gold = 15, crystals = 10},
+    C = {gold = 1, crystals = 0, ore = 0},
+    D = {gold = 0, crystals = 0, ore = 0},
+    B = {gold = 2, crystals = 1, ore = 0},
+    A = {gold = 3, crystals = 2, ore = 1},
+    S = {gold = 5, crystals = 3, ore = 2},
+    SS = {gold = 8, crystals = 5, ore = 3},
+    SSS = {gold = 15, crystals = 10, ore = 5},
 }
 
 ---Salvages the given item granting currency based on rarity and level.
@@ -28,11 +28,15 @@ function SalvageSystem:salvageItem(item)
     if not vals then return false end
     local gold = (vals.gold or 0) * level
     local crystals = (vals.crystals or 0) * level
+    local ore = (vals.ore or 0) * level
     if gold > 0 then
         CurrencySystem:add("gold", gold)
     end
     if crystals > 0 then
         GachaSystem:addCrystals(crystals)
+    end
+    if ore > 0 then
+        CurrencySystem:add("ore", ore)
     end
     return true
 end

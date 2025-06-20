@@ -499,15 +499,18 @@ function InventoryUI:selectSlot(slot)
     self:update()
 end
 
----Attempts to upgrade the specified equipment slot using gold.
+---Attempts to upgrade the specified equipment slot using the
+--  currency associated with the current location.
 -- @param slot string equipment slot name
 -- @return boolean success
 function InventoryUI:upgradeSlot(slot)
     if not self.itemSystem then
         return false
     end
-    local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
-    local ok = self.itemSystem:upgradeItem(slot, 1, "gold")
+    local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
+    local loc = LocationSystem:getCurrent()
+    local currency = loc and loc.currency or "gold"
+    local ok = self.itemSystem:upgradeItem(slot, 1, currency)
     if ok then
         self:update()
     end

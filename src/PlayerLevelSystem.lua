@@ -5,6 +5,9 @@ local PlayerLevelSystem = {}
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 
+local RunService = game:GetService("RunService")
+
+
 ---Current player level starting at ``1``.
 PlayerLevelSystem.level = 1
 
@@ -16,6 +19,17 @@ PlayerLevelSystem.nextExp = 100
 
 ---List of content identifiers unlocked so far.
 PlayerLevelSystem.unlocked = {}
+
+---Sets up networking on the client so server updates replicate level data.
+function PlayerLevelSystem:start()
+    if RunService:IsClient() then
+        NetworkSystem:onClientEvent("PlayerLevelUpdate", function(lvl, xp, nextXp)
+            if type(lvl) == "number" then self.level = lvl end
+            if type(xp) == "number" then self.exp = xp end
+            if type(nextXp) == "number" then self.nextExp = nextXp end
+        end)
+    end
+end
 
 -- Milestone table mapping levels to content keys that unlock at that level.
 local milestones = {
@@ -93,8 +107,13 @@ function PlayerLevelSystem:checkThreshold()
         -- notify listeners of the level up
         local ev = EventManager:Get("PlayerLevelUp")
         ev:Fire(self.level)
+
         if NetworkSystem and NetworkSystem.fireAllClients then
             NetworkSystem:fireAllClients("PlayerLevelUp", self.level)
+
+        if RunService:IsServer() then
+            NetworkSystem:fireAllClients("PlayerLevelUpdate", self.level, self.exp, self.nextExp)
+
         end
     end
 end
@@ -105,6 +124,9 @@ function PlayerLevelSystem:addExperience(amount)
     assert(type(amount) == "number" and amount >= 0, "amount must be non-negative")
     self.exp = self.exp + amount
     self:checkThreshold()
+    if RunService:IsServer() then
+        NetworkSystem:fireAllClients("PlayerLevelUpdate", self.level, self.exp, self.nextExp)
+    end
 end
 
 ---Serializes the current player level data for persistence.
@@ -137,6 +159,9 @@ function PlayerLevelSystem:loadData(data)
         for i, v in ipairs(data.unlocked) do
             self.unlocked[i] = v
         end
+    end
+    if RunService:IsServer() then
+        NetworkSystem:fireAllClients("PlayerLevelUpdate", self.level, self.exp, self.nextExp)
     end
 end
 
