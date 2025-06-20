@@ -2,6 +2,7 @@ return {
     {
         name = "Meadow",
         coordinates = {x = 0, y = 0, z = 0},
+        placeId = 0,
         levelStart = 1,
         levelEnd = 30,
         floors = 30,
@@ -25,6 +26,7 @@ return {
     {
         name = "Dungeon",
         coordinates = {x = 100, y = 0, z = 0},
+        placeId = 0,
         levelStart = 31,
         levelEnd = 60,
         floors = 30,
@@ -48,6 +50,7 @@ return {
     {
         name = "Ruins",
         coordinates = {x = 200, y = 0, z = 0},
+        placeId = 0,
         levelStart = 61,
         levelEnd = 90,
         floors = 30,
