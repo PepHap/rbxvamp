@@ -53,6 +53,9 @@ function NetworkSystem:start()
     self.events.EnemySpawn = createRemoteEvent("EnemySpawn")
     self.events.EnemyRemove = createRemoteEvent("EnemyRemove")
     self.events.EnemyUpdate = createRemoteEvent("EnemyUpdate")
+    -- Allow clients to request salvaging items on the server
+    self.events.SalvageRequest = createRemoteEvent("SalvageRequest")
+    self.events.SalvageResult = createRemoteEvent("SalvageResult")
     self.events.PlayerAttack = createRemoteEvent("PlayerAttack")
     -- Events used for client requests
     self.events.PartyRequest = createRemoteEvent("PartyRequest")
