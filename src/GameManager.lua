@@ -360,6 +360,9 @@ GameManager:addSystem("Tutorial", TutorialSystem)
 
 ---Triggers a skill gacha roll.
 function GameManager:rollSkill()
+    if not PlayerLevelSystem:isUnlocked("skills") then
+        return nil
+    end
     local reward = GachaSystem:rollSkill()
     if reward then
         self.skillSystem:addSkill(reward)
@@ -372,6 +375,9 @@ end
 
 ---Triggers a companion gacha roll.
 function GameManager:rollCompanion()
+    if not PlayerLevelSystem:isUnlocked("companions") then
+        return nil
+    end
     local reward = GachaSystem:rollCompanion()
     if reward then
         self.companionSystem:add(reward)

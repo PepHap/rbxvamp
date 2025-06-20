@@ -23,6 +23,18 @@ local milestones = {
     [20] = "new_area"
 }
 
+---Returns ``true`` when the specified content identifier has been unlocked.
+-- @param key string content identifier
+-- @return boolean
+function PlayerLevelSystem:isUnlocked(key)
+    for _, k in ipairs(self.unlocked) do
+        if k == key then
+            return true
+        end
+    end
+    return false
+end
+
 ---Unlocks content when a milestone level is reached.
 -- @param lvl number level that was reached
 function PlayerLevelSystem:unlockForLevel(lvl)
