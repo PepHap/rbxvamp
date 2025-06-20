@@ -11,4 +11,6 @@ return {
         reward = {keys = {raid = 1}}},
     {id = "armor_breaker", event = "EnemyKilled", goal = 20,
         reward = {currency = "ore", amount = 10}},
+    {id = "hundred_kills", event = "EnemyKilled", goal = 100,
+        reward = {crystals = 5}},
 }
