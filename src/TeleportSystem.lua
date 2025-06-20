@@ -9,6 +9,12 @@ local TeleportSystem = {
     homePlaceId = game.PlaceId,
 }
 
+function TeleportSystem:start()
+    if self.homePlaceId == 0 or not self.homePlaceId then
+        self.homePlaceId = game.PlaceId
+    end
+end
+
 ---Teleports all players in ``members`` to ``placeId`` using
 -- ``TeleportPartyAsync``. See Roblox documentation:
 -- https://create.roblox.com/docs/reference/engine/classes/TeleportService#TeleportPartyAsync

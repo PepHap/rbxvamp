@@ -170,6 +170,9 @@ if IS_SERVER then
     GameManager:addSystem("Teleport", TeleportSystem)
     TeleportSystem.raidPlaceId = 0
     TeleportSystem.lobbyPlaceId = 0
+    if TeleportSystem.start then
+        TeleportSystem:start()
+    end
 end
 
 local PartySystem
@@ -447,6 +450,13 @@ function GameManager:chooseReward(index)
         end
     end
     return chosen
+end
+
+---Resets the reward gauge completely.
+function GameManager:resetRewardGauge()
+    if RewardGaugeSystem.resetGauge then
+        RewardGaugeSystem:resetGauge()
+    end
 end
 
 ---Purchases gacha tickets using the crystal exchange system.
