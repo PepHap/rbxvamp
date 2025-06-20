@@ -36,4 +36,24 @@ function KeySystem:getCount(kind)
     return self.keys[kind] or 0
 end
 
+---Serializes key counts for saving between sessions.
+-- @return table mapping of key types to counts
+function KeySystem:saveData()
+    local data = {}
+    for k, v in pairs(self.keys) do
+        data[k] = v
+    end
+    return data
+end
+
+---Restores key counts from the provided table.
+-- @param data table previously saved via ``saveData``
+function KeySystem:loadData(data)
+    self.keys = {}
+    if type(data) ~= "table" then return end
+    for k, v in pairs(data) do
+        self.keys[k] = v
+    end
+end
+
 return KeySystem

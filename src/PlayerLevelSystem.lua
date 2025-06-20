@@ -54,4 +54,37 @@ function PlayerLevelSystem:addExperience(amount)
     self:checkThreshold()
 end
 
+---Serializes the current player level data for persistence.
+-- @return table plain table with level, exp and unlocks
+function PlayerLevelSystem:saveData()
+    return {
+        level = self.level,
+        exp = self.exp,
+        nextExp = self.nextExp,
+        unlocked = self.unlocked,
+    }
+end
+
+---Loads level data previously produced by ``saveData``.
+-- Unknown fields are ignored.
+-- @param data table data table
+function PlayerLevelSystem:loadData(data)
+    if type(data) ~= "table" then return end
+    if type(data.level) == "number" then
+        self.level = data.level
+    end
+    if type(data.exp) == "number" then
+        self.exp = data.exp
+    end
+    if type(data.nextExp) == "number" then
+        self.nextExp = data.nextExp
+    end
+    if type(data.unlocked) == "table" then
+        self.unlocked = {}
+        for i, v in ipairs(data.unlocked) do
+            self.unlocked[i] = v
+        end
+    end
+end
+
 return PlayerLevelSystem
