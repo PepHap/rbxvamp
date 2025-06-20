@@ -4,6 +4,7 @@
 local RaidSystem = {}
 
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local TeleportSystem = require(script.Parent:WaitForChild("TeleportSystem"))
 
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
 local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
@@ -50,6 +51,9 @@ function RaidSystem:startRaid(player)
     end
     if not KeySystem:useKey("raid") then
         return false
+    end
+    if TeleportSystem and TeleportSystem.teleportParty then
+        TeleportSystem:teleportParty(members)
     end
     self.active = true
     self.killCount = 0
