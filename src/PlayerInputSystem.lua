@@ -25,6 +25,7 @@ local PlayerInputSystem = {
     gachaKey = "G",
     rewardKey = "R",
     questKey = "J",
+    achievementKey = "H",
     statsKey = "U",
     progressKey = "P",
     exchangeKey = "C",
@@ -51,6 +52,7 @@ local GachaUISystem = require(script.Parent:WaitForChild("GachaUISystem"))
 local RewardGaugeUISystem = require(script.Parent:WaitForChild("RewardGaugeUISystem"))
 local StatUpgradeUISystem = require(script.Parent:WaitForChild("StatUpgradeUISystem"))
 local QuestUISystem = require(script.Parent:WaitForChild("QuestUISystem"))
+local AchievementUISystem = require(script.Parent:WaitForChild("AchievementUISystem"))
 local CrystalExchangeUISystem = require(script.Parent:WaitForChild("CrystalExchangeUISystem"))
 local ProgressMapUISystem = require(script.Parent:WaitForChild("ProgressMapUISystem"))
 local AdminConsoleSystem = require(script.Parent:FindFirstChild("AdminConsoleSystem"))
@@ -110,6 +112,8 @@ function PlayerInputSystem:setKeyState(key, isDown)
         RewardGaugeUISystem:toggle()
     elseif key == self.questKey and isDown then
         QuestUISystem:toggle()
+    elseif key == self.achievementKey and isDown then
+        AchievementUISystem:toggle()
     elseif key == self.progressKey and isDown then
         ProgressMapUISystem:toggle()
     elseif key == self.exchangeKey and isDown then
