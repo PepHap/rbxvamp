@@ -7,6 +7,11 @@ local StatUpgradeSystem = {}
 -- Each entry stores a base value and current level.
 StatUpgradeSystem.stats = {}
 
+---Multiplier applied when calculating upgrade costs. Each level costs
+--  ``level * costFactor`` of the chosen currency. Adjust this value to
+--  tune overall stat progression difficulty.
+StatUpgradeSystem.costFactor = 1
+
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 
 ---Adds a new stat with the provided base value.
@@ -18,8 +23,22 @@ function StatUpgradeSystem:addStat(name, baseValue)
     self.stats[name] = {level = 1, base = baseValue}
 end
 
+---Calculates the currency cost required for upgrading ``amount`` levels of the
+--  stat.
+-- @param name string stat name
+-- @param amount number how many levels to add
+-- @return number cost in currency
+function StatUpgradeSystem:getUpgradeCost(name, amount)
+    local stat = self.stats[name]
+    local n = tonumber(amount) or 1
+    if not stat or n <= 0 then
+        return 0
+    end
+    return (stat.level or 1) * n * (self.costFactor or 1)
+end
+
 ---Upgrades a stat by spending currency.
--- Cost is equal to the amount of levels being added.
+-- The cost scales with the stat level using `getUpgradeCost`.
 -- @param name string stat name
 -- @param amount number number of levels to add
 -- @param currency string currency key used for payment
@@ -30,7 +49,8 @@ function StatUpgradeSystem:upgradeStat(name, amount, currency)
     if not stat or not n or n <= 0 then
         return false
     end
-    if not CurrencySystem:spend(currency, n) then
+    local cost = StatUpgradeSystem:getUpgradeCost(name, n)
+    if not CurrencySystem:spend(currency, cost) then
         return false
     end
     stat.level = stat.level + n
