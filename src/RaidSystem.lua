@@ -3,6 +3,8 @@
 
 local RaidSystem = {}
 
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
 local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
 local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
@@ -41,6 +43,7 @@ function RaidSystem:startRaid()
     EnemySystem.healthScale = (EnemySystem.healthScale or 1) * 1.5
     EnemySystem.damageScale = (EnemySystem.damageScale or 1) * 1.5
     EventManager:Get("RaidStart"):Fire()
+    NetworkSystem:fireAllClients("RaidStatus", "start")
     return true
 end
 
@@ -54,6 +57,7 @@ function RaidSystem:onEnemyKilled()
         self.killCount = 0
         EnemySystem:spawnBoss("boss")
     end
+    NetworkSystem:fireAllClients("RaidStatus", "progress", self.killCount)
 end
 
 ---Ends the raid when the boss is defeated.
@@ -65,6 +69,7 @@ function RaidSystem:onBossKilled()
     EnemySystem.healthScale = 1
     EnemySystem.damageScale = 1
     EventManager:Get("RaidComplete"):Fire()
+    NetworkSystem:fireAllClients("RaidStatus", "complete")
 end
 
 function RaidSystem:isActive()
