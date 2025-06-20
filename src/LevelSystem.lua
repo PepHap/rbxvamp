@@ -200,6 +200,9 @@ function LevelSystem:advance()
         end
     end
     EventManager:Get("LevelAdvance"):Fire(self.currentLevel, stageType)
+    if NetworkSystem and NetworkSystem.fireAllClients then
+        NetworkSystem:fireAllClients("StageAdvance", self.currentLevel, stageType)
+    end
     broadcastProgress()
     return self.currentLevel
 end
@@ -209,14 +212,19 @@ function LevelSystem:onPlayerDeath()
     local lvl = self.currentLevel
     -- Roll back only on mini-boss stages which occur every 5th level
     -- except when it is also a boss or strong boss stage.
+    local rolledBack = false
     if lvl % 5 == 0 and lvl % 10 ~= 0 then
         self.currentLevel = math.max(lvl - 1, 1)
         self.killCount = 0
         self.requiredKills = self.requiredKills - 5
         updateWaveSize()
+        rolledBack = true
     end
     EventManager:Get("PlayerDeath"):Fire(lvl)
     broadcastProgress()
+    if rolledBack and NetworkSystem and NetworkSystem.fireAllClients then
+        NetworkSystem:fireAllClients("StageRollback", self.currentLevel)
+    end
 end
 
 function LevelSystem:saveData()
