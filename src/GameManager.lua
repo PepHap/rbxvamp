@@ -205,6 +205,9 @@ StatUpgradeSystem:addStat("Defense", 0)
 StatUpgradeSystem:addStat("Magic", 0)
 StatUpgradeSystem:addStat("CritChance", 0.05)
 StatUpgradeSystem:addStat("CritDamage", 1.5)
+StatUpgradeSystem:addStat("HealthRegen", 1)
+StatUpgradeSystem:addStat("MaxMana", 100)
+StatUpgradeSystem:addStat("ManaRegen", 5)
 
 -- Data persistence for saving and loading progress (server only)
 local DataPersistenceSystem
@@ -245,6 +248,11 @@ SkillCastSystem.skillSystem = GameManager.skillSystem
 GameManager.skillCastSystem = SkillCastSystem
 GameManager:addSystem("SkillCast", SkillCastSystem)
 AutoBattleSystem.skillCastSystem = SkillCastSystem
+local RegenSystem = require(script.Parent:WaitForChild("RegenSystem"))
+RegenSystem.playerSystem = PlayerSystem
+RegenSystem.skillCastSystem = SkillCastSystem
+RegenSystem.statSystem = StatUpgradeSystem
+GameManager:addSystem("Regen", RegenSystem)
 
 -- Optional automatic skill casting
 local AutoSkillSystem = require(script.Parent:WaitForChild("AutoSkillSystem"))

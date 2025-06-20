@@ -32,6 +32,15 @@ local SkillSystem = require(script.Parent:WaitForChild("SkillSystem"))
 -- @param skillSys table optional SkillSystem instance
 function SkillCastSystem:start(skillSys)
     self.skillSystem = skillSys or self.skillSystem or SkillSystem.new()
+    local Stats = require(script.Parent:WaitForChild("StatUpgradeSystem"))
+    local manaStat = Stats.stats and Stats.stats.MaxMana
+    if manaStat then
+        self.maxMana = (manaStat.base or 0) * (manaStat.level or 1)
+    end
+    local regenStat = Stats.stats and Stats.stats.ManaRegen
+    if regenStat then
+        self.regenRate = (regenStat.base or 0) * (regenStat.level or 1)
+    end
     self.mana = self.maxMana
     self.cooldowns = {}
     for _ in ipairs(self.skillSystem.skills) do
