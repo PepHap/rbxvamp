@@ -19,6 +19,7 @@ local GameManager = {
 }
 
 local RunService = game:GetService("RunService")
+local IS_SERVER = RunService:IsServer()
 
 --- Registers a system for later initialization and updates.
 -- @param name string unique key for the system
@@ -50,13 +51,18 @@ function GameManager:update(dt)
     end
 end
 
--- Integrate the default enemy system on load
-local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
-GameManager:addSystem("Enemy", EnemySystem)
+if IS_SERVER then
+    -- Integrate the default enemy system on load
+    local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
+    GameManager:addSystem("Enemy", EnemySystem)
 
 -- Auto battle functionality can optionally control the player's actions
 local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
 GameManager:addSystem("AutoBattle", AutoBattleSystem)
+
+    -- Handle player attack requests on the server
+    local AttackSystem = require(script.Parent:WaitForChild("AttackSystem"))
+    GameManager:addSystem("Attack", AttackSystem)
 
 
 -- Player progression handling
@@ -245,6 +251,8 @@ GameManager:addSystem("CompanionAI", CompanionAttackSystem)
 local LobbySystem = require(script.Parent:WaitForChild("LobbySystem"))
 GameManager.lobbySystem = LobbySystem
 GameManager:addSystem("Lobby", LobbySystem)
+
+end -- IS_SERVER block
 
 if RunService:IsClient() then
     -- Minimal UI for displaying rewards and gacha results
