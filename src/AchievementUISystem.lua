@@ -99,23 +99,37 @@ function AchievementUI:update()
     local gui = ensureGui()
     local parentGui = self.window or gui
     clearChildren(parentGui)
-    for _, def in ipairs(sys.definitions) do
+    local offset = 0
+    for i, def in ipairs(sys.definitions) do
         local p = sys.progress[def.id] or {value=0, completed=false, rewarded=false}
         local frame = createInstance("Frame")
+        if UDim2 and type(UDim2.new)=="function" then
+            frame.Position = UDim2.new(0, 5, 0, offset)
+            frame.Size = UDim2.new(1, -10, 0, 30)
+        end
         parent(frame, parentGui)
 
         local label = createInstance("TextLabel")
         label.Text = string.format("%s: %d/%d", def.id, p.value, def.goal)
+        if UDim2 and type(UDim2.new)=="function" then
+            label.Position = UDim2.new(0, 5, 0, 5)
+            label.Size = UDim2.new(1, -70, 0, 20)
+        end
         parent(label, frame)
 
         if p.completed and not p.rewarded then
             local btn = createInstance("TextButton")
             btn.Text = "Claim"
+            if UDim2 and type(UDim2.new)=="function" then
+                btn.Position = UDim2.new(1, -65, 0, 5)
+                btn.Size = UDim2.new(0, 60, 0, 20)
+            end
             parent(btn, frame)
             GuiUtil.connectButton(btn, function()
                 AchievementUI:claim(def.id)
             end)
         end
+        offset = offset + 35
     end
 end
 

@@ -79,16 +79,34 @@ function QuestUISystem:update()
     for id, q in pairs(qs.quests) do
         local frame = createInstance("Frame")
         frame.Name = id .. "Frame"
+        if UDim2 and type(UDim2.new)=="function" then
+            local count = 0
+            if type(container) == "table" and container.children then
+                count = #container.children
+            elseif container.GetChildren then
+                count = #container:GetChildren()
+            end
+            frame.Position = UDim2.new(0, 5, 0, count*35)
+            frame.Size = UDim2.new(1, -10, 0, 30)
+        end
         parent(frame, container)
 
         local label = createInstance("TextLabel")
         label.Name = "ProgressLabel"
         label.Text = string.format("%s: %d/%d", id, q.progress, q.goal)
+        if UDim2 and type(UDim2.new)=="function" then
+            label.Position = UDim2.new(0, 5, 0, 5)
+            label.Size = UDim2.new(1, -70, 0, 20)
+        end
         parent(label, frame)
 
         local btn = createInstance("TextButton")
         btn.Name = "ClaimButton"
         btn.Text = "Claim"
+        if UDim2 and type(UDim2.new)=="function" then
+            btn.Position = UDim2.new(1, -65, 0, 5)
+            btn.Size = UDim2.new(0, 60, 0, 20)
+        end
         parent(btn, frame)
 
         if q.completed and not q.rewarded then

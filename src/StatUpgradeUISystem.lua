@@ -106,13 +106,22 @@ end
 
 local function renderStats(container, sys)
     clearChildren(container)
+    local index = 0
     for name, stat in pairs(sys.stats) do
         local frame = createInstance("Frame")
         frame.Name = name .. "Frame"
+        if UDim2 and type(UDim2.new)=="function" then
+            frame.Position = UDim2.new(0, 5, 0, index*35)
+            frame.Size = UDim2.new(1, -10, 0, 30)
+        end
         parent(frame, container)
 
         local label = createInstance("TextLabel")
         label.Text = string.format("%s Lv.%d", name, stat.level)
+        if UDim2 and type(UDim2.new)=="function" then
+            label.Position = UDim2.new(0, 5, 0, 5)
+            label.Size = UDim2.new(1, -70, 0, 20)
+        end
         parent(label, frame)
 
         local btn = createInstance("TextButton")
@@ -121,6 +130,10 @@ local function renderStats(container, sys)
             btn:SetAttribute("StatName", name)
         elseif type(btn) == "table" then
             btn.StatName = name
+        end
+        if UDim2 and type(UDim2.new)=="function" then
+            btn.Position = UDim2.new(1, -65, 0, 5)
+            btn.Size = UDim2.new(0, 60, 0, 20)
         end
         parent(btn, frame)
         GuiUtil.connectButton(btn, function()
@@ -131,6 +144,7 @@ local function renderStats(container, sys)
             frame.Label = label
             frame.Button = btn
         end
+        index = index + 1
     end
 end
 

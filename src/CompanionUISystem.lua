@@ -103,10 +103,18 @@ local function renderCompanions(container, sys)
     for i, comp in ipairs(sys.companions) do
         local frame = createInstance("Frame")
         frame.Name = comp.name .. "Frame"
+        if UDim2 and type(UDim2.new)=="function" then
+            frame.Position = UDim2.new(0, 5, 0, (i-1)*35)
+            frame.Size = UDim2.new(1, -10, 0, 30)
+        end
         parent(frame, container)
 
         local label = createInstance("TextLabel")
         label.Text = string.format("%s Lv.%d", comp.name, comp.level)
+        if UDim2 and type(UDim2.new)=="function" then
+            label.Position = UDim2.new(0, 5, 0, 5)
+            label.Size = UDim2.new(1, -70, 0, 20)
+        end
         parent(label, frame)
 
         local btn = createInstance("TextButton")
@@ -115,6 +123,10 @@ local function renderCompanions(container, sys)
             btn:SetAttribute("Index", i)
         elseif type(btn) == "table" then
             btn.Index = i
+        end
+        if UDim2 and type(UDim2.new)=="function" then
+            btn.Position = UDim2.new(1, -65, 0, 5)
+            btn.Size = UDim2.new(0, 60, 0, 20)
         end
         parent(btn, frame)
         GuiUtil.connectButton(btn, function()

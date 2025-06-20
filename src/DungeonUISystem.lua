@@ -82,10 +82,22 @@ function DungeonUI:start(dungeonSys)
     end
 
     self.window = GuiUtil.createWindow("DungeonWindow")
+    if UDim2 and type(UDim2.new)=="function" then
+        self.window.Size = UDim2.new(0, 300, 0, 200)
+        self.window.Position = UDim2.new(0.5, -150, 0.5, -100)
+    end
     parent(self.window, gui)
     self.listFrame = createInstance("Frame")
+    if UDim2 and type(UDim2.new)=="function" then
+        self.listFrame.Position = UDim2.new(0, 0, 0, 0)
+        self.listFrame.Size = UDim2.new(1, 0, 1, -30)
+    end
     parent(self.listFrame, self.window)
     self.progressLabel = createInstance("TextLabel")
+    if UDim2 and type(UDim2.new)=="function" then
+        self.progressLabel.Position = UDim2.new(0, 5, 1, -25)
+        self.progressLabel.Size = UDim2.new(1, -10, 0, 20)
+    end
     parent(self.progressLabel, self.window)
 
     self:update()
@@ -106,12 +118,30 @@ local function renderDungeons(container, sys)
     clearChildren(container)
     for id, info in pairs(sys.dungeons) do
         local frame = createInstance("Frame")
+        if UDim2 and type(UDim2.new)=="function" then
+            local count = 0
+            if type(container) == "table" and container.children then
+                count = #container.children
+            elseif container.GetChildren then
+                count = #container:GetChildren()
+            end
+            frame.Position = UDim2.new(0, 5, 0, count*35)
+            frame.Size = UDim2.new(1, -10, 0, 30)
+        end
         parent(frame, container)
         local label = createInstance("TextLabel")
         label.Text = string.format("%s - %d kills for %d %s", id, info.kills, info.reward, info.currency)
+        if UDim2 and type(UDim2.new)=="function" then
+            label.Position = UDim2.new(0, 5, 0, 5)
+            label.Size = UDim2.new(1, -70, 0, 20)
+        end
         parent(label, frame)
         local btn = createInstance("TextButton")
         btn.Text = string.format("Start (%d keys)", KeySystem:getCount(info.key))
+        if UDim2 and type(UDim2.new)=="function" then
+            btn.Position = UDim2.new(1, -65, 0, 5)
+            btn.Size = UDim2.new(0, 60, 0, 20)
+        end
         parent(btn, frame)
         GuiUtil.connectButton(btn, function()
             DungeonUI:startDungeon(id)
@@ -129,10 +159,18 @@ function DungeonUI:update()
     local gui = ensureGui()
     local parentGui = self.window or gui
     self.listFrame = self.listFrame or createInstance("Frame")
+    if UDim2 and type(UDim2.new)=="function" then
+        self.listFrame.Position = UDim2.new(0, 0, 0, 0)
+        self.listFrame.Size = UDim2.new(1, 0, 1, -30)
+    end
     parent(self.listFrame, parentGui)
     renderDungeons(self.listFrame, sys)
 
     self.progressLabel = self.progressLabel or createInstance("TextLabel")
+    if UDim2 and type(UDim2.new)=="function" then
+        self.progressLabel.Position = UDim2.new(0, 5, 1, -25)
+        self.progressLabel.Size = UDim2.new(1, -10, 0, 20)
+    end
     parent(self.progressLabel, parentGui)
     if sys.active then
         local info = sys.dungeons[sys.active]
