@@ -257,6 +257,12 @@ local LootSystem = require(script.Parent:WaitForChild("LootSystem"))
 GameManager.lootSystem = LootSystem
 GameManager:addSystem("Loot", LootSystem)
 
+-- Daily login bonuses award extra crystals
+local DailyBonusSystem = require(script.Parent:WaitForChild("DailyBonusSystem"))
+GameManager.dailyBonusSystem = DailyBonusSystem
+GameManager:addSystem("DailyBonus", DailyBonusSystem)
+
+
 -- Exchange crystals for tickets or upgrade currency
 local CrystalExchangeSystem = require(script.Parent:WaitForChild("CrystalExchangeSystem"))
 GameManager.crystalExchangeSystem = CrystalExchangeSystem
@@ -373,6 +379,9 @@ if RunService:IsClient() then
 
     local EnemyUISystem = require(script.Parent:WaitForChild("EnemyUISystem"))
     GameManager:addSystem("EnemyUI", EnemyUISystem)
+
+    local PlayerUISystem = require(script.Parent:WaitForChild("PlayerUISystem"))
+    GameManager:addSystem("PlayerUI", PlayerUISystem)
 
     -- Admin console for privileged commands
     local adminModule
@@ -527,6 +536,7 @@ function GameManager:getSaveData()
         companions = self.companionSystem:saveData(),
         stats = StatUpgradeSystem:saveData(),
         achievements = AchievementSystem:saveData(),
+        dailyBonus = DailyBonusSystem:saveData(),
     }
 end
 
@@ -552,6 +562,7 @@ function GameManager:applySaveData(data)
     KeySystem:loadData(data.keys)
     RewardGaugeSystem:loadData(data.rewardGauge)
     AchievementSystem:loadData(data.achievements)
+    DailyBonusSystem:loadData(data.dailyBonus)
 end
 
 ---Salvages an item from the inventory into currency and crystals.
