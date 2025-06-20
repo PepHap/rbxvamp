@@ -39,11 +39,8 @@ local PlayerInputSystem = {
 }
 
 local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
-local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
-local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
-local LootSystem = require(script.Parent:WaitForChild("LootSystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
-local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
 local InventoryUISystem = require(script.Parent:WaitForChild("InventoryUISystem"))
 local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
 local CompanionUISystem = require(script.Parent:WaitForChild("CompanionUISystem"))
@@ -143,7 +140,13 @@ end
 
 ---Performs a manual attack against the nearest enemy.
 function PlayerInputSystem:manualAttack()
+
     NetworkSystem:fireServer("AttackRequest")
+
+    if NetworkSystem and NetworkSystem.fireServer then
+        NetworkSystem:fireServer("PlayerAttack")
+    end
+
 end
 
 ---Updates the player position and handles attack input.
