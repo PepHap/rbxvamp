@@ -104,6 +104,14 @@ GameManager:addSystem("Gacha", GachaSystem)
 -- Gauge based reward choices independent of stage/XP
 local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
 GameManager:addSystem("RewardGauge", RewardGaugeSystem)
+RewardGaugeSystem.onSelect = function(choice)
+    if not choice then return end
+    if GameManager.inventory and GameManager.inventory.EquipItem then
+        GameManager.inventory:EquipItem(choice.slot, choice.item)
+    else
+        GameManager.itemSystem:equip(choice.slot, choice.item)
+    end
+end
 
 -- Achievement tracking for milestone rewards
 local AchievementSystem = require(script.Parent:WaitForChild("AchievementSystem"))
@@ -438,15 +446,7 @@ end
 ---Chooses one of the reward options.
 -- @param index number option index
 function GameManager:chooseReward(index)
-    local chosen = RewardGaugeSystem:choose(index)
-    if chosen then
-        if self.inventory and self.inventory.EquipItem then
-            self.inventory:EquipItem(chosen.slot, chosen.item)
-        else
-            self.itemSystem:equip(chosen.slot, chosen.item)
-        end
-    end
-    return chosen
+    return RewardGaugeSystem:choose(index)
 end
 
 ---Purchases gacha tickets using the crystal exchange system.

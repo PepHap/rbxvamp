@@ -12,6 +12,9 @@ RewardGaugeSystem.maxGauge = 100
 ---Table of reward options when the gauge fills.
 RewardGaugeSystem.options = nil
 
+---Optional callback invoked when a reward is chosen.
+RewardGaugeSystem.onSelect = nil
+
 -- Required systems/assets
 local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -81,6 +84,9 @@ function RewardGaugeSystem:choose(index)
     local chosen = opts[index]
     self.options = nil
     NetworkSystem:fireAllClients("GaugeOptions", nil)
+    if self.onSelect then
+        pcall(self.onSelect, chosen)
+    end
     return chosen
 end
 
