@@ -154,6 +154,12 @@ local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 GameManager.networkSystem = NetworkSystem
 GameManager:addSystem("Network", NetworkSystem)
 
+-- Handles teleporting groups between places
+local TeleportSystem = require(script.Parent:WaitForChild("TeleportSystem"))
+GameManager.teleportSystem = TeleportSystem
+GameManager:addSystem("Teleport", TeleportSystem)
+TeleportSystem.raidPlaceId = 0
+
 -- Cooperative party management
 local PartySystem = require(script.Parent:WaitForChild("PartySystem"))
 GameManager.partySystem = PartySystem
