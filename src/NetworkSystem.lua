@@ -53,6 +53,7 @@ function NetworkSystem:start()
     self.events.GaugeReset = createRemoteEvent("GaugeReset")
     self.events.RewardChoice = createRemoteEvent("RewardChoice")
     self.events.RewardResult = createRemoteEvent("RewardResult")
+    self.events.ScoreboardUpdate = createRemoteEvent("ScoreboardUpdate")
 
     -- Level progression notifications
     self.events.StageAdvance = createRemoteEvent("StageAdvance")
