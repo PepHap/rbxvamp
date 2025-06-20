@@ -21,6 +21,8 @@ major systems. Game assets should be placed under `assets`.
 - **PartySystem.lua** – manages cooperative parties
 - **RaidSystem.lua** – coordinates raid encounters for groups
 - **TeleportSystem.lua** – teleports parties to lobby or raid places
+- **EnemySystem.lua** – spawns foes with health and damage automatically
+  scaled by the number of players in the server
 
 ## Installing Busted
 This project uses the [Busted](https://olivinelabs.com/busted/) testing

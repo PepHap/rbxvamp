@@ -56,6 +56,26 @@ EnemySystem.attackRange = 2
 ---Delay between successive enemy attacks in seconds.
 EnemySystem.attackCooldown = 1
 
+---Additional difficulty applied for each extra player in the server.
+--  Follows the design guidance of roughly ``30%`` per member.
+EnemySystem.playerScaleFactor = 0.3
+
+---Calculates a scale multiplier based on the number of players currently
+--  in the game. When the ``Players`` service is unavailable this returns ``1``.
+--  @return number difficulty scale
+local function getPlayerScale()
+    local ok, players = pcall(function()
+        return game:GetService("Players")
+    end)
+    if ok and players and players.GetPlayers then
+        local count = #players:GetPlayers()
+        if count > 1 then
+            return 1 + (count - 1) * (EnemySystem.playerScaleFactor or 0.3)
+        end
+    end
+    return 1
+end
+
 ---Returns the appropriate pathfinding service depending on environment.
 local function getPathfindingService()
     if EnemySystem.useRobloxObjects and game ~= nil and type(game.GetService) == "function" then
@@ -249,8 +269,9 @@ function EnemySystem:createEnemyByType(mobType, level, position)
     if not cfg then
         return nil
     end
-    local hScale = (self.healthScale or 1) * (MobConfig.LevelMultiplier.Health ^ (level - 1))
-    local dScale = (self.damageScale or 1) * (MobConfig.LevelMultiplier.Damage ^ (level - 1))
+    local scale = getPlayerScale()
+    local hScale = (self.healthScale or 1) * (MobConfig.LevelMultiplier.Health ^ (level - 1)) * scale
+    local dScale = (self.damageScale or 1) * (MobConfig.LevelMultiplier.Damage ^ (level - 1)) * scale
     local enemy = createEnemy(
         cfg.BaseHealth * hScale,
         cfg.Damage * dScale,
@@ -325,8 +346,9 @@ function EnemySystem:spawnWave(level, count)
     local baseDamage = 1
     local damagePerLevel = 1
 
-    local hScale = self.healthScale or 1
-    local dScale = self.damageScale or 1
+    local scale = getPlayerScale()
+    local hScale = (self.healthScale or 1) * scale
+    local dScale = (self.damageScale or 1) * scale
 
     local function pickBehavior(lvl)
         if lvl >= 15 then
@@ -379,8 +401,9 @@ function EnemySystem:spawnBoss(bossType)
         location = 15
     }
 
-    local hScale = self.healthScale or 1
-    local dScale = self.damageScale or 1
+    local scale = getPlayerScale()
+    local hScale = (self.healthScale or 1) * scale
+    local dScale = (self.damageScale or 1) * scale
 
     local bossNames = {
         mini = "Mini Boss",
