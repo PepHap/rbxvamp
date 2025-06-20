@@ -39,6 +39,37 @@ function GameManager:start()
             system:start()
         end
     end
+
+    -- Bind server-only remote events after all systems are ready
+    if IS_SERVER and self.networkSystem and self.networkSystem.onServerEvent then
+        self.networkSystem:onServerEvent("SalvageRequest", function(player, kind, arg)
+            local result = false
+            if kind == "inventory" then
+                local index = tonumber(arg)
+                if index then
+                    result = self:salvageInventoryItem(index)
+                end
+            elseif kind == "equipped" then
+                if type(arg) == "string" then
+                    result = self:salvageEquippedItem(arg)
+                end
+            end
+            self.networkSystem:fireClient(player, "SalvageResult", result)
+        end)
+
+        self.networkSystem:onServerEvent("RewardChoice", function(player, index)
+            local idx = tonumber(index)
+            local choice
+            if idx then
+                choice = GameManager:chooseReward(idx)
+            end
+            if choice then
+                self.networkSystem:fireClient(player, "RewardResult", choice.slot, choice.item.name)
+            else
+                self.networkSystem:fireClient(player, "RewardResult")
+            end
+        end)
+    end
 end
 
 function GameManager:update(dt)
@@ -235,6 +266,16 @@ local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 GameManager.currencySystem = CurrencySystem
 GameManager:addSystem("Currency", CurrencySystem)
 
+local LootSystem = require(script.Parent:WaitForChild("LootSystem"))
+GameManager.lootSystem = LootSystem
+GameManager:addSystem("Loot", LootSystem)
+
+-- Daily login bonuses award extra crystals
+local DailyBonusSystem = require(script.Parent:WaitForChild("DailyBonusSystem"))
+GameManager.dailyBonusSystem = DailyBonusSystem
+GameManager:addSystem("DailyBonus", DailyBonusSystem)
+
+
 -- Exchange crystals for tickets or upgrade currency
 local CrystalExchangeSystem = require(script.Parent:WaitForChild("CrystalExchangeSystem"))
 GameManager.crystalExchangeSystem = CrystalExchangeSystem
@@ -349,6 +390,12 @@ if RunService:IsClient() then
     local RaidUISystem = require(script.Parent:WaitForChild("RaidUISystem"))
     GameManager:addSystem("RaidUI", RaidUISystem)
 
+    local EnemyUISystem = require(script.Parent:WaitForChild("EnemyUISystem"))
+    GameManager:addSystem("EnemyUI", EnemyUISystem)
+
+    local PlayerUISystem = require(script.Parent:WaitForChild("PlayerUISystem"))
+    GameManager:addSystem("PlayerUI", PlayerUISystem)
+
     -- Admin console for privileged commands
     local adminModule
     local ok, result = pcall(function()
@@ -449,6 +496,22 @@ function GameManager:chooseReward(index)
     return RewardGaugeSystem:choose(index)
 end
 
+---Adjusts the gauge threshold for earning rewards.
+-- @param value number new gauge requirement
+function GameManager:setGaugeThreshold(value)
+    if RewardGaugeSystem.setMaxGauge then
+        RewardGaugeSystem:setMaxGauge(value)
+    end
+end
+
+---Sets how many reward options appear when the gauge fills.
+-- @param count number option count
+function GameManager:setGaugeOptionCount(count)
+    if RewardGaugeSystem.setOptionCount then
+        RewardGaugeSystem:setOptionCount(count)
+    end
+end
+
 ---Purchases gacha tickets using the crystal exchange system.
 -- @param kind string ticket type
 -- @param amount number number of tickets
@@ -502,6 +565,7 @@ function GameManager:getSaveData()
         companions = self.companionSystem:saveData(),
         stats = StatUpgradeSystem:saveData(),
         achievements = AchievementSystem:saveData(),
+        dailyBonus = DailyBonusSystem:saveData(),
     }
 end
 
@@ -527,6 +591,7 @@ function GameManager:applySaveData(data)
     KeySystem:loadData(data.keys)
     RewardGaugeSystem:loadData(data.rewardGauge)
     AchievementSystem:loadData(data.achievements)
+    DailyBonusSystem:loadData(data.dailyBonus)
 end
 
 ---Salvages an item from the inventory into currency and crystals.

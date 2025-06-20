@@ -9,6 +9,9 @@ RewardGaugeSystem.gauge = 0
 ---Amount required to fill the gauge.
 RewardGaugeSystem.maxGauge = 100
 
+---Number of reward options generated when the gauge fills.
+RewardGaugeSystem.optionCount = 3
+
 ---Table of reward options when the gauge fills.
 RewardGaugeSystem.options = nil
 
@@ -29,11 +32,31 @@ for slot in pairs(itemPool) do
     table.insert(slots, slot)
 end
 
+---Sets the maximum gauge amount required for a reward.
+-- @param value number new threshold
+function RewardGaugeSystem:setMaxGauge(value)
+    local n = tonumber(value)
+    if n and n > 0 then
+        self.maxGauge = n
+        NetworkSystem:fireAllClients("GaugeUpdate", self.gauge, self.maxGauge)
+    end
+end
+
+---Sets how many reward options are generated when the gauge fills.
+-- @param count number option count
+function RewardGaugeSystem:setOptionCount(count)
+    local n = tonumber(count)
+    if n and n >= 1 then
+        self.optionCount = math.floor(n)
+    end
+end
+
 ---Generates three random equipment options using ``GachaSystem``'s rarity roll.
 -- @return table list of option tables {slot=string,item=table}
 function RewardGaugeSystem:generateOptions()
     local opts = {}
-    for i = 1, 3 do
+    local count = self.optionCount or 3
+    for i = 1, count do
         local slot = slots[math.random(#slots)]
         local rarity = GachaSystem:rollRarity()
         local choice = EquipmentGenerator.getRandomItem(slot, rarity, itemPool)
@@ -74,7 +97,7 @@ function RewardGaugeSystem:getOptions()
 end
 
 ---Chooses a reward option clearing the list.
--- @param index number selection index (1-3)
+-- @param index number selection index (1-optionCount)
 -- @return table|nil the chosen reward
 function RewardGaugeSystem:choose(index)
     local opts = self.options

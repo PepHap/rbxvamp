@@ -59,6 +59,7 @@ if not ok then Theme = nil end
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local InventorySlots = require(script.Parent:WaitForChild("InventorySlots"))
 local InventoryGrid = require(script.Parent:WaitForChild("InventoryGrid"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 
 local function applyRarityColor(obj, rarity)
     if not obj or not Theme or not Theme.rarityColors then return end
@@ -265,6 +266,14 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     end)
     if type(btnParent) == "table" then btnParent.Salvage = salvageBtn end
     self.salvageButton = salvageBtn
+
+    if NetworkSystem and NetworkSystem.onClientEvent then
+        NetworkSystem:onClientEvent("SalvageResult", function(ok)
+            if ok then
+                InventoryUI:update()
+            end
+        end)
+    end
 
     self:update()
     self:setVisible(self.visible)
@@ -511,6 +520,10 @@ function InventoryUI:salvageSlot(slot)
     if not self.itemSystem then
         return false
     end
+    if NetworkSystem and NetworkSystem.fireServer then
+        NetworkSystem:fireServer("SalvageRequest", "equipped", slot)
+        return true
+    end
     local ItemSalvageSystem = require(script.Parent:WaitForChild("ItemSalvageSystem"))
     local itm = self.itemSystem:unequip(slot)
     if not itm then
@@ -528,6 +541,10 @@ end
 function InventoryUI:salvageInventoryItem(index)
     if not self.itemSystem then
         return false
+    end
+    if NetworkSystem and NetworkSystem.fireServer then
+        NetworkSystem:fireServer("SalvageRequest", "inventory", index)
+        return true
     end
     local ItemSalvageSystem = require(script.Parent:WaitForChild("ItemSalvageSystem"))
     local ok = ItemSalvageSystem:salvageFromInventory(self.itemSystem, index)

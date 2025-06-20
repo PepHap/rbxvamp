@@ -11,9 +11,9 @@ local AutoBattleSystem = {}
 local parent = script.Parent
 local EnemySystem = require(parent:WaitForChild("EnemySystem"))
 local LevelSystem = require(parent:WaitForChild("LevelSystem"))
-local LootSystem = require(parent:WaitForChild("LootSystem"))
 local DungeonSystem = require(parent:WaitForChild("DungeonSystem"))
 local NetworkSystem = require(parent:WaitForChild("NetworkSystem"))
+local EventManager = require(parent:WaitForChild("EventManager"))
 
 ---Current player position used for simple movement calculations.
 AutoBattleSystem.playerPosition = {x = 0, y = 0}
@@ -92,7 +92,7 @@ function AutoBattleSystem:manualAttack()
                 end
                 LevelSystem:addKill()
                 DungeonSystem:onEnemyKilled(target)
-                LootSystem:onEnemyKilled(target)
+                EventManager:Get("EnemyDefeated"):Fire(target)
                 self.lastAttackTarget = nil
             end
         end
@@ -141,7 +141,7 @@ function AutoBattleSystem:update(dt)
                 end
                 LevelSystem:addKill()
                 DungeonSystem:onEnemyKilled(target)
-                LootSystem:onEnemyKilled(target)
+                EventManager:Get("EnemyDefeated"):Fire(target)
                 self.lastAttackTarget = nil
             end
         end
