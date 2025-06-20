@@ -117,7 +117,8 @@ local function renderStats(container, sys)
         parent(frame, container)
 
         local label = createInstance("TextLabel")
-        label.Text = string.format("%s Lv.%d", name, stat.level)
+        local cost = sys.getUpgradeCost and sys:getUpgradeCost(name, 1) or 1
+        label.Text = string.format("%s Lv.%d - %dG", name, stat.level, cost)
         if UDim2 and type(UDim2.new)=="function" then
             label.Position = UDim2.new(0, 5, 0, 5)
             label.Size = UDim2.new(1, -70, 0, 20)
@@ -125,7 +126,7 @@ local function renderStats(container, sys)
         parent(label, frame)
 
         local btn = createInstance("TextButton")
-        btn.Text = "Upgrade"
+        btn.Text = string.format("Buy (%dG)", cost)
         if btn.SetAttribute then
             btn:SetAttribute("StatName", name)
         elseif type(btn) == "table" then
