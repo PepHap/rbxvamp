@@ -56,6 +56,7 @@ local ProgressMapUISystem = require(script.Parent:WaitForChild("ProgressMapUISys
 local AdminConsoleSystem = require(script.Parent:FindFirstChild("AdminConsoleSystem"))
 local LobbySystem = require(script.Parent:WaitForChild("LobbySystem"))
 local LobbyUISystem = require(script.Parent:WaitForChild("LobbyUISystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 
 -- Utility to connect Roblox input events when available
 local function connectRoblox()
@@ -132,16 +133,20 @@ function PlayerInputSystem:setKeyState(key, isDown)
     elseif isDown and self.skillCastSystem then
         local idx = self.skillKeyMap[key]
         if idx then
-            self.skillCastSystem:useSkill(idx)
+            NetworkSystem:fireServer("SkillRequest", idx)
         end
     end
 end
 
 ---Performs a manual attack against the nearest enemy.
 function PlayerInputSystem:manualAttack()
+
+    NetworkSystem:fireServer("AttackRequest")
+
     if NetworkSystem and NetworkSystem.fireServer then
         NetworkSystem:fireServer("PlayerAttack")
     end
+
 end
 
 ---Updates the player position and handles attack input.

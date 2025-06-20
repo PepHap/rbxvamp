@@ -1,6 +1,7 @@
 -- AutoSkillSystem.lua
 -- Automatically casts skills using SkillCastSystem when enabled
 
+local RunService = game:GetService("RunService")
 local AutoSkillSystem = {
     enabled = false,
     skillCastSystem = nil,
@@ -28,6 +29,9 @@ end
 ---Automatically casts available skills on the nearest enemy when enabled.
 -- @param dt number delta time
 function AutoSkillSystem:update(dt)
+    if RunService:IsClient() then
+        return
+    end
     if not self.enabled or not self.skillCastSystem then
         return
     end

@@ -1,6 +1,7 @@
 -- CompanionAttackSystem.lua
 -- Controls companion movement and automatic attacks
 
+local RunService = game:GetService("RunService")
 local CompanionAttackSystem = {
     ---Movement speed in studs per second when following the player.
     moveSpeed = 2,
@@ -47,6 +48,9 @@ end
 ---Moves companions toward the player and attacks nearby enemies.
 -- @param dt number delta time
 function CompanionAttackSystem:update(dt)
+    if RunService:IsClient() then
+        return
+    end
     local comps = self.companionSystem and self.companionSystem.companions or {}
     local playerPos = AutoBattleSystem.playerPosition or {x = 0, y = 0}
     for i, comp in ipairs(comps) do

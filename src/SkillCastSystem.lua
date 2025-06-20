@@ -1,6 +1,7 @@
 -- SkillCastSystem.lua
 -- Manages casting of acquired skills with cooldowns and mana.
 
+local RunService = game:GetService("RunService")
 local SkillCastSystem = {
     ---Maximum mana available to the player.
     maxMana = 100,
@@ -51,6 +52,9 @@ end
 ---Regenerates mana and decreases active cooldown timers.
 -- @param dt number delta time since last update
 function SkillCastSystem:update(dt)
+    if RunService:IsClient() then
+        return
+    end
     for i = 1, #self.cooldowns do
         if self.cooldowns[i] > 0 then
             self.cooldowns[i] = math.max(0, self.cooldowns[i] - dt)
@@ -71,6 +75,9 @@ end
 -- @param target table|nil enemy table
 -- @return boolean ``true`` when the skill successfully cast
 function SkillCastSystem:useSkill(index, target)
+    if RunService:IsClient() then
+        return false
+    end
     local skill = self.skillSystem and self.skillSystem.skills[index]
     if not skill or not self:canUseSkill(index) then
         return false

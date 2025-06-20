@@ -1,6 +1,7 @@
 -- AutoBattleSystem.lua
 -- Provides automatic combat actions when enabled.
 
+local RunService = game:GetService("RunService")
 local AutoBattleSystem = {}
 
 -- Resolve the EnemySystem path relative to how this module was required. This
@@ -40,6 +41,19 @@ AutoBattleSystem.enabled = false
 AutoBattleSystem.disabledTimer = 0
 AutoBattleSystem.wasEnabled = false
 
+function AutoBattleSystem:start()
+    if RunService:IsServer() then
+        NetworkSystem:onServerEvent("AttackRequest", function(player)
+            AutoBattleSystem:manualAttack()
+        end)
+        NetworkSystem:onServerEvent("SkillRequest", function(player, index)
+            if AutoBattleSystem.skillCastSystem and AutoBattleSystem.skillCastSystem.useSkill then
+                AutoBattleSystem.skillCastSystem:useSkill(index)
+            end
+        end)
+    end
+end
+
 ---Enables auto-battle mode.
 function AutoBattleSystem:enable()
     self.enabled = true
@@ -58,9 +72,40 @@ function AutoBattleSystem:disableForDuration(duration)
     self.disabledTimer = n
 end
 
+function AutoBattleSystem:manualAttack()
+    local pos = self.playerPosition
+    local target = EnemySystem:getNearestEnemy(pos)
+    if not target then return end
+    local dx = target.position.x - pos.x
+    local dy = target.position.y - pos.y
+    local distSq = dx * dx + dy * dy
+    if distSq <= self.attackRange * self.attackRange then
+        self.lastAttackTarget = target
+        if target.health then
+            target.health = target.health - self.damage
+            if target.health <= 0 then
+                for i, enemy in ipairs(EnemySystem.enemies) do
+                    if enemy == target then
+                        table.remove(EnemySystem.enemies, i)
+                        break
+                    end
+                end
+                LevelSystem:addKill()
+                DungeonSystem:onEnemyKilled(target)
+                LootSystem:onEnemyKilled(target)
+                self.lastAttackTarget = nil
+            end
+        end
+        self.attackTimer = self.attackCooldown
+    end
+end
+
 ---Updates automatic combat behavior when enabled.
 -- @param dt number delta time since last update
 function AutoBattleSystem:update(dt)
+    if RunService:IsClient() then
+        return
+    end
     if self.disabledTimer and self.disabledTimer > 0 then
         self.disabledTimer = self.disabledTimer - dt
         if self.disabledTimer <= 0 and self.wasEnabled then

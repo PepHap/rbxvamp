@@ -230,6 +230,7 @@ local SkillCastSystem = require(script.Parent:WaitForChild("SkillCastSystem"))
 SkillCastSystem.skillSystem = GameManager.skillSystem
 GameManager.skillCastSystem = SkillCastSystem
 GameManager:addSystem("SkillCast", SkillCastSystem)
+AutoBattleSystem.skillCastSystem = SkillCastSystem
 
 -- Optional automatic skill casting
 local AutoSkillSystem = require(script.Parent:WaitForChild("AutoSkillSystem"))

@@ -52,6 +52,9 @@ function NetworkSystem:start()
     -- Events used for client requests
     self.events.PartyRequest = createRemoteEvent("PartyRequest")
     self.events.RaidRequest = createRemoteEvent("RaidRequest")
+    -- Combat related requests
+    self.events.AttackRequest = createRemoteEvent("AttackRequest")
+    self.events.SkillRequest = createRemoteEvent("SkillRequest")
 end
 
 function NetworkSystem:getEvent(name)
