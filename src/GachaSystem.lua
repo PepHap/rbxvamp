@@ -11,32 +11,36 @@ local GachaSystem = {}
 -- normalized so the total weight equals ``100`` which keeps math simple
 -- when customizing the tables. Rarer ranks use fractional percentages.
 local defaultWeights = {
+    -- Probabilities roughly mirror the desired design where
+    -- common ranks appear most often and SSS items are nearly impossible.
+    -- The weights intentionally do not sum to 100 so additional ranks can
+    -- be added without recalculating all values.
     skill = {
         {"C", 80},
-        {"D", 15},
-        {"B", 4},
-        {"A", 0.9},
-        {"S", 0.09},
-        {"SS", 0.009},
-        {"SSS", 0.001},
+        {"D", 25},
+        {"B", 5},
+        {"A", 1},
+        {"S", 0.1},
+        {"SS", 0.001},
+        {"SSS", 1e-12},
     },
     companion = {
         {"C", 80},
-        {"D", 15},
-        {"B", 4},
-        {"A", 0.9},
-        {"S", 0.09},
-        {"SS", 0.009},
-        {"SSS", 0.001},
+        {"D", 25},
+        {"B", 5},
+        {"A", 1},
+        {"S", 0.1},
+        {"SS", 0.001},
+        {"SSS", 1e-12},
     },
     equipment = {
         {"C", 80},
-        {"D", 15},
-        {"B", 4},
-        {"A", 0.9},
-        {"S", 0.09},
-        {"SS", 0.009},
-        {"SSS", 0.001},
+        {"D", 25},
+        {"B", 5},
+        {"A", 1},
+        {"S", 0.1},
+        {"SS", 0.001},
+        {"SSS", 1e-12},
     }
 }
 
