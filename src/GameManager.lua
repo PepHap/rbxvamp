@@ -370,6 +370,9 @@ if RunService:IsClient() then
     local EnemyUISystem = require(script.Parent:WaitForChild("EnemyUISystem"))
     GameManager:addSystem("EnemyUI", EnemyUISystem)
 
+    local PlayerUISystem = require(script.Parent:WaitForChild("PlayerUISystem"))
+    GameManager:addSystem("PlayerUI", PlayerUISystem)
+
     -- Admin console for privileged commands
     local adminModule
     local ok, result = pcall(function()
