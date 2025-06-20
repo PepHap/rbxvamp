@@ -23,9 +23,9 @@ end
 
 local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
 local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
-local LootSystem = require(script.Parent:WaitForChild("LootSystem"))
 local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local EventManager = require(script.Parent:WaitForChild("EventManager"))
 local SkillSystem = require(script.Parent:WaitForChild("SkillSystem"))
 
 ---Initializes the cast system with a skill system instance.
@@ -125,7 +125,7 @@ function SkillCastSystem:useSkill(index, target)
             end
             LevelSystem:addKill()
             DungeonSystem:onEnemyKilled(target)
-            LootSystem:onEnemyKilled(target)
+            EventManager:Get("EnemyDefeated"):Fire(target)
         end
         return true
     end

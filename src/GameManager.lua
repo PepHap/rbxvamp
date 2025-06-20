@@ -253,6 +253,10 @@ local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 GameManager.currencySystem = CurrencySystem
 GameManager:addSystem("Currency", CurrencySystem)
 
+local LootSystem = require(script.Parent:WaitForChild("LootSystem"))
+GameManager.lootSystem = LootSystem
+GameManager:addSystem("Loot", LootSystem)
+
 -- Exchange crystals for tickets or upgrade currency
 local CrystalExchangeSystem = require(script.Parent:WaitForChild("CrystalExchangeSystem"))
 GameManager.crystalExchangeSystem = CrystalExchangeSystem
