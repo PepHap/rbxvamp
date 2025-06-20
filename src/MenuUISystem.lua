@@ -16,6 +16,12 @@ local MenuUI = {
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local InventoryUISystem = require(script.Parent:WaitForChild("InventoryUISystem"))
 local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
+local CompanionUISystem = require(script.Parent:WaitForChild("CompanionUISystem"))
+local StatUpgradeUISystem = require(script.Parent:WaitForChild("StatUpgradeUISystem"))
+local GachaUISystem = require(script.Parent:WaitForChild("GachaUISystem"))
+local QuestUISystem = require(script.Parent:WaitForChild("QuestUISystem"))
+local CrystalExchangeUISystem = require(script.Parent:WaitForChild("CrystalExchangeUISystem"))
+local ProgressMapUISystem = require(script.Parent:WaitForChild("ProgressMapUISystem"))
 local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
@@ -76,6 +82,12 @@ function MenuUI:addDefaultTabs()
     if #self.tabs > 0 then return end
     self:addTab("Inventory", InventoryUISystem)
     self:addTab("Skills", SkillUISystem)
+    self:addTab("Companions", CompanionUISystem)
+    self:addTab("Stats", StatUpgradeUISystem)
+    self:addTab("Gacha", GachaUISystem)
+    self:addTab("Quests", QuestUISystem)
+    self:addTab("Exchange", CrystalExchangeUISystem)
+    self:addTab("Progress", ProgressMapUISystem)
 end
 
 ---Toggles the menu visibility, showing the specified tab when opening.
