@@ -9,6 +9,7 @@ local LobbySystem = require(script.Parent:WaitForChild("LobbySystem"))
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 local SlotConstants = require(script.Parent:WaitForChild("SlotConstants"))
 local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
+local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
 
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
 local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
@@ -61,6 +62,9 @@ end
 ---Begins a raid if the party has the required key.
 function RaidSystem:startRaid(player)
     if self.active then
+        return false
+    end
+    if not PlayerLevelSystem:isUnlocked("raid") then
         return false
     end
     local partyId = self.partySystem and self.partySystem:getPartyId(player)
