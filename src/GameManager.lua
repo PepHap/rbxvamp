@@ -232,6 +232,9 @@ end
 local PartySystem
 if IS_SERVER then
     PartySystem = require(script.Parent:WaitForChild("PartySystem"))
+    if TeleportSystem then
+        PartySystem.teleportSystem = TeleportSystem
+    end
     GameManager.partySystem = PartySystem
     GameManager:addSystem("Party", PartySystem)
 end
@@ -549,6 +552,14 @@ end
 function GameManager:setGaugeOptionCount(count)
     if RewardGaugeSystem.setOptionCount then
         RewardGaugeSystem:setOptionCount(count)
+    end
+end
+
+---Adjusts the crystal cost required to reroll gauge choices.
+-- @param cost number new cost amount
+function GameManager:setGaugeRerollCost(cost)
+    if RewardGaugeSystem.setRerollCost then
+        RewardGaugeSystem:setRerollCost(cost)
     end
 end
 

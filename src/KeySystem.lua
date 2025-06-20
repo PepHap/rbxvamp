@@ -29,6 +29,13 @@ function KeySystem:useKey(kind)
     return false
 end
 
+---Checks whether at least one key of the specified kind is available.
+-- @param kind string key type
+-- @return boolean
+function KeySystem:hasKey(kind)
+    return (self.keys[kind] or 0) > 0
+end
+
 ---Returns the current count for a key type.
 -- @param kind string key type
 -- @return number

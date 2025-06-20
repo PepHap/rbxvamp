@@ -121,6 +121,13 @@ function GachaSystem:addTickets(kind, amount)
     self.tickets[kind] = self.tickets[kind] + n
 end
 
+---Returns how many tickets of the given type the player owns.
+-- @param kind string ticket type
+-- @return number
+function GachaSystem:getTicketCount(kind)
+    return self.tickets[kind] or 0
+end
+
 ---Sets the inventory module used to store rolled equipment.
 -- @param inv table inventory module instance
 function GachaSystem:setInventory(inv)

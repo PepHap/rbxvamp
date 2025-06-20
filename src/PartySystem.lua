@@ -4,7 +4,11 @@
 local PartySystem = {}
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local LobbySystem = require(script.Parent:WaitForChild("LobbySystem"))
+local TeleportSystem = require(script.Parent:WaitForChild("TeleportSystem"))
 local Players = game:GetService("Players")
+
+---Optional teleport system used when removing players from a party.
+PartySystem.teleportSystem = TeleportSystem
 
 ---Pending invites indexed by invitee player object
 PartySystem.invites = {}
@@ -172,6 +176,9 @@ function PartySystem:removeMember(id, player)
     self.ready[player] = nil
     if LobbySystem and LobbySystem.leave then
         LobbySystem:leave(player)
+    end
+    if self.teleportSystem and self.teleportSystem.teleportHome then
+        self.teleportSystem:teleportHome({player})
     end
     NetworkSystem:fireAllClients("RaidReady", player, false)
     if next(p.members) == nil then

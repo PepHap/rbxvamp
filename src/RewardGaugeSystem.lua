@@ -54,6 +54,15 @@ function RewardGaugeSystem:setOptionCount(count)
     end
 end
 
+---Sets the crystal price used when rerolling reward options.
+-- @param cost number new cost value
+function RewardGaugeSystem:setRerollCost(cost)
+    local n = tonumber(cost)
+    if n and n >= 0 then
+        self.rerollCost = n
+    end
+end
+
 ---Generates three random equipment options using ``GachaSystem``'s rarity roll.
 -- @return table list of option tables {slot=string,item=table}
 function RewardGaugeSystem:generateOptions()
