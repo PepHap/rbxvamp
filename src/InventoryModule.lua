@@ -71,6 +71,15 @@ function InventoryModule:UpgradeItem(slot, amount, currencyType)
     return self.itemSystem:upgradeItem(slot, amount, currencyType)
 end
 
+---Upgrades an item, using crystals when currency is insufficient.
+-- @param slot string equipment slot
+-- @param amount number upgrade levels
+-- @param currencyType string primary currency
+-- @return boolean success
+function InventoryModule:UpgradeItemWithCrystals(slot, amount, currencyType)
+    return self.itemSystem:upgradeItemWithFallback(slot, amount, currencyType)
+end
+
 ---Salvages an item from the inventory into currency and crystals.
 -- @param index number inventory index
 -- @return boolean success

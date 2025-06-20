@@ -41,6 +41,10 @@ local milestones = {
         unlock = "companions",
         reward = {crystals = 5},
     },
+    [15] = {
+        unlock = "stats",
+        reward = {crystals = 2},
+    },
     [20] = {
         unlock = "new_area",
         reward = {keys = {location = 1}},

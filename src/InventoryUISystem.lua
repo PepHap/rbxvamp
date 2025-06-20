@@ -249,6 +249,20 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     if type(btnParent) == "table" then btnParent.Upgrade = upgradeBtn end
     self.upgradeButton = upgradeBtn
 
+    local crystalBtn = btnParent.FindFirstChild and btnParent:FindFirstChild("CrystalUpgrade") or createInstance("TextButton")
+    crystalBtn.Name = "CrystalUpgrade"
+    crystalBtn.Text = "Crystal Upg"
+    if UDim2 and type(UDim2.new)=="function" then
+        crystalBtn.Position = UDim2.new(0.8, 0, 1, -70)
+    end
+    parent(crystalBtn, btnParent)
+    GuiUtil.connectButton(crystalBtn, function()
+        if InventoryUI.selectedSlot then
+            InventoryUI:upgradeSlotWithCrystals(InventoryUI.selectedSlot)
+        end
+    end)
+    if type(btnParent) == "table" then btnParent.CrystalUpgrade = crystalBtn end
+
     local salvageBtn = btnParent.FindFirstChild and btnParent:FindFirstChild("Salvage") or createInstance("TextButton")
     salvageBtn.Name = "Salvage"
     salvageBtn.Text = "Salvage"
@@ -511,6 +525,21 @@ function InventoryUI:upgradeSlot(slot)
     local loc = LocationSystem:getCurrent()
     local currency = loc and loc.currency or "gold"
     local ok = self.itemSystem:upgradeItem(slot, 1, currency)
+    if ok then
+        self:update()
+    end
+    return ok
+end
+
+---Upgrades a slot using crystals when lacking currency.
+function InventoryUI:upgradeSlotWithCrystals(slot)
+    if not self.itemSystem then
+        return false
+    end
+    local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
+    local loc = LocationSystem:getCurrent()
+    local currency = loc and loc.currency or "gold"
+    local ok = self.itemSystem:upgradeItemWithFallback(slot, 1, currency)
     if ok then
         self:update()
     end

@@ -217,6 +217,41 @@ function ItemSystem:upgradeItem(slot, amount, currencyType)
     return true
 end
 
+---Attempts to upgrade using the provided currency or crystals when lacking funds.
+-- @param slot string equipment slot
+-- @param amount number levels to add
+-- @param currencyType string primary currency
+-- @return boolean success
+function ItemSystem:upgradeItemWithFallback(slot, amount, currencyType)
+    currencyType = currencyType or "gold"
+    assertValidSlot(slot)
+    local item = self.slots[slot]
+    local n = tonumber(amount)
+    if not item or not n or n <= 0 then
+        return false
+    end
+    local current = item.level or 1
+    local target = math.min(current + n, self.maxLevel)
+    if target <= current then
+        return false
+    end
+    local required = 0
+    for lvl = current + 1, target do
+        required = required + (self.upgradeCosts[lvl] or 0)
+    end
+    if not CurrencySystem:spend(currencyType, required) then
+        local CrystalExchangeSystem = require(script.Parent:WaitForChild("CrystalExchangeSystem"))
+        if not CrystalExchangeSystem:buyCurrency(currencyType, required) then
+            return false
+        end
+        if not CurrencySystem:spend(currencyType, required) then
+            return false
+        end
+    end
+    item.level = target
+    return true
+end
+
 local function copy(tbl)
     if type(tbl) ~= "table" then return tbl end
     local t = {}

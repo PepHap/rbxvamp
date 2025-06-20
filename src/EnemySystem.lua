@@ -355,6 +355,8 @@ function EnemySystem:spawnWave(level, count)
             return "shoot"
         elseif lvl >= 10 then
             return "jump"
+        elseif lvl >= 8 then
+            return "ranged"
         elseif lvl >= 5 then
             return "fast"
         end
@@ -498,8 +500,9 @@ function EnemySystem:update(dt)
                 end
                 local pdx, pdy = enemy.position.x - playerPos.x, enemy.position.y - playerPos.y
                 local pdist = math.sqrt(pdx * pdx + pdy * pdy)
-                if enemy.behavior == "shoot" then
-                    if pdist <= 10 and enemy.attackTimer <= 0 then
+                if enemy.behavior == "shoot" or enemy.behavior == "ranged" then
+                    local range = enemy.behavior == "ranged" and 15 or 10
+                    if pdist <= range and enemy.attackTimer <= 0 then
                         PlayerSystem:takeDamage(enemy.damage or 0)
                         enemy.attackTimer = enemy.attackCooldown or self.attackCooldown
                     end
