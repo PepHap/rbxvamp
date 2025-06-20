@@ -317,7 +317,9 @@ function EnemySystem:spawnWave(level, count)
     count = count or level
 
     local baseHealth = 10
-    local healthPerLevel = 2
+    -- Increase enemy health more aggressively as the level rises to
+    -- keep pace with player power growth.
+    local healthPerLevel = 10
     local baseDamage = 1
     local damagePerLevel = 1
 

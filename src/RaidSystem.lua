@@ -30,7 +30,10 @@ RaidSystem.killsForBoss = 20
 RaidSystem.rewardCrystals = 3
 
 ---Difficulty scaling applied per additional party member
-RaidSystem.difficultyPerMember = 0.5
+-- Difficulty scaling applied per additional party member.
+-- The value follows the design notes where each extra member
+-- increases enemy strength by roughly 30%.
+RaidSystem.difficultyPerMember = 0.3
 
 ---Previous enemy health scale before starting a raid.
 RaidSystem.prevHealthScale = 1
