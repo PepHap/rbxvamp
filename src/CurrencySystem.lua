@@ -3,6 +3,9 @@
 
 local CurrencySystem = {}
 
+local RunService = game:GetService("RunService")
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+
 -- Table of balances by currency key
 CurrencySystem.balances = {}
 
@@ -12,6 +15,9 @@ CurrencySystem.balances = {}
 function CurrencySystem:add(kind, amount)
     local n = tonumber(amount) or 0
     self.balances[kind] = (self.balances[kind] or 0) + n
+    if RunService:IsServer() then
+        NetworkSystem:fireAllClients("CurrencyUpdate", kind, self.balances[kind])
+    end
 end
 
 ---Retrieves the current balance for a currency.
@@ -28,6 +34,9 @@ end
 function CurrencySystem:spend(kind, amount)
     if self:get(kind) >= amount then
         self.balances[kind] = self.balances[kind] - amount
+        if RunService:IsServer() then
+            NetworkSystem:fireAllClients("CurrencyUpdate", kind, self.balances[kind])
+        end
         return true
     end
     return false
@@ -50,6 +59,9 @@ function CurrencySystem:loadData(data)
     if type(data) ~= "table" then return end
     for k, v in pairs(data) do
         self.balances[k] = v
+        if RunService:IsServer() then
+            NetworkSystem:fireAllClients("CurrencyUpdate", k, v)
+        end
     end
 end
 

@@ -1,5 +1,4 @@
--- LootSystem.lua
--- Awards currency, experience and gauge points when enemies are defeated.
+-- Awards currency, experience, ether and gauge points when enemies are defeated.
 
 local LootSystem = {}
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
@@ -22,10 +21,10 @@ end
 
 ---Internal helper applying rewards based on enemy type.
 local rewards = {
-    normal   = {coins = 1,   exp = 5,   gauge = 10},
-    mini     = {coins = 5,   exp = 20,  gauge = 20},
-    boss     = {coins = 10,  exp = 50,  gauge = 30},
-    location = {coins = 20,  exp = 100, gauge = 50},
+    normal   = {coins = 1,   exp = 5,   gauge = 10, ether = 0},
+    mini     = {coins = 5,   exp = 20,  gauge = 20, ether = 1},
+    boss     = {coins = 10,  exp = 50,  gauge = 30, ether = 2},
+    location = {coins = 20,  exp = 100, gauge = 50, ether = 3},
 }
 
 ---Grants loot when an enemy is killed.
@@ -37,6 +36,9 @@ function LootSystem:onEnemyKilled(enemy)
     local currency = getCurrencyType()
 
     CurrencySystem:add(currency, r.coins * lvl)
+    if r.ether and r.ether > 0 then
+        CurrencySystem:add("ether", r.ether)
+    end
     PlayerLevelSystem:addExperience(r.exp)
     RewardGaugeSystem:addPoints(r.gauge)
     AchievementSystem:addProgress("kills", 1)
