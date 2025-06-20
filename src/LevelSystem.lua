@@ -4,6 +4,7 @@
 
 local LevelSystem = {}
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 
 --- Highest stage the player has cleared so far.
 LevelSystem.highestClearedStage = 0
@@ -30,6 +31,17 @@ LevelSystem.requiredKills = 15
 ---Number of enemies spawned per wave.
 LevelSystem.waveSize = 5
 
+local function broadcastProgress()
+    if NetworkSystem and NetworkSystem.fireAllClients then
+        NetworkSystem:fireAllClients(
+            "LevelProgress",
+            LevelSystem.currentLevel,
+            LevelSystem.killCount,
+            LevelSystem.requiredKills
+        )
+    end
+end
+
 ---Resets stage tracking and spawns the initial enemy wave.
 --  This is called when the overall game begins via ``GameManager``.
 function LevelSystem:start()
@@ -43,6 +55,7 @@ function LevelSystem:start()
         EnemySystem:spawnWave(1, self.waveSize)
     end
     EventManager:Get("LevelStart"):Fire(1)
+    broadcastProgress()
 end
 
 ---Determines the type of a given stage.
@@ -90,6 +103,7 @@ end
 function LevelSystem:addKill()
     self.killCount = self.killCount + 1
     self:checkAdvance()
+    broadcastProgress()
 end
 
 ---Ensures a new wave is spawned whenever all enemies are defeated.
@@ -167,6 +181,7 @@ function LevelSystem:advance()
         end
     end
     EventManager:Get("LevelAdvance"):Fire(self.currentLevel, stageType)
+    broadcastProgress()
     return self.currentLevel
 end
 
@@ -181,6 +196,32 @@ function LevelSystem:onPlayerDeath()
         self.requiredKills = self.requiredKills - 5
     end
     EventManager:Get("PlayerDeath"):Fire(lvl)
+    broadcastProgress()
+end
+
+function LevelSystem:saveData()
+    return {
+        currentLevel = self.currentLevel,
+        killCount = self.killCount,
+        requiredKills = self.requiredKills,
+        highest = self.highestClearedStage,
+    }
+end
+
+function LevelSystem:loadData(data)
+    if type(data) ~= "table" then return end
+    if type(data.currentLevel) == "number" then
+        self.currentLevel = data.currentLevel
+    end
+    if type(data.killCount) == "number" then
+        self.killCount = data.killCount
+    end
+    if type(data.requiredKills) == "number" then
+        self.requiredKills = data.requiredKills
+    end
+    if type(data.highest) == "number" then
+        self.highestClearedStage = data.highest
+    end
 end
 
 return LevelSystem
