@@ -49,6 +49,10 @@ local milestones = {
         unlock = "new_area",
         reward = {keys = {location = 1}},
     },
+    [25] = {
+        unlock = "raid",
+        reward = {crystals = 10, keys = {raid = 1}},
+    },
 }
 
 ---Grants milestone rewards such as currency, tickets or keys.
@@ -114,10 +118,11 @@ function PlayerLevelSystem:checkThreshold()
 
         if NetworkSystem and NetworkSystem.fireAllClients then
             NetworkSystem:fireAllClients("PlayerLevelUp", self.level)
-
-        if RunService:IsServer() then
+            if RunService:IsServer() then
+                NetworkSystem:fireAllClients("PlayerLevelUpdate", self.level, self.exp, self.nextExp)
+            end
+        elseif RunService:IsServer() then
             NetworkSystem:fireAllClients("PlayerLevelUpdate", self.level, self.exp, self.nextExp)
-
         end
     end
 end
