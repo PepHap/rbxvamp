@@ -45,6 +45,7 @@ function NetworkSystem:start()
     self.events.PartyJoinFailed = createRemoteEvent("PartyJoinFailed")
     self.events.PlayerState = createRemoteEvent("PlayerState")
     self.events.RaidReady = createRemoteEvent("RaidReady")
+    self.events.LevelProgress = createRemoteEvent("LevelProgress")
     -- Events for synchronizing enemy state with clients
     self.events.EnemySpawn = createRemoteEvent("EnemySpawn")
     self.events.EnemyRemove = createRemoteEvent("EnemyRemove")

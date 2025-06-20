@@ -487,6 +487,7 @@ function GameManager:getSaveData()
         gacha = GachaSystem:saveData(),
         items = self.itemSystem:toData(),
         playerLevel = PlayerLevelSystem:saveData(),
+        levelState = LevelSystem:saveData(),
         keys = KeySystem:saveData(),
         rewardGauge = RewardGaugeSystem:saveData(),
         skills = self.skillSystem:saveData(),
@@ -514,6 +515,7 @@ function GameManager:applySaveData(data)
     self.companionSystem:loadData(data.companions)
     StatUpgradeSystem:loadData(data.stats)
     PlayerLevelSystem:loadData(data.playerLevel)
+    LevelSystem:loadData(data.levelState)
     KeySystem:loadData(data.keys)
     RewardGaugeSystem:loadData(data.rewardGauge)
     AchievementSystem:loadData(data.achievements)
