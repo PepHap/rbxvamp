@@ -12,15 +12,16 @@ describe("QuestUISystem", function()
     it("displays quest progress", function()
         QuestSystem:addQuest{ id = "q1", goal = 2, reward = {currency = "gold", amount = 1} }
         QuestUISystem:start(QuestSystem)
-        assert.is_table(QuestUISystem.gui.children[1])
-        assert.is_truthy(string.find(QuestUISystem.gui.children[1].ProgressLabel.Text, "0/2"))
+        local frame = QuestUISystem.window.children[1]
+        assert.is_table(frame)
+        assert.is_truthy(string.find(frame.ProgressLabel.Text, "0/2"))
     end)
 
     it("claims reward via button", function()
         QuestSystem:addQuest{ id = "q1", goal = 1, reward = {currency = "gold", amount = 5} }
         QuestSystem:addProgress("q1", 1)
         QuestUISystem:start(QuestSystem)
-        local frame = QuestUISystem.gui.children[1]
+        local frame = QuestUISystem.window.children[1]
         local btn = frame.ClaimButton
         if btn.onClick then
             btn.onClick()

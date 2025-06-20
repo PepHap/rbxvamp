@@ -8,6 +8,7 @@ local StatUpgradeUISystem = {
     statSystem = nil,
     statListFrame = nil,
     visible = false,
+    window = nil,
 }
 
 local StatUpgradeSystem = require(script.Parent:WaitForChild("StatUpgradeSystem"))
@@ -73,13 +74,18 @@ function StatUpgradeUISystem:start(statSys, parentGui)
     self.statSystem = statSys or self.statSystem or StatUpgradeSystem
     local guiRoot = ensureGui()
     local parentTarget = parentGui or guiRoot
+    if not self.window then
+        self.window = GuiUtil.createWindow("StatUpgradeWindow")
+    end
+    if self.window.Parent ~= parentTarget then
+        parent(self.window, parentTarget)
+    end
     if not self.statListFrame then
-        -- create container frame on first run
         self.statListFrame = createInstance("Frame")
         self.statListFrame.Name = "StatList"
     end
-    if self.statListFrame.Parent ~= parentTarget then
-        parent(self.statListFrame, parentTarget)
+    if self.statListFrame.Parent ~= self.window then
+        parent(self.statListFrame, self.window)
     end
     self.gui = parentTarget
     self:update()
@@ -140,14 +146,14 @@ function StatUpgradeUISystem:update()
     local container
     if self.statListFrame then
         container = self.statListFrame
-    elseif gui.FindFirstChild then
-        container = gui:FindFirstChild("StatList")
+    elseif (self.window or gui).FindFirstChild then
+        container = (self.window or gui):FindFirstChild("StatList")
     end
     if not container then
         container = createInstance("Frame")
         container.Name = "StatList"
     end
-    parent(container, gui)
+    parent(container, self.window or gui)
     self.statListFrame = container
 
     renderStats(container, sys)
@@ -167,7 +173,8 @@ end
 function StatUpgradeUISystem:setVisible(on)
     self.visible = not not on
     local gui = ensureGui()
-    GuiUtil.setVisible(gui, self.visible)
+    local parentGui = self.window or gui
+    GuiUtil.setVisible(parentGui, self.visible)
 end
 
 function StatUpgradeUISystem:toggle()

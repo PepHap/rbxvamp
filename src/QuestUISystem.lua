@@ -4,6 +4,7 @@ local QuestUISystem = {
     gui = nil,
     questSystem = nil,
     visible = false,
+    window = nil,
 }
 
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
@@ -47,9 +48,17 @@ local function ensureGui()
     return gui
 end
 
-function QuestUISystem:start(questSys)
+function QuestUISystem:start(questSys, parentGui)
     self.questSystem = questSys or self.questSystem or require(script.Parent:WaitForChild("QuestSystem"))
-    self.gui = ensureGui()
+    local guiRoot = ensureGui()
+    local parentTarget = parentGui or guiRoot
+    if not self.window then
+        self.window = GuiUtil.createWindow("QuestWindow")
+    end
+    if self.window.Parent ~= parentTarget then
+        parent(self.window, parentTarget)
+    end
+    self.gui = parentTarget
     self:update()
     self:setVisible(self.visible)
 end
@@ -60,12 +69,12 @@ function QuestUISystem:update()
         return
     end
     local gui = ensureGui()
-    if type(gui) == "table" then
-        gui.children = {}
-    elseif gui.ClearAllChildren then
-        gui:ClearAllChildren()
+    local container = self.window or gui
+    if type(container) == "table" then
+        container.children = {}
+    elseif container.ClearAllChildren then
+        container:ClearAllChildren()
     end
-    local container = gui
 
     for id, q in pairs(qs.quests) do
         local frame = createInstance("Frame")
@@ -111,7 +120,8 @@ end
 function QuestUISystem:setVisible(on)
     self.visible = not not on
     local gui = ensureGui()
-    GuiUtil.setVisible(gui, self.visible)
+    local parentGui = self.window or gui
+    GuiUtil.setVisible(parentGui, self.visible)
 end
 
 function QuestUISystem:toggle()
