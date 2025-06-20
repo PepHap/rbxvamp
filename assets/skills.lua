@@ -74,6 +74,16 @@ return {
         damage = 40,
         radius = 8,
         effects = {"Burn"}
+    },
+    {
+        name = "Earthquake",
+        rarity = "B",
+        image = "rbxassetid://123462",
+        module = "Earthquake",
+        cooldown = 10,
+        damage = 30,
+        radius = 7,
+        effects = {"Stun"}
     }
 }
 
