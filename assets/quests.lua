@@ -9,4 +9,6 @@ return {
         reward = {keys = {location = 1}}},
     {id = "first_raid", event = "RaidComplete", goal = 1,
         reward = {keys = {raid = 1}}},
+    {id = "armor_breaker", event = "EnemyKilled", goal = 20,
+        reward = {currency = "ore", amount = 10}},
 }

@@ -363,6 +363,7 @@ function EnemySystem:spawnWave(level, count)
 
     local offset = getSpawnOffset()
     for i = 1, count do
+        local armor = math.floor(level / 5)
         local enemy = createEnemy(
             (baseHealth + healthPerLevel * level) * hScale,
             (baseDamage + damagePerLevel * level) * dScale,
@@ -371,7 +372,7 @@ function EnemySystem:spawnWave(level, count)
             string.format("Enemy %d", i),
             "Goblin",
             level,
-            0,
+            armor,
             pickBehavior(level)
         )
         if self.spawnModels ~= false then
@@ -412,6 +413,7 @@ function EnemySystem:spawnBoss(bossType)
     }
     local prefabMap = {mini = "Ogre", boss = "Dragon", location = "Dragon"}
     local offset = getSpawnOffset()
+    local armorValues = {mini = 5, boss = 10, location = 20}
     local boss = createEnemy(
         (bossHealth[bossType] or 20) * hScale,
         (bossDamage[bossType] or 2) * dScale,
@@ -420,7 +422,7 @@ function EnemySystem:spawnBoss(bossType)
         bossNames[bossType] or "Boss",
         prefabMap[bossType] or "Ogre",
         1,
-        0,
+        armorValues[bossType] or 0,
         nil
     )
 
@@ -521,7 +523,7 @@ function EnemySystem:update(dt)
                 end
             end
         end
-        NetworkSystem:fireAllClients("EnemyUpdate", enemy.name, enemy.position, enemy.health)
+        NetworkSystem:fireAllClients("EnemyUpdate", enemy.name, enemy.position, enemy.health, enemy.armor)
     end
 end
 
