@@ -133,6 +133,14 @@ function PlayerLevelSystem:addExperience(amount)
     end
 end
 
+---Returns experience progress toward the next level as a value between 0 and 1.
+function PlayerLevelSystem:getExpPercent()
+    if self.nextExp <= 0 then
+        return 0
+    end
+    return self.exp / self.nextExp
+end
+
 ---Serializes the current player level data for persistence.
 -- @return table plain table with level, exp and unlocks
 function PlayerLevelSystem:saveData()

@@ -29,6 +29,9 @@ end
 
 local validSlots = SlotConstants.valid
 
+---Maximum number of items that can be stored in the inventory.
+ItemSystem.inventoryLimit = 100
+
 ---Returns a table of stats for the item taking the upgrade level into account.
 -- Each level adds a 10% bonus to the base stats.
 -- @param item table item entry with a ``stats`` field
@@ -81,7 +84,11 @@ end
 ---Adds an item table to the inventory list.
 -- @param item table
 function ItemSystem:addItem(item)
+    if self:isInventoryFull() then
+        return false
+    end
     table.insert(self.inventory, item)
+    return true
 end
 
 ---Removes an item from the inventory by index and returns it.
@@ -90,6 +97,12 @@ end
 function ItemSystem:removeItem(index)
     local itm = table.remove(self.inventory, index)
     return itm
+end
+
+---Checks if the inventory reached the configured limit.
+-- @return boolean true when no more items can be added
+function ItemSystem:isInventoryFull()
+    return #self.inventory >= (self.inventoryLimit or 0)
 end
 
 ---Transfers an item to another ItemSystem instance.
