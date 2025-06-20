@@ -33,12 +33,15 @@ function AttackSystem:handleAttack(player)
             for i, e in ipairs(EnemySystem.enemies) do
                 if e == target then
                     table.remove(EnemySystem.enemies, i)
+                    NetworkSystem:fireAllClients("EnemyRemove", target.name)
                     break
                 end
             end
             LevelSystem:addKill()
             DungeonSystem:onEnemyKilled(target)
             LootSystem:onEnemyKilled(target)
+        else
+            NetworkSystem:fireAllClients("EnemyUpdate", target.name, target.health, target.position)
         end
     end
 end

@@ -13,6 +13,7 @@ local parent = script.Parent
 
 local MobConfig = require(parent:WaitForChild("MobConfig"))
 local LocationSystem = require(parent:WaitForChild("LocationSystem"))
+local NetworkSystem = require(parent:WaitForChild("NetworkSystem"))
 
 -- Lazily required to avoid circular dependency with AutoBattleSystem
 local AutoBattleSystem
@@ -265,6 +266,7 @@ function EnemySystem:createEnemyByType(mobType, level, position)
         spawnModel(enemy)
     end
     table.insert(self.enemies, enemy)
+    NetworkSystem:fireAllClients("EnemySpawn", enemy.name, enemy.position, mobType)
     return enemy
 end
 
@@ -354,6 +356,7 @@ function EnemySystem:spawnWave(level, count)
             spawnModel(enemy)
         end
         table.insert(self.enemies, enemy)
+        NetworkSystem:fireAllClients("EnemySpawn", enemy.name, enemy.position, "Goblin")
     end
     EventManager:Get("SpawnWave"):Fire(level, count)
 end
@@ -412,6 +415,7 @@ function EnemySystem:spawnBoss(bossType)
     end
 
     table.insert(self.enemies, boss)
+    NetworkSystem:fireAllClients("EnemySpawn", boss.name, boss.position, bossType)
     EventManager:Get("SpawnBoss"):Fire(bossType)
 end
 
@@ -437,6 +441,7 @@ function EnemySystem:update(dt)
             local clone = createEnemy(enemy.maxHealth/2, enemy.damage/2, {x=enemy.position.x+2,y=enemy.position.y,z=enemy.position.z}, nil, enemy.name .. " Clone", enemy.prefab, enemy.level, 0)
             if self.spawnModels ~= false then spawnModel(clone) end
             table.insert(self.enemies, clone)
+            NetworkSystem:fireAllClients("EnemySpawn", clone.name, clone.position, nil)
         end
         local model = enemy.model
         local primaryPart = model and (model.PrimaryPart or model.primaryPart)
@@ -493,6 +498,7 @@ function EnemySystem:update(dt)
                 end
             end
         end
+        NetworkSystem:fireAllClients("EnemyUpdate", enemy.name, enemy.position, enemy.health)
     end
 end
 
