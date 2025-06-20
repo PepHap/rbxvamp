@@ -49,11 +49,7 @@ end
 
 function QuestUISystem:start(questSys)
     self.questSystem = questSys or self.questSystem or require(script.Parent:WaitForChild("QuestSystem"))
-    if self.gui then
-        self:update()
-        self:setVisible(self.visible)
-        return
-    end
+    self.gui = ensureGui()
     self:update()
     self:setVisible(self.visible)
 end
