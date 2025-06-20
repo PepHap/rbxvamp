@@ -14,6 +14,9 @@ local HudSystem = {
     rewardButton = nil,
     skillButton = nil,
     companionButton = nil,
+    questButton = nil,
+    progressButton = nil,
+    exchangeButton = nil,
     progressFrame = nil,
     progressFill = nil,
     progressText = nil,
@@ -111,6 +114,9 @@ function HudSystem:start()
     self.rewardButton = createInstance("TextButton")
     self.skillButton = createInstance("TextButton")
     self.companionButton = createInstance("TextButton")
+    self.questButton = createInstance("TextButton")
+    self.progressButton = createInstance("TextButton")
+    self.exchangeButton = createInstance("TextButton")
     self.progressFrame = createInstance("Frame")
     self.progressFill = createInstance("Frame")
     self.progressText = createInstance("TextLabel")
@@ -122,6 +128,9 @@ function HudSystem:start()
     self.rewardButton.Text = "Rewards"
     self.skillButton.Text = "Skills"
     self.companionButton.Text = "Companions"
+    self.questButton.Text = "Quests"
+    self.progressButton.Text = "Map"
+    self.exchangeButton.Text = "Exchange"
     GuiUtil.connectButton(self.autoButton, function()
         HudSystem:toggleAutoBattle()
     end)
@@ -143,6 +152,15 @@ function HudSystem:start()
     GuiUtil.connectButton(self.companionButton, function()
         HudSystem:toggleCompanionUI()
     end)
+    GuiUtil.connectButton(self.questButton, function()
+        HudSystem:toggleQuestUI()
+    end)
+    GuiUtil.connectButton(self.progressButton, function()
+        HudSystem:toggleProgressMap()
+    end)
+    GuiUtil.connectButton(self.exchangeButton, function()
+        HudSystem:toggleExchangeUI()
+    end)
     parent(self.progressFill, self.progressFrame)
     parent(self.progressText, self.progressFrame)
     parent(self.progressFrame, gui)
@@ -155,6 +173,9 @@ function HudSystem:start()
     parent(self.rewardButton, gui)
     parent(self.skillButton, gui)
     parent(self.companionButton, gui)
+    parent(self.questButton, gui)
+    parent(self.progressButton, gui)
+    parent(self.exchangeButton, gui)
     self:update()
 end
 
@@ -219,6 +240,18 @@ function HudSystem:update(dt)
     parent(self.companionButton, gui)
     self.companionButton.Text = "Companions"
 
+    self.questButton = self.questButton or createInstance("TextButton")
+    parent(self.questButton, gui)
+    self.questButton.Text = "Quests"
+
+    self.progressButton = self.progressButton or createInstance("TextButton")
+    parent(self.progressButton, gui)
+    self.progressButton.Text = "Map"
+
+    self.exchangeButton = self.exchangeButton or createInstance("TextButton")
+    parent(self.exchangeButton, gui)
+    self.exchangeButton.Text = "Exchange"
+
     local ratio = nextExp > 0 and exp / nextExp or 0
     if ratio < 0 then ratio = 0 elseif ratio > 1 then ratio = 1 end
     self.progressText.Text = string.format("Lv.%d", lvl)
@@ -255,6 +288,9 @@ function HudSystem:update(dt)
         self.rewardButton.Position = UDim2.new(0, 220, 1, -80)
         self.skillButton.Position = UDim2.new(0, 320, 1, -80)
         self.companionButton.Position = UDim2.new(0, 420, 1, -80)
+        self.questButton.Position = UDim2.new(0, 520, 1, -80)
+        self.progressButton.Position = UDim2.new(0, 620, 1, -80)
+        self.exchangeButton.Position = UDim2.new(0, 720, 1, -80)
     end
 end
 
@@ -298,6 +334,21 @@ end
 function HudSystem:toggleCompanionUI()
     local CompanionUISystem = require(script.Parent:WaitForChild("CompanionUISystem"))
     CompanionUISystem:toggle()
+end
+
+function HudSystem:toggleQuestUI()
+    local QuestUISystem = require(script.Parent:WaitForChild("QuestUISystem"))
+    QuestUISystem:toggle()
+end
+
+function HudSystem:toggleProgressMap()
+    local ProgressMapUISystem = require(script.Parent:WaitForChild("ProgressMapUISystem"))
+    ProgressMapUISystem:toggle()
+end
+
+function HudSystem:toggleExchangeUI()
+    local CrystalExchangeUISystem = require(script.Parent:WaitForChild("CrystalExchangeUISystem"))
+    CrystalExchangeUISystem:toggle()
 end
 
 return HudSystem
