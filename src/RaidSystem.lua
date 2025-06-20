@@ -93,6 +93,7 @@ function RaidSystem:startRaid(player)
     EnemySystem.damageScale = self.prevDamageScale * scale
     EventManager:Get("RaidStart"):Fire()
     NetworkSystem:fireAllClients("RaidStatus", "start", size)
+    NetworkSystem:fireAllClients("RaidEvent", "start", size)
     return true
 end
 
@@ -107,6 +108,7 @@ function RaidSystem:onEnemyKilled()
         EnemySystem:spawnBoss("boss")
     end
     NetworkSystem:fireAllClients("RaidStatus", "progress", self.killCount, self.killsForBoss)
+    NetworkSystem:fireAllClients("RaidEvent", "progress", self.killCount, self.killsForBoss)
 end
 
 ---Ends the raid when the boss is defeated.
@@ -120,6 +122,7 @@ function RaidSystem:onBossKilled()
     self:awardRewards()
     EventManager:Get("RaidComplete"):Fire()
     NetworkSystem:fireAllClients("RaidStatus", "complete")
+    NetworkSystem:fireAllClients("RaidEvent", "complete")
     if self.partySystem and self.currentPartyId then
         for _, member in ipairs(self.partySystem:getMembers(self.currentPartyId)) do
             self.partySystem:setReady(member, false)
