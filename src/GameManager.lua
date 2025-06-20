@@ -470,6 +470,22 @@ function GameManager:chooseReward(index)
     return RewardGaugeSystem:choose(index)
 end
 
+---Adjusts the gauge threshold for earning rewards.
+-- @param value number new gauge requirement
+function GameManager:setGaugeThreshold(value)
+    if RewardGaugeSystem.setMaxGauge then
+        RewardGaugeSystem:setMaxGauge(value)
+    end
+end
+
+---Sets how many reward options appear when the gauge fills.
+-- @param count number option count
+function GameManager:setGaugeOptionCount(count)
+    if RewardGaugeSystem.setOptionCount then
+        RewardGaugeSystem:setOptionCount(count)
+    end
+end
+
 ---Purchases gacha tickets using the crystal exchange system.
 -- @param kind string ticket type
 -- @param amount number number of tickets
