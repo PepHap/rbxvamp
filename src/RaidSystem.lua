@@ -25,6 +25,12 @@ RaidSystem.killsForBoss = 20
 ---Difficulty scaling applied per additional party member
 RaidSystem.difficultyPerMember = 0.5
 
+---Previous enemy health scale before starting a raid.
+RaidSystem.prevHealthScale = 1
+
+---Previous enemy damage scale before starting a raid.
+RaidSystem.prevDamageScale = 1
+
 function RaidSystem:start()
     NetworkSystem:onServerEvent("RaidRequest", function(player)
         if player then
@@ -59,8 +65,10 @@ function RaidSystem:startRaid(player)
     self.killCount = 0
     local size = #members
     local scale = 1 + math.max(size - 1, 0) * (self.difficultyPerMember or 0)
-    EnemySystem.healthScale = (EnemySystem.healthScale or 1) * scale
-    EnemySystem.damageScale = (EnemySystem.damageScale or 1) * scale
+    self.prevHealthScale = EnemySystem.healthScale or 1
+    self.prevDamageScale = EnemySystem.damageScale or 1
+    EnemySystem.healthScale = self.prevHealthScale * scale
+    EnemySystem.damageScale = self.prevDamageScale * scale
     EventManager:Get("RaidStart"):Fire()
     NetworkSystem:fireAllClients("RaidStatus", "start", size)
     return true
@@ -85,8 +93,8 @@ function RaidSystem:onBossKilled()
         return
     end
     self.active = false
-    EnemySystem.healthScale = 1
-    EnemySystem.damageScale = 1
+    EnemySystem.healthScale = self.prevHealthScale or 1
+    EnemySystem.damageScale = self.prevDamageScale or 1
     EventManager:Get("RaidComplete"):Fire()
     NetworkSystem:fireAllClients("RaidStatus", "complete")
 end

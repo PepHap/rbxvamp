@@ -308,6 +308,9 @@ if RunService:IsClient() then
     local PartyUISystem = require(script.Parent:WaitForChild("PartyUISystem"))
     GameManager:addSystem("PartyUI", PartyUISystem)
 
+    local RaidUISystem = require(script.Parent:WaitForChild("RaidUISystem"))
+    GameManager:addSystem("RaidUI", RaidUISystem)
+
     -- Admin console for privileged commands
     local adminModule
     local ok, result = pcall(function()
