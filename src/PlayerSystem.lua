@@ -25,6 +25,7 @@ PlayerSystem.position = {x = 0, y = 0, z = 0}
 PlayerSystem.model = nil
 
 local LevelSystem -- lazy loaded to avoid circular dependency
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
 
 -- Forward declare helper functions so they can be referenced inside
@@ -32,6 +33,11 @@ local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
 local createVector3
 local getSpawnPosition
 local spawnModel
+local function broadcastState()
+    if NetworkSystem and NetworkSystem.fireAllClients then
+        NetworkSystem:fireAllClients("PlayerState", PlayerSystem.health, PlayerSystem.position)
+    end
+end
 
 ---Maximum player health.
 PlayerSystem.maxHealth = 100
@@ -49,6 +55,7 @@ function PlayerSystem:takeDamage(amount)
         self:onDeath()
     end
     EventManager:Get("PlayerDamaged"):Fire(amount, self.health)
+    broadcastState()
 end
 
 ---Heals the player by the given amount without exceeding max health.
@@ -57,6 +64,7 @@ function PlayerSystem:heal(amount)
     local n = tonumber(amount) or 0
     self.health = math.min(self.health + n, self.maxHealth)
     EventManager:Get("PlayerHealed"):Fire(amount, self.health)
+    broadcastState()
 end
 
 ---Handles player death and notifies the LevelSystem.
@@ -75,6 +83,7 @@ function PlayerSystem:onDeath()
         spawnModel()
     end
     EventManager:Get("PlayerDied"):Fire()
+    broadcastState()
 end
 
 ---Utility converting coordinates into ``Vector3`` values when running inside
@@ -168,6 +177,7 @@ function PlayerSystem:setPosition(pos)
             end
         end
     end
+    broadcastState()
 end
 
 ---Initializes the player state and spawns a model when the game starts.
@@ -179,6 +189,7 @@ function PlayerSystem:start()
     if self.spawnModels ~= false then
         spawnModel()
     end
+    broadcastState()
 end
 
 ---Updates the cached player position from the Roblox character when available.
@@ -196,6 +207,7 @@ function PlayerSystem:update(dt)
             self.position.y = pos.Y
             self.position.z = pos.Z
             AutoBattleSystem.playerPosition = self.position
+            broadcastState()
         end
     end
 end
