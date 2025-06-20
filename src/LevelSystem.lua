@@ -14,6 +14,7 @@ local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
 local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
 local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
 local WaveConfig = require(script.Parent:WaitForChild("WaveConfig"))
+local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
 local PlayerSystem -- loaded on demand to avoid circular dependency
 
 --- Tracks the player's current level.
@@ -124,6 +125,10 @@ function LevelSystem:advance()
     local stageType = getStageType(nextLevel)
 
     if stageType == "location" then
+        -- Player must have unlocked access to new areas
+        if not (PlayerLevelSystem and PlayerLevelSystem.isUnlocked and PlayerLevelSystem:isUnlocked("new_area")) then
+            return nil
+        end
         -- Require a location key to move to the next area
         if not KeySystem:useKey("location") then
             return nil
