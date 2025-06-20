@@ -56,6 +56,19 @@ function GameManager:start()
             end
             self.networkSystem:fireClient(player, "SalvageResult", result)
         end)
+
+        self.networkSystem:onServerEvent("RewardChoice", function(player, index)
+            local idx = tonumber(index)
+            local choice
+            if idx then
+                choice = GameManager:chooseReward(idx)
+            end
+            if choice then
+                self.networkSystem:fireClient(player, "RewardResult", choice.slot, choice.item.name)
+            else
+                self.networkSystem:fireClient(player, "RewardResult")
+            end
+        end)
     end
 end
 
