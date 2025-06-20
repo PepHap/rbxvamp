@@ -27,6 +27,8 @@ local PlayerInputSystem = {
     questKey = "J",
     achievementKey = "H",
     statsKey = "U",
+    progressKey = "P",
+    exchangeKey = "C",
     menuKey = "M",
     adminKey = "F10",
     ---Reference to the SkillCastSystem for manual skill use.
@@ -51,6 +53,8 @@ local RewardGaugeUISystem = require(script.Parent:WaitForChild("RewardGaugeUISys
 local StatUpgradeUISystem = require(script.Parent:WaitForChild("StatUpgradeUISystem"))
 local QuestUISystem = require(script.Parent:WaitForChild("QuestUISystem"))
 local AchievementUISystem = require(script.Parent:WaitForChild("AchievementUISystem"))
+local CrystalExchangeUISystem = require(script.Parent:WaitForChild("CrystalExchangeUISystem"))
+local ProgressMapUISystem = require(script.Parent:WaitForChild("ProgressMapUISystem"))
 local AdminConsoleSystem = require(script.Parent:FindFirstChild("AdminConsoleSystem"))
 
 -- Utility to connect Roblox input events when available
@@ -110,6 +114,10 @@ function PlayerInputSystem:setKeyState(key, isDown)
         QuestUISystem:toggle()
     elseif key == self.achievementKey and isDown then
         AchievementUISystem:toggle()
+    elseif key == self.progressKey and isDown then
+        ProgressMapUISystem:toggle()
+    elseif key == self.exchangeKey and isDown then
+        CrystalExchangeUISystem:toggle()
     elseif key == self.statsKey and isDown then
         StatUpgradeUISystem:toggle()
     elseif key == self.menuKey and isDown then
