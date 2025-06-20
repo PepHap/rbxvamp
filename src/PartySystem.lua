@@ -51,6 +51,16 @@ function PartySystem:start()
     NetworkSystem:onServerEvent("PartyResponse", function(player, response)
         PartySystem:respondInvite(player, response == "accept")
     end)
+
+    if Players and Players.PlayerRemoving then
+        Players.PlayerRemoving:Connect(function(p)
+            local id = PartySystem:getPartyId(p)
+            if id then
+                PartySystem:removeMember(id, p)
+            end
+            PartySystem.invites[p] = nil
+        end)
+    end
 end
 
 ---Creates a new party with the given leader.
