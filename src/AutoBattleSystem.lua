@@ -12,6 +12,7 @@ local EnemySystem = require(parent:WaitForChild("EnemySystem"))
 local LevelSystem = require(parent:WaitForChild("LevelSystem"))
 local LootSystem = require(parent:WaitForChild("LootSystem"))
 local DungeonSystem = require(parent:WaitForChild("DungeonSystem"))
+local NetworkSystem = require(parent:WaitForChild("NetworkSystem"))
 
 ---Current player position used for simple movement calculations.
 AutoBattleSystem.playerPosition = {x = 0, y = 0}
@@ -89,6 +90,7 @@ function AutoBattleSystem:update(dt)
                 for i, enemy in ipairs(EnemySystem.enemies) do
                     if enemy == target then
                         table.remove(EnemySystem.enemies, i)
+                        NetworkSystem:fireAllClients("EnemyRemove", target.name)
                         break
                     end
                 end

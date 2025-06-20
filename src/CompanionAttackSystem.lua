@@ -18,6 +18,7 @@ local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
 local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
 local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
 local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local LootSystem = require(script.Parent:WaitForChild("LootSystem"))
 local CompanionSystem = require(script.Parent:WaitForChild("CompanionSystem"))
 
@@ -73,6 +74,7 @@ function CompanionAttackSystem:update(dt)
                         for j, e in ipairs(EnemySystem.enemies) do
                             if e == enemy then
                                 table.remove(EnemySystem.enemies, j)
+                                NetworkSystem:fireAllClients("EnemyRemove", enemy.name)
                                 break
                             end
                         end

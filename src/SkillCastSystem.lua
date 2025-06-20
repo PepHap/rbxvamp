@@ -24,6 +24,7 @@ local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
 local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
 local LootSystem = require(script.Parent:WaitForChild("LootSystem"))
 local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local SkillSystem = require(script.Parent:WaitForChild("SkillSystem"))
 
 ---Initializes the cast system with a skill system instance.
@@ -102,6 +103,7 @@ function SkillCastSystem:useSkill(index, target)
             for i, e in ipairs(EnemySystem.enemies) do
                 if e == target then
                     table.remove(EnemySystem.enemies, i)
+                    NetworkSystem:fireAllClients("EnemyRemove", target.name)
                     break
                 end
             end
