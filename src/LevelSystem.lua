@@ -5,6 +5,7 @@
 local LevelSystem = {}
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local RunService = game:GetService("RunService")
 
 --- Highest stage the player has cleared so far.
 LevelSystem.highestClearedStage = 0
@@ -14,6 +15,7 @@ LevelSystem.highestClearedStage = 0
 local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
 local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
 local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
+local TeleportSystem = require(script.Parent:WaitForChild("TeleportSystem"))
 local WaveConfig = require(script.Parent:WaitForChild("WaveConfig"))
 local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
 local PlayerSystem -- loaded on demand to avoid circular dependency
@@ -157,6 +159,16 @@ function LevelSystem:advance()
         local loc = LocationSystem:getCurrent()
         if loc and loc.coordinates and PlayerSystem and PlayerSystem.setPosition then
             PlayerSystem:setPosition(loc.coordinates)
+        end
+        if RunService:IsServer() and TeleportSystem and TeleportSystem.teleportLocation then
+            local players = {}
+            local ok, playerService = pcall(function()
+                return game:GetService("Players")
+            end)
+            if ok and playerService then
+                players = playerService:GetPlayers()
+            end
+            TeleportSystem:teleportLocation(loc and loc.placeId or 0, players)
         end
     end
 

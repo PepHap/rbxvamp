@@ -11,6 +11,12 @@ local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
 local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
 local AchievementSystem = require(script.Parent:WaitForChild("AchievementSystem"))
 
+function LootSystem:start()
+    EventManager:Get("EnemyDefeated"):Connect(function(enemy)
+        LootSystem:onEnemyKilled(enemy)
+    end)
+end
+
 ---Returns the currency key for the current location.
 local function getCurrencyType()
     local loc = LocationSystem:getCurrent()

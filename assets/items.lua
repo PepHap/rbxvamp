@@ -39,6 +39,7 @@ return {
         {name = "Dragon Scale", rarity = "S", slot = "Armor", stats = {defense = 15}},
         {name = "Celestial Plate", rarity = "SS", slot = "Armor", stats = {health = 25}},
         {name = "Eternal Guard", rarity = "SSS", slot = "Armor", stats = {defense = 35}},
+        {name = "Phantom Plate", rarity = "SSS", slot = "Armor", stats = {defense = 40, health = 20}},
     },
     Accessory = {
         {name = "Traveler's Brooch", rarity = "C", slot = "Accessory", stats = {speed = 0.05}},

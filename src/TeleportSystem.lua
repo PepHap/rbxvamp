@@ -48,6 +48,24 @@ function TeleportSystem:teleportHome(members)
     return teleportPartyToPlace(self.homePlaceId, members)
 end
 
+---Teleports all players in ``members`` to the given ``placeId``.
+-- @param placeId number target place identifier
+-- @param members table list of ``Player`` objects
+function TeleportSystem:teleportToPlace(placeId, members)
+    return teleportPartyToPlace(placeId, members)
+end
+
+---Teleports a party to the place for a new location when defined.
+-- ``placeId`` should match the ``placeId`` field of a location entry.
+-- @param placeId number Roblox place id
+-- @param members table array of players to teleport
+function TeleportSystem:teleportLocation(placeId, members)
+    if not placeId or placeId == 0 then
+        return false
+    end
+    return teleportPartyToPlace(placeId, members)
+end
+
 -- Backwards compatibility
 function TeleportSystem:teleportParty(members)
     return self:teleportRaid(members)
