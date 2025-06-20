@@ -69,6 +69,13 @@ function GameManager:start()
                 self.networkSystem:fireClient(player, "RewardResult")
             end
         end)
+
+        self.networkSystem:onServerEvent("RewardReroll", function(player)
+            local opts = GameManager:rerollRewardOptions()
+            if opts then
+                self.networkSystem:fireClient(player, "GaugeOptions", opts)
+            end
+        end)
     end
 end
 
@@ -497,6 +504,15 @@ end
 -- @param index number option index
 function GameManager:chooseReward(index)
     return RewardGaugeSystem:choose(index)
+end
+
+---Rerolls the current reward options using crystals.
+-- @return table|nil updated option list when successful
+function GameManager:rerollRewardOptions()
+    if RewardGaugeSystem.reroll then
+        return RewardGaugeSystem:reroll()
+    end
+    return nil
 end
 
 ---Resets the reward gauge completely.
