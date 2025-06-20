@@ -10,6 +10,9 @@ local PartyUI = {
     gui = nil,
     window = nil,
     listLabel = nil,
+    readyStates = {},
+    partyMembers = nil,
+    isReady = false,
     visible = false,
 }
 
@@ -87,6 +90,8 @@ function PartyUI:start()
     leaveBtn.Text = "Leave Party"
     local raidBtn = createInstance("TextButton")
     raidBtn.Text = "Start Raid"
+    local readyBtn = createInstance("TextButton")
+    readyBtn.Text = "Ready"
     local inviteBox = createInstance("TextBox")
     inviteBox.PlaceholderText = "Player"
     local inviteBtn = createInstance("TextButton")
@@ -104,6 +109,7 @@ function PartyUI:start()
     parent(createBtn, window)
     parent(leaveBtn, window)
     parent(raidBtn, window)
+    parent(readyBtn, window)
     parent(inviteBox, window)
     parent(inviteBtn, window)
     parent(acceptBtn, window)
@@ -118,15 +124,17 @@ function PartyUI:start()
         leaveBtn.Size = UDim2.new(0, 180, 0, 30)
         raidBtn.Position = UDim2.new(0, 10, 0, 90)
         raidBtn.Size = UDim2.new(0, 180, 0, 30)
-        inviteBox.Position = UDim2.new(0, 10, 0, 130)
+        readyBtn.Position = UDim2.new(0, 10, 0, 130)
+        readyBtn.Size = UDim2.new(0, 180, 0, 30)
+        inviteBox.Position = UDim2.new(0, 10, 0, 170)
         inviteBox.Size = UDim2.new(0, 120, 0, 30)
-        inviteBtn.Position = UDim2.new(0, 140, 0, 130)
+        inviteBtn.Position = UDim2.new(0, 140, 0, 170)
         inviteBtn.Size = UDim2.new(0, 50, 0, 30)
-        acceptBtn.Position = UDim2.new(0, 10, 0, 170)
+        acceptBtn.Position = UDim2.new(0, 10, 0, 210)
         acceptBtn.Size = UDim2.new(0, 80, 0, 30)
-        declineBtn.Position = UDim2.new(0, 110, 0, 170)
+        declineBtn.Position = UDim2.new(0, 110, 0, 210)
         declineBtn.Size = UDim2.new(0, 80, 0, 30)
-        list.Position = UDim2.new(0, 10, 0, 210)
+        list.Position = UDim2.new(0, 10, 0, 250)
         list.Size = UDim2.new(0, 180, 0, 16)
     end
     GuiUtil.connectButton(createBtn, function()
@@ -137,6 +145,11 @@ function PartyUI:start()
     end)
     GuiUtil.connectButton(raidBtn, function()
         NetworkSystem:fireServer("RaidRequest")
+    end)
+    GuiUtil.connectButton(readyBtn, function()
+        PartyUI.isReady = not PartyUI.isReady
+        readyBtn.Text = PartyUI.isReady and "Unready" or "Ready"
+        NetworkSystem:fireServer("RaidReady", PartyUI.isReady)
     end)
     GuiUtil.connectButton(inviteBtn, function()
         if inviteBox.Text and inviteBox.Text ~= "" then
@@ -154,16 +167,22 @@ function PartyUI:start()
         acceptBtn.Visible = false
         declineBtn.Visible = false
     end)
-    NetworkSystem:onClientEvent("PartyUpdated", function(id, members)
-        if members and #members > 0 then
+    local function updateList()
+        if PartyUI.partyMembers and #PartyUI.partyMembers > 0 then
             local names = {}
-            for _, m in ipairs(members) do
-                table.insert(names, tostring(m))
+            for _, m in ipairs(PartyUI.partyMembers) do
+                local mark = PartyUI.readyStates[m] and "*" or ""
+                table.insert(names, mark .. tostring(m))
             end
             list.Text = table.concat(names, ", ")
         else
             list.Text = "No Party"
         end
+    end
+
+    NetworkSystem:onClientEvent("PartyUpdated", function(id, members)
+        PartyUI.partyMembers = members
+        updateList()
     end)
     NetworkSystem:onClientEvent("PartyInvite", function(fromPlayer)
         list.Text = tostring(fromPlayer) .. " invited you"
@@ -176,7 +195,15 @@ function PartyUI:start()
         end
     end)
     NetworkSystem:onClientEvent("PartyDisband", function(id)
+        PartyUI.partyMembers = nil
+        PartyUI.readyStates = {}
+        PartyUI.isReady = false
+        readyBtn.Text = "Ready"
         list.Text = "No Party"
+    end)
+    NetworkSystem:onClientEvent("RaidReady", function(p, ready)
+        PartyUI.readyStates[p] = ready
+        updateList()
     end)
     PartyUI.window.Visible = PartyUI.visible
 end

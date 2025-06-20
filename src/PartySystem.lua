@@ -3,6 +3,7 @@
 
 local PartySystem = {}
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local LobbySystem = require(script.Parent:WaitForChild("LobbySystem"))
 local Players = game:GetService("Players")
 
 ---Pending invites indexed by invitee player object
@@ -16,6 +17,9 @@ PartySystem.nextId = 1
 
 ---Mapping of player references to their party id.
 PartySystem.playerParty = {}
+
+-- Tracks players who marked themselves ready for a raid
+PartySystem.ready = {}
 
 function PartySystem:start()
     NetworkSystem:onServerEvent("PartyRequest", function(player, action, ...)
@@ -52,6 +56,10 @@ function PartySystem:start()
         PartySystem:respondInvite(player, response == "accept")
     end)
 
+    NetworkSystem:onServerEvent("RaidReady", function(player, ready)
+        PartySystem:setReady(player, ready)
+    end)
+
     if Players and Players.PlayerRemoving then
         Players.PlayerRemoving:Connect(function(p)
             local id = PartySystem:getPartyId(p)
@@ -59,6 +67,10 @@ function PartySystem:start()
                 PartySystem:removeMember(id, p)
             end
             PartySystem.invites[p] = nil
+            PartySystem.ready[p] = nil
+            if LobbySystem and LobbySystem.leave then
+                LobbySystem:leave(p)
+            end
         end)
     end
 end
@@ -71,6 +83,10 @@ function PartySystem:createParty(leader)
     self.nextId = id + 1
     self.parties[id] = {leader = leader, members = {[leader] = true}}
     self.playerParty[leader] = id
+    if LobbySystem and LobbySystem.enter then
+        LobbySystem:enter(leader)
+    end
+    NetworkSystem:fireAllClients("RaidReady", leader, false)
     NetworkSystem:fireAllClients("PartyUpdated", id, self:getMembers(id))
     return id
 end
@@ -83,6 +99,10 @@ function PartySystem:addMember(id, player)
     end
     p.members[player] = true
     self.playerParty[player] = id
+    if LobbySystem and LobbySystem.enter then
+        LobbySystem:enter(player)
+    end
+    NetworkSystem:fireAllClients("RaidReady", player, false)
     NetworkSystem:fireAllClients("PartyUpdated", id, self:getMembers(id))
     return true
 end
@@ -117,6 +137,11 @@ function PartySystem:removeMember(id, player)
     end
     p.members[player] = nil
     self.playerParty[player] = nil
+    self.ready[player] = nil
+    if LobbySystem and LobbySystem.leave then
+        LobbySystem:leave(player)
+    end
+    NetworkSystem:fireAllClients("RaidReady", player, false)
     if next(p.members) == nil then
         self.parties[id] = nil
         NetworkSystem:fireAllClients("PartyDisband", id)
@@ -142,6 +167,31 @@ function PartySystem:getMembers(id)
         table.insert(list, member)
     end
     return list
+end
+
+---Sets the ready state for a player and notifies clients.
+function PartySystem:setReady(player, ready)
+    if ready then
+        self.ready[player] = true
+    else
+        self.ready[player] = nil
+    end
+    local id = self:getPartyId(player)
+    if id then
+        NetworkSystem:fireAllClients("RaidReady", player, self.ready[player] and true or false)
+    end
+end
+
+---Returns true if all members of the party marked themselves ready.
+function PartySystem:allReady(id)
+    local p = self.parties[id]
+    if not p then return false end
+    for member in pairs(p.members) do
+        if not self.ready[member] then
+            return false
+        end
+    end
+    return true
 end
 
 return PartySystem
