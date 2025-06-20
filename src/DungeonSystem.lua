@@ -5,6 +5,7 @@ local DungeonSystem = {}
 
 local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+local RaidSystem = require(script.Parent:WaitForChild("RaidSystem"))
 
 -- Definition of available dungeons. Each dungeon specifies the key
 -- type required to enter, the currency rewarded and the number of
@@ -70,8 +71,11 @@ function DungeonSystem:abort()
 end
 
 ---Proxy called when an enemy is killed to track dungeon progress.
-function DungeonSystem:onEnemyKilled()
+function DungeonSystem:onEnemyKilled(enemy)
     self:addKill()
+    if RaidSystem and RaidSystem.onEnemyKilled then
+        RaidSystem:onEnemyKilled(enemy)
+    end
 end
 
 return DungeonSystem
