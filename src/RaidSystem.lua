@@ -5,6 +5,7 @@ local RaidSystem = {}
 
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local TeleportSystem = require(script.Parent:WaitForChild("TeleportSystem"))
+local LobbySystem = require(script.Parent:WaitForChild("LobbySystem"))
 
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
 local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
@@ -31,6 +32,9 @@ RaidSystem.prevHealthScale = 1
 ---Previous enemy damage scale before starting a raid.
 RaidSystem.prevDamageScale = 1
 
+---Party id currently in a raid.
+RaidSystem.currentPartyId = nil
+
 function RaidSystem:start()
     NetworkSystem:onServerEvent("RaidRequest", function(player)
         if player then
@@ -55,12 +59,21 @@ function RaidSystem:startRaid(player)
     if #members < 2 then
         return false
     end
+    for _, m in ipairs(members) do
+        if not LobbySystem or not LobbySystem.activePlayers[m] then
+            return false
+        end
+    end
+    if self.partySystem and not self.partySystem:allReady(partyId) then
+        return false
+    end
     if not KeySystem:useKey("raid") then
         return false
     end
     if TeleportSystem and TeleportSystem.teleportParty then
         TeleportSystem:teleportParty(members)
     end
+    self.currentPartyId = partyId
     self.active = true
     self.killCount = 0
     local size = #members
@@ -97,6 +110,12 @@ function RaidSystem:onBossKilled()
     EnemySystem.damageScale = self.prevDamageScale or 1
     EventManager:Get("RaidComplete"):Fire()
     NetworkSystem:fireAllClients("RaidStatus", "complete")
+    if self.partySystem and self.currentPartyId then
+        for _, member in ipairs(self.partySystem:getMembers(self.currentPartyId)) do
+            self.partySystem:setReady(member, false)
+        end
+        self.currentPartyId = nil
+    end
 end
 
 function RaidSystem:isActive()
