@@ -13,4 +13,6 @@ return {
         reward = {currency = "ore", amount = 10}},
     {id = "hundred_kills", event = "EnemyKilled", goal = 100,
         reward = {crystals = 5}},
+    {id = "skill_master", event = "PlayerLevelUp", goal = 10,
+        reward = {tickets = {skill = 5}}},
 }

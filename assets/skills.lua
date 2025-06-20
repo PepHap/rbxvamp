@@ -84,6 +84,16 @@ return {
         damage = 30,
         radius = 7,
         effects = {"Stun"}
+    },
+    {
+        name = "Ethereal Strike",
+        rarity = "SS",
+        image = "rbxassetid://123463",
+        module = "EtherealStrike",
+        cooldown = 6,
+        damage = 50,
+        radius = 5,
+        effects = {"Pierce"}
     }
 }
 

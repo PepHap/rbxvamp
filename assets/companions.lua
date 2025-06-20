@@ -5,5 +5,6 @@ return {
     {name = "Sprite", rarity = "D"},
     {name = "Golem", rarity = "S"},
     {name = "Phoenix", rarity = "SS"},
-    {name = "Griffin", rarity = "A"}
+    {name = "Griffin", rarity = "A"},
+    {name = "Shadow Wolf", rarity = "A"}
 }
