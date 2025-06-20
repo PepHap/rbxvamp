@@ -15,6 +15,9 @@ PartySystem.parties = {}
 ---Next id used when creating a new party.
 PartySystem.nextId = 1
 
+---Maximum number of members in a party.
+PartySystem.maxMembers = 4
+
 ---Mapping of player references to their party id.
 PartySystem.playerParty = {}
 
@@ -94,7 +97,24 @@ end
 ---Adds a player into the specified party.
 function PartySystem:addMember(id, player)
     local p = self.parties[id]
-    if not p or p.members[player] then
+    if not p then
+        NetworkSystem:fireClient(player, "PartyJoinFailed", "invalid")
+        return false
+    end
+    if self.playerParty[player] and self.playerParty[player] ~= id then
+        NetworkSystem:fireClient(player, "PartyJoinFailed", "member")
+        return false
+    end
+    if p.members[player] then
+        NetworkSystem:fireClient(player, "PartyJoinFailed", "member")
+        return false
+    end
+    local count = 0
+    for _ in pairs(p.members) do
+        count = count + 1
+    end
+    if count >= (self.maxMembers or 4) then
+        NetworkSystem:fireClient(player, "PartyJoinFailed", "full")
         return false
     end
     p.members[player] = true
@@ -110,6 +130,18 @@ end
 ---Sends an invite from one player to another.
 function PartySystem:sendInvite(fromPlayer, toPlayer)
     if not fromPlayer or not toPlayer then return end
+    local id = self:getPartyId(fromPlayer)
+    if id then
+        local p = self.parties[id]
+        if p then
+            local count = 0
+            for _ in pairs(p.members) do count = count + 1 end
+            if count >= (self.maxMembers or 4) then
+                NetworkSystem:fireClient(fromPlayer, "PartyJoinFailed", "full")
+                return
+            end
+        end
+    end
     self.invites[toPlayer] = fromPlayer
     NetworkSystem:fireClient(toPlayer, "PartyInvite", fromPlayer)
 end

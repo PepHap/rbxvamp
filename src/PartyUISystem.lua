@@ -194,6 +194,17 @@ function PartyUI:start()
             list.Text = tostring(target) .. " joined"
         end
     end)
+    NetworkSystem:onClientEvent("PartyJoinFailed", function(reason)
+        if reason == "full" then
+            list.Text = "Party is full"
+        elseif reason == "member" then
+            list.Text = "Already in party"
+        elseif reason == "invalid" then
+            list.Text = "Party not found"
+        else
+            list.Text = "Join failed"
+        end
+    end)
     NetworkSystem:onClientEvent("PartyDisband", function(id)
         PartyUI.partyMembers = nil
         PartyUI.readyStates = {}
