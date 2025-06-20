@@ -65,8 +65,16 @@ function ProgressMapUI:start(ps)
         return
     end
     self.window = GuiUtil.createWindow("ProgressMapWindow")
+    if UDim2 and type(UDim2.new)=="function" then
+        self.window.Size = UDim2.new(0, 250, 0, 80)
+        self.window.Position = UDim2.new(0.5, -125, 0, 20)
+    end
     parent(self.window, gui)
     self.label = createInstance("TextLabel")
+    if UDim2 and type(UDim2.new)=="function" then
+        self.label.Position = UDim2.new(0, 5, 0, 5)
+        self.label.Size = UDim2.new(1, -10, 1, -10)
+    end
     parent(self.label, self.window)
     self:update()
     self:setVisible(self.visible)
@@ -77,6 +85,10 @@ function ProgressMapUI:update()
     if not ps then return end
     local gui = ensureGui()
     self.label = self.label or createInstance("TextLabel")
+    if UDim2 and type(UDim2.new)=="function" then
+        self.label.Position = UDim2.new(0, 5, 0, 5)
+        self.label.Size = UDim2.new(1, -10, 1, -10)
+    end
     parent(self.label, self.window or gui)
     local pr = ps:getProgress()
     self.label.Text = string.format("Location %d - Stage %d", pr.location, pr.stage)
