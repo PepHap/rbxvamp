@@ -53,6 +53,9 @@ function NetworkSystem:start()
     self.events.RewardChoice = createRemoteEvent("RewardChoice")
     self.events.RewardResult = createRemoteEvent("RewardResult")
 
+    -- Player level notifications
+    self.events.PlayerLevelUp = createRemoteEvent("PlayerLevelUp")
+
     -- Level progression notifications
     self.events.StageAdvance = createRemoteEvent("StageAdvance")
     self.events.StageRollback = createRemoteEvent("StageRollback")

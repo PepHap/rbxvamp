@@ -202,6 +202,10 @@ function HudSystem:start()
             HudSystem.progressText.Text = string.format("Lv.%d", level)
         end
     end)
+    NetworkSystem:onClientEvent("PlayerLevelUp", function(level)
+        HudSystem.levelUpTimer = 1
+        HudSystem.lastLevel = level
+    end)
     self:update()
 end
 

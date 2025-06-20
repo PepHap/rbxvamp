@@ -30,6 +30,7 @@ local PlayerInputSystem = {
     progressKey = "P",
     exchangeKey = "C",
     lobbyKey = "O",
+    partyKey = "Y",
     menuKey = "M",
     adminKey = "F10",
     ---Reference to the SkillCastSystem for manual skill use.
@@ -56,6 +57,7 @@ local ProgressMapUISystem = require(script.Parent:WaitForChild("ProgressMapUISys
 local AdminConsoleSystem = require(script.Parent:FindFirstChild("AdminConsoleSystem"))
 local LobbySystem = require(script.Parent:WaitForChild("LobbySystem"))
 local LobbyUISystem = require(script.Parent:WaitForChild("LobbyUISystem"))
+local PartyUISystem = require(script.Parent:WaitForChild("PartyUISystem"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 
 -- Utility to connect Roblox input events when available
@@ -122,6 +124,8 @@ function PlayerInputSystem:setKeyState(key, isDown)
     elseif key == self.lobbyKey and isDown then
         LobbySystem:enter()
         LobbyUISystem:toggle()
+    elseif key == self.partyKey and isDown then
+        PartyUISystem:toggle()
     elseif key == self.statsKey and isDown then
         StatUpgradeUISystem:toggle()
     elseif key == self.menuKey and isDown then

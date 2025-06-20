@@ -3,6 +3,7 @@
 
 local PlayerLevelSystem = {}
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 
 ---Current player level starting at ``1``.
 PlayerLevelSystem.level = 1
@@ -92,6 +93,9 @@ function PlayerLevelSystem:checkThreshold()
         -- notify listeners of the level up
         local ev = EventManager:Get("PlayerLevelUp")
         ev:Fire(self.level)
+        if NetworkSystem and NetworkSystem.fireAllClients then
+            NetworkSystem:fireAllClients("PlayerLevelUp", self.level)
+        end
     end
 end
 
