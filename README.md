@@ -18,6 +18,8 @@ major systems. Game assets should be placed under `assets`.
 - **CompanionAttackSystem.lua** – companion follow and attack logic
 - **DataPersistenceSystem.lua** – saves and loads player data
 - **ThemeSystem.lua** – adjusts UI colors based on the current location
+- **PartySystem.lua** – manages cooperative parties
+- **RaidSystem.lua** – coordinates raid encounters for groups
 
 ## Installing Busted
 This project uses the [Busted](https://olivinelabs.com/busted/) testing
@@ -52,6 +54,9 @@ Press **B** during gameplay to toggle the inventory UI. The player can also use
 Use the number keys **1**&ndash;**4** to cast the skills in your slots. When
 the AutoSkill system is enabled, skills will fire automatically whenever they
 are off cooldown.
+
+Quest rewards now include raid keys which allow parties to initiate raid runs
+through the **Party** interface.
 
 ### Syncing with Rojo
 Install [Rojo](https://rojo.space/docs) and run the following command to sync

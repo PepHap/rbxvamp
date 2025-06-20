@@ -175,6 +175,9 @@ function PartyUI:start()
             list.Text = tostring(target) .. " joined"
         end
     end)
+    NetworkSystem:onClientEvent("PartyDisband", function(id)
+        list.Text = "No Party"
+    end)
     PartyUI.window.Visible = PartyUI.visible
 end
 

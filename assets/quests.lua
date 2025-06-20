@@ -7,4 +7,6 @@ return {
         reward = {crystals = 10, tickets = {companion = 1}}},
     {id = "dungeon_master", event = "DungeonComplete", goal = 3,
         reward = {keys = {location = 1}}},
+    {id = "first_raid", event = "RaidComplete", goal = 1,
+        reward = {keys = {raid = 1}}},
 }

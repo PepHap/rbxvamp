@@ -39,6 +39,7 @@ function NetworkSystem:start()
     self.events.RaidStatus = createRemoteEvent("RaidStatus")
     self.events.PartyInvite = createRemoteEvent("PartyInvite")
     self.events.PartyResponse = createRemoteEvent("PartyResponse")
+    self.events.PartyDisband = createRemoteEvent("PartyDisband")
     self.events.PlayerState = createRemoteEvent("PlayerState")
     -- Events used for client requests
     self.events.PartyRequest = createRemoteEvent("PartyRequest")
