@@ -5,6 +5,7 @@ local SalvageSystem = {}
 
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
+local LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
 
 -- Base reward values per rarity. Values are multiplied by the item level
 SalvageSystem.rarityValues = {
@@ -38,6 +39,9 @@ function SalvageSystem:salvageItem(item)
     if ore > 0 then
         CurrencySystem:add("ore", ore)
     end
+    if LoggingSystem and LoggingSystem.logItem then
+        LoggingSystem:logItem(nil, item, "salvage")
+    end
     return true
 end
 
@@ -52,6 +56,9 @@ function SalvageSystem:salvageFromInventory(itemSystem, index)
     local itm = itemSystem:removeItem(index)
     if not itm then return false end
     self:salvageItem(itm)
+    if LoggingSystem and LoggingSystem.logItem then
+        LoggingSystem:logItem(nil, itm, "salvage_inv")
+    end
     return true
 end
 
@@ -68,6 +75,9 @@ function SalvageSystem:salvageFromSlot(itemSystem, slot)
         return false
     end
     self:salvageItem(itm)
+    if LoggingSystem and LoggingSystem.logItem then
+        LoggingSystem:logItem(nil, itm, "salvage_slot")
+    end
     return true
 end
 

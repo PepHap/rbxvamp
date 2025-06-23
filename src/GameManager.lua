@@ -694,7 +694,11 @@ function GameManager:salvageInventoryItem(index)
     if not self.itemSalvageSystem or not itemSys then
         return false
     end
-    return self.itemSalvageSystem:salvageFromInventory(itemSys, index)
+    local idx = tonumber(index)
+    if not idx or idx < 1 or idx > #itemSys.inventory then
+        return false
+    end
+    return self.itemSalvageSystem:salvageFromInventory(itemSys, idx)
 end
 
 ---Salvages an equipped item from the given slot.
@@ -705,10 +709,15 @@ function GameManager:salvageEquippedItem(slot)
     if not self.itemSalvageSystem or not itemSys then
         return false
     end
-    local itm = itemSys:unequip(slot)
+    local SlotConstants = require(script.Parent:WaitForChild("SlotConstants"))
+    if not SlotConstants.valid[slot] then
+        return false
+    end
+    local itm = itemSys.slots[slot]
     if not itm then
         return false
     end
+    itemSys:unequip(slot)
     return self.itemSalvageSystem:salvageItem(itm)
 end
 
