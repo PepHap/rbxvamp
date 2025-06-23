@@ -2,19 +2,63 @@
 -- Records server-side events like currency awards and item grants.
 -- Logs are stored in memory for now but could be persisted via DataStoreService.
 
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
+
 local LoggingSystem = {
     logs = {},
     currencyLimit = 1000,
     rarityLimit = "SSS",
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
+    logDir = "server-log",
+    logFile = "server-log/log.txt",
 }
 
+local HttpService
+if LoggingSystem.useRobloxObjects then
+    local ok, svc = pcall(function()
+        return game:GetService("HttpService")
+    end)
+    if ok then
+        HttpService = svc
+    end
+end
+
+local function ensureFolder()
+    if LoggingSystem.useRobloxObjects then
+        return
+    end
+    if LoggingSystem._folderChecked then
+        return
+    end
+    LoggingSystem._folderChecked = true
+    local dir = LoggingSystem.logDir
+    local ok, f = pcall(function()
+        return io.open(dir .. "/.tmp", "w")
+    end)
+    if ok and f then
+        f:close()
+        os.remove(dir .. "/.tmp")
+    else
+        os.execute("mkdir -p " .. dir)
+    end
+end
+
+local function writeLine(line)
+    if LoggingSystem.useRobloxObjects then
+        print("[ServerLog]", line)
+        return
+    end
+    ensureFolder()
+    local f = io.open(LoggingSystem.logFile, "a")
+    if f then
+        f:write(line, "\n")
+        f:close()
+    end
+end
+
 ---Internal helper to append an entry to the log list.
-local function addEntry(action, info)
-    table.insert(LoggingSystem.logs, {
-        time = os.time(),
-        action = action,
-        info = info,
-    })
+local function addEntry(entry)
+    table.insert(LoggingSystem.logs, entry)
 end
 
 ---Logs a generic action and associated information.
@@ -22,7 +66,22 @@ end
 --  @param action string action identifier
 --  @param info table details about the event
 function LoggingSystem:logAction(action, info)
-    addEntry(action, info)
+    local entry = {
+        time = os.time(),
+        action = action,
+        info = info,
+    }
+    addEntry(entry)
+    local line
+    if HttpService and HttpService.JSONEncode then
+        local ok, encoded = pcall(function()
+            return HttpService:JSONEncode(entry)
+        end)
+        line = ok and encoded or (action .. " log")
+    else
+        line = action .. " " .. tostring(info)
+    end
+    writeLine(line)
 end
 
 ---Logs a currency transaction.

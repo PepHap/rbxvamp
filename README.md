@@ -81,3 +81,8 @@ bash scripts/check.sh
 ```
 This script executes the Busted test suite if it is installed and warns you if
 the framework is missing. The tests live under the `tests/` directory.
+
+## Server Log
+Currency and item transactions are recorded in `server-log/log.txt`. Suspicious
+entries are flagged when exceeding configured limits. The log file is created
+automatically when running the game outside of Roblox.
