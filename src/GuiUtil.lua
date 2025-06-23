@@ -260,6 +260,29 @@ function GuiUtil.applyHoverEffect(button)
     end
 end
 
+---Highlights or unhighlights a button using theme colors.
+--  When a highlight color is defined in ``UITheme``, this will tween the
+--  background to that color when ``on`` is true and restore the original
+--  color when false.
+---@param button table|Instance TextButton to modify
+---@param on boolean whether to highlight
+function GuiUtil.highlightButton(button, on)
+    if not button then return end
+    local highlight = Theme and Theme.colors and toColor3(Theme.colors.highlight)
+    if not highlight then return end
+    local normal = toColor3(button.BackgroundColor3)
+    if button._origColor == nil then
+        button._origColor = normal
+    end
+    local target = on and highlight or button._origColor
+    if TweenService and typeof and typeof(button) == "Instance" then
+        local tween = TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = target})
+        tween:Play()
+    else
+        button.BackgroundColor3 = target
+    end
+end
+
 ---Connects a button click handler using ``Activated`` when available or
 -- ``MouseButton1Click`` as a fallback. In the test environment where real
 -- events are unavailable, the callback is stored in ``onClick``.

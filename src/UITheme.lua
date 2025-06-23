@@ -8,6 +8,8 @@ UITheme.colors = {
     labelText = Color3 and Color3.fromRGB and Color3.fromRGB(220, 220, 220) or {r=220,g=220,b=220},
     -- Slightly brighter background when hovering buttons
     buttonHover = Color3 and Color3.fromRGB and Color3.fromRGB(60, 80, 120) or {r=60,g=80,b=120},
+    -- Accent color used for selected buttons or highlighted elements
+    highlight = Color3 and Color3.fromRGB and Color3.fromRGB(80, 120, 160) or {r=80,g=120,b=160},
     progressBar = Color3 and Color3.fromRGB and Color3.fromRGB(255, 230, 40) or {r=255,g=230,b=40},
 }
 

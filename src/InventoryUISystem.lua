@@ -332,6 +332,11 @@ local function renderEquipment(container, items)
             elseif type(btn) == "table" then
                 btn.Slot = slot
             end
+            if InventoryUI.selectedSlot == slot then
+                GuiUtil.highlightButton(btn, true)
+            else
+                GuiUtil.highlightButton(btn, false)
+            end
             local connected = btn.GetAttribute and btn:GetAttribute("_connected")
             if not connected then
                 GuiUtil.connectButton(btn, function()
@@ -369,6 +374,11 @@ local function renderInventory(container, items, page, perPage)
         local btn = grid.cells[i]
         if btn then
             applyRarityColor(btn, item and item.rarity)
+            if InventoryUI.pendingIndex == idx then
+                GuiUtil.highlightButton(btn, true)
+            else
+                GuiUtil.highlightButton(btn, false)
+            end
             GuiUtil.connectButton(btn, function()
                 InventoryUI:selectInventory(idx)
             end)
