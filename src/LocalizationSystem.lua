@@ -32,6 +32,8 @@ LocalizationSystem.translations.en = {
     ["Underworld"] = "Underworld",
     ["Next Reward"] = "Next Reward",
     ["XP"] = "XP",
+    ["Haunted Manor"] = "Haunted Manor",
+
 }
 
 -- Russian translations covering common UI labels
@@ -56,6 +58,7 @@ LocalizationSystem.translations.ru = {
     ["Underworld"] = "Преисподняя",
     ["Next Reward"] = "Следующая награда",
     ["XP"] = "Опыта",
+    ["Haunted Manor"] = "Проклятое поместье",
 }
 
 ---Returns a localized string for the given key or the key itself.
