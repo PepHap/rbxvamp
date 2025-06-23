@@ -24,6 +24,7 @@ local HudSystem = {
     progressFill = nil,
     progressText = nil,
     levelUpTimer = 0,
+    deathTimer = 0,
     lastLevel = 1,
 }
 
@@ -209,6 +210,12 @@ function HudSystem:start()
             HudSystem.progressText.Text = string.format("Lv.%d", level)
         end
     end)
+    NetworkSystem:onClientEvent("PlayerDied", function()
+        HudSystem.deathTimer = 2
+        if HudSystem.progressText then
+            HudSystem.progressText.Text = "Respawning..."
+        end
+    end)
     NetworkSystem:onClientEvent("PlayerLevelUp", function(level)
         HudSystem.levelUpTimer = 1
         HudSystem.lastLevel = level
@@ -303,7 +310,12 @@ function HudSystem:update(dt)
 
     local ratio = nextExp > 0 and exp / nextExp or 0
     if ratio < 0 then ratio = 0 elseif ratio > 1 then ratio = 1 end
-    self.progressText.Text = string.format("Lv.%d", lvl)
+    if self.deathTimer > 0 then
+        self.deathTimer = math.max(0, self.deathTimer - dt)
+        self.progressText.Text = "Respawning..."
+    else
+        self.progressText.Text = string.format("Lv.%d", lvl)
+    end
     if UDim2 and type(UDim2.new)=="function" then
         self.progressFrame.Position = UDim2.new(0.5, -200, 0, 0)
         self.progressFrame.Size = UDim2.new(0, 400, 0, 20)

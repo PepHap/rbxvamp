@@ -84,6 +84,9 @@ function PlayerSystem:onDeath()
         spawnModel()
     end
     EventManager:Get("PlayerDied"):Fire()
+    if NetworkSystem and NetworkSystem.fireAllClients then
+        NetworkSystem:fireAllClients("PlayerDied")
+    end
     broadcastState()
 end
 

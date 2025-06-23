@@ -38,4 +38,5 @@ return {
     QuestUpdate = "ev_qu_v2",
     QuestData = "ev_qd_v2",
     QuestRequest = "ev_qrq_v2",
+    PlayerDied = "ev_pd_v2",
 }
