@@ -38,6 +38,7 @@ return {
         {name = "Chain Mail", rarity = "B", slot = "Armor", stats = {defense = 3}},
         {name = "Knight Armor", rarity = "B", slot = "Armor", stats = {defense = 4}},
         {name = "Wizard Robe", rarity = "A", slot = "Armor", stats = {magic = 4}},
+        {name = "Mystic Robe", rarity = "A", slot = "Armor", stats = {magic = 5, health = 5}},
         {name = "Golden Armor", rarity = "A", slot = "Armor", stats = {defense = 8}},
         {name = "Shadow Cloak", rarity = "A", slot = "Armor", stats = {defense = 2, speed = 0.1}},
         {name = "Dragon Scale", rarity = "S", slot = "Armor", stats = {defense = 15}},
