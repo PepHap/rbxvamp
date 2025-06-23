@@ -15,6 +15,7 @@ local assets = ReplicatedStorage:WaitForChild("assets")
 -- are used when presenting random rewards to the player.
 ItemSystem.templates = require(assets:WaitForChild("items"))
 ItemSystem.upgradeCosts = require(assets:WaitForChild("item_upgrade_costs"))
+ItemSystem.rarityLimits = require(assets:WaitForChild("item_rarity_limit"))
 
 -- Determine the highest level defined in the upgrade cost table. This value
 -- acts as a hard cap for item upgrades.
@@ -255,7 +256,9 @@ function ItemSystem:upgradeItem(slot, amount, currencyType)
     end
     local current = item.level or 1
     local target = current + n
-    if target > self.maxLevel then
+    local rarity = item.rarity
+    local limit = self.rarityLimits and self.rarityLimits[rarity] or self.maxLevel
+    if target > limit or target > self.maxLevel then
         return false
     end
     local required = 0
@@ -286,7 +289,9 @@ function ItemSystem:upgradeItemWithFallback(slot, amount, currencyType)
         return false
     end
     local current = item.level or 1
-    local target = math.min(current + n, self.maxLevel)
+    local rarity = item.rarity
+    local limit = self.rarityLimits and self.rarityLimits[rarity] or self.maxLevel
+    local target = math.min(current + n, self.maxLevel, limit)
     if target <= current then
         return false
     end
