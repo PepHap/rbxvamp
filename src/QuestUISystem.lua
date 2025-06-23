@@ -116,6 +116,7 @@ function QuestUISystem:update()
         end
         parent(frame, container)
         GuiUtil.applyResponsive(frame, 6, 200, 30, 800, 40)
+        GuiUtil.addCrossDecor(frame)
 
         local label = createInstance("TextLabel")
         label.Name = "ProgressLabel"

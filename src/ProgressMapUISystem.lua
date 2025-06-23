@@ -72,6 +72,19 @@ function ProgressMapUI:start(ps)
         self.window.Position = UDim2.new(0.5, -125, 0, 20)
     end
     parent(self.window, gui)
+
+    local closeBtn = createInstance("TextButton")
+    closeBtn.Name = "CloseButton"
+    closeBtn.Text = "X"
+    if UDim2 and type(UDim2.new)=="function" then
+        closeBtn.Size = UDim2.new(0, 20, 0, 20)
+        closeBtn.Position = UDim2.new(1, -25, 0, 5)
+    end
+    parent(closeBtn, self.window)
+    GuiUtil.connectButton(closeBtn, function()
+        ProgressMapUI:setVisible(false)
+    end)
+
     self.label = createInstance("TextLabel")
     if UDim2 and type(UDim2.new)=="function" then
         self.label.Position = UDim2.new(0, 5, 0, 5)

@@ -87,6 +87,18 @@ function GachaUI:start(manager)
     self.window = GuiUtil.createWindow("GachaWindow")
     parent(self.window, gui)
 
+    local closeBtn = createInstance("TextButton")
+    closeBtn.Name = "CloseButton"
+    closeBtn.Text = "X"
+    if UDim2 and type(UDim2.new)=="function" then
+        closeBtn.Size = UDim2.new(0,20,0,20)
+        closeBtn.Position = UDim2.new(1,-25,0,5)
+    end
+    parent(closeBtn, self.window)
+    connect(closeBtn, function()
+        GachaUI:toggle()
+    end)
+
     local layout = createInstance("UIListLayout")
     layout.Name = "ButtonLayout"
     if Enum and Enum.FillDirection then
