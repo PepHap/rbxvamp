@@ -11,10 +11,29 @@ local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
 local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
 local AchievementSystem = require(script.Parent:WaitForChild("AchievementSystem"))
 
+-- Exposed reward tables for referencing from UI modules.
+local rewards = {
+    normal   = {coins = 1,   exp = 5,   gauge = 10, ether = 0, crystals = 0},
+    mini     = {coins = 5,   exp = 20,  gauge = 20, ether = 1, crystals = 1},
+    boss     = {coins = 10,  exp = 50,  gauge = 30, ether = 2, crystals = 2},
+    location = {coins = 20,  exp = 100, gauge = 50, ether = 3, crystals = 3},
+}
 function LootSystem:start()
     EventManager:Get("EnemyDefeated"):Connect(function(enemy)
         LootSystem:onEnemyKilled(enemy)
     end)
+end
+
+---Returns the reward table for the given enemy type.
+-- @param enemyType string type key such as "normal", "mini", "boss", "location"
+-- @return table reward information
+function LootSystem.getRewardInfo(enemyType)
+    return rewards[enemyType or "normal"] or rewards.normal
+end
+
+---Public wrapper returning the currency type for the active location.
+function LootSystem.getCurrencyType()
+    return getCurrencyType()
 end
 
 ---Returns the currency key for the current location.
@@ -25,14 +44,6 @@ local function getCurrencyType()
     end
     return "gold"
 end
-
----Internal helper applying rewards based on enemy type.
-local rewards = {
-    normal   = {coins = 1,   exp = 5,   gauge = 10, ether = 0, crystals = 0},
-    mini     = {coins = 5,   exp = 20,  gauge = 20, ether = 1, crystals = 1},
-    boss     = {coins = 10,  exp = 50,  gauge = 30, ether = 2, crystals = 2},
-    location = {coins = 20,  exp = 100, gauge = 50, ether = 3, crystals = 3},
-}
 
 ---Grants loot when an enemy is killed.
 -- @param enemy table enemy data (may include ``type`` field)

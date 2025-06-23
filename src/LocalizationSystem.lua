@@ -1,0 +1,42 @@
+local LocalizationSystem = {
+    translations = {}
+}
+
+local LocalizationService
+local success, service = pcall(function()
+    return game:GetService("LocalizationService")
+end)
+if success then
+    LocalizationService = service
+end
+
+-- Default English terms
+LocalizationSystem.translations.en = {
+    ["Floor"] = "Floor",
+    ["kills to"] = "kills to",
+    ["Boss"] = "Boss",
+    ["Mini Boss"] = "Mini Boss",
+    ["Area Boss"] = "Area Boss",
+}
+
+---Returns a localized string for the given key or the key itself.
+function LocalizationSystem:get(key)
+    local lang = "en"
+    if LocalizationService and LocalizationService.RobloxLocaleId then
+        lang = LocalizationService.RobloxLocaleId:sub(1, 2)
+    end
+    local tbl = self.translations[lang] or self.translations.en
+    if tbl and tbl[key] then
+        return tbl[key]
+    end
+    return key
+end
+
+---Adds translation entries for the specified language.
+function LocalizationSystem:addLanguage(lang, entries)
+    if type(lang) == "string" and type(entries) == "table" then
+        self.translations[lang] = entries
+    end
+end
+
+return LocalizationSystem

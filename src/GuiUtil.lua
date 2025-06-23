@@ -217,6 +217,9 @@ function GuiUtil.connectButton(button, callback)
         button.Activated:Connect(callback)
     elseif button.MouseButton1Click then
         button.MouseButton1Click:Connect(callback)
+        if button.TouchTap then
+            button.TouchTap:Connect(callback)
+        end
     else
         button.onClick = callback
     end
