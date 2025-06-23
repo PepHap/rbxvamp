@@ -574,6 +574,8 @@ end
 function GameManager:resetRewardGauge()
     if RewardGaugeSystem.resetGauge then
         RewardGaugeSystem:resetGauge()
+    end
+end
 
 ---Adjusts the gauge threshold for earning rewards.
 -- @param value number new gauge requirement
