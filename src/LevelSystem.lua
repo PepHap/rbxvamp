@@ -97,12 +97,13 @@ function LevelSystem:getNextStageInfo()
     local nextLevel = self.currentLevel + 1
     local killsLeft = math.max(0, (self.requiredKills or 0) - (self.killCount or 0))
     local stageType = getStageType(nextLevel)
+    local milestoneKills, _, milestoneType = self:getKillsUntilMilestone(self.currentLevel)
     local loc = LocationSystem:getCurrent()
     local bossName
     if loc and loc.bosses then
         bossName = loc.bosses[nextLevel]
     end
-    return nextLevel, stageType, killsLeft, bossName
+    return nextLevel, stageType, killsLeft, bossName, milestoneKills, milestoneType
 end
 
 ---Resets stage tracking and spawns the initial enemy wave.
@@ -142,6 +143,24 @@ end
 -- or dungeon logic can easily query the current stage type.
 function LevelSystem.getStageType(level)
     return getStageType(level)
+end
+
+---Returns how many kills remain until the next mini-boss, boss or new location.
+-- @param startLevel number starting level
+-- @return number killsNeeded
+-- @return number milestoneLevel
+-- @return string milestoneType
+function LevelSystem:getKillsUntilMilestone(startLevel)
+    local lvl = startLevel or self.currentLevel
+    local kills = math.max(0, (self.requiredKills or 0) - (self.killCount or 0))
+    local mLevel = lvl
+    local t = "normal"
+    repeat
+        mLevel = mLevel + 1
+        t = getStageType(mLevel)
+        kills = kills + self:getKillRequirement(mLevel)
+    until t == "mini" or t == "boss" or t == "location" or mLevel > lvl + 100
+    return kills, mLevel, t
 end
 --- Internal helper that increases monster stats based on the stage type.
 -- @param stageType string type returned by ``getStageType``
