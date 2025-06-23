@@ -169,7 +169,11 @@ function MenuUI:start()
         GuiUtil.connectButton(btn, function()
             MenuUI:showTab(i)
         end)
-        tab.system:start(nil, self.contentFrame)
+        if tab.system == LevelUISystem then
+            tab.system:start()
+        else
+            tab.system:start(nil, self.contentFrame)
+        end
         tab.system:setVisible(false)
     end
     self:setVisible(self.visible)
