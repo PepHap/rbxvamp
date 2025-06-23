@@ -211,7 +211,8 @@ function StatUpgradeUISystem:upgrade(name)
     if not self.statSystem then
         return false
     end
-    local ok = self.statSystem:upgradeStat(name, 1, "gold")
+    local method = self.statSystem.upgradeStatWithFallback or self.statSystem.upgradeStat
+    local ok = method(self.statSystem, name, 1, "gold")
     if ok then
         self:update()
     end
