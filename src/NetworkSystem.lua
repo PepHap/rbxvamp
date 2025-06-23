@@ -6,6 +6,7 @@
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
 local RemoteEventNames = require(script.Parent:WaitForChild("RemoteEventNames"))
+local RunService = game:GetService("RunService")
 
 local NetworkSystem = {
     useRobloxObjects = EnvironmentUtil.detectRoblox(),
@@ -58,9 +59,14 @@ function NetworkSystem:getEvent(name)
     return self.events[name] or createRemoteEvent(name)
 end
 
+-- Fires a RemoteEvent to all connected clients. Per Roblox API this
+-- method can only be called from the server. When executed on the
+-- client we fall back to ``Fire`` so tests or client code do not
+-- raise an error.
+-- https://create.roblox.com/docs/reference/engine/classes/RemoteEvent#FireAllClients
 function NetworkSystem:fireAllClients(name, ...)
     local ev = self:getEvent(name)
-    if ev and ev.FireAllClients then
+    if RunService and RunService:IsServer() and ev and ev.FireAllClients then
         ev:FireAllClients(...)
     elseif ev and ev.Fire then
         ev:Fire(...)
