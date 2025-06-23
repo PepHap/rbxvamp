@@ -68,7 +68,8 @@ function NetworkSystem:fireAllClients(name, ...)
     local ev = self:getEvent(name)
     if RunService and RunService:IsServer() and ev and ev.FireAllClients then
         ev:FireAllClients(...)
-    elseif ev and ev.Fire then
+    elseif (not RunService or not RunService:IsServer()) and ev and ev.Fire then
+        -- Fallback for test environments where BindableEvents are used
         ev:Fire(...)
     end
 end

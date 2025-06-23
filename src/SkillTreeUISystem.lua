@@ -161,8 +161,8 @@ function SkillTreeUISystem:update()
             layout.FillDirection = Enum.FillDirection.Vertical
             layout.SortOrder = Enum.SortOrder.LayoutOrder
         end
-        if UDim2 and type(UDim2.new)=="function" then
-            layout.Padding = UDim2.new(0, 5, 0, 5)
+        if UDim and type(UDim.new) == "function" then
+            layout.Padding = UDim.new(0, 5)
         end
         parent(layout, container)
         parent(container, parentGui)
