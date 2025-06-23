@@ -12,6 +12,9 @@ local UISystem = {
     ---Temporary reward option buttons
     rewardButtons = nil,
 
+    ---Window container for reward options
+    optionsWindow = nil,
+
     ---Label showing the selected reward
     selectionLabel = nil,
 
@@ -23,6 +26,7 @@ local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
 if not ok then Theme = nil end
+local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 
 -- Helper to create an Instance when available or fall back to a table
 local function createInstance(className)
@@ -46,7 +50,6 @@ end
 
 -- Parent ``child`` to ``parent`` in both real Roblox and table form
 local function parent(child, parentObj)
-    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
     GuiUtil.parent(child, parentObj)
 end
 
@@ -57,7 +60,6 @@ local function ensureGui()
     end
     local pgui
     if UISystem.useRobloxObjects then
-        local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
         pgui = GuiUtil.getPlayerGui()
         if pgui then
             local existing = pgui:FindFirstChild("UISystemGui")
@@ -95,8 +97,30 @@ function UISystem:showRewardOptions()
     end
 
     local gui = ensureGui()
+    if not self.optionsWindow then
+        self.optionsWindow = GuiUtil.createWindow("RewardOptions")
+        if UDim2 and type(UDim2.new)=="function" then
+            self.optionsWindow.Size = UDim2.new(0, 200, 0, 150)
+            self.optionsWindow.Position = UDim2.new(0.5, -100, 0.5, -75)
+        end
+        parent(self.optionsWindow, gui)
+        local closeBtn = createInstance("TextButton")
+        closeBtn.Name = "CloseButton"
+        closeBtn.Text = "X"
+        if UDim2 and type(UDim2.new)=="function" then
+            closeBtn.Size = UDim2.new(0,20,0,20)
+            closeBtn.Position = UDim2.new(1,-25,0,5)
+        end
+        parent(closeBtn, self.optionsWindow)
+        GuiUtil.connectButton(closeBtn, function()
+            UISystem.optionsWindow.Visible = false
+        end)
+    else
+        GuiUtil.setVisible(self.optionsWindow, true)
+    end
+
     self.rewardButtons = {}
-    gui.rewardButtons = self.rewardButtons
+    self.optionsWindow.rewardButtons = self.rewardButtons
 
     for i, opt in ipairs(opts) do
         local btn = createInstance("TextButton")
@@ -104,7 +128,7 @@ function UISystem:showRewardOptions()
         if Theme and Theme.rarityColors and Theme.rarityColors[opt.item.rarity] then
             btn.TextColor3 = Theme.rarityColors[opt.item.rarity]
         end
-        parent(btn, gui)
+        parent(btn, self.optionsWindow)
         table.insert(self.rewardButtons, btn)
     end
 
@@ -129,6 +153,9 @@ function UISystem:selectReward(index)
     end
 
     self.rewardButtons = nil
+    if self.optionsWindow then
+        GuiUtil.setVisible(self.optionsWindow, false)
+    end
 
     return chosen
 end

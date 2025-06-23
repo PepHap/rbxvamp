@@ -132,6 +132,7 @@ local function renderSkills(container, sys)
             frame.Size = UDim2.new(1, -10, 0, 30)
         end
         GuiUtil.applyResponsive(frame, 6, 200, 30, 800, 40)
+        GuiUtil.addCrossDecor(frame)
         parent(frame, container)
 
         local label = createInstance("TextLabel")
