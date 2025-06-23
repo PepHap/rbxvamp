@@ -16,12 +16,28 @@ local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local LootSystem = require(script.Parent:WaitForChild("LootSystem"))
 local LocalizationSystem = require(script.Parent:WaitForChild("LocalizationSystem"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local ok, Theme = pcall(function()
+    return require(script.Parent:WaitForChild("UITheme"))
+end)
+if not ok then Theme = nil end
 
 local function createInstance(className)
     if ProgressMapUI.useRobloxObjects and typeof and Instance and type(Instance.new)=="function" then
-        return Instance.new(className)
+        local inst = Instance.new(className)
+        if Theme then
+            if className == "TextLabel" then Theme.styleLabel(inst)
+            elseif className == "TextButton" then Theme.styleButton(inst)
+            elseif className == "Frame" then Theme.styleWindow(inst) end
+        end
+        return inst
     end
-    return {ClassName = className}
+    local tbl = {ClassName = className}
+    if Theme then
+        if className == "TextLabel" then Theme.styleLabel(tbl)
+        elseif className == "TextButton" then Theme.styleButton(tbl)
+        elseif className == "Frame" then Theme.styleWindow(tbl) end
+    end
+    return tbl
 end
 
 local function parent(child, parentObj)
@@ -127,7 +143,7 @@ function ProgressMapUI:update()
     parent(self.label, self.window or gui)
     local pr = ps:getProgress()
     local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
-    local _, stageType, killsLeft, bossName, milestoneKills, milestoneType = LevelSystem:getNextStageInfo()
+    local nextLevel, stageType, killsLeft, bossName, milestoneKills, milestoneType = LevelSystem:getNextStageInfo()
     local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
     local loc = LocationSystem:getCurrent()
     local typeLabel = stageType or ""
@@ -159,7 +175,8 @@ function ProgressMapUI:update()
         end
         table.insert(parts, string.format("%d %s %s", milestoneKills, LocalizationSystem:get("kills to"), mLabel))
     end
-    table.insert(parts, string.format("+%d %s", reward.coins * (LevelSystem.currentLevel or 1), currency))
+    local coinLevel = nextLevel or (LevelSystem.currentLevel or 1)
+    table.insert(parts, string.format("+%d %s", reward.coins * coinLevel, currency))
     table.insert(parts, string.format("+%d XP", reward.exp))
     if reward.ether and reward.ether > 0 then
         table.insert(parts, string.format("+%d %s", reward.ether, LocalizationSystem:get("Ether")))
