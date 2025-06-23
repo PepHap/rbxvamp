@@ -45,6 +45,16 @@ function LevelSystem:getKillRequirement(level)
     return base + locIncrease + segmentIncrease
 end
 
+---Adjusts enemy stat multipliers based on the floor number.
+--  Increases health and damage by 5% per level as a baseline.
+--  @param level number stage level used for scaling
+function LevelSystem:scaleStats(level)
+    level = level or self.currentLevel or 1
+    local factor = 1 + (level - 1) * 0.05
+    EnemySystem.healthScale = factor
+    EnemySystem.damageScale = factor
+end
+
 ---Number of enemies spawned per wave.
 LevelSystem.baseWaveSize = 5
 LevelSystem.waveSize = LevelSystem.baseWaveSize
@@ -72,12 +82,30 @@ function LevelSystem:getPercent()
     return self.killCount / self.requiredKills
 end
 
+---Returns information about the upcoming stage.
+--  @return number nextLevel
+--  @return string stageType
+--  @return number killsLeft
+--  @return string|nil bossName
+function LevelSystem:getNextStageInfo()
+    local nextLevel = self.currentLevel + 1
+    local killsLeft = math.max(0, (self.requiredKills or 0) - (self.killCount or 0))
+    local stageType = getStageType(nextLevel)
+    local loc = LocationSystem:getCurrent()
+    local bossName
+    if loc and loc.bosses then
+        bossName = loc.bosses[nextLevel]
+    end
+    return nextLevel, stageType, killsLeft, bossName
+end
+
 ---Resets stage tracking and spawns the initial enemy wave.
 --  This is called when the overall game begins via ``GameManager``.
 function LevelSystem:start()
     self.currentLevel = 1
     self.killCount = 0
     self.requiredKills = self:getKillRequirement(1)
+    self:scaleStats(1)
     updateWaveSize()
     local cfg = WaveConfig.levels[1]
     if cfg and not cfg.boss then
@@ -204,6 +232,7 @@ function LevelSystem:advance()
     self.currentLevel = nextLevel
     self.killCount = 0
     self.requiredKills = self:getKillRequirement(self.currentLevel)
+    self:scaleStats(self.currentLevel)
     updateWaveSize()
 
     -- Record the highest stage cleared which is the previous level.

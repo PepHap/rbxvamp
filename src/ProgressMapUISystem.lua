@@ -94,12 +94,9 @@ function ProgressMapUI:update()
     parent(self.label, self.window or gui)
     local pr = ps:getProgress()
     local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+    local _, stageType, killsLeft, bossName = LevelSystem:getNextStageInfo()
     local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
-    local killsLeft = math.max(0, (LevelSystem.requiredKills or 0) - (LevelSystem.killCount or 0))
-    local nextStage = LevelSystem.currentLevel + 1
-    local stageType = LevelSystem.getStageType and LevelSystem.getStageType(nextStage)
     local loc = LocationSystem:getCurrent()
-    local bossName = loc and loc.bosses and loc.bosses[nextStage]
     local typeLabel = stageType or ""
     if bossName then
         typeLabel = bossName
