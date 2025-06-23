@@ -298,9 +298,8 @@ local function renderSectionTitle(container, text)
     local lbl = createInstance("TextLabel")
     lbl.Name = "Title"
     lbl.Text = text
-    if UDim2 and type(UDim2.new)=="function" then
+    if UDim2 and type(UDim2.new) == "function" then
         lbl.Size = UDim2.new(1, 0, 0, 20)
-        lbl.Position = UDim2.new(0, 0, 0, 0)
     end
     parent(lbl, container)
     return 25
@@ -390,6 +389,19 @@ end
 local function renderStats(container, items, stats, setSys)
     clearChildren(container)
     local offset = renderSectionTitle(container, "Stats")
+    local layout = container.FindFirstChild and container:FindFirstChild("Layout")
+    if not layout then
+        layout = createInstance("UIListLayout")
+        layout.Name = "Layout"
+        if Enum and Enum.FillDirection and Enum.SortOrder then
+            layout.FillDirection = Enum.FillDirection.Vertical
+            layout.SortOrder = Enum.SortOrder.LayoutOrder
+        end
+        if layout.Padding ~= nil then
+            layout.Padding = UDim.new(0, 2)
+        end
+        parent(layout, container)
+    end
     local combined = {}
     if stats then
         for name, data in pairs(stats.stats) do
@@ -409,15 +421,10 @@ local function renderStats(container, items, stats, setSys)
     local keys = {}
     for k in pairs(combined) do table.insert(keys, k) end
     table.sort(keys)
-    local y = 0
     for _, name in ipairs(keys) do
         local lbl = createInstance("TextLabel")
         lbl.Text = string.format("%s: %s", name, tostring(combined[name]))
-        if UDim2 and type(UDim2.new)=="function" then
-            lbl.Position = UDim2.new(0, 0, 0, offset + y)
-        end
         parent(lbl, container)
-        y = y + 20
     end
 end
 
