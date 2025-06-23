@@ -14,6 +14,10 @@ local InventorySlots = {
 local SlotConstants = require(script.Parent:WaitForChild("SlotConstants"))
 local slotNames = SlotConstants.list
 
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local assets = ReplicatedStorage:WaitForChild("assets")
+local slotIcons = require(assets:WaitForChild("slot_icons"))
+
 local function createInstance(className)
     if InventorySlots.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
         return Instance.new(className)
@@ -69,7 +73,16 @@ function InventorySlots:create(parentFrame)
         if UDim2 and type(UDim2.new)=="function" then
             btn.Size = UDim2.new(0, 80, 0, 80)
         end
+        btn.Text = ""
         parent(btn, frame)
+        local icon = createInstance("ImageLabel")
+        icon.Name = "Icon"
+        if UDim2 and type(UDim2.new)=="function" then
+            icon.Size = UDim2.new(1, 0, 1, 0)
+        end
+        icon.BackgroundTransparency = 1
+        icon.Image = slotIcons[name] or ""
+        parent(icon, btn)
         self.slots[name] = btn
     end
 
