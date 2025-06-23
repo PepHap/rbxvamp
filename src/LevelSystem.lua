@@ -30,6 +30,21 @@ LevelSystem.killCount = 0
 --- Number of kills required to advance to the next level.
 LevelSystem.requiredKills = 15
 
+---Returns how many kills are required to clear ``level``.
+--  The amount scales gradually based on the current location
+--  and every tenth floor becomes slightly harder.
+--  @param level number target level
+--  @return number kill requirement
+function LevelSystem:getKillRequirement(level)
+    level = level or self.currentLevel or 1
+    local base = 15
+    -- Increase requirement by 5 each new location (every 30 floors)
+    local locIncrease = math.floor((level - 1) / 30) * 5
+    -- Within a location bump the count slightly every 10 floors
+    local segmentIncrease = math.floor(((level - 1) % 30) / 10) * 2
+    return base + locIncrease + segmentIncrease
+end
+
 ---Number of enemies spawned per wave.
 LevelSystem.baseWaveSize = 5
 LevelSystem.waveSize = LevelSystem.baseWaveSize
@@ -54,7 +69,7 @@ end
 function LevelSystem:start()
     self.currentLevel = 1
     self.killCount = 0
-    self.requiredKills = 15
+    self.requiredKills = self:getKillRequirement(1)
     updateWaveSize()
     local cfg = WaveConfig.levels[1]
     if cfg and not cfg.boss then
@@ -180,7 +195,7 @@ function LevelSystem:advance()
 
     self.currentLevel = nextLevel
     self.killCount = 0
-    self.requiredKills = 15
+    self.requiredKills = self:getKillRequirement(self.currentLevel)
     updateWaveSize()
 
     -- Record the highest stage cleared which is the previous level.
@@ -222,7 +237,7 @@ function LevelSystem:onPlayerDeath()
     if lvl % 5 == 0 and lvl % 10 ~= 0 then
         self.currentLevel = math.max(lvl - 1, 1)
         self.killCount = 0
-        self.requiredKills = 15
+        self.requiredKills = self:getKillRequirement(self.currentLevel)
         updateWaveSize()
         rolledBack = true
     end
@@ -253,7 +268,7 @@ function LevelSystem:loadData(data)
     if type(data.requiredKills) == "number" then
         self.requiredKills = data.requiredKills
     else
-        self.requiredKills = 15
+        self.requiredKills = self:getKillRequirement(self.currentLevel)
     end
     if type(data.highest) == "number" then
         self.highestClearedStage = data.highest
