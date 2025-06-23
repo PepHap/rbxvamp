@@ -3,6 +3,9 @@
 
 local AttackSystem = {}
 
+-- Maximum allowed damage per attack to mitigate exploit attempts
+AttackSystem.maxDamage = 20
+
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
 local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
@@ -10,6 +13,7 @@ local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
 local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
 local AntiCheatSystem = require(script.Parent:WaitForChild("AntiCheatSystem"))
+local LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
 
 AttackSystem.damage = 1
 AttackSystem.range = 5
@@ -20,7 +24,22 @@ function AttackSystem:start()
     end)
 end
 
+-- Validates that the player instance is actually part of the game
+local function isValidPlayer(player)
+    if typeof and typeof(player) == "Instance" then
+        local ok, isPlayer = pcall(function()
+            return player:IsA("Player")
+        end)
+        return ok and isPlayer and player.Parent ~= nil
+    end
+    return false
+end
+
 function AttackSystem:handleAttack(player)
+    if not isValidPlayer(player) then
+        LoggingSystem:logAction("invalid_attack", {player = player})
+        return
+    end
     AntiCheatSystem:recordAttack(player)
     local pos = PlayerSystem.position
     if not pos then return end
@@ -31,6 +50,10 @@ function AttackSystem:handleAttack(player)
     local distSq = dx * dx + dy * dy
     if distSq <= (self.range or 5) * (self.range or 5) then
         local dmg = self.damage or 1
+        if dmg > self.maxDamage then
+            LoggingSystem:logAction("suspicious_damage", {player = player, damage = dmg})
+            dmg = self.maxDamage
+        end
         if target.armor and target.armor > 0 then
             if target.armor >= dmg then
                 target.armor = target.armor - dmg
