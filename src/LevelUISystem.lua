@@ -54,20 +54,36 @@ local function ensureGui()
     return gui
 end
 
-function LevelUI:start(pls, lvlSys)
+function LevelUI:start(pls, lvlSys, parentGui)
+    -- Support older call signatures where ``lvlSys`` was actually the parent
+    -- frame passed from ``MenuUISystem:start``
+    if parentGui == nil and self.useRobloxObjects then
+        if typeof(lvlSys) == "Instance" and lvlSys:IsA("GuiObject") then
+            parentGui = lvlSys
+            lvlSys = nil
+        end
+    elseif parentGui == nil and type(lvlSys) == "table" and lvlSys.ClassName == "Frame" then
+        parentGui = lvlSys
+        lvlSys = nil
+    end
+
     self.playerLevelSystem = pls or self.playerLevelSystem or PlayerLevelSystem
     self.levelSystem = lvlSys or self.levelSystem or LevelSystem
-    local gui = ensureGui()
+
+    local guiRoot = ensureGui()
+    local parentTarget = parentGui or guiRoot
+
     if self.window then
-        if self.window.Parent ~= gui then
-            parent(self.window, gui)
+        if self.window.Parent ~= parentTarget then
+            parent(self.window, parentTarget)
         end
         self:update()
         self:setVisible(self.visible)
         return
     end
+
     self.window = GuiUtil.createWindow("LevelWindow")
-    parent(self.window, gui)
+    parent(self.window, parentTarget)
 
     self.levelLabel = createInstance("TextLabel")
     parent(self.levelLabel, self.window)
