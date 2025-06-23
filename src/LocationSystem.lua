@@ -2,6 +2,7 @@
 -- Handles progression between different game areas.
 
 local LocationSystem = {}
+local PlayerLevelSystem
 
 -- Load location data from assets so that stages can be configured externally.
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -15,6 +16,7 @@ LocationSystem.currentIndex = 1
 
 ---Resets the location back to the first entry.
 function LocationSystem:start()
+    PlayerLevelSystem = PlayerLevelSystem or require(script.Parent:WaitForChild("PlayerLevelSystem"))
     self.currentIndex = 1
 end
 
@@ -23,11 +25,24 @@ function LocationSystem:getCurrent()
     return self.locations[self.currentIndex]
 end
 
+---Returns true when the location at ``index`` is unlocked for ``level``.
+-- @param index number location array index
+-- @param level number? player level
+function LocationSystem:isUnlocked(index, level)
+    local loc = self.locations[index]
+    if not loc then return false end
+    PlayerLevelSystem = PlayerLevelSystem or require(script.Parent:WaitForChild("PlayerLevelSystem"))
+    local lvl = tonumber(level) or PlayerLevelSystem.level or 1
+    return lvl >= (loc.levelStart or 1)
+end
+
 ---Advances to the next location if one exists.
 -- @return table location data after the advance
 function LocationSystem:advance()
-    if self.currentIndex < #self.locations then
-        self.currentIndex = self.currentIndex + 1
+    PlayerLevelSystem = PlayerLevelSystem or require(script.Parent:WaitForChild("PlayerLevelSystem"))
+    local nextIndex = self.currentIndex + 1
+    if nextIndex <= #self.locations and self:isUnlocked(nextIndex, PlayerLevelSystem.level) then
+        self.currentIndex = nextIndex
     end
     return self:getCurrent()
 end

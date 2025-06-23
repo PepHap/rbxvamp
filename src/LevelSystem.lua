@@ -229,11 +229,10 @@ function LevelSystem:advance()
     local stageType = getStageType(nextLevel)
 
     if stageType == "location" then
-        -- Player must have unlocked access to new areas
-        if not (PlayerLevelSystem and PlayerLevelSystem.isUnlocked and PlayerLevelSystem:isUnlocked("new_area")) then
+        local nextIndex = (LocationSystem.currentIndex or 1) + 1
+        if not LocationSystem:isUnlocked(nextIndex, PlayerLevelSystem.level) then
             return nil
         end
-        -- Require a location key to move to the next area
         if not KeySystem:useKey("location") then
             return nil
         end
