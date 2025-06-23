@@ -167,4 +167,28 @@ return {
             brightness = 2,
         },
     },
+    {
+        name = "Frozen Wasteland",
+        coordinates = {x = 700, y = 0, z = 0},
+        placeId = 0,
+        levelStart = 211,
+        levelEnd = 240,
+        floors = 30,
+        bosses = {
+            [5] = "Frost Guardian",
+            [10] = "Glacial Serpent",
+            [30] = "Ice Queen",
+        },
+        currency = "crystal",
+        theme = {
+            windowBackground = {r = 80, g = 90, b = 110},
+            buttonBackground = {r = 140, g = 150, b = 190},
+            buttonHover = {r = 160, g = 170, b = 210},
+        },
+        lighting = {
+            ambient = Color3 and Color3.fromRGB and Color3.fromRGB(150,180,200) or {r=150,g=180,b=200},
+            outdoorAmbient = Color3 and Color3.fromRGB and Color3.fromRGB(100,130,150) or {r=100,g=130,b=150},
+            brightness = 2,
+        },
+    },
 }

@@ -21,6 +21,7 @@ LocalizationSystem.translations.en = {
     ["Ether"] = "Ether",
     ["Crystals"] = "Crystals",
     ["Gauge"] = "Gauge",
+    ["Frozen Wasteland"] = "Frozen Wasteland",
 }
 
 -- Russian translations covering common UI labels
@@ -34,6 +35,7 @@ LocalizationSystem.translations.ru = {
     ["Ether"] = "Эфир",
     ["Crystals"] = "Кристаллы",
     ["Gauge"] = "Шкала",
+    ["Frozen Wasteland"] = "Замерзшие пустоши",
 }
 
 ---Returns a localized string for the given key or the key itself.

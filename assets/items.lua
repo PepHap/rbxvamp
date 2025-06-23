@@ -9,6 +9,7 @@ return {
         {name = "Eternal Halo", rarity = "SSS", slot = "Hat", stats = {magic = 20}},
         {name = "Sturdy Helm", rarity = "C", slot = "Hat", stats = {defense = 2}},
         {name = "Diamond Crown", rarity = "SS", slot = "Hat", stats = {health = 30, attackSpeed = 0.15}},
+        {name = "Frozen Crown", rarity = "SS", slot = "Hat", stats = {health = 20, magic = 10}},
     },
     Necklace = {
         {name = "Bronze Necklace", rarity = "C", slot = "Necklace", stats = {health = 2}},

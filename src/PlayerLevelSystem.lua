@@ -53,6 +53,10 @@ local milestones = {
         unlock = "raid",
         reward = {crystals = 10, keys = {raid = 1}},
     },
+    [30] = {
+        unlock = "icy_area",
+        reward = {crystals = 7},
+    },
 }
 
 ---Grants milestone rewards such as currency, tickets or keys.
