@@ -116,7 +116,31 @@ return {
         lighting = {
             ambient = Color3 and Color3.fromRGB and Color3.fromRGB(120, 120, 150) or {r=120,g=120,b=150},
             outdoorAmbient = Color3 and Color3.fromRGB and Color3.fromRGB(90, 90, 120) or {r=90,g=90,b=120},
-            brightness = 2,
+        brightness = 2,
+        },
+    },
+    {
+        name = "Abyss",
+        coordinates = {x = 500, y = -50, z = 0},
+        placeId = 0,
+        levelStart = 151,
+        levelEnd = 180,
+        floors = 30,
+        bosses = {
+            [5] = "Abyss Guardian",
+            [10] = "Void Horror",
+            [30] = "Abyss Lord",
+        },
+        currency = "crystal",
+        theme = {
+            windowBackground = {r = 20, g = 20, b = 40},
+            buttonBackground = {r = 60, g = 60, b = 100},
+            buttonHover = {r = 80, g = 80, b = 120},
+        },
+        lighting = {
+            ambient = Color3 and Color3.fromRGB and Color3.fromRGB(10,10,20) or {r=10,g=10,b=20},
+            outdoorAmbient = Color3 and Color3.fromRGB and Color3.fromRGB(5,5,10) or {r=5,g=5,b=10},
+            brightness = 1.5,
         },
     },
 }

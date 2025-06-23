@@ -15,4 +15,6 @@ return {
         reward = {crystals = 5}},
     {id = "skill_master", event = "PlayerLevelUp", goal = 10,
         reward = {tickets = {skill = 5}}},
+    {id = "chain_novice", event = "EnemyKilled", goal = 30,
+        reward = {crystals = 2, tickets = {skill = 1}}},
 }
