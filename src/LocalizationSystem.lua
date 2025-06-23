@@ -30,7 +30,10 @@ LocalizationSystem.translations.en = {
     ["Sky Castle"] = "Sky Castle",
     ["Abyss"] = "Abyss",
     ["Underworld"] = "Underworld",
+    ["Next Reward"] = "Next Reward",
+    ["XP"] = "XP",
     ["Haunted Manor"] = "Haunted Manor",
+
 }
 
 -- Russian translations covering common UI labels
@@ -53,6 +56,8 @@ LocalizationSystem.translations.ru = {
     ["Sky Castle"] = "Небесный замок",
     ["Abyss"] = "Бездна",
     ["Underworld"] = "Преисподняя",
+    ["Next Reward"] = "Следующая награда",
+    ["XP"] = "Опыта",
     ["Haunted Manor"] = "Проклятое поместье",
 }
 

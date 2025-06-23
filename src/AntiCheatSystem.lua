@@ -6,6 +6,7 @@ local AntiCheatSystem = {
     currencyPerMinute = 1000,
     minAttackInterval = 0.2,
     maxMoveSpeed = 50,
+    teleportDistance = 10,
     players = {},
     connections = {}
 }
@@ -24,7 +25,7 @@ function AntiCheatSystem:getRecord(player)
     local id = getId(player)
     local rec = self.players[id]
     if not rec then
-        rec = {exp = 0, currency = 0, lastReset = os.clock(), lastAttack = 0, lastPos = nil, lastTime = os.clock()}
+        rec = {exp = 0, currency = 0, lastReset = os.clock(), lastAttack = 0, lastPos = nil, lastTime = os.clock(), lastSafePos = nil}
         self.players[id] = rec
     end
     local now = os.clock()
@@ -96,10 +97,22 @@ function AntiCheatSystem:checkMovement(player, position)
                     speed = dist / dt
                 })
             end
+            if dist > self.teleportDistance and player and player.Character then
+                local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+                if hrp then
+                    local pos = rec.lastSafePos or rec.lastPos
+                    local from = {x = hrp.Position.X, y = hrp.Position.Y, z = hrp.Position.Z}
+                    hrp.CFrame = CFrame.new(pos.x, pos.y, pos.z)
+                    if LoggingSystem and LoggingSystem.logTeleport then
+                        LoggingSystem:logTeleport(getId(player), from, pos)
+                    end
+                end
+            end
         end
     end
     rec.lastPos = {x = position.x, y = position.y, z = position.z}
     rec.lastTime = now
+    rec.lastSafePos = {x = position.x, y = position.y, z = position.z}
 end
 
 function AntiCheatSystem:update(dt)
