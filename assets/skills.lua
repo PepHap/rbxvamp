@@ -104,6 +104,16 @@ return {
         damage = 8,
         radius = 4,
         effects = {"Pierce"}
-    }
+  },
+  {
+        name = "Chain Lightning",
+        rarity = "A",
+        image = "rbxassetid://123464",
+        module = "ChainLightning",
+        cooldown = 7,
+        damage = 18,
+        radius = 6,
+        effects = {"Shock"}
+    },
 }
 
