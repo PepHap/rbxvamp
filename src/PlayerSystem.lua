@@ -37,7 +37,11 @@ local spawnModel
 local RunService = game:GetService("RunService")
 
 local function broadcastState()
-    if RunService:IsServer() and NetworkSystem and NetworkSystem.fireAllClients then
+    -- Only the server should replicate player state to connected clients
+    if not RunService:IsServer() then
+        return
+    end
+    if NetworkSystem and NetworkSystem.fireAllClients then
         NetworkSystem:fireAllClients("PlayerState", PlayerSystem.health, PlayerSystem.position)
     end
 end
@@ -196,7 +200,9 @@ function PlayerSystem:start()
     if self.spawnModels ~= false then
         spawnModel()
     end
-    broadcastState()
+    if RunService:IsServer() then
+        broadcastState()
+    end
 end
 
 ---Updates the cached player position from the Roblox character when available.
