@@ -515,6 +515,22 @@ function GameManager:addRewardPoints(amount)
     RewardGaugeSystem:addPoints(amount)
 end
 
+---Returns the gauge progress toward the next reward (0-1).
+function GameManager:getGaugePercent()
+    if RewardGaugeSystem.getPercent then
+        return RewardGaugeSystem:getPercent()
+    end
+    return 0
+end
+
+---Returns stage progress toward clearing the current level (0-1).
+function GameManager:getLevelPercent()
+    if LevelSystem.getPercent then
+        return LevelSystem:getPercent()
+    end
+    return 0
+end
+
 ---Returns reward options when the gauge is full.
 function GameManager:getRewardOptions()
     return RewardGaugeSystem:getOptions()

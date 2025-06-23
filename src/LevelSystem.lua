@@ -49,6 +49,14 @@ local function broadcastProgress()
     end
 end
 
+---Returns level progress toward the next stage as a value from ``0`` to ``1``.
+function LevelSystem:getPercent()
+    if self.requiredKills <= 0 then
+        return 0
+    end
+    return self.killCount / self.requiredKills
+end
+
 ---Resets stage tracking and spawns the initial enemy wave.
 --  This is called when the overall game begins via ``GameManager``.
 function LevelSystem:start()
