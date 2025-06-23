@@ -82,6 +82,16 @@ bash scripts/check.sh
 This script executes the Busted test suite if it is installed and warns you if
 the framework is missing. The tests live under the `tests/` directory.
 
+### Rotating RemoteEvent Names
+To obfuscate networking calls each major update, increment all RemoteEvent
+version suffixes using:
+
+```bash
+lua scripts/rotate_events.lua
+```
+This rewrites `src/RemoteEventNames.lua` with the next version number so you can
+re-publish the place with fresh RemoteEvent identifiers.
+
 ## Server Log
 Currency and item transactions are recorded in `server-log/log.txt`. Suspicious
 entries are flagged when exceeding configured limits. The log file is created
