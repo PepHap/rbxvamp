@@ -19,6 +19,7 @@ local HudSystem = {
     exchangeButton = nil,
     dungeonButton = nil,
     partyButton = nil,
+    scoreboardButton = nil,
     progressFrame = nil,
     progressFill = nil,
     progressText = nil,
@@ -122,6 +123,7 @@ function HudSystem:start()
     self.exchangeButton = createInstance("TextButton")
     self.dungeonButton = createInstance("TextButton")
     self.partyButton = createInstance("TextButton")
+    self.scoreboardButton = createInstance("TextButton")
     self.progressFrame = createInstance("Frame")
     self.progressFill = createInstance("Frame")
     self.progressText = createInstance("TextLabel")
@@ -138,6 +140,7 @@ function HudSystem:start()
     self.exchangeButton.Text = "Exchange"
     self.dungeonButton.Text = "Dungeon"
     self.partyButton.Text = "Party"
+    self.scoreboardButton.Text = "Scores"
     GuiUtil.connectButton(self.autoButton, function()
         HudSystem:toggleAutoBattle()
     end)
@@ -174,6 +177,9 @@ function HudSystem:start()
     GuiUtil.connectButton(self.partyButton, function()
         HudSystem:togglePartyUI()
     end)
+    GuiUtil.connectButton(self.scoreboardButton, function()
+        HudSystem:toggleScoreboard()
+    end)
     parent(self.progressFill, self.progressFrame)
     parent(self.progressText, self.progressFrame)
     parent(self.progressFrame, gui)
@@ -191,6 +197,7 @@ function HudSystem:start()
     parent(self.exchangeButton, gui)
     parent(self.dungeonButton, gui)
     parent(self.partyButton, gui)
+    parent(self.scoreboardButton, gui)
 
     NetworkSystem:onClientEvent("StageAdvance", function(level)
         if HudSystem.progressText then
@@ -290,6 +297,10 @@ function HudSystem:update(dt)
     parent(self.partyButton, gui)
     self.partyButton.Text = "Party"
 
+    self.scoreboardButton = self.scoreboardButton or createInstance("TextButton")
+    parent(self.scoreboardButton, gui)
+    self.scoreboardButton.Text = "Scores"
+
     local ratio = nextExp > 0 and exp / nextExp or 0
     if ratio < 0 then ratio = 0 elseif ratio > 1 then ratio = 1 end
     self.progressText.Text = string.format("Lv.%d", lvl)
@@ -331,6 +342,7 @@ function HudSystem:update(dt)
         self.exchangeButton.Position = UDim2.new(0, 720, 1, -80)
         self.dungeonButton.Position = UDim2.new(0, 820, 1, -80)
         self.partyButton.Position = UDim2.new(0, 920, 1, -80)
+        self.scoreboardButton.Position = UDim2.new(0, 1020, 1, -80)
     end
 end
 
@@ -399,6 +411,11 @@ end
 function HudSystem:togglePartyUI()
     local PartyUISystem = require(script.Parent:WaitForChild("PartyUISystem"))
     PartyUISystem:toggle()
+end
+
+function HudSystem:toggleScoreboard()
+    local ScoreboardUISystem = require(script.Parent:WaitForChild("ScoreboardUISystem"))
+    ScoreboardUISystem:toggle()
 end
 
 return HudSystem
