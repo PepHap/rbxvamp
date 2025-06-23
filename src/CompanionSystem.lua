@@ -4,6 +4,27 @@
 local CompanionSystem = {}
 
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
+
+-- Minimum level required to obtain companions of each rarity
+CompanionSystem.rarityUnlockLevels = {
+    C = 1,
+    D = 1,
+    B = 5,
+    A = 10,
+    S = 20,
+    SS = 30,
+    SSS = 50,
+}
+
+---Returns true if ``rarity`` is unlocked for the current player level.
+-- @param rarity string rarity key
+-- @param lvl number? optional level override
+function CompanionSystem:isRarityUnlocked(rarity, lvl)
+    local req = self.rarityUnlockLevels[rarity] or 1
+    local level = tonumber(lvl) or PlayerLevelSystem.level or 1
+    return level >= req
+end
 
 -- List of companion tables currently owned by the player. Each companion
 -- stores a ``name``, ``rarity`` and current ``level``.
