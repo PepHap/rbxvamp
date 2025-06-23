@@ -84,6 +84,9 @@ function GameManager:start()
                 self.networkSystem:fireClient(player, "DungeonState", nil, 0, 0)
             end
         end)
+        self.networkSystem:onServerEvent("QuestRequest", function(player)
+            self.networkSystem:fireClient(player, "QuestData", QuestSystem:saveData())
+        end)
     end
 end
 
@@ -658,6 +661,7 @@ function GameManager:getSaveData()
         stats = StatUpgradeSystem:saveData(),
         achievements = AchievementSystem:saveData(),
         dailyBonus = DailyBonusSystem:saveData(),
+        quests = QuestSystem:saveData(),
     }
 end
 
@@ -684,6 +688,7 @@ function GameManager:applySaveData(data)
     RewardGaugeSystem:loadData(data.rewardGauge)
     AchievementSystem:loadData(data.achievements)
     DailyBonusSystem:loadData(data.dailyBonus)
+    QuestSystem:loadData(data.quests)
 end
 
 ---Salvages an item from the inventory into currency and crystals.
