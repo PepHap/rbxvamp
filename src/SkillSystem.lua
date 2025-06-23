@@ -4,6 +4,29 @@
 local SkillSystem = {}
 SkillSystem.__index = SkillSystem
 
+-- Minimum player level required to obtain a skill of each rarity
+SkillSystem.rarityUnlockLevels = {
+    C = 1,
+    D = 1,
+    B = 5,
+    A = 10,
+    S = 20,
+    SS = 30,
+    SSS = 50,
+}
+
+local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
+
+---Returns true when the player level allows acquiring the given rarity.
+-- @param rarity string rarity key
+-- @param lvl number? optional player level
+-- @return boolean
+function SkillSystem:isRarityUnlocked(rarity, lvl)
+    local req = self.rarityUnlockLevels[rarity] or 1
+    local level = tonumber(lvl) or PlayerLevelSystem.level or 1
+    return level >= req
+end
+
 -- Mapping from rarity key to upgrade success chance
 SkillSystem.rarityChances = {
     C = 0.05,

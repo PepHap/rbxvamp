@@ -58,6 +58,9 @@ local skillPool = require(assets:WaitForChild("skills"))
 local itemPool = require(assets:WaitForChild("items"))
 local companionPool = require(assets:WaitForChild("companions"))
 local EquipmentGenerator = require(script.Parent:WaitForChild("EquipmentGenerator"))
+local SkillSystem = require(script.Parent:WaitForChild("SkillSystem"))
+local CompanionSystem = require(script.Parent:WaitForChild("CompanionSystem"))
+local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
 local RunService = game:GetService("RunService")
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
@@ -165,6 +168,29 @@ function GachaSystem:loadData(data)
     self.tickets.equipment = data.tickets and data.tickets.equipment or 0
 end
 
+-- Returns rarity weight entries the player is allowed to roll based on level.
+local function getAvailableWeights(category)
+    local weights = GachaSystem.rarityWeights[category] or defaultWeights.skill
+    local level = PlayerLevelSystem.level or 1
+    local filter
+    if category == "skill" then
+        filter = function(r) return SkillSystem:isRarityUnlocked(r, level) end
+    elseif category == "companion" then
+        filter = function(r) return CompanionSystem:isRarityUnlocked(r, level) end
+    end
+    if not filter then return weights end
+    local out = {}
+    for _, entry in ipairs(weights) do
+        if filter(entry[1]) then
+            table.insert(out, entry)
+        end
+    end
+    if #out == 0 then
+        return weights
+    end
+    return out
+end
+
 ---Selects a rarity based on the configured weights.
 -- @return string rarity key
 ---Selects a rarity based on the configured weights for ``category``.
@@ -173,7 +199,7 @@ end
 -- @return string rarity key
 function GachaSystem:rollRarity(category)
     category = category or "skill"
-    local weights = self.rarityWeights[category] or defaultWeights.skill
+    local weights = getAvailableWeights(category)
     local total = 0
     for _, entry in ipairs(weights) do
         total = total + entry[2]
