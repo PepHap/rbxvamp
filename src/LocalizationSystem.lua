@@ -17,6 +17,7 @@ LocalizationSystem.translations.en = {
     ["Boss"] = "Boss",
     ["Mini Boss"] = "Mini Boss",
     ["Area Boss"] = "Area Boss",
+    ["Location"] = "Location",
 }
 
 -- Russian translations covering common UI labels
@@ -26,6 +27,7 @@ LocalizationSystem.translations.ru = {
     ["Boss"] = "Босс",
     ["Mini Boss"] = "Мини-босс",
     ["Area Boss"] = "Босс локации",
+    ["Location"] = "Локация",
 }
 
 ---Returns a localized string for the given key or the key itself.
