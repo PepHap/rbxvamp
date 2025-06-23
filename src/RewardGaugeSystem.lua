@@ -151,6 +151,14 @@ function RewardGaugeSystem:resetGauge()
     NetworkSystem:fireAllClients("GaugeReset")
 end
 
+---Returns gauge progress as a value from ``0`` to ``1``.
+function RewardGaugeSystem:getPercent()
+    if self.maxGauge <= 0 then
+        return 0
+    end
+    return self.gauge / self.maxGauge
+end
+
 ---Serializes the gauge state so progress persists across sessions.
 -- @return table data table containing ``gauge`` value
 function RewardGaugeSystem:saveData()
