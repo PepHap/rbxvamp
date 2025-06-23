@@ -15,6 +15,7 @@ local function onPlayerAdded(player)
         local encoded = HttpService:JSONEncode(data)
         player:SetAttribute("SaveData", encoded)
     end
+    GameManager:startAutoSave(player.UserId)
 end
 
 local function onPlayerRemoving(player)
@@ -30,6 +31,7 @@ local function onPlayerRemoving(player)
             GameManager:savePlayerData(player.UserId, decoded)
         end
     end
+    GameManager:forceAutoSave()
 end
 
 Players.PlayerAdded:Connect(onPlayerAdded)

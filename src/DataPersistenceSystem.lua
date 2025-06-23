@@ -2,6 +2,7 @@
 -- Handles saving and loading player data using DataStoreService when available.
 
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
+local LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
 local DataPersistenceSystem = {
     ---When true and running inside Roblox, DataStoreService will be used.
     useRobloxObjects = EnvironmentUtil.detectRoblox(),
@@ -25,6 +26,13 @@ function DataPersistenceSystem:start()
             end)
             if success then
                 self.datastore = store
+                if LoggingSystem and LoggingSystem.logAction then
+                    LoggingSystem:logAction("datastore_connect", {store = self.storeName})
+                end
+            else
+                if LoggingSystem and LoggingSystem.logAction then
+                    LoggingSystem:logAction("datastore_error", {message = tostring(store)})
+                end
             end
         end
     end
@@ -45,10 +53,15 @@ function DataPersistenceSystem:load(playerId)
         end)
         if success and result then
             data = result
+        elseif not success and LoggingSystem and LoggingSystem.logAction then
+            LoggingSystem:logAction("datastore_get_fail", {player = playerId, error = tostring(result)})
         end
     end
     data = data or {}
     self.cache[playerId] = data
+    if LoggingSystem and LoggingSystem.logAction then
+        LoggingSystem:logAction("load", {player = playerId})
+    end
     return data
 end
 
@@ -59,9 +72,15 @@ function DataPersistenceSystem:save(playerId, data)
     playerId = tostring(playerId)
     self.cache[playerId] = data
     if self.datastore then
-        pcall(function()
+        local ok, err = pcall(function()
             self.datastore:SetAsync(playerId, data)
         end)
+        if not ok and LoggingSystem and LoggingSystem.logAction then
+            LoggingSystem:logAction("datastore_set_fail", {player = playerId, error = tostring(err)})
+        end
+    end
+    if LoggingSystem and LoggingSystem.logAction then
+        LoggingSystem:logAction("save", {player = playerId})
     end
 end
 

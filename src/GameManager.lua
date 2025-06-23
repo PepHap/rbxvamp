@@ -779,5 +779,24 @@ function GameManager:savePlayerData(playerId, data)
     end
 end
 
+---Starts automatic saving for the given player id.
+--  The auto save system uses ``getSaveData`` as the provider.
+--  @param playerId string|number player identifier
+function GameManager:startAutoSave(playerId)
+    if self.autoSaveSystem and self.autoSaveSystem.start and self.saveSystem then
+        self.autoSaveSystem:start(self.saveSystem, playerId, function()
+            return GameManager:getSaveData()
+        end)
+    end
+end
+
+---Immediately writes the current save data using the auto save system.
+function GameManager:forceAutoSave()
+    if self.autoSaveSystem and self.autoSaveSystem.forceSave then
+        self.autoSaveSystem:forceSave()
+    end
+end
+
+
 
 return GameManager
