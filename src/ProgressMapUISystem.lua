@@ -110,11 +110,23 @@ function ProgressMapUI:update()
     local reward = LootSystem.getRewardInfo(stageType)
     local currency = LootSystem.getCurrencyType()
     local locName = loc and loc.name or ""
-    self.label.Text = string.format("%s: %s | %s %d | %d %s %s | +%d %s, +%d XP",
-        LocalizationSystem:get("Location"), locName,
-        LocalizationSystem:get("Floor"), pr.stage,
-        killsLeft, LocalizationSystem:get("kills to"), typeLabel,
-        reward.coins * (LevelSystem.currentLevel or 1), currency, reward.exp)
+    local parts = {
+        string.format("%s: %s", LocalizationSystem:get("Location"), locName),
+        string.format("%s %d", LocalizationSystem:get("Floor"), pr.stage),
+        string.format("%d %s %s", killsLeft, LocalizationSystem:get("kills to"), typeLabel),
+        string.format("+%d %s", reward.coins * (LevelSystem.currentLevel or 1), currency),
+        string.format("+%d XP", reward.exp)
+    }
+    if reward.ether and reward.ether > 0 then
+        table.insert(parts, string.format("+%d %s", reward.ether, LocalizationSystem:get("Ether")))
+    end
+    if reward.crystals and reward.crystals > 0 then
+        table.insert(parts, string.format("+%d %s", reward.crystals, LocalizationSystem:get("Crystals")))
+    end
+    if reward.gauge and reward.gauge > 0 then
+        table.insert(parts, string.format("+%d %s", reward.gauge, LocalizationSystem:get("Gauge")))
+    end
+    self.label.Text = table.concat(parts, " | ")
 end
 
 function ProgressMapUI:setVisible(on)
