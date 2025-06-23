@@ -31,12 +31,7 @@ function LootSystem.getRewardInfo(enemyType)
     return rewards[enemyType or "normal"] or rewards.normal
 end
 
----Public wrapper returning the currency type for the active location.
-function LootSystem.getCurrencyType()
-    return getCurrencyType()
-end
-
----Returns the currency key for the current location.
+--Returns the currency key for the current location.
 local function getCurrencyType()
     local loc = LocationSystem:getCurrent()
     if loc and loc.currency then
@@ -44,6 +39,12 @@ local function getCurrencyType()
     end
     return "gold"
 end
+
+---Public wrapper returning the currency type for the active location.
+function LootSystem.getCurrencyType()
+    return getCurrencyType()
+end
+
 
 ---Grants loot when an enemy is killed.
 -- @param enemy table enemy data (may include ``type`` field)
