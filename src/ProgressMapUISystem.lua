@@ -137,6 +137,9 @@ function ProgressMapUI:update()
     if reward.gauge and reward.gauge > 0 then
         table.insert(parts, string.format("+%d %s", reward.gauge, LocalizationSystem:get("Gauge")))
     end
+    local gauge = require(script.Parent:WaitForChild("RewardGaugeSystem"))
+    local percent = math.floor((gauge:getPercent() or 0) * 100)
+    table.insert(parts, string.format("%d%% %s", percent, LocalizationSystem:get("Gauge")))
     self.label.Text = table.concat(parts, " | ")
 end
 
