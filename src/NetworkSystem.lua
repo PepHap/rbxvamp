@@ -5,6 +5,7 @@
 
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
+local RemoteEventNames = require(script.Parent:WaitForChild("RemoteEventNames"))
 
 local NetworkSystem = {
     useRobloxObjects = EnvironmentUtil.detectRoblox(),
@@ -13,9 +14,10 @@ local NetworkSystem = {
 
 local ReplicatedStorage
 
-local function createRemoteEvent(name)
+local function createRemoteEvent(alias)
+    local realName = RemoteEventNames[alias] or alias
     if not NetworkSystem.useRobloxObjects then
-        return EventManager:Get(name)
+        return EventManager:Get(realName)
     end
     ReplicatedStorage = ReplicatedStorage or game:GetService("ReplicatedStorage")
     local folder = ReplicatedStorage:FindFirstChild("RemoteEvents")
@@ -24,63 +26,31 @@ local function createRemoteEvent(name)
         folder.Name = "RemoteEvents"
         folder.Parent = ReplicatedStorage
     end
-    local ev = folder:FindFirstChild(name)
+    local ev = folder:FindFirstChild(realName)
     if not ev then
         ev = Instance.new("RemoteEvent")
-        ev.Name = name
+        ev.Name = realName
         ev.Parent = folder
     end
     return ev
 end
 
 function NetworkSystem:start()
-    -- Create default events used by PartySystem and RaidSystem
-    self.events.PartyUpdated = createRemoteEvent("PartyUpdated")
-    self.events.RaidStatus = createRemoteEvent("RaidStatus")
-    self.events.RaidEvent = createRemoteEvent("RaidEvent")
-    self.events.RaidReward = createRemoteEvent("RaidReward")
-    self.events.PartyInvite = createRemoteEvent("PartyInvite")
-    self.events.PartyResponse = createRemoteEvent("PartyResponse")
-    self.events.PartyDisband = createRemoteEvent("PartyDisband")
-    self.events.PartyJoinFailed = createRemoteEvent("PartyJoinFailed")
-    self.events.PlayerState = createRemoteEvent("PlayerState")
-    self.events.RaidReady = createRemoteEvent("RaidReady")
-    self.events.LevelProgress = createRemoteEvent("LevelProgress")
-    self.events.CurrencyUpdate = createRemoteEvent("CurrencyUpdate")
-    self.events.PlayerLevelUpdate = createRemoteEvent("PlayerLevelUpdate")
-    self.events.GaugeUpdate = createRemoteEvent("GaugeUpdate")
-    self.events.GaugeOptions = createRemoteEvent("GaugeOptions")
-    self.events.GaugeReset = createRemoteEvent("GaugeReset")
-    self.events.RewardChoice = createRemoteEvent("RewardChoice")
-    self.events.RewardResult = createRemoteEvent("RewardResult")
-    self.events.ScoreboardUpdate = createRemoteEvent("ScoreboardUpdate")
-    self.events.DungeonRequest = createRemoteEvent("DungeonRequest")
-    self.events.DungeonState = createRemoteEvent("DungeonState")
-    self.events.DungeonProgress = createRemoteEvent("DungeonProgress")
-
-    -- Player level notifications
-    self.events.PlayerLevelUp = createRemoteEvent("PlayerLevelUp")
-
-    -- Level progression notifications
-    self.events.StageAdvance = createRemoteEvent("StageAdvance")
-    self.events.StageRollback = createRemoteEvent("StageRollback")
-  
-    self.events.RewardReroll = createRemoteEvent("RewardReroll")
-
-    -- Events for synchronizing enemy state with clients
-    self.events.EnemySpawn = createRemoteEvent("EnemySpawn")
-    self.events.EnemyRemove = createRemoteEvent("EnemyRemove")
-    self.events.EnemyUpdate = createRemoteEvent("EnemyUpdate")
-    -- Allow clients to request salvaging items on the server
-    self.events.SalvageRequest = createRemoteEvent("SalvageRequest")
-    self.events.SalvageResult = createRemoteEvent("SalvageResult")
-    self.events.PlayerAttack = createRemoteEvent("PlayerAttack")
-    -- Events used for client requests
-    self.events.PartyRequest = createRemoteEvent("PartyRequest")
-    self.events.RaidRequest = createRemoteEvent("RaidRequest")
-    -- Combat related requests
-    self.events.AttackRequest = createRemoteEvent("AttackRequest")
-    self.events.SkillRequest = createRemoteEvent("SkillRequest")
+    -- List of event aliases created by the system
+    local aliases = {
+        "PartyUpdated", "RaidStatus", "RaidEvent", "RaidReward", "PartyInvite",
+        "PartyResponse", "PartyDisband", "PartyJoinFailed", "PlayerState",
+        "RaidReady", "LevelProgress", "CurrencyUpdate", "PlayerLevelUpdate",
+        "GaugeUpdate", "GaugeOptions", "GaugeReset", "RewardChoice",
+        "RewardResult", "ScoreboardUpdate", "DungeonRequest", "DungeonState",
+        "DungeonProgress", "PlayerLevelUp", "StageAdvance", "StageRollback",
+        "RewardReroll", "EnemySpawn", "EnemyRemove", "EnemyUpdate",
+        "SalvageRequest", "SalvageResult", "PlayerAttack", "PartyRequest",
+        "RaidRequest", "AttackRequest", "SkillRequest"
+    }
+    for _, alias in ipairs(aliases) do
+        self.events[alias] = createRemoteEvent(alias)
+    end
 end
 
 function NetworkSystem:getEvent(name)
