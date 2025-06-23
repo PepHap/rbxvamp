@@ -138,6 +138,10 @@ function ProgressMapUI:update()
             mLabel = LocalizationSystem:get("Area Boss")
         end
         table.insert(parts, string.format("%d %s %s", milestoneKills, LocalizationSystem:get("kills to"), mLabel))
+        local mr = LootSystem.getRewardInfo(milestoneType)
+        if mr then
+            table.insert(parts, string.format("-> +%d %s", mr.coins * (LevelSystem.currentLevel or 1), currency))
+        end
     end
     table.insert(parts, string.format("+%d %s", reward.coins * (LevelSystem.currentLevel or 1), currency))
     table.insert(parts, string.format("+%d XP", reward.exp))

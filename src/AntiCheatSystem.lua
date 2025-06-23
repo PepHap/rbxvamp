@@ -6,6 +6,8 @@ local AntiCheatSystem = {
     currencyPerMinute = 1000,
     minAttackInterval = 0.2,
     maxMoveSpeed = 50,
+    teleportThreshold = 30,
+    kickOnTeleport = false,
     players = {},
     connections = {}
 }
@@ -72,6 +74,16 @@ function AntiCheatSystem:checkMovement(player, position)
         local dt = now - rec.lastTime
         if dt > 0 and dist / dt > self.maxMoveSpeed then
             warn("Possible teleport detected", player)
+            if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                local hrp = player.Character.HumanoidRootPart
+                if dist > (self.teleportThreshold or 30) then
+                    local last = rec.lastPos
+                    hrp.CFrame = CFrame.new(last.x, last.y, last.z)
+                end
+                if self.kickOnTeleport and player.Kick then
+                    player:Kick("Teleport detected")
+                end
+            end
         end
     end
     rec.lastPos = {x = position.x, y = position.y, z = position.z}
