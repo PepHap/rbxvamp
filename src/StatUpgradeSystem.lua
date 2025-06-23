@@ -57,6 +57,35 @@ function StatUpgradeSystem:upgradeStat(name, amount, currency)
     return true
 end
 
+---Upgrades a stat using ``currency`` or crystals when lacking funds.
+--  This behaves similar to ``upgradeStat`` but will attempt to purchase the
+--  required currency through ``CrystalExchangeSystem`` when the current balance
+--  is insufficient. The function returns ``true`` only when the upgrade and any
+--  currency exchange succeed.
+--  @param name string stat name
+--  @param amount number levels to add
+--  @param currency string currency key used for payment
+--  @return boolean success
+function StatUpgradeSystem:upgradeStatWithFallback(name, amount, currency)
+    local stat = self.stats[name]
+    local n = tonumber(amount)
+    if not stat or not n or n <= 0 then
+        return false
+    end
+    local cost = StatUpgradeSystem:getUpgradeCost(name, n)
+    if not CurrencySystem:spend(currency, cost) then
+        local CrystalExchangeSystem = require(script.Parent:WaitForChild("CrystalExchangeSystem"))
+        if not CrystalExchangeSystem:buyCurrency(currency, cost) then
+            return false
+        end
+        if not CurrencySystem:spend(currency, cost) then
+            return false
+        end
+    end
+    stat.level = stat.level + n
+    return true
+end
+
 ---Serializes the stat table for persistence.
 -- @return table serialized stats
 function StatUpgradeSystem:saveData()
