@@ -85,16 +85,22 @@ function GachaUI:start(manager)
 
     -- use a plain window frame; banner images were removed
     self.window = GuiUtil.createWindow("GachaWindow")
-    if UDim2 and type(UDim2.new)=="function" then
-        self.window.Size = UDim2.new(0, 300, 0, 170)
-        self.window.Position = UDim2.new(0.5, -150, 0.5, -85)
-    end
     parent(self.window, gui)
+
+    local layout = createInstance("UIListLayout")
+    layout.Name = "ButtonLayout"
+    if Enum and Enum.FillDirection then
+        layout.FillDirection = Enum.FillDirection.Vertical
+        layout.SortOrder = Enum.SortOrder.LayoutOrder
+    end
+    if UDim2 and type(UDim2.new)=="function" then
+        layout.Padding = UDim2.new(0,5,0,5)
+    end
+    parent(layout, self.window)
 
     self.resultLabel = createInstance("TextLabel")
     self.resultLabel.Text = "Roll result"
     if UDim2 and type(UDim2.new)=="function" then
-        self.resultLabel.Position = UDim2.new(0, 5, 0, 5)
         self.resultLabel.Size = UDim2.new(1, -10, 0, 25)
     end
     parent(self.resultLabel, self.window)
@@ -102,7 +108,6 @@ function GachaUI:start(manager)
     self.skillButton = createInstance("TextButton")
     self.skillButton.Text = "Roll Skill"
     if UDim2 and type(UDim2.new)=="function" then
-        self.skillButton.Position = UDim2.new(0, 5, 0, 35)
         self.skillButton.Size = UDim2.new(1, -10, 0, 30)
     end
     parent(self.skillButton, self.window)
@@ -110,7 +115,6 @@ function GachaUI:start(manager)
     self.companionButton = createInstance("TextButton")
     self.companionButton.Text = "Roll Companion"
     if UDim2 and type(UDim2.new)=="function" then
-        self.companionButton.Position = UDim2.new(0, 5, 0, 70)
         self.companionButton.Size = UDim2.new(1, -10, 0, 30)
     end
     parent(self.companionButton, self.window)
@@ -118,7 +122,6 @@ function GachaUI:start(manager)
     self.equipmentButton = createInstance("TextButton")
     self.equipmentButton.Text = "Roll Weapon"
     if UDim2 and type(UDim2.new)=="function" then
-        self.equipmentButton.Position = UDim2.new(0, 5, 0, 105)
         self.equipmentButton.Size = UDim2.new(1, -10, 0, 30)
     end
     parent(self.equipmentButton, self.window)

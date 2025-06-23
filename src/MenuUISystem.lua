@@ -6,6 +6,7 @@ local MenuUI = {
     useRobloxObjects = detectRoblox(),
     gui = nil,
     window = nil,
+    tabFrame = nil,
     contentFrame = nil,
     tabs = {},
     tabButtons = {},
@@ -126,10 +127,26 @@ function MenuUI:start()
     local gui = ensureGui()
     self.window = GuiUtil.createWindow("MenuWindow")
     if UDim2 and type(UDim2.new)=="function" then
-        self.window.Size = UDim2.new(1, 0, 1, 0)
-        self.window.Position = UDim2.new(0, 0, 0, 0)
+        self.window.Size = UDim2.new(1,0,1,0)
+        self.window.Position = UDim2.new(0,0,0,0)
     end
     parent(self.window, gui)
+
+
+    self.tabFrame = createInstance("Frame")
+    if UDim2 and type(UDim2.new)=="function" then
+        self.tabFrame.Position = UDim2.new(0,0,0,0)
+        self.tabFrame.Size = UDim2.new(1,0,0,30)
+    end
+    parent(self.tabFrame, self.window)
+
+    local layout = createInstance("UIListLayout")
+    layout.Name = "TabLayout"
+    if Enum and Enum.FillDirection then
+        layout.FillDirection = Enum.FillDirection.Horizontal
+        layout.SortOrder = Enum.SortOrder.LayoutOrder
+    end
+    parent(layout, self.tabFrame)
 
     self.contentFrame = createInstance("Frame")
     if UDim2 and type(UDim2.new)=="function" then
@@ -142,10 +159,10 @@ function MenuUI:start()
         local btn = createInstance("TextButton")
         btn.Text = tab.name
         if UDim2 and type(UDim2.new)=="function" then
-            btn.Position = UDim2.new(0, (i-1)*100, 0, 0)
             btn.Size = UDim2.new(0, 100, 0, 30)
         end
-        parent(btn, self.window)
+        btn.LayoutOrder = i
+        parent(btn, self.tabFrame)
         self.tabButtons[i] = btn
         GuiUtil.connectButton(btn, function()
             MenuUI:showTab(i)
