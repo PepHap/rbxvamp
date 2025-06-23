@@ -271,15 +271,30 @@ function GuiUtil.highlightButton(button, on)
     local highlight = Theme and Theme.colors and toColor3(Theme.colors.highlight)
     if not highlight then return end
     local normal = toColor3(button.BackgroundColor3)
-    if button._origColor == nil then
-        button._origColor = normal
-    end
-    local target = on and highlight or button._origColor
-    if TweenService and typeof and typeof(button) == "Instance" then
-        local tween = TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = target})
-        tween:Play()
+
+    if typeof and typeof(button) == "Instance" then
+        -- Instances can't have arbitrary fields, store the color in an Attribute
+        if button:GetAttribute("_origColor") == nil then
+            button:SetAttribute("_origColor", normal)
+        end
+        local target = on and highlight or button:GetAttribute("_origColor")
+        if TweenService then
+            local tween = TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = target})
+            tween:Play()
+        else
+            button.BackgroundColor3 = target
+        end
     else
-        button.BackgroundColor3 = target
+        if button._origColor == nil then
+            button._origColor = normal
+        end
+        local target = on and highlight or button._origColor
+        if TweenService then
+            local tween = TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = target})
+            tween:Play()
+        else
+            button.BackgroundColor3 = target
+        end
     end
 end
 
