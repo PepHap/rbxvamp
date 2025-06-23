@@ -12,6 +12,8 @@ local ProgressMapUI = {
 }
 
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
+local LootSystem = require(script.Parent:WaitForChild("LootSystem"))
+local LocalizationSystem = require(script.Parent:WaitForChild("LocalizationSystem"))
 
 local function createInstance(className)
     if ProgressMapUI.useRobloxObjects and typeof and Instance and type(Instance.new)=="function" then
@@ -102,13 +104,15 @@ function ProgressMapUI:update()
     if bossName then
         typeLabel = bossName
     elseif stageType == "mini" then
-        typeLabel = "Mini Boss"
+        typeLabel = LocalizationSystem:get("Mini Boss")
     elseif stageType == "boss" then
-        typeLabel = "Boss"
+        typeLabel = LocalizationSystem:get("Boss")
     elseif stageType == "location" then
-        typeLabel = "Area Boss"
+        typeLabel = LocalizationSystem:get("Area Boss")
     end
-    self.label.Text = string.format("Floor %d | %d kills to %s", pr.stage, killsLeft, typeLabel)
+    local reward = LootSystem.getRewardInfo(stageType)
+    local currency = LootSystem.getCurrencyType()
+    self.label.Text = string.format("%s %d | %d %s %s | +%d %s, +%d XP", LocalizationSystem:get("Floor"), pr.stage, killsLeft, LocalizationSystem:get("kills to"), typeLabel, reward.coins * (LevelSystem.currentLevel or 1), currency, reward.exp)
 end
 
 function ProgressMapUI:setVisible(on)
