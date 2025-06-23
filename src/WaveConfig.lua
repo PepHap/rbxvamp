@@ -13,6 +13,9 @@ local WaveConfig = {
             {type = "Goblin", count = 5},
             {type = "Ogre", count = 1}
         },
+        [4] = {
+            {type = "Skeleton", count = 6}
+        },
         [5] = {
             boss = "Ogre"
         },

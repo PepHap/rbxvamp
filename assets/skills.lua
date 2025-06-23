@@ -94,6 +94,16 @@ return {
         damage = 50,
         radius = 5,
         effects = {"Pierce"}
+    },
+    {
+        name = "Twin Shot",
+        rarity = "B",
+        image = "rbxassetid://123464",
+        module = "TwinShot",
+        cooldown = 4,
+        damage = 8,
+        radius = 4,
+        effects = {"Pierce"}
     }
 }
 
