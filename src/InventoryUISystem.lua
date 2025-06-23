@@ -424,6 +424,11 @@ local function renderStats(container, items, stats, setSys)
     for _, name in ipairs(keys) do
         local lbl = createInstance("TextLabel")
         lbl.Text = string.format("%s: %s", name, tostring(combined[name]))
+        if UDim2 and type(UDim2.new)=="function" then
+            lbl.Size = UDim2.new(1, -10, 0, 20)
+            lbl.Position = UDim2.new(0, 5, 0, 0)
+            lbl.TextXAlignment = Enum and Enum.TextXAlignment.Left or 0
+        end
         parent(lbl, container)
     end
 end
@@ -442,7 +447,8 @@ function InventoryUI:update()
         self.equipmentFrame.Position = UDim2.new(0, 0, 0, 0)
         self.equipmentFrame.Size = UDim2.new(0.25, 0, 1, 0)
     end
-    GuiUtil.applyResponsive(self.equipmentFrame, 4, 150, 100)
+    -- allow the equipment column to stretch the full screen height
+    GuiUtil.applyResponsive(self.equipmentFrame, 0.25, 150, 100, 2000, 2000)
     GuiUtil.addCrossDecor(self.equipmentFrame)
     existing = parentGui.FindFirstChild and parentGui:FindFirstChild("Inventory")
     self.inventoryFrame = self.inventoryFrame or existing or createInstance("Frame")
@@ -451,7 +457,8 @@ function InventoryUI:update()
         self.inventoryFrame.Position = UDim2.new(0.25, 0, 0, 0)
         self.inventoryFrame.Size = UDim2.new(0.5, 0, 1, 0)
     end
-    GuiUtil.applyResponsive(self.inventoryFrame, 4, 150, 100)
+    -- center inventory grid with large max size for fullscreen window
+    GuiUtil.applyResponsive(self.inventoryFrame, 0.5, 150, 100, 2000, 2000)
     GuiUtil.addCrossDecor(self.inventoryFrame)
     existing = parentGui.FindFirstChild and parentGui:FindFirstChild("Stats")
     self.statsFrame = self.statsFrame or existing or createInstance("Frame")
@@ -460,7 +467,8 @@ function InventoryUI:update()
         self.statsFrame.Position = UDim2.new(0.75, 0, 0, 0)
         self.statsFrame.Size = UDim2.new(0.25, 0, 1, 0)
     end
-    GuiUtil.applyResponsive(self.statsFrame, 4, 150, 100)
+    -- stats column shares the same dimensions as the equipment column
+    GuiUtil.applyResponsive(self.statsFrame, 0.25, 150, 100, 2000, 2000)
     GuiUtil.addCrossDecor(self.statsFrame)
 
     clearChildren(self.equipmentFrame)
