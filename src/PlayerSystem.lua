@@ -77,11 +77,13 @@ end
 ---Handles player death and notifies the LevelSystem.
 function PlayerSystem:onDeath()
     -- load LevelSystem here to avoid circular require error
-    if not LevelSystem then
-        LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
-    end
-    if LevelSystem and LevelSystem.onPlayerDeath then
-        LevelSystem:onPlayerDeath()
+    if RunService:IsServer() then
+        if not LevelSystem then
+            LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+        end
+        if LevelSystem and LevelSystem.onPlayerDeath then
+            LevelSystem:onPlayerDeath()
+        end
     end
     self.health = self.maxHealth
     local spawnPos = getSpawnPosition()
