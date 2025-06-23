@@ -51,6 +51,12 @@ end
 function LevelSystem:scaleStats(level)
     level = level or self.currentLevel or 1
     local factor = 1 + (level - 1) * 0.05
+    -- bosses and mini bosses receive additional scaling
+    if level % 10 == 0 then
+        factor = factor * 1.2
+    elseif level % 5 == 0 then
+        factor = factor * 1.1
+    end
     EnemySystem.healthScale = factor
     EnemySystem.damageScale = factor
 end
