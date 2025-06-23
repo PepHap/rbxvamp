@@ -76,71 +76,77 @@ local function connect(btn, callback)
     GuiUtil.connectButton(btn, callback)
 end
 
-function GachaUI:start(manager)
+function GachaUI:start(manager, parentGui)
     self.gameManager = manager or self.gameManager or require(script.Parent:WaitForChild("GameManager"))
-    if self.window then
-        return
+    local guiRoot = ensureGui()
+    local parentTarget = parentGui or guiRoot
+    local created = false
+    if not self.window then
+        -- use a plain window frame; banner images were removed
+        self.window = GuiUtil.createWindow("GachaWindow")
+        created = true
     end
-    local gui = ensureGui()
-
-    -- use a plain window frame; banner images were removed
-    self.window = GuiUtil.createWindow("GachaWindow")
-    parent(self.window, gui)
-
-    local closeBtn = createInstance("TextButton")
-    closeBtn.Name = "CloseButton"
-    closeBtn.Text = "X"
-    if UDim2 and type(UDim2.new)=="function" then
-        closeBtn.Size = UDim2.new(0,20,0,20)
-        closeBtn.Position = UDim2.new(1,-25,0,5)
+    if self.window.Parent ~= parentTarget then
+        parent(self.window, parentTarget)
     end
-    parent(closeBtn, self.window)
-    connect(closeBtn, function()
-        GachaUI:toggle()
-    end)
+    self.gui = parentTarget
 
-    local layout = createInstance("UIListLayout")
-    layout.Name = "ButtonLayout"
-    if Enum and Enum.FillDirection then
-        layout.FillDirection = Enum.FillDirection.Vertical
-        layout.SortOrder = Enum.SortOrder.LayoutOrder
-    end
-    if UDim and type(UDim.new) == "function" then
-        layout.Padding = UDim.new(0,5)
-    end
-    parent(layout, self.window)
+    if created then
+        local closeBtn = createInstance("TextButton")
+        closeBtn.Name = "CloseButton"
+        closeBtn.Text = "X"
+        if UDim2 and type(UDim2.new)=="function" then
+            closeBtn.Size = UDim2.new(0,20,0,20)
+            closeBtn.Position = UDim2.new(1,-25,0,5)
+        end
+        parent(closeBtn, self.window)
+        connect(closeBtn, function()
+            GachaUI:toggle()
+        end)
 
-    self.resultLabel = createInstance("TextLabel")
-    self.resultLabel.Text = "Roll result"
-    if UDim2 and type(UDim2.new)=="function" then
-        self.resultLabel.Size = UDim2.new(1, -10, 0, 25)
-    end
-    parent(self.resultLabel, self.window)
+        local layout = createInstance("UIListLayout")
+        layout.Name = "ButtonLayout"
+        if Enum and Enum.FillDirection then
+            layout.FillDirection = Enum.FillDirection.Vertical
+            layout.SortOrder = Enum.SortOrder.LayoutOrder
+        end
+        if UDim and type(UDim.new) == "function" then
+            layout.Padding = UDim.new(0,5)
+        end
+        parent(layout, self.window)
 
-    self.skillButton = createInstance("TextButton")
-    self.skillButton.Text = "Roll Skill"
-    if UDim2 and type(UDim2.new)=="function" then
-        self.skillButton.Size = UDim2.new(1, -10, 0, 30)
-    end
-    parent(self.skillButton, self.window)
+        self.resultLabel = createInstance("TextLabel")
+        self.resultLabel.Text = "Roll result"
+        if UDim2 and type(UDim2.new)=="function" then
+            self.resultLabel.Size = UDim2.new(1, -10, 0, 25)
+        end
+        parent(self.resultLabel, self.window)
 
-    self.companionButton = createInstance("TextButton")
-    self.companionButton.Text = "Roll Companion"
-    if UDim2 and type(UDim2.new)=="function" then
-        self.companionButton.Size = UDim2.new(1, -10, 0, 30)
-    end
-    parent(self.companionButton, self.window)
+        self.skillButton = createInstance("TextButton")
+        self.skillButton.Text = "Roll Skill"
+        if UDim2 and type(UDim2.new)=="function" then
+            self.skillButton.Size = UDim2.new(1, -10, 0, 30)
+        end
+        parent(self.skillButton, self.window)
 
-    self.equipmentButton = createInstance("TextButton")
-    self.equipmentButton.Text = "Roll Weapon"
-    if UDim2 and type(UDim2.new)=="function" then
-        self.equipmentButton.Size = UDim2.new(1, -10, 0, 30)
-    end
-    parent(self.equipmentButton, self.window)
+        self.companionButton = createInstance("TextButton")
+        self.companionButton.Text = "Roll Companion"
+        if UDim2 and type(UDim2.new)=="function" then
+            self.companionButton.Size = UDim2.new(1, -10, 0, 30)
+        end
+        parent(self.companionButton, self.window)
 
-    connect(self.skillButton, function() GachaUI:rollSkill() end)
-    connect(self.companionButton, function() GachaUI:rollCompanion() end)
-    connect(self.equipmentButton, function() GachaUI:rollEquipment("Weapon") end)
+        self.equipmentButton = createInstance("TextButton")
+        self.equipmentButton.Text = "Roll Weapon"
+        if UDim2 and type(UDim2.new)=="function" then
+            self.equipmentButton.Size = UDim2.new(1, -10, 0, 30)
+        end
+        parent(self.equipmentButton, self.window)
+
+        connect(self.skillButton, function() GachaUI:rollSkill() end)
+        connect(self.companionButton, function() GachaUI:rollCompanion() end)
+        connect(self.equipmentButton, function() GachaUI:rollEquipment("Weapon") end)
+    end
 
     self:setVisible(self.visible)
 end
