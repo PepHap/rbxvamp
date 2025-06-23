@@ -71,5 +71,6 @@ return {
         {name = "Omega Breaker", rarity = "SSS", slot = "Weapon", stats = {attack = 40}},
         {name = "Celestial Spear", rarity = "SS", slot = "Weapon", stats = {attack = 22}},
         {name = "Ethereal Blade", rarity = "SS", slot = "Weapon", stats = {attack = 15, magic = 15}},
+        {name = "Storm Breaker", rarity = "SSS", slot = "Weapon", stats = {attack = 45, critChance = 0.05}},
     },
 }

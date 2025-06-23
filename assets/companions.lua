@@ -6,5 +6,6 @@ return {
     {name = "Golem", rarity = "S"},
     {name = "Phoenix", rarity = "SS"},
     {name = "Griffin", rarity = "A"},
-    {name = "Shadow Wolf", rarity = "A"}
+    {name = "Shadow Wolf", rarity = "A"},
+    {name = "Celestial Fox", rarity = "SSS"}
 }

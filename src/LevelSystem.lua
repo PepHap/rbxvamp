@@ -180,7 +180,7 @@ function LevelSystem:advance()
 
     self.currentLevel = nextLevel
     self.killCount = 0
-    self.requiredKills = self.requiredKills + 5
+    self.requiredKills = 15
     updateWaveSize()
 
     -- Record the highest stage cleared which is the previous level.
@@ -222,7 +222,7 @@ function LevelSystem:onPlayerDeath()
     if lvl % 5 == 0 and lvl % 10 ~= 0 then
         self.currentLevel = math.max(lvl - 1, 1)
         self.killCount = 0
-        self.requiredKills = self.requiredKills - 5
+        self.requiredKills = 15
         updateWaveSize()
         rolledBack = true
     end
@@ -252,6 +252,8 @@ function LevelSystem:loadData(data)
     end
     if type(data.requiredKills) == "number" then
         self.requiredKills = data.requiredKills
+    else
+        self.requiredKills = 15
     end
     if type(data.highest) == "number" then
         self.highestClearedStage = data.highest
