@@ -18,6 +18,9 @@ LocalizationSystem.translations.en = {
     ["Mini Boss"] = "Mini Boss",
     ["Area Boss"] = "Area Boss",
     ["Location"] = "Location",
+    ["Ether"] = "Ether",
+    ["Crystals"] = "Crystals",
+    ["Gauge"] = "Gauge",
 }
 
 -- Russian translations covering common UI labels
@@ -28,6 +31,9 @@ LocalizationSystem.translations.ru = {
     ["Mini Boss"] = "Мини-босс",
     ["Area Boss"] = "Босс локации",
     ["Location"] = "Локация",
+    ["Ether"] = "Эфир",
+    ["Crystals"] = "Кристаллы",
+    ["Gauge"] = "Шкала",
 }
 
 ---Returns a localized string for the given key or the key itself.
