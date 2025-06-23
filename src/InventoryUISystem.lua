@@ -183,6 +183,11 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     if UDim2 and type(UDim2.new)=="function" then
         self.window.Size = UDim2.new(1, 0, 1, 0)
         self.window.Position = UDim2.new(0, 0, 0, 0)
+        -- Remove responsive constraints so the window truly fills the screen
+        local aspect = self.window:FindFirstChild("Aspect")
+        if aspect and aspect.Destroy then aspect:Destroy() end
+        local sizeLimit = self.window:FindFirstChild("SizeLimit")
+        if sizeLimit and sizeLimit.Destroy then sizeLimit:Destroy() end
     end
     -- slightly visible background for readability
     if self.window.BackgroundTransparency ~= nil then
@@ -401,6 +406,15 @@ local function renderStats(container, items, stats, setSys)
             layout.Padding = UDim.new(0, 2)
         end
         parent(layout, container)
+        local padding = createInstance("UIPadding")
+        padding.Name = "Padding"
+        if UDim and type(UDim.new)=="function" then
+            padding.PaddingLeft = UDim.new(0, 4)
+            padding.PaddingRight = UDim.new(0, 4)
+            padding.PaddingTop = UDim.new(0, 4)
+            padding.PaddingBottom = UDim.new(0, 4)
+        end
+        parent(padding, container)
     end
     local combined = {}
     if stats then
@@ -424,6 +438,15 @@ local function renderStats(container, items, stats, setSys)
     for _, name in ipairs(keys) do
         local lbl = createInstance("TextLabel")
         lbl.Text = string.format("%s: %s", name, tostring(combined[name]))
+        if Enum and Enum.TextXAlignment then
+            lbl.TextXAlignment = Enum.TextXAlignment.Left
+        end
+        if UDim2 and type(UDim2.new)=="function" then
+            lbl.Size = UDim2.new(1, -10, 0, 18)
+        end
+        if Enum and Enum.AutomaticSize then
+            lbl.AutomaticSize = Enum.AutomaticSize.XY
+        end
         parent(lbl, container)
     end
 end
@@ -442,7 +465,6 @@ function InventoryUI:update()
         self.equipmentFrame.Position = UDim2.new(0, 0, 0, 0)
         self.equipmentFrame.Size = UDim2.new(0.25, 0, 1, 0)
     end
-    GuiUtil.applyResponsive(self.equipmentFrame, 4, 150, 100)
     GuiUtil.addCrossDecor(self.equipmentFrame)
     existing = parentGui.FindFirstChild and parentGui:FindFirstChild("Inventory")
     self.inventoryFrame = self.inventoryFrame or existing or createInstance("Frame")
@@ -451,7 +473,6 @@ function InventoryUI:update()
         self.inventoryFrame.Position = UDim2.new(0.25, 0, 0, 0)
         self.inventoryFrame.Size = UDim2.new(0.5, 0, 1, 0)
     end
-    GuiUtil.applyResponsive(self.inventoryFrame, 4, 150, 100)
     GuiUtil.addCrossDecor(self.inventoryFrame)
     existing = parentGui.FindFirstChild and parentGui:FindFirstChild("Stats")
     self.statsFrame = self.statsFrame or existing or createInstance("Frame")
@@ -460,7 +481,6 @@ function InventoryUI:update()
         self.statsFrame.Position = UDim2.new(0.75, 0, 0, 0)
         self.statsFrame.Size = UDim2.new(0.25, 0, 1, 0)
     end
-    GuiUtil.applyResponsive(self.statsFrame, 4, 150, 100)
     GuiUtil.addCrossDecor(self.statsFrame)
 
     clearChildren(self.equipmentFrame)
