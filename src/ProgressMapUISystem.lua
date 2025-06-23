@@ -94,7 +94,7 @@ function ProgressMapUI:update()
     parent(self.label, self.window or gui)
     local pr = ps:getProgress()
     local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
-    local _, stageType, killsLeft, bossName = LevelSystem:getNextStageInfo()
+    local _, stageType, killsLeft, bossName, milestoneKills, milestoneType = LevelSystem:getNextStageInfo()
     local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
     local loc = LocationSystem:getCurrent()
     local typeLabel = stageType or ""
@@ -114,9 +114,20 @@ function ProgressMapUI:update()
         string.format("%s: %s", LocalizationSystem:get("Location"), locName),
         string.format("%s %d", LocalizationSystem:get("Floor"), pr.stage),
         string.format("%d %s %s", killsLeft, LocalizationSystem:get("kills to"), typeLabel),
-        string.format("+%d %s", reward.coins * (LevelSystem.currentLevel or 1), currency),
-        string.format("+%d XP", reward.exp)
     }
+    if milestoneKills and milestoneType then
+        local mLabel = milestoneType
+        if milestoneType == "mini" then
+            mLabel = LocalizationSystem:get("Mini Boss")
+        elseif milestoneType == "boss" then
+            mLabel = LocalizationSystem:get("Boss")
+        elseif milestoneType == "location" then
+            mLabel = LocalizationSystem:get("Area Boss")
+        end
+        table.insert(parts, string.format("%d %s %s", milestoneKills, LocalizationSystem:get("kills to"), mLabel))
+    end
+    table.insert(parts, string.format("+%d %s", reward.coins * (LevelSystem.currentLevel or 1), currency))
+    table.insert(parts, string.format("+%d XP", reward.exp))
     if reward.ether and reward.ether > 0 then
         table.insert(parts, string.format("+%d %s", reward.ether, LocalizationSystem:get("Ether")))
     end
