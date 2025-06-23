@@ -106,6 +106,19 @@ end
 
 local function renderSkills(container, sys)
     clearChildren(container)
+    local layout = container:FindFirstChild("ListLayout")
+    if not layout then
+        layout = createInstance("UIListLayout")
+        layout.Name = "ListLayout"
+        if Enum and Enum.FillDirection then
+            layout.FillDirection = Enum.FillDirection.Vertical
+            layout.SortOrder = Enum.SortOrder.LayoutOrder
+        end
+        if UDim2 and type(UDim2.new)=="function" then
+            layout.Padding = UDim2.new(0, 5, 0, 5)
+        end
+        parent(layout, container)
+    end
     if #sys.skills == 0 then
         local none = createInstance("TextLabel")
         none.Text = "No skills available"
@@ -116,9 +129,9 @@ local function renderSkills(container, sys)
         local frame = createInstance("Frame")
         frame.Name = skill.name .. "Frame"
         if UDim2 and type(UDim2.new)=="function" then
-            frame.Position = UDim2.new(0, 5, 0, (i-1)*35)
             frame.Size = UDim2.new(1, -10, 0, 30)
         end
+        GuiUtil.applyResponsive(frame, 6, 200, 30, 800, 40)
         parent(frame, container)
 
         local label = createInstance("TextLabel")
@@ -171,6 +184,17 @@ function SkillUISystem:update()
     if not container then
         container = createInstance("Frame")
         container.Name = "SkillList"
+        GuiUtil.applyResponsive(container, 1, 150, 100, 400, 300)
+        local layout = createInstance("UIListLayout")
+        layout.Name = "ListLayout"
+        if Enum and Enum.FillDirection then
+            layout.FillDirection = Enum.FillDirection.Vertical
+            layout.SortOrder = Enum.SortOrder.LayoutOrder
+        end
+        if UDim2 and type(UDim2.new)=="function" then
+            layout.Padding = UDim2.new(0, 5, 0, 5)
+        end
+        parent(layout, container)
     end
     parent(container, parentGui)
     self.skillListFrame = container
