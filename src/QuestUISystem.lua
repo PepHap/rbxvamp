@@ -76,20 +76,24 @@ function QuestUISystem:update()
         container:ClearAllChildren()
     end
 
+    local layout = container:FindFirstChild("QuestLayout")
+    if not layout then
+        layout = createInstance("UIListLayout")
+        layout.Name = "QuestLayout"
+        if UDim2 and type(UDim2.new)=="function" then
+            layout.Padding = UDim2.new(0,5,0,5)
+        end
+        parent(layout, container)
+    end
+
     for id, q in pairs(qs.quests) do
         local frame = createInstance("Frame")
         frame.Name = id .. "Frame"
         if UDim2 and type(UDim2.new)=="function" then
-            local count = 0
-            if type(container) == "table" and container.children then
-                count = #container.children
-            elseif container.GetChildren then
-                count = #container:GetChildren()
-            end
-            frame.Position = UDim2.new(0, 5, 0, count*35)
             frame.Size = UDim2.new(1, -10, 0, 30)
         end
         parent(frame, container)
+        GuiUtil.applyResponsive(frame, 6, 200, 30, 800, 40)
 
         local label = createInstance("TextLabel")
         label.Name = "ProgressLabel"

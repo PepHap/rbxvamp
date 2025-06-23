@@ -111,6 +111,60 @@ function GuiUtil.getPlayerGui()
     return nil
 end
 
+---Adds UIAspectRatioConstraint and UISizeConstraint for adaptive sizing.
+---@param frame table|Instance Frame to modify
+---@param ratio number? desired aspect ratio
+---@param minX number? minimum width in pixels
+---@param minY number? minimum height in pixels
+---@param maxX number? maximum width in pixels
+---@param maxY number? maximum height in pixels
+function GuiUtil.applyResponsive(frame, ratio, minX, minY, maxX, maxY)
+    if not frame then return end
+    ratio = ratio or 1.5
+    local aspect = createInstance("UIAspectRatioConstraint")
+    aspect.Name = "Aspect"
+    if aspect.AspectRatio ~= nil then
+        aspect.AspectRatio = ratio
+    end
+    parent(aspect, frame)
+
+    local sizeConst = createInstance("UISizeConstraint")
+    sizeConst.Name = "SizeLimit"
+    if sizeConst.MinSize and Vector2 and Vector2.new then
+        sizeConst.MinSize = Vector2.new(minX or 150, minY or 100)
+        sizeConst.MaxSize = Vector2.new(maxX or 600, maxY or 400)
+    elseif type(sizeConst) == "table" then
+        sizeConst.MinSize = {x = minX or 150, y = minY or 100}
+        sizeConst.MaxSize = {x = maxX or 600, y = maxY or 400}
+    end
+    parent(sizeConst, frame)
+end
+
+---Adds a simple cross decoration using thin Frames around the edges.
+---@param frame table|Instance Frame to decorate
+function GuiUtil.addCrossDecor(frame)
+    if not frame then return end
+    local positions = {
+        Top = {UDim2.new(0,0,0,0), UDim2.new(1,0,0,2)},
+        Bottom = {UDim2.new(0,0,1,-2), UDim2.new(1,0,0,2)},
+        Left = {UDim2.new(0,0,0,0), UDim2.new(0,2,1,0)},
+        Right = {UDim2.new(1,-2,0,0), UDim2.new(0,2,1,0)},
+    }
+    for name, vals in pairs(positions) do
+        local bar = createInstance("Frame")
+        bar.Name = name
+        bar.BorderSizePixel = 0
+        if Theme and Theme.colors then
+            bar.BackgroundColor3 = toColor3(Theme.colors.buttonBackground)
+        end
+        if UDim2 and type(UDim2.new)=="function" then
+            bar.Position = vals[1]
+            bar.Size = vals[2]
+        end
+        parent(bar, frame)
+    end
+end
+
 ---Creates a basic window Frame. A background image asset id may be specified,
 ---though no images are bundled in the repository so it remains text-only.
 ---When running outside of Roblox, table objects are used instead of instances.
@@ -153,6 +207,8 @@ function GuiUtil.createWindow(name, image)
     if Theme and Theme.styleWindow then
         Theme.styleWindow(frame)
     end
+    GuiUtil.applyResponsive(frame)
+    GuiUtil.addCrossDecor(frame)
     return frame
 end
 
