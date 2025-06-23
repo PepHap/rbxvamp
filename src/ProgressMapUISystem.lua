@@ -9,11 +9,13 @@ local ProgressMapUI = {
     label = nil,
     progressSystem = nil,
     visible = false,
+    connections = {},
 }
 
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local LootSystem = require(script.Parent:WaitForChild("LootSystem"))
 local LocalizationSystem = require(script.Parent:WaitForChild("LocalizationSystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 
 local function createInstance(className)
     if ProgressMapUI.useRobloxObjects and typeof and Instance and type(Instance.new)=="function" then
@@ -93,6 +95,24 @@ function ProgressMapUI:start(ps)
     parent(self.label, self.window)
     self:update()
     self:setVisible(self.visible)
+
+    if NetworkSystem and NetworkSystem.onClientEvent then
+        if not self.connections.levelProgress then
+            self.connections.levelProgress = NetworkSystem:onClientEvent("LevelProgress", function()
+                ProgressMapUI:update()
+            end)
+        end
+        if not self.connections.stageAdvance then
+            self.connections.stageAdvance = NetworkSystem:onClientEvent("StageAdvance", function()
+                ProgressMapUI:update()
+            end)
+        end
+        if not self.connections.stageRollback then
+            self.connections.stageRollback = NetworkSystem:onClientEvent("StageRollback", function()
+                ProgressMapUI:update()
+            end)
+        end
+    end
 end
 
 function ProgressMapUI:update()
