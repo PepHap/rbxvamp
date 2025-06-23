@@ -425,6 +425,8 @@ function InventoryUI:update()
         self.equipmentFrame.Position = UDim2.new(0, 0, 0, 0)
         self.equipmentFrame.Size = UDim2.new(0.25, 0, 1, 0)
     end
+    GuiUtil.applyResponsive(self.equipmentFrame, 4, 150, 100)
+    GuiUtil.addCrossDecor(self.equipmentFrame)
     existing = parentGui.FindFirstChild and parentGui:FindFirstChild("Inventory")
     self.inventoryFrame = self.inventoryFrame or existing or createInstance("Frame")
     self.inventoryFrame.Name = "Inventory"
@@ -432,6 +434,8 @@ function InventoryUI:update()
         self.inventoryFrame.Position = UDim2.new(0.25, 0, 0, 0)
         self.inventoryFrame.Size = UDim2.new(0.5, 0, 1, 0)
     end
+    GuiUtil.applyResponsive(self.inventoryFrame, 4, 150, 100)
+    GuiUtil.addCrossDecor(self.inventoryFrame)
     existing = parentGui.FindFirstChild and parentGui:FindFirstChild("Stats")
     self.statsFrame = self.statsFrame or existing or createInstance("Frame")
     self.statsFrame.Name = "Stats"
@@ -439,6 +443,8 @@ function InventoryUI:update()
         self.statsFrame.Position = UDim2.new(0.75, 0, 0, 0)
         self.statsFrame.Size = UDim2.new(0.25, 0, 1, 0)
     end
+    GuiUtil.applyResponsive(self.statsFrame, 4, 150, 100)
+    GuiUtil.addCrossDecor(self.statsFrame)
 
     clearChildren(self.equipmentFrame)
     clearChildren(self.inventoryFrame)

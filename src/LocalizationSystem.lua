@@ -19,6 +19,15 @@ LocalizationSystem.translations.en = {
     ["Area Boss"] = "Area Boss",
 }
 
+-- Russian translations covering common UI labels
+LocalizationSystem.translations.ru = {
+    ["Floor"] = "Этаж",
+    ["kills to"] = "убить до",
+    ["Boss"] = "Босс",
+    ["Mini Boss"] = "Мини-босс",
+    ["Area Boss"] = "Босс локации",
+}
+
 ---Returns a localized string for the given key or the key itself.
 function LocalizationSystem:get(key)
     local lang = "en"
