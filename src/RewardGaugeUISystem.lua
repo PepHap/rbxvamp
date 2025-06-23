@@ -7,6 +7,7 @@ local RewardGaugeUISystem = {
     gui = nil,
     gaugeLabel = nil,
     optionButtons = nil,
+    layout = nil,
     visible = false,
     window = nil,
 }
@@ -105,6 +106,16 @@ function RewardGaugeUISystem:start()
 
         self.gaugeLabel = createInstance("TextLabel")
         parent(self.gaugeLabel, self.window)
+
+        self.layout = createInstance("UIListLayout")
+        if UDim and type(UDim.new) == "function" then
+            self.layout.Padding = UDim.new(0, 5)
+        end
+        if Enum and Enum.FillDirection then
+            self.layout.FillDirection = Enum.FillDirection.Vertical
+            self.layout.SortOrder = Enum.SortOrder.LayoutOrder
+        end
+        parent(self.layout, self.window)
     end
     self:update()
     self:setVisible(self.visible)
@@ -153,6 +164,17 @@ function RewardGaugeUISystem:showOptions()
     if not opts then return nil end
     local gui = ensureGui()
     local parentGui = self.window or gui
+    self.layout = self.layout or createInstance("UIListLayout")
+    if not self.layout.Parent then
+        if UDim and type(UDim.new) == "function" then
+            self.layout.Padding = UDim.new(0, 5)
+        end
+        if Enum and Enum.FillDirection then
+            self.layout.FillDirection = Enum.FillDirection.Vertical
+            self.layout.SortOrder = Enum.SortOrder.LayoutOrder
+        end
+        parent(self.layout, parentGui)
+    end
     if self.optionButtons then
         for _, btn in ipairs(self.optionButtons) do
             if btn.Destroy then
