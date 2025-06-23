@@ -23,6 +23,13 @@ LocalizationSystem.translations.en = {
     ["Gauge"] = "Gauge",
     ["Level"] = "Level",
     ["Frozen Wasteland"] = "Frozen Wasteland",
+    ["Meadow"] = "Meadow",
+    ["Dungeon"] = "Dungeon",
+    ["Ruins"] = "Ruins",
+    ["Volcano"] = "Volcano",
+    ["Sky Castle"] = "Sky Castle",
+    ["Abyss"] = "Abyss",
+    ["Underworld"] = "Underworld",
 }
 
 -- Russian translations covering common UI labels
@@ -38,6 +45,13 @@ LocalizationSystem.translations.ru = {
     ["Gauge"] = "Шкала",
     ["Level"] = "Уровень",
     ["Frozen Wasteland"] = "Замерзшие пустоши",
+    ["Meadow"] = "Луг",
+    ["Dungeon"] = "Подземелье",
+    ["Ruins"] = "Руины",
+    ["Volcano"] = "Вулкан",
+    ["Sky Castle"] = "Небесный замок",
+    ["Abyss"] = "Бездна",
+    ["Underworld"] = "Преисподняя",
 }
 
 ---Returns a localized string for the given key or the key itself.
