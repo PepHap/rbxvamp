@@ -115,5 +115,15 @@ return {
         radius = 6,
         effects = {"Shock"}
     },
+    {
+        name = "Shadow Flame",
+        rarity = "S",
+        image = "rbxassetid://123465",
+        module = "ShadowFlame",
+        cooldown = 6,
+        damage = 20,
+        radius = 4,
+        effects = {"Burn"}
+    },
 }
 
