@@ -8,6 +8,7 @@ return {
         {name = "Ancient Halo", rarity = "SS", slot = "Hat", stats = {magic = 10}},
         {name = "Eternal Halo", rarity = "SSS", slot = "Hat", stats = {magic = 20}},
         {name = "Sturdy Helm", rarity = "C", slot = "Hat", stats = {defense = 2}},
+        {name = "Diamond Crown", rarity = "SS", slot = "Hat", stats = {health = 30, attackSpeed = 0.15}},
     },
     Necklace = {
         {name = "Bronze Necklace", rarity = "C", slot = "Necklace", stats = {health = 2}},
@@ -19,6 +20,7 @@ return {
         {name = "Eternal Pendant", rarity = "SS", slot = "Necklace", stats = {magic = 8}},
         {name = "Cosmic Relic", rarity = "SSS", slot = "Necklace", stats = {magic = 16}},
         {name = "Emerald Pendant", rarity = "B", slot = "Necklace", stats = {health = 4, magic = 1}},
+        {name = "Shadow Locket", rarity = "S", slot = "Necklace", stats = {attack = 6}},
     },
     Ring = {
         {name = "Simple Ring", rarity = "C", slot = "Ring", stats = {attack = 1}},
@@ -31,6 +33,7 @@ return {
         {name = "Infinity Ring", rarity = "SSS", slot = "Ring", stats = {magic = 18}},
         {name = "Platinum Ring", rarity = "S", slot = "Ring", stats = {critDamage = 0.2}},
         {name = "Titan Ring", rarity = "A", slot = "Ring", stats = {attack = 3, defense = 1}},
+        {name = "Obsidian Ring", rarity = "S", slot = "Ring", stats = {attack = 7, critChance = 0.05}},
     },
     Armor = {
         {name = "Leather Armor", rarity = "C", slot = "Armor", stats = {health = 10}},
@@ -45,6 +48,7 @@ return {
         {name = "Celestial Plate", rarity = "SS", slot = "Armor", stats = {health = 25}},
         {name = "Eternal Guard", rarity = "SSS", slot = "Armor", stats = {defense = 35}},
         {name = "Phantom Plate", rarity = "SSS", slot = "Armor", stats = {defense = 40, health = 20}},
+        {name = "Guardian Armor", rarity = "S", slot = "Armor", stats = {defense = 20, health = 10}},
     },
     Accessory = {
         {name = "Traveler's Brooch", rarity = "C", slot = "Accessory", stats = {speed = 0.05}},
@@ -57,6 +61,7 @@ return {
         {name = "Spirit Token", rarity = "S", slot = "Accessory", stats = {critChance = 0.1}},
         {name = "Ancient Talisman", rarity = "SS", slot = "Accessory", stats = {magic = 12}},
         {name = "Divine Sigil", rarity = "SSS", slot = "Accessory", stats = {magic = 24}},
+        {name = "Feather Cape", rarity = "B", slot = "Accessory", stats = {speed = 0.15}},
     },
     Weapon = {
         {name = "Wooden Sword", rarity = "C", slot = "Weapon", stats = {attack = 3}},
@@ -73,5 +78,6 @@ return {
         {name = "Celestial Spear", rarity = "SS", slot = "Weapon", stats = {attack = 22}},
         {name = "Ethereal Blade", rarity = "SS", slot = "Weapon", stats = {attack = 15, magic = 15}},
         {name = "Storm Breaker", rarity = "SSS", slot = "Weapon", stats = {attack = 45, critChance = 0.05}},
+        {name = "Shadow Blade", rarity = "A", slot = "Weapon", stats = {attack = 10, critChance = 0.05}},
     },
 }
