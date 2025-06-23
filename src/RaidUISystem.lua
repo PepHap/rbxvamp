@@ -104,6 +104,9 @@ function RaidUI:onStatus(action, a, b)
     if action == "start" then
         self.statusLabel.Text = string.format("Raid Started (%d)", a)
         self:setVisible(true)
+    elseif action == "lobby" then
+        self.statusLabel.Text = "Preparing Raid..."
+        self:setVisible(true)
     elseif action == "progress" then
         self.statusLabel.Text = string.format("Raid %d/%d", a, b)
     elseif action == "complete" then

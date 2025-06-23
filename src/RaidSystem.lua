@@ -45,6 +45,15 @@ RaidSystem.prevDamageScale = 1
 ---Party id currently in a raid.
 RaidSystem.currentPartyId = nil
 
+---When true the party is waiting in the raid lobby before teleporting.
+RaidSystem.inLobby = false
+
+---Countdown timer used while players wait in the raid lobby.
+RaidSystem.lobbyTimer = 0
+
+---How many seconds players stay in the lobby before the raid starts.
+RaidSystem.lobbyTime = 5
+
 function RaidSystem:start()
     NetworkSystem:onServerEvent("RaidRequest", function(player)
         if player then
@@ -59,9 +68,40 @@ function RaidSystem:start()
     end)
 end
 
+---Processes the waiting period in the raid lobby and starts the raid when the
+--  timer expires.
+function RaidSystem:update(dt)
+    if not self.inLobby then
+        return
+    end
+    dt = dt or 0
+    self.lobbyTimer = math.max(0, (self.lobbyTimer or 0) - dt)
+    if self.lobbyTimer <= 0 then
+        self.inLobby = false
+        local members = {}
+        if self.partySystem and self.currentPartyId then
+            members = self.partySystem:getMembers(self.currentPartyId)
+        end
+        if TeleportSystem and TeleportSystem.teleportRaid then
+            TeleportSystem:teleportRaid(members)
+        end
+        self.active = true
+        self.killCount = 0
+        local size = #members
+        local scale = 1 + math.max(size - 1, 0) * (self.difficultyPerMember or 0)
+        self.prevHealthScale = EnemySystem.healthScale or 1
+        self.prevDamageScale = EnemySystem.damageScale or 1
+        EnemySystem.healthScale = self.prevHealthScale * scale
+        EnemySystem.damageScale = self.prevDamageScale * scale
+        EventManager:Get("RaidStart"):Fire()
+        NetworkSystem:fireAllClients("RaidStatus", "start", size)
+        NetworkSystem:fireAllClients("RaidEvent", "start", size)
+    end
+end
+
 ---Begins a raid if the party has the required key.
 function RaidSystem:startRaid(player)
-    if self.active then
+    if self.active or self.inLobby then
         return false
     end
     if not PlayerLevelSystem:isUnlocked("raid") then
@@ -83,6 +123,16 @@ function RaidSystem:startRaid(player)
     if not KeySystem:useKey("raid") then
         return false
     end
+    if TeleportSystem and TeleportSystem.lobbyPlaceId ~= 0 then
+        TeleportSystem:teleportLobby(members)
+        self.inLobby = true
+        self.lobbyTimer = self.lobbyTime or 5
+        self.currentPartyId = partyId
+        NetworkSystem:fireAllClients("RaidStatus", "lobby")
+        NetworkSystem:fireAllClients("RaidEvent", "lobby")
+        return true
+    end
+
     if TeleportSystem and TeleportSystem.teleportRaid then
         TeleportSystem:teleportRaid(members)
     end
@@ -136,6 +186,7 @@ function RaidSystem:onBossKilled()
         end
         self.currentPartyId = nil
     end
+    self.inLobby = false
 end
 
 ---Distributes raid rewards to all party members.
