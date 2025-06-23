@@ -23,6 +23,13 @@ local MobConfig = {
             Speed = 10,
             AttackCooldown = 3,
             Prefab = "Dragon"
+        },
+        Skeleton = {
+            BaseHealth = 80,
+            Damage = 7,
+            Speed = 9,
+            AttackCooldown = 1.5,
+            Prefab = "Skeleton"
         }
     },
     LevelMultiplier = {

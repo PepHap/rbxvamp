@@ -96,6 +96,16 @@ return {
         effects = {"Pierce"}
     },
     {
+        name = "Twin Shot",
+        rarity = "B",
+        image = "rbxassetid://123464",
+        module = "TwinShot",
+        cooldown = 4,
+        damage = 8,
+        radius = 4,
+        effects = {"Pierce"}
+  },
+  {
         name = "Chain Lightning",
         rarity = "A",
         image = "rbxassetid://123464",
@@ -104,6 +114,6 @@ return {
         damage = 18,
         radius = 6,
         effects = {"Shock"}
-    }
+    },
 }
 
