@@ -80,6 +80,19 @@ function ProgressMapUI:start(ps)
     parent(self.label, self.window)
     self:update()
     self:setVisible(self.visible)
+
+    local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+    if NetworkSystem and NetworkSystem.onClientEvent then
+        NetworkSystem:onClientEvent("StageAdvance", function()
+            ProgressMapUI:update()
+        end)
+        NetworkSystem:onClientEvent("StageRollback", function()
+            ProgressMapUI:update()
+        end)
+        NetworkSystem:onClientEvent("LevelProgress", function()
+            ProgressMapUI:update()
+        end)
+    end
 end
 
 function ProgressMapUI:update()
