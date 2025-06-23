@@ -34,8 +34,10 @@ local AntiCheatSystem = require(script.Parent:WaitForChild("AntiCheatSystem"))
 local createVector3
 local getSpawnPosition
 local spawnModel
+local RunService = game:GetService("RunService")
+
 local function broadcastState()
-    if NetworkSystem and NetworkSystem.fireAllClients then
+    if RunService:IsServer() and NetworkSystem and NetworkSystem.fireAllClients then
         NetworkSystem:fireAllClients("PlayerState", PlayerSystem.health, PlayerSystem.position)
     end
 end
