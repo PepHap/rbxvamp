@@ -100,7 +100,8 @@ end
 function LevelSystem:getNextStageInfo()
     local nextLevel = self.currentLevel + 1
     local killsLeft = math.max(0, (self.requiredKills or 0) - (self.killCount or 0))
-    local stageType = getStageType(nextLevel)
+    -- Use the exported method to avoid nil upvalues on partial loads
+    local stageType = self.getStageType(nextLevel)
     local milestoneKills, _, milestoneType = self:getKillsUntilMilestone(self.currentLevel)
     local loc = LocationSystem:getCurrent()
     local bossName
@@ -163,7 +164,7 @@ function LevelSystem:getKillsUntilMilestone(startLevel)
     local t = "normal"
     repeat
         mLevel = mLevel + 1
-        t = getStageType(mLevel)
+        t = self.getStageType(mLevel)
         kills = kills + self:getKillRequirement(mLevel)
     until t == "mini" or t == "boss" or t == "location" or mLevel > lvl + 100
     return kills, mLevel, t
@@ -232,7 +233,8 @@ function LevelSystem:advance()
         PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
     end
     local nextLevel = self.currentLevel + 1
-    local stageType = getStageType(nextLevel)
+    -- Use the exposed method for reliability across environments
+    local stageType = self.getStageType(nextLevel)
 
     if stageType == "location" then
         local nextIndex = (LocationSystem.currentIndex or 1) + 1
