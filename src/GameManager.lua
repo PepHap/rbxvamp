@@ -294,6 +294,10 @@ local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 GameManager.currencySystem = CurrencySystem
 GameManager:addSystem("Currency", CurrencySystem)
 
+local LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
+GameManager.loggingSystem = LoggingSystem
+GameManager:addSystem("Logging", LoggingSystem)
+
 local AntiCheatSystem = require(script.Parent:WaitForChild("AntiCheatSystem"))
 GameManager:addSystem("AntiCheat", AntiCheatSystem)
 

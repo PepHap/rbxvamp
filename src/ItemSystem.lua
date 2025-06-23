@@ -6,6 +6,7 @@ ItemSystem.__index = ItemSystem
 
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 local SlotConstants = require(script.Parent:WaitForChild("SlotConstants"))
+local LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local assets = ReplicatedStorage:WaitForChild("assets")
@@ -103,6 +104,9 @@ function ItemSystem:equip(slot, item)
     item.level = item.level or 1
     self:assignId(item)
     self.slots[slot] = item
+    if LoggingSystem and LoggingSystem.logItem then
+        LoggingSystem:logItem(nil, item, "equip")
+    end
     return true
 end
 
@@ -114,6 +118,9 @@ function ItemSystem:addItem(item)
     end
     self:assignId(item)
     table.insert(self.inventory, item)
+    if LoggingSystem and LoggingSystem.logItem then
+        LoggingSystem:logItem(nil, item, "add")
+    end
     return true
 end
 
@@ -122,6 +129,9 @@ end
 -- @return table|nil
 function ItemSystem:removeItem(index)
     local itm = table.remove(self.inventory, index)
+    if itm and LoggingSystem and LoggingSystem.logItem then
+        LoggingSystem:logItem(nil, itm, "remove")
+    end
     return itm
 end
 
@@ -207,6 +217,9 @@ function ItemSystem:unequip(slot)
     assertValidSlot(slot)
     local removed = self.slots[slot]
     self.slots[slot] = nil
+    if removed and LoggingSystem and LoggingSystem.logItem then
+        LoggingSystem:logItem(nil, removed, "unequip")
+    end
     return removed
 end
 
@@ -253,6 +266,9 @@ function ItemSystem:upgradeItem(slot, amount, currencyType)
         return false
     end
     item.level = target
+    if LoggingSystem and LoggingSystem.logItem then
+        LoggingSystem:logItem(nil, item, "upgrade")
+    end
     return true
 end
 
@@ -288,6 +304,9 @@ function ItemSystem:upgradeItemWithFallback(slot, amount, currencyType)
         end
     end
     item.level = target
+    if LoggingSystem and LoggingSystem.logItem then
+        LoggingSystem:logItem(nil, item, "upgrade")
+    end
     return true
 end
 
