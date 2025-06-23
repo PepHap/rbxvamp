@@ -30,6 +30,8 @@ LocalizationSystem.translations.en = {
     ["Sky Castle"] = "Sky Castle",
     ["Abyss"] = "Abyss",
     ["Underworld"] = "Underworld",
+    ["Next Reward"] = "Next Reward",
+    ["XP"] = "XP",
 }
 
 -- Russian translations covering common UI labels
@@ -52,6 +54,8 @@ LocalizationSystem.translations.ru = {
     ["Sky Castle"] = "Небесный замок",
     ["Abyss"] = "Бездна",
     ["Underworld"] = "Преисподняя",
+    ["Next Reward"] = "Следующая награда",
+    ["XP"] = "Опыта",
 }
 
 ---Returns a localized string for the given key or the key itself.

@@ -121,4 +121,16 @@ function LoggingSystem:logItem(playerId, item, action)
     })
 end
 
+---Logs when a player's position is corrected due to suspicious movement.
+-- @param playerId any player identifier
+-- @param from table previous position
+-- @param to table new position
+function LoggingSystem:logTeleport(playerId, from, to)
+    self:logAction("teleport", {
+        player = playerId,
+        from = from,
+        to = to,
+    })
+end
+
 return LoggingSystem
