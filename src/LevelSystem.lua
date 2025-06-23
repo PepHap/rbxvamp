@@ -69,8 +69,12 @@ local function updateWaveSize()
     LevelSystem.waveSize = LevelSystem.baseWaveSize + math.floor((LevelSystem.currentLevel - 1) / 3)
 end
 
+-- Broadcasts stage progress to all connected clients. This must only
+-- be invoked from the server, otherwise ``RemoteEvent:FireAllClients``
+-- will throw an error as documented in the Roblox reference:
+-- https://create.roblox.com/docs/reference/engine/classes/RemoteEvent#FireAllClients
 local function broadcastProgress()
-    if NetworkSystem and NetworkSystem.fireAllClients then
+    if RunService:IsServer() and NetworkSystem and NetworkSystem.fireAllClients then
         NetworkSystem:fireAllClients(
             "LevelProgress",
             LevelSystem.currentLevel,
