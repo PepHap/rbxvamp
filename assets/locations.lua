@@ -143,4 +143,28 @@ return {
             brightness = 1.5,
         },
     },
+    {
+        name = "Underworld",
+        coordinates = {x = 600, y = -100, z = 0},
+        placeId = 0,
+        levelStart = 181,
+        levelEnd = 210,
+        floors = 30,
+        bosses = {
+            [5] = "Hellhound",
+            [10] = "Demon Lord",
+            [30] = "Infernal King",
+        },
+        currency = "crystal",
+        theme = {
+            windowBackground = {r = 50, g = 20, b = 20},
+            buttonBackground = {r = 100, g = 40, b = 40},
+            buttonHover = {r = 120, g = 60, b = 60},
+        },
+        lighting = {
+            ambient = Color3 and Color3.fromRGB and Color3.fromRGB(80,30,30) or {r=80,g=30,b=30},
+            outdoorAmbient = Color3 and Color3.fromRGB and Color3.fromRGB(40,10,10) or {r=40,g=10,b=10},
+            brightness = 2,
+        },
+    },
 }
