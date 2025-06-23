@@ -21,6 +21,7 @@ LocalizationSystem.translations.en = {
     ["Ether"] = "Ether",
     ["Crystals"] = "Crystals",
     ["Gauge"] = "Gauge",
+    ["Level"] = "Level",
     ["Frozen Wasteland"] = "Frozen Wasteland",
 }
 
@@ -35,6 +36,7 @@ LocalizationSystem.translations.ru = {
     ["Ether"] = "Эфир",
     ["Crystals"] = "Кристаллы",
     ["Gauge"] = "Шкала",
+    ["Level"] = "Уровень",
     ["Frozen Wasteland"] = "Замерзшие пустоши",
 }
 
