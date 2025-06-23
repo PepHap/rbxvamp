@@ -11,6 +11,7 @@ local AntiCheatSystem = {
 }
 
 local RunService = game:GetService("RunService")
+local LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
 
 local function getId(player)
     if typeof and typeof(player) == "Instance" and player.UserId then
@@ -40,6 +41,12 @@ function AntiCheatSystem:recordExp(player, amount)
     rec.exp = rec.exp + (tonumber(amount) or 0)
     if rec.exp > self.expPerMinute then
         warn("Suspicious EXP gain", player)
+        if LoggingSystem and LoggingSystem.logAction then
+            LoggingSystem:logAction("exp_suspicious", {
+                player = getId(player),
+                value = rec.exp
+            })
+        end
     end
 end
 
@@ -48,6 +55,12 @@ function AntiCheatSystem:recordCurrency(player, amount)
     rec.currency = rec.currency + (tonumber(amount) or 0)
     if rec.currency > self.currencyPerMinute then
         warn("Suspicious currency gain", player)
+        if LoggingSystem and LoggingSystem.logAction then
+            LoggingSystem:logAction("currency_suspicious", {
+                player = getId(player),
+                value = rec.currency
+            })
+        end
     end
 end
 
@@ -56,6 +69,11 @@ function AntiCheatSystem:recordAttack(player)
     local now = os.clock()
     if now - rec.lastAttack < self.minAttackInterval then
         warn("Suspicious attack rate", player)
+        if LoggingSystem and LoggingSystem.logAction then
+            LoggingSystem:logAction("attack_rate", {
+                player = getId(player)
+            })
+        end
     end
     rec.lastAttack = now
 end
@@ -72,6 +90,12 @@ function AntiCheatSystem:checkMovement(player, position)
         local dt = now - rec.lastTime
         if dt > 0 and dist / dt > self.maxMoveSpeed then
             warn("Possible teleport detected", player)
+            if LoggingSystem and LoggingSystem.logAction then
+                LoggingSystem:logAction("movement_speed", {
+                    player = getId(player),
+                    speed = dist / dt
+                })
+            end
         end
     end
     rec.lastPos = {x = position.x, y = position.y, z = position.z}
