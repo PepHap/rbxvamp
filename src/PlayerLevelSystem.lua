@@ -46,17 +46,19 @@ local milestones = {
         reward = {crystals = 2},
     },
     [20] = {
-        unlock = "new_area",
+        unlock = "Dungeon",
         reward = {keys = {location = 1}},
     },
     [25] = {
         unlock = "raid",
         reward = {crystals = 10, keys = {raid = 1}},
     },
-    [30] = {
-        unlock = "icy_area",
-        reward = {crystals = 7},
-    },
+    [40] = { unlock = "Ruins", reward = {crystals = 3} },
+    [70] = { unlock = "Volcano", reward = {crystals = 3} },
+    [100] = { unlock = "Sky Castle", reward = {crystals = 5} },
+    [130] = { unlock = "Abyss", reward = {crystals = 5} },
+    [160] = { unlock = "Underworld", reward = {crystals = 5} },
+    [190] = { unlock = "Frozen Wasteland", reward = {crystals = 7} },
 }
 
 ---Grants milestone rewards such as currency, tickets or keys.
