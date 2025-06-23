@@ -275,6 +275,8 @@ StatUpgradeSystem:addStat("CritDamage", 1.5)
 StatUpgradeSystem:addStat("HealthRegen", 1)
 StatUpgradeSystem:addStat("MaxMana", 100)
 StatUpgradeSystem:addStat("ManaRegen", 5)
+StatUpgradeSystem:addStat("Speed", 1)
+StatUpgradeSystem:addStat("AttackSpeed", 1)
 
 -- Data persistence for saving and loading progress (server only)
 local DataPersistenceSystem

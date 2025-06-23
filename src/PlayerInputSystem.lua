@@ -50,6 +50,7 @@ local SkillCastSystem = require(script.Parent:WaitForChild("SkillCastSystem"))
 local GachaUISystem = require(script.Parent:WaitForChild("GachaUISystem"))
 local RewardGaugeUISystem = require(script.Parent:WaitForChild("RewardGaugeUISystem"))
 local StatUpgradeUISystem = require(script.Parent:WaitForChild("StatUpgradeUISystem"))
+local StatUpgradeSystem = require(script.Parent:WaitForChild("StatUpgradeSystem"))
 local QuestUISystem = require(script.Parent:WaitForChild("QuestUISystem"))
 local AchievementUISystem = require(script.Parent:WaitForChild("AchievementUISystem"))
 local CrystalExchangeUISystem = require(script.Parent:WaitForChild("CrystalExchangeUISystem"))
@@ -159,7 +160,12 @@ function PlayerInputSystem:update(dt)
         return
     end
     local pos = self.playerPosition
-    local step = self.moveSpeed * dt
+    local speed = 1
+    local sStat = StatUpgradeSystem.stats and StatUpgradeSystem.stats.Speed
+    if sStat then
+        speed = (sStat.base or 1) * (sStat.level or 1)
+    end
+    local step = self.moveSpeed * speed * dt
     if self.keyStates.D or self.keyStates.Right then
         pos.x = pos.x + step
     end

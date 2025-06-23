@@ -14,6 +14,7 @@ local LevelSystem = require(parent:WaitForChild("LevelSystem"))
 local DungeonSystem = require(parent:WaitForChild("DungeonSystem"))
 local NetworkSystem = require(parent:WaitForChild("NetworkSystem"))
 local EventManager = require(parent:WaitForChild("EventManager"))
+local StatUpgradeSystem = require(parent:WaitForChild("StatUpgradeSystem"))
 
 ---Current player position used for simple movement calculations.
 AutoBattleSystem.playerPosition = {x = 0, y = 0}
@@ -115,6 +116,12 @@ function AutoBattleSystem:update(dt)
     if not self.enabled then
         return
     end
+    local atkSpeed = StatUpgradeSystem.stats and StatUpgradeSystem.stats.AttackSpeed
+    local atkMult = 1
+    if atkSpeed then
+        atkMult = (atkSpeed.base or 1) * (atkSpeed.level or 1)
+    end
+    self.attackCooldown = 1 / atkMult
     self.attackTimer = math.max(0, (self.attackTimer or 0) - dt)
     local pos = self.playerPosition
     local target = EnemySystem:getNearestEnemy(pos)
@@ -150,7 +157,12 @@ function AutoBattleSystem:update(dt)
         -- Move toward the target by a small step based on moveSpeed
         local dist = math.sqrt(distSq)
         if dist > 0 then
-            local step = math.min(self.moveSpeed * dt, dist)
+            local spdStat = StatUpgradeSystem.stats and StatUpgradeSystem.stats.Speed
+            local spd = 1
+            if spdStat then
+                spd = (spdStat.base or 1) * (spdStat.level or 1)
+            end
+            local step = math.min(self.moveSpeed * spd * dt, dist)
             pos.x = pos.x + dx / dist * step
             pos.y = pos.y + dy / dist * step
         end
