@@ -14,6 +14,8 @@ CurrencySystem.balances = {}
 -- @param amount number amount to add
 function CurrencySystem:add(kind, amount)
     local n = tonumber(amount) or 0
+    local AntiCheatSystem = require(script.Parent:WaitForChild("AntiCheatSystem"))
+    AntiCheatSystem:recordCurrency(nil, n)
     self.balances[kind] = (self.balances[kind] or 0) + n
     if RunService:IsServer() then
         NetworkSystem:fireAllClients("CurrencyUpdate", kind, self.balances[kind])

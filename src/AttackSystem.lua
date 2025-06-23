@@ -9,6 +9,7 @@ local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
 local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
 local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
+local AntiCheatSystem = require(script.Parent:WaitForChild("AntiCheatSystem"))
 
 AttackSystem.damage = 1
 AttackSystem.range = 5
@@ -20,6 +21,7 @@ function AttackSystem:start()
 end
 
 function AttackSystem:handleAttack(player)
+    AntiCheatSystem:recordAttack(player)
     local pos = PlayerSystem.position
     if not pos then return end
     local target = EnemySystem:getNearestEnemy(pos)

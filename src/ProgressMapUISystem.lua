@@ -91,7 +91,24 @@ function ProgressMapUI:update()
     end
     parent(self.label, self.window or gui)
     local pr = ps:getProgress()
-    self.label.Text = string.format("Location %d - Stage %d", pr.location, pr.stage)
+    local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+    local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
+    local killsLeft = math.max(0, (LevelSystem.requiredKills or 0) - (LevelSystem.killCount or 0))
+    local nextStage = LevelSystem.currentLevel + 1
+    local stageType = LevelSystem.getStageType and LevelSystem.getStageType(nextStage)
+    local loc = LocationSystem:getCurrent()
+    local bossName = loc and loc.bosses and loc.bosses[nextStage]
+    local typeLabel = stageType or ""
+    if bossName then
+        typeLabel = bossName
+    elseif stageType == "mini" then
+        typeLabel = "Mini Boss"
+    elseif stageType == "boss" then
+        typeLabel = "Boss"
+    elseif stageType == "location" then
+        typeLabel = "Area Boss"
+    end
+    self.label.Text = string.format("Floor %d | %d kills to %s", pr.stage, killsLeft, typeLabel)
 end
 
 function ProgressMapUI:setVisible(on)

@@ -27,6 +27,7 @@ PlayerSystem.model = nil
 local LevelSystem -- lazy loaded to avoid circular dependency
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
+local AntiCheatSystem = require(script.Parent:WaitForChild("AntiCheatSystem"))
 
 -- Forward declare helper functions so they can be referenced inside
 -- PlayerSystem methods defined above them.
@@ -166,6 +167,7 @@ function PlayerSystem:setPosition(pos)
         self.position = {x = pos.x, y = pos.y, z = pos.z}
     end
     AutoBattleSystem.playerPosition = self.position
+    AntiCheatSystem:checkMovement(nil, self.position)
     local model = self.model
     if model then
         local part = model.PrimaryPart or model.primaryPart
@@ -207,6 +209,7 @@ function PlayerSystem:update(dt)
             self.position.y = pos.Y
             self.position.z = pos.Z
             AutoBattleSystem.playerPosition = self.position
+            AntiCheatSystem:checkMovement(nil, self.position)
             broadcastState()
         end
     end
