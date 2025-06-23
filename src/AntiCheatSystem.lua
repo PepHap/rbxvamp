@@ -6,7 +6,8 @@ local AntiCheatSystem = {
     currencyPerMinute = 1000,
     minAttackInterval = 0.2,
     maxMoveSpeed = 50,
-    players = {}
+    players = {},
+    connections = {}
 }
 
 local RunService = game:GetService("RunService")
@@ -79,6 +80,28 @@ end
 
 function AntiCheatSystem:update(dt)
     -- currently no periodic logic
+end
+
+function AntiCheatSystem:start()
+    if not RunService:IsServer() then
+        return
+    end
+    local ok, players = pcall(function()
+        return game:GetService("Players")
+    end)
+    if not ok or not players then
+        return
+    end
+    self.connections.heartbeat = RunService.Heartbeat:Connect(function()
+        for _, plr in ipairs(players:GetPlayers()) do
+            local char = plr.Character
+            local hrp = char and char:FindFirstChild("HumanoidRootPart")
+            if hrp then
+                local pos = hrp.Position
+                self:checkMovement(plr, {x = pos.X, y = pos.Y, z = pos.Z})
+            end
+        end
+    end)
 end
 
 return AntiCheatSystem

@@ -28,6 +28,7 @@ local assets = ReplicatedStorage:WaitForChild("assets")
 local itemPool = require(assets:WaitForChild("items"))
 local EquipmentGenerator = require(script.Parent:WaitForChild("EquipmentGenerator"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
 
 -- Precompute a list of available equipment slots
 local slots = {}
@@ -72,6 +73,9 @@ function RewardGaugeSystem:generateOptions()
         local slot = slots[math.random(#slots)]
         local rarity = GachaSystem:rollRarity()
         local choice = EquipmentGenerator.getRandomItem(slot, rarity, itemPool)
+        if choice then
+            LoggingSystem:logItem(nil, choice, "gauge_option")
+        end
         table.insert(opts, {slot = slot, item = choice})
     end
     return opts
@@ -120,6 +124,9 @@ function RewardGaugeSystem:choose(index)
     self.options = nil
     NetworkSystem:fireAllClients("GaugeOptions", nil)
     NetworkSystem:fireAllClients("GaugeReset")
+    if chosen and chosen.item then
+        LoggingSystem:logItem(nil, chosen.item, "gauge_claim")
+    end
     if self.onSelect then
         pcall(self.onSelect, chosen)
     end
@@ -139,6 +146,13 @@ function RewardGaugeSystem:reroll()
     end
     self.options = self:generateOptions()
     NetworkSystem:fireAllClients("GaugeOptions", self.options)
+    if self.options then
+        for _, opt in ipairs(self.options) do
+            if opt.item then
+                LoggingSystem:logItem(nil, opt.item, "gauge_reroll")
+            end
+        end
+    end
     return self.options
 end
 
