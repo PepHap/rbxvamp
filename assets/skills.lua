@@ -125,5 +125,15 @@ return {
         radius = 4,
         effects = {"Burn"}
     },
+    {
+        name = "Frost Nova",
+        rarity = "B",
+        image = "rbxassetid://123466",
+        module = "FrostNova",
+        cooldown = 5,
+        damage = 12,
+        radius = 5,
+        effects = {"Freeze"}
+    },
 }
 
