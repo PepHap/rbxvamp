@@ -80,6 +80,13 @@ local function connectRoblox()
             UIS.InputEnded:Connect(function(input)
                 PlayerInputSystem:setKeyState(input.KeyCode.Name, false)
             end)
+            if UIS.TouchTap then
+                UIS.TouchTap:Connect(function(_, processed)
+                    if not processed then
+                        PlayerInputSystem:manualAttack()
+                    end
+                end)
+            end
         end
     end
 end
