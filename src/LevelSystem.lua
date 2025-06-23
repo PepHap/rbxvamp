@@ -119,10 +119,12 @@ function LevelSystem:start()
     self:scaleStats(1)
     updateWaveSize()
     local cfg = WaveConfig.levels[1]
-    if cfg and not cfg.boss then
-        EnemySystem:spawnWaveForLevel(1, cfg)
-    else
-        EnemySystem:spawnWave(1, self.waveSize)
+    if RunService:IsServer() then
+        if cfg and not cfg.boss then
+            EnemySystem:spawnWaveForLevel(1, cfg)
+        else
+            EnemySystem:spawnWave(1, self.waveSize)
+        end
     end
     EventManager:Get("LevelStart"):Fire(1)
     broadcastProgress()
@@ -208,8 +210,8 @@ function LevelSystem:update()
     if self.killCount >= self.requiredKills then
         return
     end
-    -- Spawn another wave when no enemies remain
-    if #EnemySystem.enemies == 0 then
+    -- Spawn another wave when no enemies remain (server only)
+    if RunService:IsServer() and #EnemySystem.enemies == 0 then
         local remaining = self.requiredKills - self.killCount
         local count = math.min(self.waveSize, remaining)
         local cfg = WaveConfig.levels[self.currentLevel]
@@ -271,18 +273,20 @@ function LevelSystem:advance()
     self:strengthenMonsters(stageType)
 
     -- Determine what kind of enemy encounter should occur on this level.
-    if stageType == "location" then
-        EnemySystem:spawnBoss("location")
-    elseif stageType == "boss" then
-        EnemySystem:spawnBoss("boss")
-    elseif stageType == "mini" then
-        EnemySystem:spawnBoss("mini")
-    else
-        local cfg = WaveConfig.levels[self.currentLevel]
-        if cfg and not cfg.boss then
-            EnemySystem:spawnWaveForLevel(self.currentLevel, cfg)
+    if RunService:IsServer() then
+        if stageType == "location" then
+            EnemySystem:spawnBoss("location")
+        elseif stageType == "boss" then
+            EnemySystem:spawnBoss("boss")
+        elseif stageType == "mini" then
+            EnemySystem:spawnBoss("mini")
         else
-            EnemySystem:spawnWave(self.currentLevel, self.waveSize)
+            local cfg = WaveConfig.levels[self.currentLevel]
+            if cfg and not cfg.boss then
+                EnemySystem:spawnWaveForLevel(self.currentLevel, cfg)
+            else
+                EnemySystem:spawnWave(self.currentLevel, self.waveSize)
+            end
         end
     end
     EventManager:Get("LevelAdvance"):Fire(self.currentLevel, stageType)

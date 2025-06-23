@@ -66,11 +66,24 @@ end
 -- https://create.roblox.com/docs/reference/engine/classes/RemoteEvent#FireAllClients
 function NetworkSystem:fireAllClients(name, ...)
     local ev = self:getEvent(name)
-    if RunService and RunService:IsServer() and ev and ev.FireAllClients then
-        ev:FireAllClients(...)
-    elseif (not RunService or not RunService:IsServer()) and ev and ev.Fire then
-        -- Fallback for test environments where BindableEvents are used
-        ev:Fire(...)
+    if RunService and RunService:IsServer() then
+        if ev and ev.FireAllClients then
+            ev:FireAllClients(...)
+        end
+    else
+        local hasFire = false
+        if ev then
+            local ok, val = pcall(function()
+                return ev.Fire
+            end)
+            if ok and val then
+                hasFire = true
+            end
+        end
+        if hasFire then
+            -- Fallback for test environments using BindableEvents
+            ev:Fire(...)
+        end
     end
 end
 
