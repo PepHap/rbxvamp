@@ -20,6 +20,8 @@ local HudSystem = {
     dungeonButton = nil,
     partyButton = nil,
     scoreboardButton = nil,
+    buttonFrame = nil,
+    buttonLayout = nil,
     progressFrame = nil,
     progressFill = nil,
     progressText = nil,
@@ -99,13 +101,15 @@ function HudSystem:start()
         if self.levelLabel.Parent ~= gui then
             parent(self.levelLabel, gui)
             parent(self.currencyLabel, gui)
-            parent(self.autoButton, gui)
-            parent(self.attackButton, gui)
-            parent(self.gachaButton, gui)
-            parent(self.inventoryButton, gui)
-            parent(self.rewardButton, gui)
-            parent(self.skillButton, gui)
-            parent(self.companionButton, gui)
+            parent(self.buttonLayout, self.buttonFrame)
+            parent(self.buttonFrame, gui)
+            parent(self.autoButton, self.buttonFrame)
+            parent(self.attackButton, self.buttonFrame)
+            parent(self.gachaButton, self.buttonFrame)
+            parent(self.inventoryButton, self.buttonFrame)
+            parent(self.rewardButton, self.buttonFrame)
+            parent(self.skillButton, self.buttonFrame)
+            parent(self.companionButton, self.buttonFrame)
             parent(self.progressFrame, gui)
         end
         return
@@ -125,6 +129,18 @@ function HudSystem:start()
     self.dungeonButton = createInstance("TextButton")
     self.partyButton = createInstance("TextButton")
     self.scoreboardButton = createInstance("TextButton")
+    self.buttonFrame = createInstance("Frame")
+    self.buttonLayout = createInstance("UIGridLayout")
+    if Enum and Enum.FillDirection then
+        self.buttonLayout.FillDirection = Enum.FillDirection.Horizontal
+        self.buttonLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    end
+    if UDim2 and type(UDim2.new) == "function" then
+        self.buttonLayout.CellSize = UDim2.new(0, 110, 0, 30)
+        self.buttonLayout.CellPadding = UDim2.new(0, 5, 0, 5)
+        self.buttonFrame.Size = UDim2.new(0, 360, 0, 170)
+        self.buttonFrame.Position = UDim2.new(0, 20, 1, -190)
+    end
     self.progressFrame = createInstance("Frame")
     self.progressFill = createInstance("Frame")
     self.progressText = createInstance("TextLabel")
@@ -186,19 +202,21 @@ function HudSystem:start()
     parent(self.progressFrame, gui)
     parent(self.levelLabel, gui)
     parent(self.currencyLabel, gui)
-    parent(self.autoButton, gui)
-    parent(self.attackButton, gui)
-    parent(self.gachaButton, gui)
-    parent(self.inventoryButton, gui)
-    parent(self.rewardButton, gui)
-    parent(self.skillButton, gui)
-    parent(self.companionButton, gui)
-    parent(self.questButton, gui)
-    parent(self.progressButton, gui)
-    parent(self.exchangeButton, gui)
-    parent(self.dungeonButton, gui)
-    parent(self.partyButton, gui)
-    parent(self.scoreboardButton, gui)
+    parent(self.buttonLayout, self.buttonFrame)
+    parent(self.buttonFrame, gui)
+    parent(self.autoButton, self.buttonFrame)
+    parent(self.attackButton, self.buttonFrame)
+    parent(self.gachaButton, self.buttonFrame)
+    parent(self.inventoryButton, self.buttonFrame)
+    parent(self.rewardButton, self.buttonFrame)
+    parent(self.skillButton, self.buttonFrame)
+    parent(self.companionButton, self.buttonFrame)
+    parent(self.questButton, self.buttonFrame)
+    parent(self.progressButton, self.buttonFrame)
+    parent(self.exchangeButton, self.buttonFrame)
+    parent(self.dungeonButton, self.buttonFrame)
+    parent(self.partyButton, self.buttonFrame)
+    parent(self.scoreboardButton, self.buttonFrame)
 
     NetworkSystem:onClientEvent("StageAdvance", function(level)
         if HudSystem.progressText then
@@ -232,6 +250,21 @@ function HudSystem:update(dt)
     parent(self.progressFill, self.progressFrame)
     parent(self.progressText, self.progressFrame)
     parent(self.progressFrame, gui)
+    self.buttonFrame = self.buttonFrame or createInstance("Frame")
+    self.buttonLayout = self.buttonLayout or createInstance("UIGridLayout")
+    if Enum and Enum.FillDirection then
+        self.buttonLayout.FillDirection = Enum.FillDirection.Horizontal
+        self.buttonLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    end
+    if UDim2 and type(UDim2.new) == "function" then
+        self.buttonLayout.CellSize = UDim2.new(0, 110, 0, 30)
+        self.buttonLayout.CellPadding = UDim2.new(0, 5, 0, 5)
+        self.buttonFrame.Size = UDim2.new(0, 360, 0, 170)
+        self.buttonFrame.Position = UDim2.new(0, 20, 1, -190)
+    end
+    parent(self.buttonLayout, self.buttonFrame)
+    parent(self.buttonFrame, gui)
+
     self.levelLabel = self.levelLabel or createInstance("TextLabel")
     parent(self.levelLabel, gui)
     local lvl = PlayerLevelSystem.level or 1
@@ -251,12 +284,12 @@ function HudSystem:update(dt)
     self.currencyLabel.Text = string.format("%s: %d", currencyType, amount)
 
     self.autoButton = self.autoButton or createInstance("TextButton")
-    parent(self.autoButton, gui)
+    parent(self.autoButton, self.buttonFrame)
     local state = AutoBattleSystem.enabled and "ON" or "OFF"
     self.autoButton.Text = "Auto: " .. state
 
     self.attackButton = self.attackButton or createInstance("TextButton")
-    parent(self.attackButton, gui)
+    parent(self.attackButton, self.buttonFrame)
     self.attackButton.Text = "Attack"
     if AutoBattleSystem.enabled then
         self.attackButton.Active = false
@@ -265,47 +298,47 @@ function HudSystem:update(dt)
     end
 
     self.gachaButton = self.gachaButton or createInstance("TextButton")
-    parent(self.gachaButton, gui)
+    parent(self.gachaButton, self.buttonFrame)
     self.gachaButton.Text = "Gacha"
 
     self.inventoryButton = self.inventoryButton or createInstance("TextButton")
-    parent(self.inventoryButton, gui)
+    parent(self.inventoryButton, self.buttonFrame)
     self.inventoryButton.Text = "Inventory"
 
     self.rewardButton = self.rewardButton or createInstance("TextButton")
-    parent(self.rewardButton, gui)
+    parent(self.rewardButton, self.buttonFrame)
     self.rewardButton.Text = string.format("Rewards %d/%d", RewardGaugeSystem.gauge, RewardGaugeSystem.maxGauge)
 
     self.skillButton = self.skillButton or createInstance("TextButton")
-    parent(self.skillButton, gui)
+    parent(self.skillButton, self.buttonFrame)
     self.skillButton.Text = "Skills"
 
     self.companionButton = self.companionButton or createInstance("TextButton")
-    parent(self.companionButton, gui)
+    parent(self.companionButton, self.buttonFrame)
     self.companionButton.Text = "Companions"
 
     self.questButton = self.questButton or createInstance("TextButton")
-    parent(self.questButton, gui)
+    parent(self.questButton, self.buttonFrame)
     self.questButton.Text = "Quests"
 
     self.progressButton = self.progressButton or createInstance("TextButton")
-    parent(self.progressButton, gui)
+    parent(self.progressButton, self.buttonFrame)
     self.progressButton.Text = "Map"
 
     self.exchangeButton = self.exchangeButton or createInstance("TextButton")
-    parent(self.exchangeButton, gui)
+    parent(self.exchangeButton, self.buttonFrame)
     self.exchangeButton.Text = "Exchange"
 
     self.dungeonButton = self.dungeonButton or createInstance("TextButton")
-    parent(self.dungeonButton, gui)
+    parent(self.dungeonButton, self.buttonFrame)
     self.dungeonButton.Text = "Dungeon"
 
     self.partyButton = self.partyButton or createInstance("TextButton")
-    parent(self.partyButton, gui)
+    parent(self.partyButton, self.buttonFrame)
     self.partyButton.Text = "Party"
 
     self.scoreboardButton = self.scoreboardButton or createInstance("TextButton")
-    parent(self.scoreboardButton, gui)
+    parent(self.scoreboardButton, self.buttonFrame)
     self.scoreboardButton.Text = "Scores"
 
     local ratio = nextExp > 0 and exp / nextExp or 0
@@ -342,19 +375,10 @@ function HudSystem:update(dt)
     if UDim2 and type(UDim2.new)=="function" then
         self.levelLabel.Position = UDim2.new(0, 20, 0, 10)
         self.currencyLabel.Position = UDim2.new(0, 20, 0, 30)
-        self.autoButton.Position = UDim2.new(0, 20, 1, -120)
-        self.attackButton.Position = UDim2.new(0, 20, 1, -40)
-        self.gachaButton.Position = UDim2.new(0, 20, 1, -80)
-        self.inventoryButton.Position = UDim2.new(0, 120, 1, -80)
-        self.rewardButton.Position = UDim2.new(0, 220, 1, -80)
-        self.skillButton.Position = UDim2.new(0, 320, 1, -80)
-        self.companionButton.Position = UDim2.new(0, 420, 1, -80)
-        self.questButton.Position = UDim2.new(0, 520, 1, -80)
-        self.progressButton.Position = UDim2.new(0, 620, 1, -80)
-        self.exchangeButton.Position = UDim2.new(0, 720, 1, -80)
-        self.dungeonButton.Position = UDim2.new(0, 820, 1, -80)
-        self.partyButton.Position = UDim2.new(0, 920, 1, -80)
-        self.scoreboardButton.Position = UDim2.new(0, 1020, 1, -80)
+        if not self.buttonFrame.Size then
+            self.buttonFrame.Size = UDim2.new(0, 360, 0, 170)
+            self.buttonFrame.Position = UDim2.new(0, 20, 1, -190)
+        end
     end
 end
 
