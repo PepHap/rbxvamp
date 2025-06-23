@@ -191,4 +191,28 @@ return {
             brightness = 2,
         },
     },
+    {
+        name = "Haunted Manor",
+        coordinates = {x = 800, y = 0, z = 0},
+        placeId = 0,
+        levelStart = 241,
+        levelEnd = 270,
+        floors = 30,
+        bosses = {
+            [5] = "Specter Guard",
+            [10] = "Phantom Lord",
+            [30] = "Ghost Queen",
+        },
+        currency = "silver",
+        theme = {
+            windowBackground = {r = 45, g = 45, b = 60},
+            buttonBackground = {r = 90, g = 90, b = 120},
+            buttonHover = {r = 110, g = 110, b = 140},
+        },
+        lighting = {
+            ambient = Color3 and Color3.fromRGB and Color3.fromRGB(70,70,90) or {r=70,g=70,b=90},
+            outdoorAmbient = Color3 and Color3.fromRGB and Color3.fromRGB(40,40,60) or {r=40,g=40,b=60},
+            brightness = 1.5,
+        },
+    },
 }
