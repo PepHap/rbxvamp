@@ -245,6 +245,7 @@ if IS_SERVER then
     if PartySystem then
         RaidSystem.partySystem = PartySystem
     end
+    RaidSystem.lobbyTime = 5
     GameManager.raidSystem = RaidSystem
     GameManager:addSystem("Raid", RaidSystem)
 end
