@@ -19,6 +19,10 @@ local TeleportSystem = require(script.Parent:WaitForChild("TeleportSystem"))
 local WaveConfig = require(script.Parent:WaitForChild("WaveConfig"))
 local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
 local PlayerSystem -- loaded on demand to avoid circular dependency
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local assets = ReplicatedStorage:WaitForChild("assets")
+local StageRewards = require(assets:WaitForChild("stage_rewards"))
+local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 
 --- Tracks the player's current level.
 --  Starts at ``1`` when the game begins.
@@ -62,6 +66,32 @@ local function broadcastProgress()
             LevelSystem.requiredKills
         )
     end
+end
+
+---Returns how many enemies remain before advancing to the next stage.
+-- @return number kill count remaining
+function LevelSystem:getRemainingKills()
+    return math.max(self.requiredKills - self.killCount, 0)
+end
+
+---Gets the reward table for ``level``.
+-- @param level number|nil stage number (defaults to current level)
+-- @return table reward definition
+function LevelSystem:getStageReward(level)
+    local target = level or self.currentLevel
+    if StageRewards then
+        local ok, reward = pcall(StageRewards, target)
+        if ok then
+            return reward
+        end
+    end
+    return nil
+end
+
+---Returns the reward granted after clearing the next stage.
+-- @return table reward table
+function LevelSystem:getNextStageReward()
+    return self:getStageReward(self.currentLevel + 1)
 end
 
 ---Returns level progress toward the next stage as a value from ``0`` to ``1``.
@@ -204,6 +234,10 @@ function LevelSystem:advance()
     self.currentLevel = nextLevel
     self.killCount = 0
     self.requiredKills = self:getKillRequirement(self.currentLevel)
+    local reward = self:getStageReward(nextLevel)
+    if reward then
+        CurrencySystem:add(reward.currency, reward.amount)
+    end
     updateWaveSize()
 
     -- Record the highest stage cleared which is the previous level.
