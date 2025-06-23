@@ -182,13 +182,19 @@ do
     end
     local t = ItemSystem.templates
     if t and t.Weapon and t.Weapon[1] then
-        GameManager.itemSystem:equip("Weapon", clone(t.Weapon[1]))
+        local itm = clone(t.Weapon[1])
+        GameManager.itemSystem:assignId(itm)
+        GameManager.itemSystem:equip("Weapon", itm)
     end
     if t and t.Hat and t.Hat[1] then
-        GameManager.itemSystem:addItem(clone(t.Hat[1]))
+        local itm = clone(t.Hat[1])
+        GameManager.itemSystem:assignId(itm)
+        GameManager.itemSystem:addItem(itm)
     end
     if t and t.Ring and t.Ring[1] then
-        GameManager.itemSystem:addItem(clone(t.Ring[1]))
+        local itm = clone(t.Ring[1])
+        GameManager.itemSystem:assignId(itm)
+        GameManager.itemSystem:addItem(itm)
     end
 end
 
@@ -503,6 +509,7 @@ end
 function GameManager:rollEquipment(slot)
     local reward = GachaSystem:rollEquipment(slot)
     if reward then
+        self.itemSystem:assignId(reward)
         if self.inventory and self.inventory.AddItem then
             self.inventory:AddItem(reward)
         else

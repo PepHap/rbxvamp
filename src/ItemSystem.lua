@@ -32,6 +32,29 @@ local validSlots = SlotConstants.valid
 ---Maximum number of items that can be stored in the inventory.
 ItemSystem.inventoryLimit = 100
 
+-- Counter used to assign unique serial IDs to items.
+ItemSystem.serialCounter = 0
+
+---Generates a new unique serial ID.
+-- @return number id value
+function ItemSystem:generateId()
+    self.serialCounter = (self.serialCounter or 0) + 1
+    return self.serialCounter
+end
+
+---Ensures the provided item table has a serial ``id`` field.
+-- @param item table item table
+-- @return number assigned id
+function ItemSystem:assignId(item)
+    if not item then return nil end
+    if not item.id then
+        item.id = self:generateId()
+    elseif item.id > (self.serialCounter or 0) then
+        self.serialCounter = item.id
+    end
+    return item.id
+end
+
 ---Returns a table of stats for the item taking the upgrade level into account.
 -- Each level adds a 10% bonus to the base stats.
 -- @param item table item entry with a ``stats`` field
@@ -63,6 +86,7 @@ function ItemSystem.new()
         slots = slotTbl,
         ---List of unequipped item tables stored in the inventory.
         inventory = {},
+        serialCounter = 0,
     }, ItemSystem)
 end
 
@@ -77,6 +101,7 @@ function ItemSystem:equip(slot, item)
         return false
     end
     item.level = item.level or 1
+    self:assignId(item)
     self.slots[slot] = item
     return true
 end
@@ -87,6 +112,7 @@ function ItemSystem:addItem(item)
     if self:isInventoryFull() then
         return false
     end
+    self:assignId(item)
     table.insert(self.inventory, item)
     return true
 end
@@ -274,12 +300,62 @@ local function copy(tbl)
     return t
 end
 
+local function checksumString(str)
+    local sum = 0
+    for i = 1, #str do
+        sum = (sum + string.byte(str, i)) % 2147483647
+    end
+    return sum
+end
+
+---Calculates a checksum over all item IDs and levels.
+-- @return number checksum value
+function ItemSystem:getChecksum()
+    local entries = {}
+    for slot, itm in pairs(self.slots) do
+        if itm and itm.id then
+            table.insert(entries, tostring(itm.id) .. ":" .. tostring(itm.level or 1))
+        end
+    end
+    for _, itm in ipairs(self.inventory) do
+        if itm.id then
+            table.insert(entries, tostring(itm.id) .. ":" .. tostring(itm.level or 1))
+        end
+    end
+    table.sort(entries)
+    local str = table.concat(entries, "|")
+    return checksumString(str)
+end
+
+---Returns serial id lists along with a checksum for client sync.
+function ItemSystem:serializeForClient()
+    local slots = {}
+    for slot, itm in pairs(self.slots) do
+        if itm and itm.id then
+            slots[slot] = itm.id
+        end
+    end
+    local inv = {}
+    for i, itm in ipairs(self.inventory) do
+        inv[i] = itm.id
+    end
+    return {slots = slots, inventory = inv, checksum = self:getChecksum()}
+end
+
+---Verifies that ``checksum`` matches the current inventory state.
+-- @param checksum number checksum provided by the client
+-- @return boolean
+function ItemSystem:verifyChecksum(checksum)
+    return checksum == self:getChecksum()
+end
+
 ---Serializes the current state of equipped and stored items.
 -- @return table data table
 function ItemSystem:toData()
     return {
         slots = copy(self.slots),
         inventory = copy(self.inventory),
+        serialCounter = self.serialCounter or 0,
     }
 end
 
@@ -291,13 +367,18 @@ function ItemSystem.fromData(data)
     if type(data) ~= "table" then
         return inst
     end
+    inst.serialCounter = tonumber(data.serialCounter) or 0
     for slot, itm in pairs(data.slots or {}) do
         if validSlots[slot] then
-            inst.slots[slot] = copy(itm)
+            local c = copy(itm)
+            inst:assignId(c)
+            inst.slots[slot] = c
         end
     end
     for _, itm in ipairs(data.inventory or {}) do
-        table.insert(inst.inventory, copy(itm))
+        local c = copy(itm)
+        inst:assignId(c)
+        table.insert(inst.inventory, c)
     end
     return inst
 end
