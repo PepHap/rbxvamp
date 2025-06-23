@@ -59,6 +59,7 @@ local milestones = {
     [130] = { unlock = "Abyss", reward = {crystals = 5} },
     [160] = { unlock = "Underworld", reward = {crystals = 5} },
     [190] = { unlock = "Frozen Wasteland", reward = {crystals = 7} },
+    [220] = { unlock = "Haunted Manor", reward = {crystals = 7} },
 }
 
 ---Grants milestone rewards such as currency, tickets or keys.
