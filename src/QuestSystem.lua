@@ -19,6 +19,8 @@ local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
 local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local RunService = game:GetService("RunService")
 
 ---Initializes built-in quests and connects event listeners.
 function QuestSystem:start()
@@ -33,6 +35,9 @@ function QuestSystem:start()
                 QuestSystem:addProgress(id, amount or 1)
             end)
         end
+    end
+    if RunService:IsServer() then
+        NetworkSystem:fireAllClients("QuestData", self:saveData())
     end
 end
 
@@ -66,6 +71,16 @@ function QuestSystem:addProgress(id, amount)
     q.progress = q.progress + add
     if q.progress >= q.goal then
         q.completed = true
+    end
+    if RunService:IsServer() then
+        NetworkSystem:fireAllClients(
+            "QuestUpdate",
+            id,
+            q.progress,
+            q.goal,
+            q.completed,
+            q.rewarded
+        )
     end
 end
 
@@ -104,7 +119,45 @@ function QuestSystem:claimReward(id)
         end
     end
     q.rewarded = true
+    if RunService:IsServer() then
+        NetworkSystem:fireAllClients(
+            "QuestUpdate",
+            id,
+            q.progress,
+            q.goal,
+            q.completed,
+            q.rewarded
+        )
+    end
     return true
+end
+
+---Serializes quest progress and reward state.
+-- @return table data table keyed by quest id
+function QuestSystem:saveData()
+    local data = {}
+    for id, q in pairs(self.quests) do
+        data[id] = {
+            progress = q.progress,
+            completed = q.completed,
+            rewarded = q.rewarded,
+        }
+    end
+    return data
+end
+
+---Restores quest progress from saved data.
+-- @param data table data previously produced by `saveData`
+function QuestSystem:loadData(data)
+    if type(data) ~= "table" then return end
+    for id, entry in pairs(data) do
+        local q = self.quests[id]
+        if q then
+            q.progress = tonumber(entry.progress) or q.progress
+            q.completed = not not entry.completed
+            q.rewarded = not not entry.rewarded
+        end
+    end
 end
 
 return QuestSystem

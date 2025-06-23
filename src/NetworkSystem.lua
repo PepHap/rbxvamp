@@ -46,7 +46,8 @@ function NetworkSystem:start()
         "DungeonProgress", "PlayerLevelUp", "StageAdvance", "StageRollback",
         "RewardReroll", "EnemySpawn", "EnemyRemove", "EnemyUpdate",
         "SalvageRequest", "SalvageResult", "PlayerAttack", "PartyRequest",
-        "RaidRequest", "AttackRequest", "SkillRequest"
+        "RaidRequest", "AttackRequest", "SkillRequest", "QuestUpdate",
+        "QuestData", "QuestRequest"
     }
     for _, alias in ipairs(aliases) do
         self.events[alias] = createRemoteEvent(alias)

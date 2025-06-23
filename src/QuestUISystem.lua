@@ -8,6 +8,7 @@ local QuestUISystem = {
 }
 
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 
 local function createInstance(className)
     if QuestUISystem.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
@@ -59,6 +60,27 @@ function QuestUISystem:start(questSys, parentGui)
         parent(self.window, parentTarget)
     end
     self.gui = parentTarget
+    if NetworkSystem and NetworkSystem.fireServer then
+        NetworkSystem:fireServer("QuestRequest")
+    end
+    if NetworkSystem and NetworkSystem.onClientEvent then
+        NetworkSystem:onClientEvent("QuestUpdate", function(id, progress, goal, completed, rewarded)
+            local q = self.questSystem and self.questSystem.quests[id]
+            if q then
+                q.progress = progress or q.progress
+                q.goal = goal or q.goal
+                q.completed = completed or q.completed
+                q.rewarded = rewarded or q.rewarded
+                self:update()
+            end
+        end)
+        NetworkSystem:onClientEvent("QuestData", function(data)
+            if type(data) == "table" and self.questSystem then
+                self.questSystem:loadData(data)
+                self:update()
+            end
+        end)
+    end
     self:update()
     self:setVisible(self.visible)
 end
