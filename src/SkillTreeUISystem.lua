@@ -110,9 +110,17 @@ end
 
 local function renderSkill(container, index, skill, treeSys)
     local frame = createInstance("Frame")
+    if UDim2 and type(UDim2.new)=="function" then
+        frame.Size = UDim2.new(1, -10, 0, 40)
+    end
+    GuiUtil.applyResponsive(frame, 6, 200, 40, 800, 60)
     parent(frame, container)
     local label = createInstance("TextLabel")
     label.Text = string.format("%s Lv.%d", skill.name, skill.level)
+    if UDim2 and type(UDim2.new)=="function" then
+        label.Position = UDim2.new(0, 5, 0, 5)
+        label.Size = UDim2.new(1, -70, 0, 20)
+    end
     parent(label, frame)
 
     if not skill.branch then
@@ -120,9 +128,17 @@ local function renderSkill(container, index, skill, treeSys)
     else
         local branchLabel = createInstance("TextLabel")
         branchLabel.Text = "Branch: " .. skill.branch
+        if UDim2 and type(UDim2.new)=="function" then
+            branchLabel.Position = UDim2.new(0, 5, 0, 5)
+            branchLabel.Size = UDim2.new(1, -70, 0, 20)
+        end
         parent(branchLabel, frame)
         local btn = createInstance("TextButton")
         btn.Text = "Upgrade"
+        if UDim2 and type(UDim2.new)=="function" then
+            btn.Position = UDim2.new(1, -65, 0, 5)
+            btn.Size = UDim2.new(0, 60, 0, 20)
+        end
         parent(btn, frame)
         GuiUtil.connectButton(btn, function()
             treeSys:upgradeSkill(index, 1)
@@ -138,6 +154,17 @@ function SkillTreeUISystem:update()
     if not container then
         container = createInstance("Frame")
         container.Name = "SkillTreeList"
+        GuiUtil.applyResponsive(container, 1, 150, 100, 400, 300)
+        local layout = createInstance("UIListLayout")
+        layout.Name = "ListLayout"
+        if Enum and Enum.FillDirection then
+            layout.FillDirection = Enum.FillDirection.Vertical
+            layout.SortOrder = Enum.SortOrder.LayoutOrder
+        end
+        if UDim2 and type(UDim2.new)=="function" then
+            layout.Padding = UDim2.new(0, 5, 0, 5)
+        end
+        parent(layout, container)
         parent(container, parentGui)
         self.listFrame = container
     end

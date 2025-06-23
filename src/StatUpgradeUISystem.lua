@@ -83,6 +83,17 @@ function StatUpgradeUISystem:start(statSys, parentGui)
     if not self.statListFrame then
         self.statListFrame = createInstance("Frame")
         self.statListFrame.Name = "StatList"
+        GuiUtil.applyResponsive(self.statListFrame, 1, 150, 100, 400, 300)
+        local layout = createInstance("UIListLayout")
+        layout.Name = "ListLayout"
+        if Enum and Enum.FillDirection then
+            layout.FillDirection = Enum.FillDirection.Vertical
+            layout.SortOrder = Enum.SortOrder.LayoutOrder
+        end
+        if UDim2 and type(UDim2.new)=="function" then
+            layout.Padding = UDim2.new(0, 5, 0, 5)
+        end
+        parent(layout, self.statListFrame)
     end
     if self.statListFrame.Parent ~= self.window then
         parent(self.statListFrame, self.window)
@@ -106,14 +117,26 @@ end
 
 local function renderStats(container, sys)
     clearChildren(container)
-    local index = 0
+    local layout = container:FindFirstChild("ListLayout")
+    if not layout then
+        layout = createInstance("UIListLayout")
+        layout.Name = "ListLayout"
+        if Enum and Enum.FillDirection then
+            layout.FillDirection = Enum.FillDirection.Vertical
+            layout.SortOrder = Enum.SortOrder.LayoutOrder
+        end
+        if UDim2 and type(UDim2.new)=="function" then
+            layout.Padding = UDim2.new(0, 5, 0, 5)
+        end
+        parent(layout, container)
+    end
     for name, stat in pairs(sys.stats) do
         local frame = createInstance("Frame")
         frame.Name = name .. "Frame"
         if UDim2 and type(UDim2.new)=="function" then
-            frame.Position = UDim2.new(0, 5, 0, index*35)
             frame.Size = UDim2.new(1, -10, 0, 30)
         end
+        GuiUtil.applyResponsive(frame, 6, 200, 30, 800, 40)
         parent(frame, container)
 
         local label = createInstance("TextLabel")
@@ -145,7 +168,6 @@ local function renderStats(container, sys)
             frame.Label = label
             frame.Button = btn
         end
-        index = index + 1
     end
 end
 
@@ -167,6 +189,17 @@ function StatUpgradeUISystem:update()
     if not container then
         container = createInstance("Frame")
         container.Name = "StatList"
+        GuiUtil.applyResponsive(container, 1, 150, 100, 400, 300)
+        local layout = createInstance("UIListLayout")
+        layout.Name = "ListLayout"
+        if Enum and Enum.FillDirection then
+            layout.FillDirection = Enum.FillDirection.Vertical
+            layout.SortOrder = Enum.SortOrder.LayoutOrder
+        end
+        if UDim2 and type(UDim2.new)=="function" then
+            layout.Padding = UDim2.new(0, 5, 0, 5)
+        end
+        parent(layout, container)
     end
     parent(container, self.window or gui)
     self.statListFrame = container
