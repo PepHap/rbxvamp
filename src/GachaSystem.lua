@@ -60,6 +60,7 @@ local companionPool = require(assets:WaitForChild("companions"))
 local EquipmentGenerator = require(script.Parent:WaitForChild("EquipmentGenerator"))
 local RunService = game:GetService("RunService")
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
 
 -- Simple currency storage
 GachaSystem.tickets = {skill = 0, companion = 0, equipment = 0}
@@ -91,6 +92,7 @@ function GachaSystem:addCrystals(amount)
     local n = tonumber(amount) or 0
     self.crystals = self.crystals + n
     if RunService:IsServer() then
+        LoggingSystem:logCurrency(nil, "crystal", n)
         NetworkSystem:fireAllClients("CurrencyUpdate", "crystal", self.crystals)
     end
 end
@@ -105,6 +107,9 @@ function GachaSystem:spendCrystals(amount)
     end
     if self.crystals >= n then
         self.crystals = self.crystals - n
+        if RunService:IsServer() then
+            LoggingSystem:logCurrency(nil, "crystal", -n)
+        end
         return true
     end
     return false
@@ -119,6 +124,9 @@ function GachaSystem:addTickets(kind, amount)
     end
     local n = tonumber(amount) or 0
     self.tickets[kind] = self.tickets[kind] + n
+    if RunService:IsServer() then
+        LoggingSystem:logCurrency(nil, kind .. "_ticket", n)
+    end
 end
 
 ---Returns how many tickets of the given type the player owns.
@@ -212,7 +220,11 @@ function GachaSystem:rollSkill()
         return nil
     end
     local rarity = self:rollRarity("skill")
-    return selectByRarity(skillPool, rarity)
+    local reward = selectByRarity(skillPool, rarity)
+    if reward and LoggingSystem and LoggingSystem.logItem then
+        LoggingSystem:logItem(nil, reward, "skill")
+    end
+    return reward
 end
 
 ---Rolls multiple skills and returns the list of rewards.
@@ -239,7 +251,11 @@ function GachaSystem:rollCompanion()
         return nil
     end
     local rarity = self:rollRarity("companion")
-    return selectByRarity(companionPool, rarity)
+    local reward = selectByRarity(companionPool, rarity)
+    if reward and LoggingSystem and LoggingSystem.logItem then
+        LoggingSystem:logItem(nil, reward, "companion")
+    end
+    return reward
 end
 
 ---Rolls multiple companions.
@@ -272,6 +288,9 @@ function GachaSystem:rollEquipment(slot)
     end
     if self.inventory and self.inventory.AddItem then
         self.inventory:AddItem(reward)
+    end
+    if reward and LoggingSystem and LoggingSystem.logItem then
+        LoggingSystem:logItem(nil, reward, "equipment")
     end
     return reward
 end
