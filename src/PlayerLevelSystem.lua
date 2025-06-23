@@ -131,6 +131,8 @@ end
 -- @param amount number non-negative experience amount to add
 function PlayerLevelSystem:addExperience(amount)
     assert(type(amount) == "number" and amount >= 0, "amount must be non-negative")
+    local AntiCheatSystem = require(script.Parent:WaitForChild("AntiCheatSystem"))
+    AntiCheatSystem:recordExp(nil, amount)
     self.exp = self.exp + amount
     self:checkThreshold()
     if RunService:IsServer() then

@@ -1,0 +1,84 @@
+-- AntiCheatSystem.lua
+-- Basic server-side checks for suspicious behavior.
+
+local AntiCheatSystem = {
+    expPerMinute = 1000,
+    currencyPerMinute = 1000,
+    minAttackInterval = 0.2,
+    maxMoveSpeed = 50,
+    players = {}
+}
+
+local RunService = game:GetService("RunService")
+
+local function getId(player)
+    if typeof and typeof(player) == "Instance" and player.UserId then
+        return player.UserId
+    end
+    return 0
+end
+
+function AntiCheatSystem:getRecord(player)
+    local id = getId(player)
+    local rec = self.players[id]
+    if not rec then
+        rec = {exp = 0, currency = 0, lastReset = os.clock(), lastAttack = 0, lastPos = nil, lastTime = os.clock()}
+        self.players[id] = rec
+    end
+    local now = os.clock()
+    if now - rec.lastReset >= 60 then
+        rec.exp = 0
+        rec.currency = 0
+        rec.lastReset = now
+    end
+    return rec
+end
+
+function AntiCheatSystem:recordExp(player, amount)
+    local rec = self:getRecord(player)
+    rec.exp = rec.exp + (tonumber(amount) or 0)
+    if rec.exp > self.expPerMinute then
+        warn("Suspicious EXP gain", player)
+    end
+end
+
+function AntiCheatSystem:recordCurrency(player, amount)
+    local rec = self:getRecord(player)
+    rec.currency = rec.currency + (tonumber(amount) or 0)
+    if rec.currency > self.currencyPerMinute then
+        warn("Suspicious currency gain", player)
+    end
+end
+
+function AntiCheatSystem:recordAttack(player)
+    local rec = self:getRecord(player)
+    local now = os.clock()
+    if now - rec.lastAttack < self.minAttackInterval then
+        warn("Suspicious attack rate", player)
+    end
+    rec.lastAttack = now
+end
+
+function AntiCheatSystem:checkMovement(player, position)
+    local rec = self:getRecord(player)
+    if not position then return end
+    local now = os.clock()
+    if rec.lastPos then
+        local dx = position.x - rec.lastPos.x
+        local dy = position.y - rec.lastPos.y
+        local dz = position.z - rec.lastPos.z
+        local dist = math.sqrt(dx * dx + dy * dy + dz * dz)
+        local dt = now - rec.lastTime
+        if dt > 0 and dist / dt > self.maxMoveSpeed then
+            warn("Possible teleport detected", player)
+        end
+    end
+    rec.lastPos = {x = position.x, y = position.y, z = position.z}
+    rec.lastTime = now
+end
+
+function AntiCheatSystem:update(dt)
+    -- currently no periodic logic
+end
+
+return AntiCheatSystem
