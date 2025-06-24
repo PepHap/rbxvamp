@@ -53,7 +53,11 @@ local InventoryUISystem = require(script.Parent:WaitForChild("InventoryUISystem"
 local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
 local CompanionUISystem = require(script.Parent:WaitForChild("CompanionUISystem"))
 local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
-local SkillCastSystem = require(script.Parent:WaitForChild("SkillCastSystem"))
+local SkillCastSystem
+if RunService:IsServer() then
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    SkillCastSystem = require(serverFolder:WaitForChild("SkillCastSystem"))
+end
 local GachaUISystem = require(script.Parent:WaitForChild("GachaUISystem"))
 local RewardGaugeUISystem = require(script.Parent:WaitForChild("RewardGaugeUISystem"))
 local StatUpgradeUISystem = require(script.Parent:WaitForChild("StatUpgradeUISystem"))

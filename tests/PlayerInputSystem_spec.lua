@@ -69,7 +69,7 @@ describe("PlayerInputSystem", function()
     end)
 
     it("casts skills when number keys are pressed", function()
-        local SkillCastSystem = require("src.SkillCastSystem")
+        local SkillCastSystem = require("server.systems.SkillCastSystem")
         SkillCastSystem.skillSystem = {skills = {{}}}
         SkillCastSystem.cooldowns = {0}
         PlayerInputSystem.skillCastSystem = SkillCastSystem

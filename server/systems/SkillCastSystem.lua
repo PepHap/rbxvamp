@@ -2,6 +2,10 @@
 -- Manages casting of acquired skills with cooldowns and mana.
 
 local RunService = game:GetService("RunService")
+
+local server = script.Parent
+local src = script.Parent.Parent.Parent:WaitForChild("src")
+
 local SkillCastSystem = {
     ---Maximum mana available to the player.
     maxMana = 100,
@@ -22,16 +26,15 @@ local function playRareEffect(skill)
 end
 
 local EnemySystem
-local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+local LevelSystem = require(src:WaitForChild("LevelSystem"))
 local DungeonSystem
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
-local EventManager = require(script.Parent:WaitForChild("EventManager"))
-local SkillSystem = require(script.Parent:WaitForChild("SkillSystem"))
+local NetworkSystem = require(src:WaitForChild("NetworkSystem"))
+local EventManager = require(src:WaitForChild("EventManager"))
+local SkillSystem = require(src:WaitForChild("SkillSystem"))
 
 if RunService:IsServer() then
-    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
-    EnemySystem = require(serverFolder:WaitForChild("EnemySystem"))
-    DungeonSystem = require(serverFolder:WaitForChild("DungeonSystem"))
+    EnemySystem = require(server:WaitForChild("EnemySystem"))
+    DungeonSystem = require(server:WaitForChild("DungeonSystem"))
 end
 
 ---Initializes the cast system with a skill system instance.

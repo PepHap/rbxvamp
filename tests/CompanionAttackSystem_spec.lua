@@ -1,4 +1,4 @@
-local CompanionAttackSystem = require("src.CompanionAttackSystem")
+local CompanionAttackSystem = require("server.systems.CompanionAttackSystem")
 local CompanionSystem = require("src.CompanionSystem")
 local AutoBattleSystem = require("src.AutoBattleSystem")
 local EnemySystem = require("src.EnemySystem")

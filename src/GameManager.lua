@@ -424,23 +424,26 @@ local SkillTreeSystem = require(script.Parent:WaitForChild("SkillTreeSystem"))
 GameManager.skillTreeSystem = SkillTreeSystem.new(GameManager.skillSystem)
 GameManager:addSystem("SkillTree", GameManager.skillTreeSystem)
 
--- Skill casting using mana and cooldowns
-local SkillCastSystem = require(script.Parent:WaitForChild("SkillCastSystem"))
-SkillCastSystem.skillSystem = GameManager.skillSystem
-GameManager.skillCastSystem = SkillCastSystem
-GameManager:addSystem("SkillCast", SkillCastSystem)
+local SkillCastSystem
 if IS_SERVER then
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    SkillCastSystem = require(serverFolder:WaitForChild("SkillCastSystem"))
+    SkillCastSystem.skillSystem = GameManager.skillSystem
+    GameManager.skillCastSystem = SkillCastSystem
+    GameManager:addSystem("SkillCast", SkillCastSystem)
     AutoBattleSystem.skillCastSystem = SkillCastSystem
+
+    local RegenSystem = require(serverFolder:WaitForChild("RegenSystem"))
+    RegenSystem.playerSystem = PlayerSystem
+    RegenSystem.skillCastSystem = SkillCastSystem
+    RegenSystem.statSystem = StatUpgradeSystem
+    GameManager:addSystem("Regen", RegenSystem)
 end
-local RegenSystem = require(script.Parent:WaitForChild("RegenSystem"))
-RegenSystem.playerSystem = PlayerSystem
-RegenSystem.skillCastSystem = SkillCastSystem
-RegenSystem.statSystem = StatUpgradeSystem
-GameManager:addSystem("Regen", RegenSystem)
 
 -- Optional automatic skill casting
 if IS_SERVER then
-    local AutoSkillSystem = require(script.Parent:WaitForChild("AutoSkillSystem"))
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    local AutoSkillSystem = require(serverFolder:WaitForChild("AutoSkillSystem"))
     AutoSkillSystem.skillCastSystem = SkillCastSystem
     GameManager.autoSkillSystem = AutoSkillSystem
     GameManager:addSystem("AutoSkill", AutoSkillSystem)
@@ -453,7 +456,8 @@ GameManager:addSystem("Companions", CompanionSystem)
 
 -- Companions follow the player and attack nearby enemies
 if IS_SERVER then
-    local CompanionAttackSystem = require(script.Parent:WaitForChild("CompanionAttackSystem"))
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    local CompanionAttackSystem = require(serverFolder:WaitForChild("CompanionAttackSystem"))
     CompanionAttackSystem.companionSystem = GameManager.companionSystem
     GameManager:addSystem("CompanionAI", CompanionAttackSystem)
 end

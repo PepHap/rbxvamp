@@ -1,7 +1,7 @@
-local AutoSkillSystem = require("src.AutoSkillSystem")
-local SkillCastSystem = require("src.SkillCastSystem")
-local EnemySystem = require("src.EnemySystem")
-local AutoBattleSystem = require("src.AutoBattleSystem")
+local AutoSkillSystem = require("server.systems.AutoSkillSystem")
+local SkillCastSystem = require("server.systems.SkillCastSystem")
+local EnemySystem = require("server.systems.EnemySystem")
+local AutoBattleSystem = require("server.systems.AutoBattleSystem")
 
 describe("AutoSkillSystem", function()
     before_each(function()

@@ -2,6 +2,9 @@
 -- Controls companion movement and automatic attacks
 
 local RunService = game:GetService("RunService")
+
+local server = script.Parent
+local src = script.Parent.Parent.Parent:WaitForChild("src")
 local CompanionAttackSystem = {
     ---Movement speed in studs per second when following the player.
     moveSpeed = 2,
@@ -17,20 +20,18 @@ local CompanionAttackSystem = {
 
 local AutoBattleSystem
 if RunService:IsServer() then
-    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
-    AutoBattleSystem = require(serverFolder:WaitForChild("AutoBattleSystem"))
+    AutoBattleSystem = require(server:WaitForChild("AutoBattleSystem"))
 end
 local EnemySystem
-local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+local LevelSystem = require(src:WaitForChild("LevelSystem"))
 
 if RunService:IsServer() then
-    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
-    EnemySystem = require(serverFolder:WaitForChild("EnemySystem"))
-    DungeonSystem = require(serverFolder:WaitForChild("DungeonSystem"))
+    EnemySystem = require(server:WaitForChild("EnemySystem"))
+    DungeonSystem = require(server:WaitForChild("DungeonSystem"))
 end
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
-local EventManager = require(script.Parent:WaitForChild("EventManager"))
-local CompanionSystem = require(script.Parent:WaitForChild("CompanionSystem"))
+local NetworkSystem = require(src:WaitForChild("NetworkSystem"))
+local EventManager = require(src:WaitForChild("EventManager"))
+local CompanionSystem = require(src:WaitForChild("CompanionSystem"))
 
 ---Initializes companion positions and stores the system reference.
 -- @param compSys table optional CompanionSystem instance

@@ -4,14 +4,18 @@
 local RegenSystem = {}
 
 local RunService = game:GetService("RunService")
+
+local server = script.Parent
+local src = script.Parent.Parent.Parent:WaitForChild("src")
+
 local PlayerSystem
 if RunService:IsServer() then
-    PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
+    PlayerSystem = require(src:WaitForChild("PlayerSystem"))
 else
-    PlayerSystem = require(script.Parent:WaitForChild("ClientPlayerSystem"))
+    PlayerSystem = require(src:WaitForChild("ClientPlayerSystem"))
 end
-local SkillCastSystem = require(script.Parent:WaitForChild("SkillCastSystem"))
-local StatUpgradeSystem = require(script.Parent:WaitForChild("StatUpgradeSystem"))
+local SkillCastSystem = require(server:WaitForChild("SkillCastSystem"))
+local StatUpgradeSystem = require(src:WaitForChild("StatUpgradeSystem"))
 
 ---Applies regeneration values every update.
 -- @param dt number delta time
