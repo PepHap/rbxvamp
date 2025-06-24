@@ -44,4 +44,6 @@ return {
     GachaResult = "ev_grs_v2",
     ExchangeRequest = "ev_exr_v1",
     ExchangeResult = "ev_exrs_v1",
+    StatUpgradeRequest = "ev_sur_v1",
+    StatUpdate = "ev_su_v1",
 }

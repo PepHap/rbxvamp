@@ -6,12 +6,10 @@ local CrystalExchangeUI = {
     useRobloxObjects = EnvironmentUtil.detectRoblox(),
     gui = nil,
     visible = false,
-    exchangeSystem = nil,
     window = nil,
     buttons = {},
 }
 
-local CrystalExchangeSystem = require(script.Parent:WaitForChild("CrystalExchangeSystem"))
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local ok, Theme = pcall(function()
@@ -69,8 +67,7 @@ local function ensureGui()
     return gui
 end
 
-function CrystalExchangeUI:start(exchangeSys)
-    self.exchangeSystem = exchangeSys or self.exchangeSystem or CrystalExchangeSystem
+function CrystalExchangeUI:start()
     local gui = ensureGui()
     if self.window then
         if self.window.Parent ~= gui then
@@ -111,8 +108,7 @@ function CrystalExchangeUI:buyTicket(kind)
         NetworkSystem:fireServer("ExchangeRequest", "ticket", kind, 1)
         return true
     end
-    if not self.exchangeSystem then return false end
-    return self.exchangeSystem:buyTickets(kind, 1)
+    return false
 end
 
 function CrystalExchangeUI:buyCurrency(kind)
@@ -120,8 +116,7 @@ function CrystalExchangeUI:buyCurrency(kind)
         NetworkSystem:fireServer("ExchangeRequest", "currency", kind, 1)
         return true
     end
-    if not self.exchangeSystem then return false end
-    return self.exchangeSystem:buyCurrency(kind, 1)
+    return false
 end
 
 function CrystalExchangeUI:setVisible(on)
@@ -133,7 +128,7 @@ end
 
 function CrystalExchangeUI:toggle()
     if not self.gui then
-        self:start(self.exchangeSystem)
+        self:start()
     end
     self:setVisible(not self.visible)
 end

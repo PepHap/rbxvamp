@@ -123,6 +123,12 @@ function GameManager:start()
             end
             self.networkSystem:fireClient(player, "ExchangeResult", result)
         end)
+
+        self.networkSystem:onServerEvent("StatUpgradeRequest", function(player, stat)
+            local ok = StatUpgradeSystem:upgradeStatWithFallback(stat, 1, "gold")
+            local lvl = StatUpgradeSystem.stats[stat] and StatUpgradeSystem.stats[stat].level or 0
+            self.networkSystem:fireClient(player, "StatUpdate", stat, lvl)
+        end)
     end
 end
 

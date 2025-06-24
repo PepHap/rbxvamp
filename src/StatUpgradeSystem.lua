@@ -13,6 +13,7 @@ StatUpgradeSystem.stats = {}
 StatUpgradeSystem.costFactor = 1
 
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+local RunService = game:GetService("RunService")
 
 ---Adds a new stat with the provided base value.
 -- @param name string name of the stat
@@ -117,6 +118,11 @@ function StatUpgradeSystem:loadData(data)
             }
         end
     end
+end
+
+if RunService and RunService.IsClient and RunService:IsClient() then
+    StatUpgradeSystem.upgradeStat = nil
+    StatUpgradeSystem.upgradeStatWithFallback = nil
 end
 
 return StatUpgradeSystem
