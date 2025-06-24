@@ -7,7 +7,59 @@
     "$className": "DataModel",
     "ServerScriptService": {
       "src": {
-        "$path": "src"
+        "$path": "src",
+        "$className": "Folder",
+        "CurrencySystem.client": {
+          "$className": "ModuleScript"
+        },
+        "CurrencySystem.server": {
+          "$className": "ModuleScript"
+        },
+        "GachaSystem.server": {
+          "$className": "ModuleScript"
+        },
+        "InventoryModule.client": {
+          "$className": "ModuleScript"
+        },
+        "InventoryModule.server": {
+          "$className": "ModuleScript"
+        },
+        "LevelSystem.client": {
+          "$className": "ModuleScript"
+        },
+        "LevelSystem.server": {
+          "$className": "ModuleScript"
+        },
+        "PlayerInputSystem.client": {
+          "$className": "ModuleScript"
+        },
+        "PlayerInputSystem.server": {
+          "$className": "ModuleScript"
+        },
+        "PlayerLevelSystem.client": {
+          "$className": "ModuleScript"
+        },
+        "PlayerLevelSystem.server": {
+          "$className": "ModuleScript"
+        },
+        "PlayerSystem.client": {
+          "$className": "ModuleScript"
+        },
+        "PlayerSystem.server": {
+          "$className": "ModuleScript"
+        },
+        "RewardGaugeSystem.client": {
+          "$className": "ModuleScript"
+        },
+        "RewardGaugeSystem.server": {
+          "$className": "ModuleScript"
+        },
+        "StatUpgradeSystem.client": {
+          "$className": "ModuleScript"
+        },
+        "StatUpgradeSystem.server": {
+          "$className": "ModuleScript"
+        }
       },
       "server": {
         "$path": "server"
@@ -24,7 +76,59 @@
         "$path": "assets"
       },
       "src": {
-        "$path": "src"
+        "$path": "src",
+        "$className": "Folder",
+        "CurrencySystem.client": {
+          "$className": "ModuleScript"
+        },
+        "CurrencySystem.server": {
+          "$className": "ModuleScript"
+        },
+        "GachaSystem.server": {
+          "$className": "ModuleScript"
+        },
+        "InventoryModule.client": {
+          "$className": "ModuleScript"
+        },
+        "InventoryModule.server": {
+          "$className": "ModuleScript"
+        },
+        "LevelSystem.client": {
+          "$className": "ModuleScript"
+        },
+        "LevelSystem.server": {
+          "$className": "ModuleScript"
+        },
+        "PlayerInputSystem.client": {
+          "$className": "ModuleScript"
+        },
+        "PlayerInputSystem.server": {
+          "$className": "ModuleScript"
+        },
+        "PlayerLevelSystem.client": {
+          "$className": "ModuleScript"
+        },
+        "PlayerLevelSystem.server": {
+          "$className": "ModuleScript"
+        },
+        "PlayerSystem.client": {
+          "$className": "ModuleScript"
+        },
+        "PlayerSystem.server": {
+          "$className": "ModuleScript"
+        },
+        "RewardGaugeSystem.client": {
+          "$className": "ModuleScript"
+        },
+        "RewardGaugeSystem.server": {
+          "$className": "ModuleScript"
+        },
+        "StatUpgradeSystem.client": {
+          "$className": "ModuleScript"
+        },
+        "StatUpgradeSystem.server": {
+          "$className": "ModuleScript"
+        }
       }
     },
     "StarterPlayer": {

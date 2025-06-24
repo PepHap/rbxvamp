@@ -1,2 +1,2 @@
 -- Deprecated compatibility module
-return require(script.Parent:WaitForChild("PlayerSystem.client"))
+return require(script.Parent:WaitForChild("PlayerSystem"))
