@@ -46,9 +46,18 @@ local serverOnly = {
 local ClientGameManager = {}
 for k, v in pairs(GameManager) do
     if not serverOnly[k] then
-        ClientGameManager[k] = v
+        if k == "systems" and type(v) == "table" then
+            ClientGameManager.systems = {}
+            for name, sys in pairs(v) do
+                ClientGameManager.systems[name] = sys
+            end
+        else
+            ClientGameManager[k] = v
+        end
     end
 end
+ClientGameManager.systems = ClientGameManager.systems or {}
+ClientGameManager.systems.Quest = require(script.Parent:WaitForChild("ClientQuestSystem"))
 
 ---Applies persistent data from the server to the local systems.
 -- This mirrors ``applySaveData`` on the server but excludes
@@ -66,7 +75,7 @@ function ClientGameManager:applyClientData(data)
     local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
     local AchievementSystem = require(script.Parent:WaitForChild("AchievementSystem"))
     local DailyBonusSystem = require(script.Parent:WaitForChild("DailyBonusSystem"))
-    local QuestSystem = require(script.Parent:WaitForChild("QuestSystem"))
+    local QuestSystem = require(script.Parent:WaitForChild("ClientQuestSystem"))
     local StatUpgradeSystem = require(script.Parent:WaitForChild("StatUpgradeSystem"))
 
     CurrencySystem:loadData(data.currency)

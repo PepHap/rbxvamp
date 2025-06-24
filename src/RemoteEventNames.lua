@@ -39,6 +39,7 @@ return {
     QuestUpdate = "ev_qu_v2",
     QuestData = "ev_qd_v2",
     QuestRequest = "ev_qrq_v2",
+    QuestClaim = "ev_qc_v1",
     PlayerDied = "ev_pd_v2",
     GachaRequest = "ev_grq_v2",
     GachaResult = "ev_grs_v2",
