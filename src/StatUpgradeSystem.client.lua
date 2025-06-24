@@ -1,6 +1,6 @@
 local RunService = game:GetService("RunService")
 if RunService:IsServer() then
-    error("StatUpgradeSystem.client should only be required on the client", 2)
+    error("StatUpgradeSystem client module should only be required on the client", 2)
 end
 
 local StatUpgradeSystem = {}

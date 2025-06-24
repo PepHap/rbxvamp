@@ -1,6 +1,6 @@
 local RunService = game:GetService("RunService")
 if RunService:IsServer() then
-    error("CurrencySystem.client should only be required on the client", 2)
+    error("CurrencySystem client module should only be required on the client", 2)
 end
 
 local CurrencySystem = {}

@@ -1,6 +1,6 @@
 local RunService = game:GetService("RunService")
 if RunService:IsServer() then
-    error("LevelSystem.client should only be required on the client", 2)
+    error("LevelSystem client module should only be required on the client", 2)
 end
 
 local LevelSystem = {}

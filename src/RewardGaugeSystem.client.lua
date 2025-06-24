@@ -1,6 +1,6 @@
 local RunService = game:GetService("RunService")
 if RunService:IsServer() then
-    error("RewardGaugeSystem.client should only be required on the client", 2)
+    error("RewardGaugeSystem client module should only be required on the client", 2)
 end
 
 local RewardGaugeSystem = {}

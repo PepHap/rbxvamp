@@ -2,7 +2,7 @@
 -- Allows manual player control and attacks when auto-battle is disabled.
 local RunService = game:GetService("RunService")
 if RunService:IsClient() then
-    error("PlayerInputSystem.server should only be required on the server", 2)
+    error("PlayerInputSystem server module should only be required on the server", 2)
 end
 
 

@@ -3,7 +3,7 @@
 
 local RunService = game:GetService("RunService")
 if RunService:IsServer() then
-    error("PlayerSystem.client should only be required on the client", 2)
+    error("PlayerSystem client module should only be required on the client", 2)
 end
 
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
