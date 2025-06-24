@@ -18,9 +18,12 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local assets = ReplicatedStorage:WaitForChild("assets")
 local slotIcons = require(assets:WaitForChild("slot_icons"))
 
--- Slots are arranged in three rows with two columns each
+-- Slots are arranged in three rows with two columns each using UIGridLayout
+-- https://create.roblox.com/docs/reference/engine/classes/UIGridLayout
 local COLUMN_COUNT = 2
 local ROW_COUNT = 3
+local CELL_SIZE = 80
+local CELL_PADDING = 5
 
 local function createInstance(className)
     if InventorySlots.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
@@ -59,7 +62,9 @@ function InventorySlots:create(parentFrame)
     local frame = createInstance("Frame")
     frame.Name = "EquipmentSlots"
     if UDim2 and type(UDim2.new)=="function" then
-        frame.Size = UDim2.new(1, 0, 1, 0)
+        local totalWidth = COLUMN_COUNT * CELL_SIZE + (COLUMN_COUNT - 1) * CELL_PADDING
+        local totalHeight = ROW_COUNT * CELL_SIZE + (ROW_COUNT - 1) * CELL_PADDING
+        frame.Size = UDim2.new(0, totalWidth, 0, totalHeight)
     end
     parent(frame, parentFrame)
     self.container = frame
@@ -67,9 +72,9 @@ function InventorySlots:create(parentFrame)
     local layout = createInstance("UIGridLayout")
     layout.Name = "Layout"
     if UDim2 and type(UDim2.new)=="function" then
-        layout.CellSize = UDim2.new(0, 80, 0, 80)
+        layout.CellSize = UDim2.new(0, CELL_SIZE, 0, CELL_SIZE)
         if layout.CellPadding ~= nil then
-            layout.CellPadding = UDim2.new(0, 2, 0, 2)
+            layout.CellPadding = UDim2.new(0, CELL_PADDING, 0, CELL_PADDING)
         end
         if Enum and Enum.FillDirection and Enum.SortOrder then
             layout.FillDirection = Enum.FillDirection.Horizontal
@@ -99,11 +104,13 @@ function InventorySlots:create(parentFrame)
             btn.LayoutOrder = i
         end
         if UDim2 and type(UDim2.new)=="function" then
-            btn.Size = UDim2.new(0, 80, 0, 80)
+            btn.Size = UDim2.new(0, CELL_SIZE, 0, CELL_SIZE)
             if not gridSupported then
                 local row = math.floor((i-1) / COLUMN_COUNT)
                 local col = (i-1) % COLUMN_COUNT
-                btn.Position = UDim2.new(0, col * 82, 0, row * 82)
+                local offsetX = col * (CELL_SIZE + CELL_PADDING)
+                local offsetY = row * (CELL_SIZE + CELL_PADDING)
+                btn.Position = UDim2.new(0, offsetX, 0, offsetY)
             end
         end
         btn.Text = ""
