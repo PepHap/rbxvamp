@@ -10,6 +10,8 @@ local src = script.Parent:WaitForChild("src")
 local server = script.Parent:WaitForChild("server")
 local GameManager = require(server:WaitForChild("ServerGameManager"))
 
+local ADMIN_IDS = {game.CreatorId}
+
 -- Enable Roblox object creation for modules that support it so the
 -- user can actually see models and interfaces when running the game
 -- Only non-UI modules should run on the server to avoid
@@ -28,6 +30,7 @@ end
 
 GameManager:start()
 GameManager.systems.AutoBattle:enable()
+GameManager:setAdminIds(ADMIN_IDS)
 
 local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")

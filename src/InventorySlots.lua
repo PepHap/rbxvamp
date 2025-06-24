@@ -85,6 +85,9 @@ function InventorySlots:create(parentFrame)
     for i, name in ipairs(slotNames) do
         local btn = createInstance("TextButton")
         btn.Name = name .. "Slot"
+        if btn.LayoutOrder ~= nil then
+            btn.LayoutOrder = i
+        end
         if UDim2 and type(UDim2.new)=="function" then
             btn.Size = UDim2.new(0, 80, 0, 80)
             if not gridSupported then
