@@ -1,6 +1,15 @@
 -- EnemySystem.lua
 -- Spawns waves of enemies and bosses.
 
+local RunService = game:GetService("RunService")
+-- Server-only module guard per Roblox guidelines:
+-- https://create.roblox.com/docs/reference/engine/classes/RunService#IsServer
+if RunService and RunService.IsClient and RunService.IsServer then
+    if RunService:IsClient() then
+        error("EnemySystem should only be required on the server", 2)
+    end
+end
+
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local EnemySystem = {}
 local EventManager = require(script.Parent:WaitForChild("EventManager"))

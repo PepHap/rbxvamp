@@ -8,9 +8,13 @@ local AutoSkillSystem = {
     lastSkillUsed = nil,
 }
 
-local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
+local EnemySystem
 local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
 local SkillCastSystem = require(script.Parent:WaitForChild("SkillCastSystem"))
+
+if RunService:IsServer() then
+    EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
+end
 
 ---Initializes the system with a SkillCastSystem instance.
 -- @param castSys table optional SkillCastSystem instance

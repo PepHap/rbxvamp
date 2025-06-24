@@ -5,7 +5,10 @@ local CurrencySystem = {}
 
 local RunService = game:GetService("RunService")
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
-local LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
+local LoggingSystem
+if RunService and RunService.IsServer and RunService:IsServer() then
+    LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
+end
 
 -- Table of balances by currency key
 CurrencySystem.balances = {}

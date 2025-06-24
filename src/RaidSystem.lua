@@ -1,6 +1,15 @@
 -- RaidSystem.lua
 -- Handles cooperative raid encounters with tougher enemies.
 
+local RunService = game:GetService("RunService")
+-- Raids are orchestrated server-side only according to Roblox docs:
+-- https://create.roblox.com/docs/reference/engine/classes/RunService#IsServer
+if RunService and RunService.IsClient and RunService.IsServer then
+    if RunService:IsClient() then
+        error("RaidSystem should only be required on the server", 2)
+    end
+end
+
 local RaidSystem = {}
 
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))

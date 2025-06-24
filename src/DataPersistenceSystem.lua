@@ -1,9 +1,17 @@
 -- DataPersistenceSystem.lua
 -- Handles saving and loading player data using DataStoreService when available.
 
+local RunService = game:GetService("RunService")
+-- Only the server may access DataStoreService:
+-- https://create.roblox.com/docs/reference/engine/classes/RunService#IsServer
+if RunService and RunService.IsClient and RunService.IsServer then
+    if RunService:IsClient() then
+        error("DataPersistenceSystem should only be required on the server", 2)
+    end
+end
+
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
-local RunService = game:GetService("RunService")
 local DataPersistenceSystem = {
     ---When true and running inside Roblox, DataStoreService will be used.
     useRobloxObjects = EnvironmentUtil.detectRoblox(),

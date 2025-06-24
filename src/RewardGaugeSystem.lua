@@ -28,7 +28,13 @@ local assets = ReplicatedStorage:WaitForChild("assets")
 local itemPool = require(assets:WaitForChild("items"))
 local EquipmentGenerator = require(script.Parent:WaitForChild("EquipmentGenerator"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
-local LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
+local LoggingSystem
+do
+    local RunService = game:GetService("RunService")
+    if RunService and RunService.IsServer and RunService:IsServer() then
+        LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
+    end
+end
 
 -- Precompute a list of available equipment slots
 local slots = {}

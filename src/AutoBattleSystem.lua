@@ -9,12 +9,17 @@ local AutoBattleSystem = {}
 -- like "../src/AutoBattleSystem".
 -- Parent folder containing the other systems
 local parent = script.Parent
-local EnemySystem = require(parent:WaitForChild("EnemySystem"))
+local EnemySystem
 local LevelSystem = require(parent:WaitForChild("LevelSystem"))
-local DungeonSystem = require(parent:WaitForChild("DungeonSystem"))
+local DungeonSystem
 local NetworkSystem = require(parent:WaitForChild("NetworkSystem"))
 local EventManager = require(parent:WaitForChild("EventManager"))
 local StatUpgradeSystem = require(parent:WaitForChild("StatUpgradeSystem"))
+
+if RunService:IsServer() then
+    EnemySystem = require(parent:WaitForChild("EnemySystem"))
+    DungeonSystem = require(parent:WaitForChild("DungeonSystem"))
+end
 
 ---Current player position used for simple movement calculations.
 AutoBattleSystem.playerPosition = {x = 0, y = 0}

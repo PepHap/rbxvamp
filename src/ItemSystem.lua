@@ -6,7 +6,13 @@ ItemSystem.__index = ItemSystem
 
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 local SlotConstants = require(script.Parent:WaitForChild("SlotConstants"))
-local LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
+local LoggingSystem
+do
+    local RunService = game:GetService("RunService")
+    if RunService and RunService.IsServer and RunService:IsServer() then
+        LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
+    end
+end
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local assets = ReplicatedStorage:WaitForChild("assets")

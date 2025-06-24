@@ -2,6 +2,15 @@
 -- Records server-side events like currency awards and item grants.
 -- Logs are stored in memory for now but could be persisted via DataStoreService.
 
+local RunService = game:GetService("RunService")
+-- Logging should only occur on the server as recommended here:
+-- https://create.roblox.com/docs/reference/engine/classes/RunService#IsServer
+if RunService and RunService.IsClient and RunService.IsServer then
+    if RunService:IsClient() then
+        error("LoggingSystem should only be required on the server", 2)
+    end
+end
+
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 
 local LoggingSystem = {
