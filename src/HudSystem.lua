@@ -176,7 +176,7 @@ function HudSystem:start()
         self.buttonLayout.CellSize = UDim2.new(0, 60, 0, 60)
         self.buttonLayout.CellPadding = UDim2.new(0, 4, 0, 4)
         self.buttonFrame.Size = UDim2.new(0.22, 0, 0.25, 0)
-        self.buttonFrame.Position = UDim2.new(0.02, 0, 0.7, 0)
+        self.buttonFrame.Position = UDim2.new(0.02, 0, 0.96, 0)
         self.buttonFrame.AnchorPoint = Vector2.new(0, 1)
     end
     GuiUtil.applyResponsive(self.buttonFrame, nil, 240, 60, 400, 120)
@@ -392,7 +392,7 @@ function HudSystem:update(dt)
         self.buttonLayout.CellSize = UDim2.new(0, 60, 0, 60)
         self.buttonLayout.CellPadding = UDim2.new(0, 4, 0, 4)
         self.buttonFrame.Size = UDim2.new(0.22, 0, 0.25, 0)
-        self.buttonFrame.Position = UDim2.new(0.02, 0, 0.7, 0)
+        self.buttonFrame.Position = UDim2.new(0.02, 0, 0.96, 0)
     end
     GuiUtil.applyResponsive(self.buttonFrame, nil, 240, 60, 400, 120)
     parent(self.buttonLayout, self.buttonFrame)
@@ -560,6 +560,17 @@ function HudSystem:update(dt)
                 keyLabel.Position = UDim2.new(0.7, 0, 0.7, 0)
             end
             parent(keyLabel, btn)
+            -- hint that holding the button opens the skill menu
+            local hint = createInstance("TextLabel")
+            hint.Name = "Hint" .. i
+            hint.BackgroundTransparency = 1
+            hint.TextScaled = true
+            hint.Text = "↗"
+            if UDim2 and type(UDim2.new)=="function" then
+                hint.Size = UDim2.new(0.3,0,0.3,0)
+                hint.Position = UDim2.new(0.7,0,0,0)
+            end
+            parent(hint, btn)
             local overlay = createInstance("Frame")
             overlay.BackgroundTransparency = 0.4
             overlay.BackgroundColor3 = Theme and Theme.colors and Theme.colors.cooldownOverlay or (Color3 and Color3.fromRGB and Color3.fromRGB(0,0,0) or {r=0,g=0,b=0})
@@ -651,7 +662,7 @@ function HudSystem:update(dt)
         self.levelLabel.Position = UDim2.new(0.02, 0, 0.02, 0)
         self.currencyLabel.Position = UDim2.new(0.02, 0, 0.06, 0)
         self.buttonFrame.Size = UDim2.new(0.22, 0, 0.25, 0)
-        self.buttonFrame.Position = UDim2.new(0.02, 0, 0.7, 0)
+        self.buttonFrame.Position = UDim2.new(0.02, 0, 0.96, 0)
         self.buttonFrame.AnchorPoint = Vector2.new(0, 1)
         GuiUtil.applyResponsive(self.buttonFrame, nil, 240, 60, 400, 120)
         self.healthFrame.Position = UDim2.new(0.02, 0, 0.1, 0)
