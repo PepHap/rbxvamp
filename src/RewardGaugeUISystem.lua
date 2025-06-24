@@ -203,7 +203,6 @@ function RewardGaugeUISystem:choose(index)
     if NetworkSystem and NetworkSystem.fireServer then
         NetworkSystem:fireServer("RewardChoice", index)
     end
-    local chosen = RewardGaugeSystem:choose(index)
     if self.optionButtons then
         for _, btn in ipairs(self.optionButtons) do
             if btn.Destroy then
@@ -213,7 +212,6 @@ function RewardGaugeUISystem:choose(index)
     end
     self.optionButtons = nil
     self:update()
-    return chosen
 end
 
 function RewardGaugeUISystem:setVisible(on)

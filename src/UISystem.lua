@@ -86,7 +86,13 @@ local function ensureGui()
 end
 
 local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
-local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+
+if NetworkSystem and NetworkSystem.onClientEvent then
+    NetworkSystem:onClientEvent("GachaResult", function(_, reward)
+        UISystem:displayGachaResult(reward)
+    end)
+end
 
 ---Displays reward options from the RewardGaugeSystem if available.
 -- Prints each option to the console.
@@ -185,26 +191,26 @@ end
 ---Rolls a skill through ``GachaSystem`` and displays the outcome.
 -- @return table|nil the rolled skill
 function UISystem:rollSkill()
-    local result = GachaSystem:rollSkill()
-    self:displayGachaResult(result)
-    return result
+    if NetworkSystem then
+        NetworkSystem:fireServer("GachaRequest", "skill")
+    end
 end
 
 ---Rolls a companion through ``GachaSystem`` and displays the outcome.
 -- @return table|nil the rolled companion
 function UISystem:rollCompanion()
-    local result = GachaSystem:rollCompanion()
-    self:displayGachaResult(result)
-    return result
+    if NetworkSystem then
+        NetworkSystem:fireServer("GachaRequest", "companion")
+    end
 end
 
 ---Rolls equipment for the specified slot and displays the outcome.
 -- @param slot string equipment slot
 -- @return table|nil the rolled equipment
 function UISystem:rollEquipment(slot)
-    local result = GachaSystem:rollEquipment(slot)
-    self:displayGachaResult(result)
-    return result
+    if NetworkSystem then
+        NetworkSystem:fireServer("GachaRequest", "equipment", slot)
+    end
 end
 
 ---Displays the current reward gauge value in a TextLabel.

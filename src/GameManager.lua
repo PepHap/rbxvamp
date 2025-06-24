@@ -87,6 +87,18 @@ function GameManager:start()
         self.networkSystem:onServerEvent("QuestRequest", function(player)
             self.networkSystem:fireClient(player, "QuestData", QuestSystem:saveData())
         end)
+
+        self.networkSystem:onServerEvent("GachaRequest", function(player, kind, arg)
+            local reward
+            if kind == "skill" then
+                reward = GameManager:rollSkill()
+            elseif kind == "companion" then
+                reward = GameManager:rollCompanion()
+            elseif kind == "equipment" then
+                reward = GameManager:rollEquipment(arg)
+            end
+            self.networkSystem:fireClient(player, "GachaResult", kind, reward)
+        end)
     end
 end
 
