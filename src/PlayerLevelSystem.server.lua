@@ -2,8 +2,8 @@
 -- Manages player experience, levels and content unlocks.
 
 local PlayerLevelSystem = {}
-local EventManager = require(script.Parent:WaitForChild("EventManager"))
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local EventManager = require(script.Parent.Parent:WaitForChild("EventManager"))
+local NetworkSystem = require(script.Parent.Parent:WaitForChild("NetworkSystem"))
 
 local RunService = game:GetService("RunService")
 
@@ -66,9 +66,9 @@ local milestones = {
 -- @param reward table reward descriptor
 local function grantMilestoneReward(reward)
     if not reward then return end
-    local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
-    local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
-    local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
+    local CurrencySystem = require(script.Parent.Parent:WaitForChild("CurrencySystem"))
+    local GachaSystem = require(script.Parent.Parent:WaitForChild("GachaSystem"))
+    local KeySystem = require(script.Parent.Parent:WaitForChild("KeySystem"))
     if reward.crystals then
         CurrencySystem:add("crystal", reward.crystals)
     end
