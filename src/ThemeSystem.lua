@@ -8,6 +8,8 @@ local ThemeSystem = {
     lastLevel = nil,
 }
 
+local RunService = game:GetService("RunService")
+
 local UITheme = require(script.Parent:WaitForChild("UITheme"))
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
 local ok, LightingSystem = pcall(function()
@@ -53,7 +55,12 @@ end
 function ThemeSystem:updateTheme()
     if not self.locationSystem then return end
     local idx = self.locationSystem.currentIndex
-    local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+    local LevelSystem
+    if RunService:IsServer() then
+        LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+    else
+        LevelSystem = require(script.Parent:WaitForChild("LevelSystem.client"))
+    end
     local lvl = LevelSystem.currentLevel or 1
     if self.lastIndex == idx and self.lastLevel == lvl then return end
     self.lastIndex = idx

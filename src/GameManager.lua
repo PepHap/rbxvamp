@@ -188,7 +188,12 @@ end
 GameManager:addSystem("Player", PlayerSystem)
 
 -- Stage progression between floors
-local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+local LevelSystem
+if IS_SERVER then
+    LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+else
+    LevelSystem = require(script.Parent:WaitForChild("LevelSystem.client"))
+end
 GameManager:addSystem("Level", LevelSystem)
 
 -- Tracks which area the player is currently exploring
@@ -214,7 +219,12 @@ local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
 GameManager:addSystem("Gacha", GachaSystem)
 
 -- Gauge based reward choices independent of stage/XP
-local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
+local RewardGaugeSystem
+if IS_SERVER then
+    RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
+else
+    RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem.client"))
+end
 GameManager:addSystem("RewardGauge", RewardGaugeSystem)
 RewardGaugeSystem.onSelect = function(choice)
     if not choice then return end

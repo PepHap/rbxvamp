@@ -94,7 +94,7 @@ local function ensureGui()
     return gui
 end
 
-local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
+local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem.client"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 
 if NetworkSystem and NetworkSystem.onClientEvent then

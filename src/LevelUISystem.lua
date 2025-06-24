@@ -8,7 +8,7 @@ end
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
-local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+local LevelSystem = require(script.Parent:WaitForChild("LevelSystem.client"))
 local LocalizationSystem = require(script.Parent:WaitForChild("LocalizationSystem"))
 local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
