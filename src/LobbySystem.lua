@@ -2,6 +2,8 @@
 -- Handles a shared lobby area where players can meet and trade items.
 
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
+local RunService = game:GetService("RunService")
+if RunService:IsClient() then error("LobbySystem should only be required on the server", 2) end
 local LobbySystem = {
     useRobloxObjects = EnvironmentUtil.detectRoblox(),
     lobbyCoordinates = {x = -200, y = 0, z = 0},
