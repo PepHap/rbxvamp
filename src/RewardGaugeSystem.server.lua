@@ -22,17 +22,17 @@ RewardGaugeSystem.options = nil
 RewardGaugeSystem.onSelect = nil
 
 -- Required systems/assets
-local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
+local GachaSystem = require(script.Parent.Parent:WaitForChild("GachaSystem"))
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local assets = ReplicatedStorage:WaitForChild("assets")
 local itemPool = require(assets:WaitForChild("items"))
-local EquipmentGenerator = require(script.Parent:WaitForChild("EquipmentGenerator"))
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local EquipmentGenerator = require(script.Parent.Parent:WaitForChild("EquipmentGenerator"))
+local NetworkSystem = require(script.Parent.Parent:WaitForChild("NetworkSystem"))
 local LoggingSystem
 do
     local RunService = game:GetService("RunService")
     if RunService and RunService.IsServer and RunService:IsServer() then
-        LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
+        LoggingSystem = require(script.Parent.Parent:WaitForChild("LoggingSystem"))
     end
 end
 

@@ -4,9 +4,9 @@
 local InventoryModule = {}
 InventoryModule.__index = InventoryModule
 
-local ItemSystem = require(script.Parent:WaitForChild("ItemSystem"))
-local StatUpgradeSystem = require(script.Parent:WaitForChild("StatUpgradeSystem"))
-local ItemSalvageSystem = require(script.Parent:WaitForChild("ItemSalvageSystem"))
+local ItemSystem = require(script.Parent.Parent:WaitForChild("ItemSystem"))
+local StatUpgradeSystem = require(script.Parent.Parent:WaitForChild("StatUpgradeSystem"))
+local ItemSalvageSystem = require(script.Parent.Parent:WaitForChild("ItemSalvageSystem"))
 
 function InventoryModule.new(statSystem, setSystem)
     local self = setmetatable({}, InventoryModule)

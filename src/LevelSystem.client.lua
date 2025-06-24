@@ -5,10 +5,10 @@ end
 
 local LevelSystem = {}
 
-local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
-local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
-local WaveConfig = require(script.Parent:WaitForChild("WaveConfig"))
-local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
+local KeySystem = require(script.Parent.Parent:WaitForChild("KeySystem"))
+local LocationSystem = require(script.Parent.Parent:WaitForChild("LocationSystem"))
+local WaveConfig = require(script.Parent.Parent:WaitForChild("WaveConfig"))
+local PlayerLevelSystem = require(script.Parent.Parent:WaitForChild("PlayerLevelSystem"))
 
 LevelSystem.highestClearedStage = 0
 LevelSystem.currentLevel = 1

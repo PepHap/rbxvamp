@@ -57,15 +57,15 @@ local assets = ReplicatedStorage:WaitForChild("assets")
 local skillPool = require(assets:WaitForChild("skills"))
 local itemPool = require(assets:WaitForChild("items"))
 local companionPool = require(assets:WaitForChild("companions"))
-local EquipmentGenerator = require(script.Parent:WaitForChild("EquipmentGenerator"))
-local SkillSystem = require(script.Parent:WaitForChild("SkillSystem"))
-local CompanionSystem = require(script.Parent:WaitForChild("CompanionSystem"))
-local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
+local EquipmentGenerator = require(script.Parent.Parent:WaitForChild("EquipmentGenerator"))
+local SkillSystem = require(script.Parent.Parent:WaitForChild("SkillSystem"))
+local CompanionSystem = require(script.Parent.Parent:WaitForChild("CompanionSystem"))
+local PlayerLevelSystem = require(script.Parent.Parent:WaitForChild("PlayerLevelSystem"))
 local RunService = game:GetService("RunService")
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local NetworkSystem = require(script.Parent.Parent:WaitForChild("NetworkSystem"))
 local LoggingSystem
 if RunService and RunService.IsServer and RunService:IsServer() then
-    LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
+    LoggingSystem = require(script.Parent.Parent:WaitForChild("LoggingSystem"))
 end
 
 -- Simple currency storage
