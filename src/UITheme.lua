@@ -139,6 +139,28 @@ function UITheme.styleLabel(lbl)
     addCorner(lbl)
 end
 
+---Styles an ImageButton with rounded corners and highlight stroke.
+-- @param btn table|Instance ImageButton object
+function UITheme.styleImageButton(btn)
+    assign(btn, {
+        BackgroundColor3 = toColor3(UITheme.colors.buttonBackground),
+        AutoButtonColor = false,
+    })
+    addCorner(btn)
+    if typeof and typeof(btn) == "Instance" and Instance and type(Instance.new) == "function" then
+        local ok, stroke = pcall(function()
+            return Instance.new("UIStroke")
+        end)
+        if ok and stroke then
+            stroke.Color = toColor3(UITheme.colors.highlight)
+            stroke.Thickness = 1
+            stroke.Parent = btn
+        end
+    else
+        btn.strokeColor = UITheme.colors.highlight
+    end
+end
+
 ---Styles an input TextBox control with the theme colors.
 -- Adds consistent font and rounded corners similar to buttons.
 -- @param input table|Instance TextBox object
