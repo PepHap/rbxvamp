@@ -14,7 +14,11 @@ local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 
 local function createInstance(className)
     if LobbyUI.useRobloxObjects and typeof and Instance and type(Instance.new)=="function" then
-        return Instance.new(className)
+        local inst = Instance.new(className)
+        if className == "ScreenGui" and inst.IgnoreGuiInset ~= nil then
+            inst.IgnoreGuiInset = true
+        end
+        return inst
     end
     return {ClassName = className}
 end

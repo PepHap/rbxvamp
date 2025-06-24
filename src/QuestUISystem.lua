@@ -12,7 +12,11 @@ local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 
 local function createInstance(className)
     if QuestUISystem.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
-        return Instance.new(className)
+        local inst = Instance.new(className)
+        if className == "ScreenGui" and inst.IgnoreGuiInset ~= nil then
+            inst.IgnoreGuiInset = true
+        end
+        return inst
     end
     return {ClassName = className}
 end

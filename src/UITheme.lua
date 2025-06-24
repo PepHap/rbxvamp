@@ -2,15 +2,15 @@ local UITheme = {}
 
 -- Base colors inspired by Genshin Impact's UI
 UITheme.colors = {
-    windowBackground = Color3 and Color3.fromRGB and Color3.fromRGB(20, 20, 30) or {r=20,g=20,b=30},
-    buttonBackground = Color3 and Color3.fromRGB and Color3.fromRGB(40, 60, 90) or {r=40,g=60,b=90},
+    windowBackground = Color3 and Color3.fromRGB and Color3.fromRGB(35, 40, 55) or {r=35,g=40,b=55},
+    buttonBackground = Color3 and Color3.fromRGB and Color3.fromRGB(70, 100, 140) or {r=70,g=100,b=140},
     buttonText = Color3 and Color3.fromRGB and Color3.fromRGB(255, 255, 255) or {r=1,g=1,b=1},
-    labelText = Color3 and Color3.fromRGB and Color3.fromRGB(220, 220, 220) or {r=220,g=220,b=220},
+    labelText = Color3 and Color3.fromRGB and Color3.fromRGB(240, 240, 240) or {r=240,g=240,b=240},
     -- Slightly brighter background when hovering buttons
-    buttonHover = Color3 and Color3.fromRGB and Color3.fromRGB(60, 80, 120) or {r=60,g=80,b=120},
+    buttonHover = Color3 and Color3.fromRGB and Color3.fromRGB(100, 140, 190) or {r=100,g=140,b=190},
     -- Accent color used for selected buttons or highlighted elements
-    highlight = Color3 and Color3.fromRGB and Color3.fromRGB(80, 120, 160) or {r=80,g=120,b=160},
-    progressBar = Color3 and Color3.fromRGB and Color3.fromRGB(255, 230, 40) or {r=255,g=230,b=40},
+    highlight = Color3 and Color3.fromRGB and Color3.fromRGB(100, 170, 230) or {r=100,g=170,b=230},
+    progressBar = Color3 and Color3.fromRGB and Color3.fromRGB(100, 170, 255) or {r=100,g=170,b=255},
 }
 
 UITheme.rarityColors = {
@@ -26,7 +26,7 @@ UITheme.rarityColors = {
 -- Fallback font if Enum.Font is unavailable
 UITheme.font = Enum and Enum.Font and Enum.Font.GothamBold
 
-UITheme.cornerRadius = 8
+UITheme.cornerRadius = 12
 
 -- Convert RGB table values returned in test environments to actual Color3
 -- values when running inside Roblox. This prevents type mismatches when

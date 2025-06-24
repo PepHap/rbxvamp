@@ -25,6 +25,7 @@ local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local function createInstance(className)
     if CompanionUISystem.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
         local inst = Instance.new(className)
+        if className == "ScreenGui" and inst.IgnoreGuiInset ~= nil then inst.IgnoreGuiInset = true end
         if Theme then
             if className == "TextLabel" then Theme.styleLabel(inst)
             elseif className == "TextButton" then Theme.styleButton(inst)
