@@ -197,6 +197,10 @@ function HudSystem:start()
         GuiUtil.addCrossDecor(self.skillFrame)
     end
     self.skillLayout = createInstance("UIListLayout")
+    if Theme and Theme.styleProgressBar then
+        Theme.styleProgressBar(self.progressFrame)
+        Theme.styleProgressBar(self.healthFrame)
+    end
     GuiUtil.applyResponsive(self.healthFrame, 10, 150, 20, 800, 40)
     GuiUtil.applyResponsive(self.progressFrame, 16, 200, 20, 1000, 40)
     -- Keep the skill bar a fixed height while scaling for different resolutions
@@ -332,6 +336,10 @@ function HudSystem:update(dt)
     self.healthFrame = self.healthFrame or createInstance("Frame")
     self.healthFill = self.healthFill or createInstance("Frame")
     self.healthText = self.healthText or createInstance("TextLabel")
+    if Theme and Theme.styleProgressBar then
+        Theme.styleProgressBar(self.progressFrame)
+        Theme.styleProgressBar(self.healthFrame)
+    end
     self.skillFrame = self.skillFrame or createInstance("Frame")
     self.skillLayout = self.skillLayout or createInstance("UIListLayout")
     self.skillButtons = self.skillButtons or {}
@@ -485,9 +493,27 @@ function HudSystem:update(dt)
                 aspect.Parent = btn
             end
             btn.LayoutOrder = i
-            GuiUtil.connectButton(btn, function()
-                NetworkSystem:fireServer("SkillRequest", i)
-            end)
+            local pressStart = 0
+            if btn.MouseButton1Down then
+                btn.MouseButton1Down:Connect(function()
+                    pressStart = os.clock()
+                end)
+            end
+            if btn.MouseButton1Up then
+                btn.MouseButton1Up:Connect(function()
+                    local duration = os.clock() - pressStart
+                    if duration > 0.5 then
+                        local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
+                        MenuUISystem:openTab("Skills")
+                    else
+                        NetworkSystem:fireServer("SkillRequest", i)
+                    end
+                end)
+            else
+                GuiUtil.connectButton(btn, function()
+                    NetworkSystem:fireServer("SkillRequest", i)
+                end)
+            end
             if btn.MouseButton2Click then
                 btn.MouseButton2Click:Connect(function()
                     local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))

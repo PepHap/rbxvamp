@@ -177,6 +177,28 @@ function UITheme.styleInput(input)
     addCorner(input)
 end
 
+---Styles a simple progress bar frame.
+--@param bar table|Instance progress bar container
+function UITheme.styleProgressBar(bar)
+    assign(bar, {
+        BackgroundTransparency = 0.1,
+        BackgroundColor3 = toColor3(UITheme.colors.windowBackground2),
+    })
+    addCorner(bar)
+    if typeof and typeof(bar) == "Instance" and Instance and type(Instance.new) == "function" then
+        local okStroke, stroke = pcall(function()
+            return Instance.new("UIStroke")
+        end)
+        if okStroke and stroke then
+            stroke.Color = toColor3(UITheme.colors.highlight)
+            stroke.Thickness = 1
+            stroke.Parent = bar
+        end
+    else
+        bar.strokeColor = UITheme.colors.highlight
+    end
+end
+
 ---Returns an interpolated color from green to red based on the health ratio.
 -- @param ratio number value between 0 and 1 representing current HP
 function UITheme.getHealthColor(ratio)
