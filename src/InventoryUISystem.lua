@@ -132,10 +132,15 @@ local function ensureGui(parent)
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "InventoryUI"
-    InventoryUI.gui = gui
+    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
+    GuiUtil.makeFullScreen(gui)
     if gui.Enabled ~= nil then
         gui.Enabled = true
     end
+    if gui.ResetOnSpawn ~= nil then
+        gui.ResetOnSpawn = false
+    end
+    InventoryUI.gui = gui
     if InventoryUI.useRobloxObjects and pgui then
         gui.Parent = pgui
     end

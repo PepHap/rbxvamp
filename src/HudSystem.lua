@@ -108,6 +108,9 @@ local function ensureGui()
     end
     local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
     GuiUtil.makeFullScreen(gui)
+    if gui.ResetOnSpawn ~= nil then
+        gui.ResetOnSpawn = false
+    end
     HudSystem.gui = gui
     if HudSystem.useRobloxObjects and pgui then
         gui.Parent = pgui

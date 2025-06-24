@@ -75,6 +75,9 @@ local function ensureGui()
     local gui = createInstance("ScreenGui")
     gui.Name = "MenuUI"
     GuiUtil.makeFullScreen(gui)
+    if gui.ResetOnSpawn ~= nil then
+        gui.ResetOnSpawn = false
+    end
     MenuUI.gui = gui
     if gui.Enabled ~= nil then
         gui.Enabled = true

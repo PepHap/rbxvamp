@@ -224,6 +224,13 @@ end
 ---@param frame table|Instance Frame to modify
 function GuiUtil.makeFullScreen(frame)
     if not frame then return end
+    if typeof and typeof(frame) == "Instance" and frame:IsA("ScreenGui") then
+        if frame.IgnoreGuiInset ~= nil then frame.IgnoreGuiInset = true end
+        if frame.ResetOnSpawn ~= nil then frame.ResetOnSpawn = false end
+    elseif type(frame) == "table" and frame.ClassName == "ScreenGui" then
+        frame.IgnoreGuiInset = true
+        frame.ResetOnSpawn = false
+    end
     if UDim2 and type(UDim2.new)=="function" then
         local size = UDim2.new(1,0,1,0)
         local pos = UDim2.new(0,0,0,0)
