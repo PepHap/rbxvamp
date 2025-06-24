@@ -16,7 +16,7 @@ local RewardGaugeUISystem = {
     window = nil,
 }
 
-local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
+local RewardGaugeSystem = require(script.Parent:WaitForChild("ClientRewardGaugeSystem"))
 local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)

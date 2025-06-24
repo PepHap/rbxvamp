@@ -53,7 +53,7 @@ end
 function ThemeSystem:updateTheme()
     if not self.locationSystem then return end
     local idx = self.locationSystem.currentIndex
-    local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+    local LevelSystem = require(script.Parent:WaitForChild("ClientLevelSystem"))
     local lvl = LevelSystem.currentLevel or 1
     if self.lastIndex == idx and self.lastLevel == lvl then return end
     self.lastIndex = idx

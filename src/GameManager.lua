@@ -195,7 +195,12 @@ end
 GameManager:addSystem("Player", PlayerSystem)
 
 -- Stage progression between floors
-local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+local LevelSystem
+if IS_SERVER then
+    LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+else
+    LevelSystem = require(script.Parent:WaitForChild("ClientLevelSystem"))
+end
 GameManager:addSystem("Level", LevelSystem)
 
 -- Tracks which area the player is currently exploring

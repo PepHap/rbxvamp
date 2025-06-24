@@ -58,7 +58,7 @@ if RunService:IsServer() then
     local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
     AutoBattleSystem = require(serverFolder:WaitForChild("AutoBattleSystem"))
 end
-local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
+local RewardGaugeSystem = require(script.Parent:WaitForChild("ClientRewardGaugeSystem"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local GameManager = require(script.Parent:WaitForChild("ClientGameManager"))
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
