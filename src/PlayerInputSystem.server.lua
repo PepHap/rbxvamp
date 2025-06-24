@@ -45,7 +45,6 @@ local PlayerInputSystem = {
     skillKeyMap = {One = 1, Two = 2, Three = 3, Four = 4},
 }
 
-local RunService = game:GetService("RunService")
 local PlayerSystem
 if RunService:IsServer() then
     PlayerSystem = require(script.Parent.Parent:WaitForChild("server"):WaitForChild("ServerPlayerSystem"))

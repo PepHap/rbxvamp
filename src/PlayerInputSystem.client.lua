@@ -45,7 +45,6 @@ local PlayerInputSystem = {
     skillKeyMap = {One = 1, Two = 2, Three = 3, Four = 4},
 }
 
-local RunService = game:GetService("RunService")
 local PlayerSystem = require(script.Parent.Parent:WaitForChild("PlayerSystem"))
 local SkillUISystem = require(script.Parent.Parent:WaitForChild("SkillUISystem"))
 local CompanionUISystem = require(script.Parent.Parent:WaitForChild("CompanionUISystem"))

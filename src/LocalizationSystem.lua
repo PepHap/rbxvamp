@@ -31,6 +31,7 @@ LocalizationSystem.translations.en = {
     ["Abyss"] = "Abyss",
     ["Underworld"] = "Underworld",
     ["Next Reward"] = "Next Reward",
+    ["Next Milestone"] = "Next Milestone",
     ["XP"] = "XP",
     ["Haunted Manor"] = "Haunted Manor",
 
@@ -57,6 +58,7 @@ LocalizationSystem.translations.ru = {
     ["Abyss"] = "Бездна",
     ["Underworld"] = "Преисподняя",
     ["Next Reward"] = "Следующая награда",
+    ["Next Milestone"] = "Следующая цель",
     ["XP"] = "Опыта",
     ["Haunted Manor"] = "Проклятое поместье",
 }

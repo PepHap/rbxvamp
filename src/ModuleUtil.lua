@@ -18,6 +18,11 @@ function ModuleUtil.requireChild(parent, name, timeout)
         warn(("Missing module %s under %s"):format(name, parent:GetFullName()))
         return nil
     end
+    if not child:IsA("ModuleScript") then
+        warn(("Child %s under %s is not a ModuleScript (found %s)")
+            :format(child.Name, parent:GetFullName(), child.ClassName))
+        return nil
+    end
     local ok, mod = pcall(require, child)
     if not ok then
         warn(("Error requiring %s: %s"):format(child:GetFullName(), mod))

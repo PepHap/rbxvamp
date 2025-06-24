@@ -127,6 +127,13 @@ function LevelUI:start(pls, lvlSys, parentGui)
         self.stageLabel.Size = UDim2.new(1,-10,0,20)
     end
 
+    self.milestoneLabel = createInstance("TextLabel")
+    parent(self.milestoneLabel, self.window)
+    if UDim2 and type(UDim2.new)=="function" then
+        self.milestoneLabel.Position = UDim2.new(0,5,0,50)
+        self.milestoneLabel.Size = UDim2.new(1,-10,0,20)
+    end
+
     self:update()
     self:setVisible(self.visible)
 end
@@ -137,6 +144,8 @@ function LevelUI:update()
     parent(self.levelLabel, self.window or gui)
     self.stageLabel = self.stageLabel or createInstance("TextLabel")
     parent(self.stageLabel, self.window or gui)
+    self.milestoneLabel = self.milestoneLabel or createInstance("TextLabel")
+    parent(self.milestoneLabel, self.window or gui)
 
     local lvl = self.playerLevelSystem.level or 1
     local expPercent = math.floor((self.playerLevelSystem:getExpPercent() or 0)*100)
@@ -145,6 +154,14 @@ function LevelUI:update()
 
     self.levelLabel.Text = string.format("%s %d (%d%% XP)", LocalizationSystem:get("Level"), lvl, expPercent)
     self.stageLabel.Text = string.format("%s %d - %d %s", LocalizationSystem:get("Floor"), floor, killsLeft, LocalizationSystem:get("kills to"))
+    if self.milestoneLabel then
+        local nextLvl = self.playerLevelSystem:getNextMilestoneLevel()
+        if nextLvl then
+            self.milestoneLabel.Text = string.format("%s %d", LocalizationSystem:get("Next Milestone"), nextLvl)
+        else
+            self.milestoneLabel.Text = ""
+        end
+    end
 end
 
 function LevelUI:setVisible(on)
