@@ -42,4 +42,6 @@ return {
     PlayerDied = "ev_pd_v2",
     GachaRequest = "ev_grq_v2",
     GachaResult = "ev_grs_v2",
+    ExchangeRequest = "ev_exr_v1",
+    ExchangeResult = "ev_exrs_v1",
 }

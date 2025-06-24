@@ -208,25 +208,37 @@ function AdminConsole:runCommand(text)
         currency = function(self, a)
             local kind = a[1]
             local amount = tonumber(a[2]) or 0
-            local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
             if kind then
-                CurrencySystem:add(kind, amount)
+                if NetworkSystem and NetworkSystem.fireServer then
+                    NetworkSystem:fireServer("ExchangeRequest", "addCurrency", kind, amount)
+                else
+                    local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+                    CurrencySystem:add(kind, amount)
+                end
                 return string.format("Added %d %s", amount, kind)
             end
         end,
         ticket = function(self, a)
             local kind = a[1]
             local amount = tonumber(a[2]) or 1
-            local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
             if kind then
-                GachaSystem:addTickets(kind, amount)
+                if NetworkSystem and NetworkSystem.fireServer then
+                    NetworkSystem:fireServer("ExchangeRequest", "addTicket", kind, amount)
+                else
+                    local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
+                    GachaSystem:addTickets(kind, amount)
+                end
                 return string.format("Added %d %s tickets", amount, kind)
             end
         end,
         crystals = function(self, a)
             local amount = tonumber(a[1]) or 1
-            local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
-            GachaSystem:addCrystals(amount)
+            if NetworkSystem and NetworkSystem.fireServer then
+                NetworkSystem:fireServer("ExchangeRequest", "addCrystals", nil, amount)
+            else
+                local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
+                GachaSystem:addCrystals(amount)
+            end
             return string.format("Added %d crystals", amount)
         end,
         roll = function(self, a)
@@ -253,64 +265,84 @@ function AdminConsole:runCommand(text)
         end,
         -- Purchase gacha tickets using crystals
         buyticket = function(self, a)
-            if not self.gameManager then return "No manager" end
             local kind = a[1]
             local amount = tonumber(a[2]) or 1
             if kind then
-                local ok = self.gameManager:buyTickets(kind, amount)
-                if ok then
-                    return string.format("Bought %d %s tickets", amount, kind)
+                if NetworkSystem and NetworkSystem.fireServer then
+                    NetworkSystem:fireServer("ExchangeRequest", "ticket", kind, amount)
+                    return "Ticket purchase requested"
+                elseif self.gameManager then
+                    local ok = self.gameManager:buyTickets(kind, amount)
+                    if ok then
+                        return string.format("Bought %d %s tickets", amount, kind)
+                    end
                 end
             end
             return "Ticket purchase failed"
         end,
         -- Purchase upgrade currency using crystals
         buycurrency = function(self, a)
-            if not self.gameManager then return "No manager" end
             local kind = a[1]
             local amount = tonumber(a[2]) or 1
             if kind then
-                local ok = self.gameManager:buyCurrency(kind, amount)
-                if ok then
-                    return string.format("Bought %d %s", amount, kind)
+                if NetworkSystem and NetworkSystem.fireServer then
+                    NetworkSystem:fireServer("ExchangeRequest", "currency", kind, amount)
+                    return "Currency purchase requested"
+                elseif self.gameManager then
+                    local ok = self.gameManager:buyCurrency(kind, amount)
+                    if ok then
+                        return string.format("Bought %d %s", amount, kind)
+                    end
                 end
             end
             return "Currency purchase failed"
         end,
         -- Upgrade an item by spending crystals
         upgradec = function(self, a)
-            if not self.gameManager then return "No manager" end
             local slot = a[1]
             local amount = tonumber(a[2]) or 1
             local currency = a[3]
             if slot then
-                local ok = self.gameManager:upgradeItemWithCrystals(slot, amount, currency)
-                if ok then
-                    return string.format("Crystal upgraded %s", slot)
+                if NetworkSystem and NetworkSystem.fireServer then
+                    NetworkSystem:fireServer("ExchangeRequest", "upgrade", nil, amount, slot, currency)
+                    return "Upgrade requested"
+                elseif self.gameManager then
+                    local ok = self.gameManager:upgradeItemWithCrystals(slot, amount, currency)
+                    if ok then
+                        return string.format("Crystal upgraded %s", slot)
+                    end
                 end
             end
             return "Crystal upgrade failed"
         end,
         -- Salvage an inventory item into currency
         salvageinv = function(self, a)
-            if not self.gameManager then return "No manager" end
             local index = tonumber(a[1])
             if index then
-                local ok = self.gameManager:salvageInventoryItem(index)
-                if ok then
-                    return string.format("Salvaged inventory %d", index)
+                if NetworkSystem and NetworkSystem.fireServer then
+                    NetworkSystem:fireServer("SalvageRequest", "inventory", index)
+                    return "Salvage requested"
+                elseif self.gameManager then
+                    local ok = self.gameManager:salvageInventoryItem(index)
+                    if ok then
+                        return string.format("Salvaged inventory %d", index)
+                    end
                 end
             end
             return "Salvage failed"
         end,
         -- Salvage an equipped item from a slot
         salvageslot = function(self, a)
-            if not self.gameManager then return "No manager" end
             local slot = a[1]
             if slot then
-                local ok = self.gameManager:salvageEquippedItem(slot)
-                if ok then
-                    return string.format("Salvaged %s", slot)
+                if NetworkSystem and NetworkSystem.fireServer then
+                    NetworkSystem:fireServer("SalvageRequest", "equipped", slot)
+                    return "Salvage requested"
+                elseif self.gameManager then
+                    local ok = self.gameManager:salvageEquippedItem(slot)
+                    if ok then
+                        return string.format("Salvaged %s", slot)
+                    end
                 end
             end
             return "Salvage failed"

@@ -99,6 +99,30 @@ function GameManager:start()
             end
             self.networkSystem:fireClient(player, "GachaResult", kind, reward)
         end)
+
+        self.networkSystem:onServerEvent("ExchangeRequest", function(player, action, kind, amount, slot, currency)
+            local result
+            if action == "ticket" then
+                result = GameManager:buyTickets(kind, tonumber(amount) or 1)
+            elseif action == "currency" then
+                result = GameManager:buyCurrency(kind, tonumber(amount) or 1)
+            elseif action == "upgrade" then
+                result = GameManager:upgradeItemWithCrystals(slot, tonumber(amount) or 1, currency)
+            elseif action == "addTicket" then
+                local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
+                GachaSystem:addTickets(kind, tonumber(amount) or 0)
+                result = true
+            elseif action == "addCurrency" then
+                local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+                CurrencySystem:add(kind, tonumber(amount) or 0)
+                result = true
+            elseif action == "addCrystals" then
+                local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
+                GachaSystem:addCrystals(tonumber(amount) or 0)
+                result = true
+            end
+            self.networkSystem:fireClient(player, "ExchangeResult", result)
+        end)
     end
 end
 
