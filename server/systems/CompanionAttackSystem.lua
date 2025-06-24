@@ -29,7 +29,7 @@ if RunService:IsServer() then
     EnemySystem = require(server:WaitForChild("EnemySystem"))
     DungeonSystem = require(server:WaitForChild("DungeonSystem"))
 end
-local NetworkSystem = require(src:WaitForChild("NetworkSystem"))
+local NetworkSystem = require(src:WaitForChild("NetworkServer"))
 local EventManager = require(src:WaitForChild("EventManager"))
 local CompanionSystem = require(src:WaitForChild("CompanionSystem"))
 

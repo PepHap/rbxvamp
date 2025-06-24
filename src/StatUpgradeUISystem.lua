@@ -16,7 +16,7 @@ local StatUpgradeUISystem = {
 }
 
 local StatUpgradeSystem = require(script.Parent:WaitForChild("StatUpgradeSystem"))
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
 local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)

@@ -37,7 +37,7 @@ local function getCurrencyType()
     return "gold"
 end
 local LocalizationSystem = require(script.Parent:WaitForChild("LocalizationSystem"))
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
 local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)

@@ -25,7 +25,7 @@ local parent = server
 
 local MobConfig = require(src:WaitForChild("MobConfig"))
 local LocationSystem = require(src:WaitForChild("LocationSystem"))
-local NetworkSystem = require(src:WaitForChild("NetworkSystem"))
+local NetworkSystem = require(src:WaitForChild("NetworkServer"))
 
 -- Lazily required to avoid circular dependency with AutoBattleSystem
 local AutoBattleSystem

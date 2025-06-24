@@ -11,7 +11,7 @@ local EnemyUISystem = {
     enemies = {}
 }
 
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
 
 local function createModel(name, pos)
     if EnemyUISystem.useRobloxObjects then

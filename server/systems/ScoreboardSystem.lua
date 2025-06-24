@@ -26,7 +26,7 @@ local ScoreboardSystem = {
 ---Initializes the datastore and loads existing scores.
 function ScoreboardSystem:start(levelSys, netSys)
     self.levelSystem = levelSys or self.levelSystem or require(src:WaitForChild("LevelSystem"))
-    self.networkSystem = netSys or self.networkSystem or require(src:WaitForChild("NetworkSystem"))
+    self.networkSystem = netSys or self.networkSystem or require(src:WaitForChild("NetworkServer"))
     if self.useRobloxObjects and RunService:IsServer() and game and game.GetService then
         local ok, dsService = pcall(function()
             return game:GetService("DataStoreService")

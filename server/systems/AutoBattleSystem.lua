@@ -13,7 +13,7 @@ local src = script.Parent.Parent.Parent:WaitForChild("src")
 local EnemySystem
 local LevelSystem = require(src:WaitForChild("LevelSystem"))
 local DungeonSystem
-local NetworkSystem = require(src:WaitForChild("NetworkSystem"))
+local NetworkSystem = require(src:WaitForChild("NetworkServer"))
 local EventManager = require(src:WaitForChild("EventManager"))
 local StatUpgradeSystem = require(src:WaitForChild("StatUpgradeSystem"))
 

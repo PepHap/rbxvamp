@@ -13,7 +13,7 @@ end
 local PartySystem = {}
 local server = script.Parent
 local src = script.Parent.Parent.Parent:WaitForChild("src")
-local NetworkSystem = require(src:WaitForChild("NetworkSystem"))
+local NetworkSystem = require(src:WaitForChild("NetworkServer"))
 local LobbySystem = require(src:WaitForChild("LobbySystem"))
 local TeleportSystem = require(server:WaitForChild("TeleportSystem"))
 local Players = game:GetService("Players")

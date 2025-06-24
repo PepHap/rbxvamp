@@ -95,7 +95,7 @@ local function ensureGui()
 end
 
 local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
 
 if NetworkSystem and NetworkSystem.onClientEvent then
     NetworkSystem:onClientEvent("GachaResult", function(_, reward)

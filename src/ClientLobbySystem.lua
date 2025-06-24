@@ -6,7 +6,7 @@ if RunService:IsServer() then
     error("ClientLobbySystem should only be required on the client", 2)
 end
 
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
 
 local ClientLobbySystem = {}
 

@@ -8,7 +8,7 @@ if RunService:IsServer() then
 end
 
 local QuestSystem = require(script.Parent:WaitForChild("QuestSystem"))
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
 
 local ClientQuestSystem = {
     quests = QuestSystem.quests

@@ -22,7 +22,7 @@ local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
 if not ok then Theme = nil end
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 
 local function createInstance(className)

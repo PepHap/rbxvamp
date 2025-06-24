@@ -69,7 +69,7 @@ if not ok then Theme = nil end
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local InventorySlots = require(script.Parent:WaitForChild("InventorySlots"))
 local InventoryGrid = require(script.Parent:WaitForChild("InventoryGrid"))
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
 
 local function applyRarityColor(obj, rarity)
     if not obj or not Theme or not Theme.rarityColors then return end

@@ -66,7 +66,7 @@ local AdminConsoleSystem = require(script.Parent:FindFirstChild("AdminConsoleSys
 local ClientLobbySystem = require(script.Parent:WaitForChild("ClientLobbySystem"))
 local LobbyUISystem = require(script.Parent:WaitForChild("LobbyUISystem"))
 local PartyUISystem = require(script.Parent:WaitForChild("PartyUISystem"))
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
 
 -- Utility to connect Roblox input events when available
 local function connectRoblox()

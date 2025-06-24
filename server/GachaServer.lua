@@ -21,7 +21,7 @@ return function(src)
     local SkillSystem = require(src:WaitForChild("SkillSystem"))
     local CompanionSystem = require(src:WaitForChild("CompanionSystem"))
     local PlayerLevelSystem = require(src:WaitForChild("PlayerLevelSystem"))
-    local NetworkSystem = require(src:WaitForChild("NetworkSystem"))
+    local NetworkSystem = require(src:WaitForChild("NetworkServer"))
     local LoggingSystem = require(src:WaitForChild("LoggingSystem"))
 
     local function selectByRarity(pool, rarity)
