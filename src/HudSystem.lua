@@ -22,6 +22,15 @@ local HudSystem = {
     scoreboardButton = nil,
     buttonFrame = nil,
     buttonLayout = nil,
+    healthFrame = nil,
+    healthFill = nil,
+    healthText = nil,
+    skillFrame = nil,
+    skillLayout = nil,
+    skillButtons = nil,
+    cooldownLabels = nil,
+    cooldowns = nil,
+    playerHealth = nil,
     progressFrame = nil,
     progressFill = nil,
     progressText = nil,
@@ -33,10 +42,12 @@ local HudSystem = {
 local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
+local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
 local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local GameManager = require(script.Parent:WaitForChild("GameManager"))
 local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
@@ -159,6 +170,22 @@ function HudSystem:start()
     self.dungeonButton.Text = "Dungeon"
     self.partyButton.Text = "Party"
     self.scoreboardButton.Text = "Scores"
+
+    self.healthFrame = createInstance("Frame")
+    self.healthFill = createInstance("Frame")
+    self.healthText = createInstance("TextLabel")
+    self.skillFrame = createInstance("Frame")
+    self.skillLayout = createInstance("UIListLayout")
+    if Theme and Theme.colors then
+        self.healthFill.BackgroundColor3 = Theme.colors.progressBar
+    end
+    if self.healthText.BackgroundTransparency ~= nil then
+        self.healthText.BackgroundTransparency = 1
+        self.healthText.TextScaled = true
+    end
+    self.skillButtons = {}
+    self.cooldownLabels = {}
+    self.cooldowns = {}
     GuiUtil.connectButton(self.autoButton, function()
         HudSystem:toggleAutoBattle()
     end)
@@ -198,6 +225,11 @@ function HudSystem:start()
     GuiUtil.connectButton(self.scoreboardButton, function()
         HudSystem:toggleScoreboard()
     end)
+    parent(self.healthFill, self.healthFrame)
+    parent(self.healthText, self.healthFrame)
+    parent(self.healthFrame, gui)
+    parent(self.skillLayout, self.skillFrame)
+    parent(self.skillFrame, gui)
     parent(self.progressFill, self.progressFrame)
     parent(self.progressText, self.progressFrame)
     parent(self.progressFrame, gui)
@@ -239,6 +271,12 @@ function HudSystem:start()
         HudSystem.levelUpTimer = 1
         HudSystem.lastLevel = level
     end)
+    NetworkSystem:onClientEvent("PlayerState", function(h)
+        HudSystem.playerHealth = h
+    end)
+    NetworkSystem:onClientEvent("SkillCooldown", function(idx, cd)
+        HudSystem.cooldowns[idx] = cd
+    end)
     self:update()
 end
 
@@ -248,9 +286,22 @@ function HudSystem:update(dt)
     self.progressFrame = self.progressFrame or createInstance("Frame")
     self.progressFill = self.progressFill or createInstance("Frame")
     self.progressText = self.progressText or createInstance("TextLabel")
+    self.healthFrame = self.healthFrame or createInstance("Frame")
+    self.healthFill = self.healthFill or createInstance("Frame")
+    self.healthText = self.healthText or createInstance("TextLabel")
+    self.skillFrame = self.skillFrame or createInstance("Frame")
+    self.skillLayout = self.skillLayout or createInstance("UIListLayout")
+    self.skillButtons = self.skillButtons or {}
+    self.cooldownLabels = self.cooldownLabels or {}
+    self.cooldowns = self.cooldowns or {}
     parent(self.progressFill, self.progressFrame)
     parent(self.progressText, self.progressFrame)
     parent(self.progressFrame, gui)
+    parent(self.healthFill, self.healthFrame)
+    parent(self.healthText, self.healthFrame)
+    parent(self.healthFrame, gui)
+    parent(self.skillLayout, self.skillFrame)
+    parent(self.skillFrame, gui)
     self.buttonFrame = self.buttonFrame or createInstance("Frame")
     self.buttonLayout = self.buttonLayout or createInstance("UIGridLayout")
     if Enum and Enum.FillDirection then
@@ -265,6 +316,11 @@ function HudSystem:update(dt)
     end
     parent(self.buttonLayout, self.buttonFrame)
     parent(self.buttonFrame, gui)
+    self.skillLayout = self.skillLayout or createInstance("UIListLayout")
+    if Enum and Enum.FillDirection then
+        self.skillLayout.FillDirection = Enum.FillDirection.Horizontal
+        self.skillLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    end
 
     self.levelLabel = self.levelLabel or createInstance("TextLabel")
     parent(self.levelLabel, gui)
@@ -283,6 +339,16 @@ function HudSystem:update(dt)
     local currencyType = loc and loc.currency or "gold"
     local amount = CurrencySystem:get(currencyType)
     self.currencyLabel.Text = string.format("%s: %d", currencyType, amount)
+
+    local hp = self.playerHealth or PlayerSystem.health or PlayerSystem.maxHealth
+    local maxHp = PlayerSystem.maxHealth or 100
+    local hpRatio = maxHp > 0 and hp / maxHp or 0
+    self.healthText.Text = string.format("%d/%d", hp, maxHp)
+    if UDim2 and type(UDim2.new)=="function" then
+        self.healthFill.Size = UDim2.new(hpRatio, 0, 1, 0)
+    else
+        self.healthFill.FillRatio = hpRatio
+    end
 
     self.autoButton = self.autoButton or createInstance("TextButton")
     parent(self.autoButton, self.buttonFrame)
@@ -342,6 +408,40 @@ function HudSystem:update(dt)
     parent(self.scoreboardButton, self.buttonFrame)
     self.scoreboardButton.Text = "Scores"
 
+    local skills = GameManager and GameManager.skillSystem and GameManager.skillSystem.skills or {}
+    for i = 1, math.min(4, #skills) do
+        local skill = skills[i]
+        local btn = self.skillButtons[i]
+        if not btn then
+            btn = createInstance("ImageButton")
+            btn.Name = "Skill" .. i
+            if UDim2 and type(UDim2.new)=="function" then
+                btn.Size = UDim2.new(0, 60, 0, 60)
+            end
+            btn.LayoutOrder = i
+            GuiUtil.connectButton(btn, function()
+                NetworkSystem:fireServer("SkillRequest", i)
+            end)
+            parent(btn, self.skillFrame)
+            self.skillButtons[i] = btn
+        end
+        btn.Image = skill.image or ""
+        local cdLabel = self.cooldownLabels[i]
+        if not cdLabel then
+            cdLabel = createInstance("TextLabel")
+            cdLabel.BackgroundTransparency = 0.5
+            cdLabel.Size = UDim2.new(1,0,1,0)
+            cdLabel.TextScaled = true
+            cdLabel.TextColor3 = Theme and Theme.colors.labelText or Color3.new(1,1,1)
+            cdLabel.BackgroundColor3 = Color3.fromRGB(0,0,0)
+            cdLabel.TextXAlignment = Enum and Enum.TextXAlignment.Center or cdLabel.TextXAlignment
+            cdLabel.TextYAlignment = Enum and Enum.TextYAlignment.Center or cdLabel.TextYAlignment
+            parent(cdLabel, btn)
+            self.cooldownLabels[i] = cdLabel
+        end
+        self.cooldowns[i] = self.cooldowns[i] or 0
+    end
+
     local ratio = nextExp > 0 and exp / nextExp or 0
     if ratio < 0 then ratio = 0 elseif ratio > 1 then ratio = 1 end
     if self.deathTimer > 0 then
@@ -373,6 +473,19 @@ function HudSystem:update(dt)
         self.progressFill.FillRatio = ratio
     end
 
+    for i, cd in pairs(self.cooldowns) do
+        if cd > 0 then
+            self.cooldowns[i] = math.max(0, cd - dt)
+            if self.cooldownLabels[i] then
+                self.cooldownLabels[i].Text = tostring(math.ceil(self.cooldowns[i]))
+                self.cooldownLabels[i].Visible = true
+            end
+        elseif self.cooldownLabels[i] then
+            self.cooldownLabels[i].Visible = false
+            self.cooldownLabels[i].Text = ""
+        end
+    end
+
     if UDim2 and type(UDim2.new)=="function" then
         self.levelLabel.Position = UDim2.new(0, 20, 0, 10)
         self.currencyLabel.Position = UDim2.new(0, 20, 0, 30)
@@ -380,6 +493,10 @@ function HudSystem:update(dt)
             self.buttonFrame.Size = UDim2.new(0, 360, 0, 180)
             self.buttonFrame.Position = UDim2.new(0, 20, 1, -200)
         end
+        self.healthFrame.Position = UDim2.new(0, 20, 0, 50)
+        self.healthFrame.Size = UDim2.new(0, 200, 0, 20)
+        self.skillFrame.Position = UDim2.new(0.5, -150, 1, -80)
+        self.skillFrame.Size = UDim2.new(0, 300, 0, 60)
     end
 end
 
