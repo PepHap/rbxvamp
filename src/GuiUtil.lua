@@ -196,10 +196,12 @@ function GuiUtil.createWindow(name, image)
         local ok = pcall(function()
             if not frame.Size then frame.Size = defaultSize end
             if not frame.Position then frame.Position = defaultPos end
+            frame.AnchorPoint = Vector2.new(0.5, 0.5)
         end)
         if not ok and type(frame) == "table" then
             frame.Size = frame.Size or defaultSize
             frame.Position = frame.Position or defaultPos
+            frame.AnchorPoint = Vector2.new(0.5, 0.5)
         end
     end
     if image then

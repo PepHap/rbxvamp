@@ -177,6 +177,7 @@ function HudSystem:start()
         self.buttonLayout.CellPadding = UDim2.new(0, 4, 0, 4)
         self.buttonFrame.Size = UDim2.new(0.22, 0, 0.25, 0)
         self.buttonFrame.Position = UDim2.new(0.02, 0, 0.7, 0)
+        self.buttonFrame.AnchorPoint = Vector2.new(0, 1)
     end
     GuiUtil.applyResponsive(self.buttonFrame, nil, 240, 60, 400, 120)
     self.progressFrame = createInstance("Frame")
@@ -220,6 +221,11 @@ function HudSystem:start()
     GuiUtil.applyResponsive(self.progressFrame, 16, 200, 20, 1000, 40)
     -- Keep the skill bar a fixed height while scaling for different resolutions
     GuiUtil.applyResponsive(self.skillFrame, nil, 240, 60, 240, 60)
+    if UDim2 and type(UDim2.new) == "function" then
+        self.progressFrame.AnchorPoint = Vector2.new(0.5, 0)
+        self.skillFrame.AnchorPoint = Vector2.new(1, 1)
+        self.healthFrame.AnchorPoint = Vector2.new(0, 0)
+    end
     if Theme and Theme.colors then
         self.healthFill.BackgroundColor3 = Theme.colors.progressBar
     end
@@ -643,6 +649,7 @@ function HudSystem:update(dt)
         self.currencyLabel.Position = UDim2.new(0.02, 0, 0.06, 0)
         self.buttonFrame.Size = UDim2.new(0.22, 0, 0.25, 0)
         self.buttonFrame.Position = UDim2.new(0.02, 0, 0.7, 0)
+        self.buttonFrame.AnchorPoint = Vector2.new(0, 1)
         GuiUtil.applyResponsive(self.buttonFrame, nil, 240, 60, 400, 120)
         self.healthFrame.Position = UDim2.new(0.02, 0, 0.1, 0)
         self.healthFrame.Size = UDim2.new(0.25, 0, 0.04, 0)
@@ -650,8 +657,10 @@ function HudSystem:update(dt)
         -- https://create.roblox.com/docs/reference/engine/classes/UDim2
         self.skillFrame.Position = UDim2.new(1, -250, 1, -70)
         self.skillFrame.Size = UDim2.new(0, 240, 0, 60)
+        self.skillFrame.AnchorPoint = Vector2.new(1, 1)
         self.progressFrame.Position = UDim2.new(0.5, -200, 0.02, 0)
         self.progressFrame.Size = UDim2.new(0.4, 0, 0, 25)
+        self.progressFrame.AnchorPoint = Vector2.new(0.5, 0)
     end
 end
 
