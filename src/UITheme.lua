@@ -12,6 +12,8 @@ UITheme.colors = {
     -- Accent color used for selected buttons or highlighted elements
     highlight = Color3 and Color3.fromRGB and Color3.fromRGB(100, 200, 255) or {r=100,g=200,b=255},
     progressBar = Color3 and Color3.fromRGB and Color3.fromRGB(100, 200, 255) or {r=100,g=200,b=255},
+    -- Semi-transparent overlay used for skill cooldowns
+    cooldownOverlay = Color3 and Color3.fromRGB and Color3.fromRGB(0, 0, 0) or {r=0,g=0,b=0},
     -- Color for full player health
     healthHigh = Color3 and Color3.fromRGB and Color3.fromRGB(80, 220, 80) or {r=80,g=220,b=80},
     -- Color for very low player health

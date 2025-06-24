@@ -562,7 +562,7 @@ function HudSystem:update(dt)
             parent(keyLabel, btn)
             local overlay = createInstance("Frame")
             overlay.BackgroundTransparency = 0.4
-            overlay.BackgroundColor3 = Color3 and Color3.fromRGB and Color3.fromRGB(0,0,0) or {r=0,g=0,b=0}
+            overlay.BackgroundColor3 = Theme and Theme.colors and Theme.colors.cooldownOverlay or (Color3 and Color3.fromRGB and Color3.fromRGB(0,0,0) or {r=0,g=0,b=0})
             overlay.BorderSizePixel = 0
             if UDim2 and type(UDim2.new)=="function" then
                 overlay.Size = UDim2.new(1,0,1,0)
@@ -641,6 +641,9 @@ function HudSystem:update(dt)
                 self.cooldownLabels[i].Visible = false
                 self.cooldownLabels[i].Text = ""
             end
+        end
+        if self.skillButtons[i] then
+            GuiUtil.highlightButton(self.skillButtons[i], self.cooldowns[i] <= 0)
         end
     end
 
