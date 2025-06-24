@@ -80,11 +80,18 @@ function InventorySlots:create(parentFrame)
     end
     parent(layout, frame)
 
-    for _, name in ipairs(slotNames) do
+    local gridSupported = layout.FillDirectionMaxCells ~= nil
+
+    for i, name in ipairs(slotNames) do
         local btn = createInstance("TextButton")
         btn.Name = name .. "Slot"
         if UDim2 and type(UDim2.new)=="function" then
             btn.Size = UDim2.new(0, 80, 0, 80)
+            if not gridSupported then
+                local row = math.floor((i-1) / 2)
+                local col = (i-1) % 2
+                btn.Position = UDim2.new(0, col * 82, 0, row * 82)
+            end
         end
         btn.Text = ""
         parent(btn, frame)
