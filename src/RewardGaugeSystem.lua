@@ -27,7 +27,11 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local assets = ReplicatedStorage:WaitForChild("assets")
 local itemPool = require(assets:WaitForChild("items"))
 local EquipmentGenerator = require(script.Parent:WaitForChild("EquipmentGenerator"))
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local NetworkSystem
+local RunService = game:GetService("RunService")
+if RunService:IsServer() then
+    NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+end
 local LoggingSystem
 do
     local RunService = game:GetService("RunService")

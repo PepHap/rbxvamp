@@ -296,7 +296,12 @@ local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
 GameManager:addSystem("Keys", KeySystem)
 
 -- Remote event networking
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local NetworkSystem
+if IS_SERVER then
+    NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+else
+    NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
+end
 GameManager.networkSystem = NetworkSystem
 GameManager:addSystem("Network", NetworkSystem)
 

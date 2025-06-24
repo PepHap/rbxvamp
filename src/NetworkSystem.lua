@@ -8,6 +8,12 @@ local EventManager = require(script.Parent:WaitForChild("EventManager"))
 local RemoteEventNames = require(script.Parent:WaitForChild("RemoteEventNames"))
 local RunService = game:GetService("RunService")
 
+-- Prevent clients from requiring this module directly. They should use
+-- ``NetworkClient`` which exposes a safe subset of networking APIs.
+if RunService:IsClient() then
+    error("NetworkSystem is server-side only. Use NetworkClient instead.", 2)
+end
+
 local NetworkSystem = {
     useRobloxObjects = EnvironmentUtil.detectRoblox(),
     events = {}

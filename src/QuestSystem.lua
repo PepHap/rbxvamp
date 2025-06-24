@@ -19,8 +19,11 @@ local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
 local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local RunService = game:GetService("RunService")
+local NetworkSystem
+if RunService:IsServer() then
+    NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+end
 
 ---Initializes built-in quests and connects event listeners.
 function QuestSystem:start()

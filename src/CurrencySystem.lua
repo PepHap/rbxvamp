@@ -4,7 +4,10 @@
 local CurrencySystem = {}
 
 local RunService = game:GetService("RunService")
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local NetworkSystem
+if RunService:IsServer() then
+    NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+end
 local LoggingSystem
 if RunService and RunService.IsServer and RunService:IsServer() then
     local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")

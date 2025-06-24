@@ -4,8 +4,11 @@
 
 local LevelSystem = {}
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local RunService = game:GetService("RunService")
+local NetworkSystem
+if RunService:IsServer() then
+    NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+end
 
 --- Highest stage the player has cleared so far.
 LevelSystem.highestClearedStage = 0

@@ -26,7 +26,10 @@ PlayerSystem.model = nil
 
 local RunService = game:GetService("RunService")
 local LevelSystem -- lazy loaded to avoid circular dependency
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local NetworkSystem
+if RunService:IsServer() then
+    NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+end
 local AutoBattleSystem
 local AntiCheatSystem
 if RunService:IsServer() then

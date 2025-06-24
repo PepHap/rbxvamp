@@ -62,7 +62,10 @@ local SkillSystem = require(script.Parent:WaitForChild("SkillSystem"))
 local CompanionSystem = require(script.Parent:WaitForChild("CompanionSystem"))
 local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
 local RunService = game:GetService("RunService")
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local NetworkSystem
+if RunService:IsServer() then
+    NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+end
 local LoggingSystem
 if RunService and RunService.IsServer and RunService:IsServer() then
     LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))

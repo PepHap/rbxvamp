@@ -1,17 +1,33 @@
 -- NetworkClient.lua
--- Client wrapper around NetworkSystem that exposes only client-safe methods.
+-- Provides client-side networking functions using RemoteEvents.
 
 local RunService = game:GetService("RunService")
 if RunService:IsServer() then
     error("NetworkClient should only be required on the client", 2)
 end
 
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RemoteEventNames = require(script.Parent:WaitForChild("RemoteEventNames"))
+
+local function getEvent(alias)
+    local name = RemoteEventNames[alias] or alias
+    local folder = ReplicatedStorage:WaitForChild("RemoteEvents")
+    return folder:WaitForChild(name)
+end
 
 local ClientNetwork = {}
-for k, v in pairs(NetworkSystem) do
-    if k ~= "fireAllClients" and k ~= "fireClient" and k ~= "onServerEvent" then
-        ClientNetwork[k] = v
+
+function ClientNetwork:fireServer(name, ...)
+    local ev = getEvent(name)
+    if ev and ev.FireServer then
+        ev:FireServer(...)
+    end
+end
+
+function ClientNetwork:onClientEvent(name, callback)
+    local ev = getEvent(name)
+    if ev and ev.OnClientEvent then
+        ev.OnClientEvent:Connect(callback)
     end
 end
 
