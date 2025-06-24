@@ -62,6 +62,7 @@ local function createInstance(className)
         if Theme then
             if className == "TextLabel" then Theme.styleLabel(inst)
             elseif className == "TextButton" then Theme.styleButton(inst)
+            elseif className == "ImageButton" then Theme.styleImageButton(inst)
             elseif className == "Frame" then Theme.styleWindow(inst) end
         end
         return inst
@@ -70,6 +71,7 @@ local function createInstance(className)
     if Theme then
         if className == "TextLabel" then Theme.styleLabel(tbl)
         elseif className == "TextButton" then Theme.styleButton(tbl)
+        elseif className == "ImageButton" then Theme.styleImageButton(tbl)
         elseif className == "Frame" then Theme.styleWindow(tbl) end
     end
     return tbl
@@ -100,6 +102,8 @@ local function ensureGui()
     if gui.Enabled ~= nil then
         gui.Enabled = true
     end
+    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
+    GuiUtil.makeFullScreen(gui)
     HudSystem.gui = gui
     if HudSystem.useRobloxObjects and pgui then
         gui.Parent = pgui
@@ -148,10 +152,10 @@ function HudSystem:start()
         self.buttonLayout.SortOrder = Enum.SortOrder.LayoutOrder
     end
     if UDim2 and type(UDim2.new) == "function" then
-        self.buttonLayout.CellSize = UDim2.new(0, 110, 0, 30)
-        self.buttonLayout.CellPadding = UDim2.new(0, 5, 0, 5)
-        self.buttonFrame.Size = UDim2.new(0, 360, 0, 180)
-        self.buttonFrame.Position = UDim2.new(0, 20, 1, -200)
+        self.buttonLayout.CellSize = UDim2.new(0, 60, 0, 60)
+        self.buttonLayout.CellPadding = UDim2.new(0, 4, 0, 4)
+        self.buttonFrame.Size = UDim2.new(0.22, 0, 0.25, 0)
+        self.buttonFrame.Position = UDim2.new(0.02, 0, 0.7, 0)
     end
     self.progressFrame = createInstance("Frame")
     self.progressFill = createInstance("Frame")
@@ -189,42 +193,55 @@ function HudSystem:start()
     GuiUtil.connectButton(self.autoButton, function()
         HudSystem:toggleAutoBattle()
     end)
+    GuiUtil.applyHoverEffect(self.autoButton)
     GuiUtil.connectButton(self.attackButton, function()
         HudSystem:manualAttack()
     end)
+    GuiUtil.applyHoverEffect(self.attackButton)
     GuiUtil.connectButton(self.gachaButton, function()
         HudSystem:toggleGacha()
     end)
+    GuiUtil.applyHoverEffect(self.gachaButton)
     GuiUtil.connectButton(self.inventoryButton, function()
         HudSystem:toggleInventory()
     end)
+    GuiUtil.applyHoverEffect(self.inventoryButton)
     GuiUtil.connectButton(self.rewardButton, function()
         HudSystem:toggleRewardGauge()
     end)
+    GuiUtil.applyHoverEffect(self.rewardButton)
     GuiUtil.connectButton(self.skillButton, function()
         HudSystem:toggleSkillUI()
     end)
+    GuiUtil.applyHoverEffect(self.skillButton)
     GuiUtil.connectButton(self.companionButton, function()
         HudSystem:toggleCompanionUI()
     end)
+    GuiUtil.applyHoverEffect(self.companionButton)
     GuiUtil.connectButton(self.questButton, function()
         HudSystem:toggleQuestUI()
     end)
+    GuiUtil.applyHoverEffect(self.questButton)
     GuiUtil.connectButton(self.progressButton, function()
         HudSystem:toggleProgressMap()
     end)
+    GuiUtil.applyHoverEffect(self.progressButton)
     GuiUtil.connectButton(self.exchangeButton, function()
         HudSystem:toggleExchangeUI()
     end)
+    GuiUtil.applyHoverEffect(self.exchangeButton)
     GuiUtil.connectButton(self.dungeonButton, function()
         HudSystem:toggleDungeonUI()
     end)
+    GuiUtil.applyHoverEffect(self.dungeonButton)
     GuiUtil.connectButton(self.partyButton, function()
         HudSystem:togglePartyUI()
     end)
+    GuiUtil.applyHoverEffect(self.partyButton)
     GuiUtil.connectButton(self.scoreboardButton, function()
         HudSystem:toggleScoreboard()
     end)
+    GuiUtil.applyHoverEffect(self.scoreboardButton)
     parent(self.healthFill, self.healthFrame)
     parent(self.healthText, self.healthFrame)
     parent(self.healthFrame, gui)
@@ -309,10 +326,10 @@ function HudSystem:update(dt)
         self.buttonLayout.SortOrder = Enum.SortOrder.LayoutOrder
     end
     if UDim2 and type(UDim2.new) == "function" then
-        self.buttonLayout.CellSize = UDim2.new(0, 110, 0, 30)
-        self.buttonLayout.CellPadding = UDim2.new(0, 5, 0, 5)
-        self.buttonFrame.Size = UDim2.new(0, 360, 0, 180)
-        self.buttonFrame.Position = UDim2.new(0, 20, 1, -200)
+        self.buttonLayout.CellSize = UDim2.new(0, 60, 0, 60)
+        self.buttonLayout.CellPadding = UDim2.new(0, 4, 0, 4)
+        self.buttonFrame.Size = UDim2.new(0.22, 0, 0.25, 0)
+        self.buttonFrame.Position = UDim2.new(0.02, 0, 0.7, 0)
     end
     parent(self.buttonLayout, self.buttonFrame)
     parent(self.buttonFrame, gui)
@@ -422,6 +439,13 @@ function HudSystem:update(dt)
             GuiUtil.connectButton(btn, function()
                 NetworkSystem:fireServer("SkillRequest", i)
             end)
+            if btn.MouseButton2Click then
+                btn.MouseButton2Click:Connect(function()
+                    local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
+                    SkillUISystem:toggle()
+                end)
+            end
+            GuiUtil.applyHoverEffect(btn)
             parent(btn, self.skillFrame)
             self.skillButtons[i] = btn
         end
@@ -451,8 +475,8 @@ function HudSystem:update(dt)
         self.progressText.Text = string.format("Lv.%d", lvl)
     end
     if UDim2 and type(UDim2.new)=="function" then
-        self.progressFrame.Position = UDim2.new(0.5, -200, 0, 0)
-        self.progressFrame.Size = UDim2.new(0, 400, 0, 20)
+        self.progressFrame.Position = UDim2.new(0.5, -200, 0.02, 0)
+        self.progressFrame.Size = UDim2.new(0.4, 0, 0, 25)
         local fillColor = Color3.fromRGB(80, 120, 220)
         if self.levelUpTimer > 0 then
             self.levelUpTimer = math.max(0, self.levelUpTimer - dt)
@@ -487,16 +511,16 @@ function HudSystem:update(dt)
     end
 
     if UDim2 and type(UDim2.new)=="function" then
-        self.levelLabel.Position = UDim2.new(0, 20, 0, 10)
-        self.currencyLabel.Position = UDim2.new(0, 20, 0, 30)
-        if not self.buttonFrame.Size then
-            self.buttonFrame.Size = UDim2.new(0, 360, 0, 180)
-            self.buttonFrame.Position = UDim2.new(0, 20, 1, -200)
-        end
-        self.healthFrame.Position = UDim2.new(0, 20, 0, 50)
-        self.healthFrame.Size = UDim2.new(0, 200, 0, 20)
-        self.skillFrame.Position = UDim2.new(0.5, -150, 1, -80)
-        self.skillFrame.Size = UDim2.new(0, 300, 0, 60)
+        self.levelLabel.Position = UDim2.new(0.02, 0, 0.02, 0)
+        self.currencyLabel.Position = UDim2.new(0.02, 0, 0.06, 0)
+        self.buttonFrame.Size = UDim2.new(0.22, 0, 0.25, 0)
+        self.buttonFrame.Position = UDim2.new(0.02, 0, 0.7, 0)
+        self.healthFrame.Position = UDim2.new(0.02, 0, 0.1, 0)
+        self.healthFrame.Size = UDim2.new(0.25, 0, 0.04, 0)
+        self.skillFrame.Position = UDim2.new(0.5, -150, 0.9, -60)
+        self.skillFrame.Size = UDim2.new(0.3, 0, 0, 60)
+        self.progressFrame.Position = UDim2.new(0.5, -200, 0.02, 0)
+        self.progressFrame.Size = UDim2.new(0.4, 0, 0, 25)
     end
 end
 
