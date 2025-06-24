@@ -4,14 +4,14 @@ local UITheme = {}
 UITheme.colors = {
     windowBackground = Color3 and Color3.fromRGB and Color3.fromRGB(40, 45, 60) or {r=40,g=45,b=60},
     windowBackground2 = Color3 and Color3.fromRGB and Color3.fromRGB(30, 35, 50) or {r=30,g=35,b=50},
-    buttonBackground = Color3 and Color3.fromRGB and Color3.fromRGB(50, 120, 220) or {r=50,g=120,b=220},
+    buttonBackground = Color3 and Color3.fromRGB and Color3.fromRGB(60, 130, 230) or {r=60,g=130,b=230},
     buttonText = Color3 and Color3.fromRGB and Color3.fromRGB(255, 255, 255) or {r=1,g=1,b=1},
     labelText = Color3 and Color3.fromRGB and Color3.fromRGB(235, 235, 235) or {r=235,g=235,b=235},
     -- Slightly brighter background when hovering buttons
     buttonHover = Color3 and Color3.fromRGB and Color3.fromRGB(80, 150, 240) or {r=80,g=150,b=240},
     -- Accent color used for selected buttons or highlighted elements
-    highlight = Color3 and Color3.fromRGB and Color3.fromRGB(100, 200, 255) or {r=100,g=200,b=255},
-    progressBar = Color3 and Color3.fromRGB and Color3.fromRGB(100, 200, 255) or {r=100,g=200,b=255},
+    highlight = Color3 and Color3.fromRGB and Color3.fromRGB(120, 210, 255) or {r=120,g=210,b=255},
+    progressBar = Color3 and Color3.fromRGB and Color3.fromRGB(110, 210, 255) or {r=110,g=210,b=255},
     -- Semi-transparent overlay used for skill cooldowns
     cooldownOverlay = Color3 and Color3.fromRGB and Color3.fromRGB(0, 0, 0) or {r=0,g=0,b=0},
     -- Color for full player health
