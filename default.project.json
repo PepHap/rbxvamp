@@ -12,78 +12,95 @@
         "CurrencySystem": {
           "$path": "src/CurrencySystem.lua",
           "server": {
+            "$className": "ModuleScript",
             "$path": "src/CurrencySystem.server.lua"
           },
           "client": {
+            "$className": "ModuleScript",
             "$path": "src/CurrencySystem.client.lua"
           }
         },
         "GachaSystem": {
           "$path": "src/GachaSystem.lua",
           "server": {
+            "$className": "ModuleScript",
             "$path": "src/GachaSystem.server.lua"
           }
         },
         "InventoryModule": {
           "$path": "src/InventoryModule.lua",
           "server": {
+            "$className": "ModuleScript",
             "$path": "src/InventoryModule.server.lua"
           },
           "client": {
+            "$className": "ModuleScript",
             "$path": "src/InventoryModule.client.lua"
           }
         },
         "LevelSystem": {
           "$path": "src/LevelSystem.lua",
           "server": {
+            "$className": "ModuleScript",
             "$path": "src/LevelSystem.server.lua"
           },
           "client": {
+            "$className": "ModuleScript",
             "$path": "src/LevelSystem.client.lua"
           }
         },
         "PlayerInputSystem": {
           "$path": "src/PlayerInputSystem.lua",
           "server": {
+            "$className": "ModuleScript",
             "$path": "src/PlayerInputSystem.server.lua"
           },
           "client": {
+            "$className": "ModuleScript",
             "$path": "src/PlayerInputSystem.client.lua"
           }
         },
         "PlayerLevelSystem": {
           "$path": "src/PlayerLevelSystem.lua",
           "server": {
+            "$className": "ModuleScript",
             "$path": "src/PlayerLevelSystem.server.lua"
           },
           "client": {
+            "$className": "ModuleScript",
             "$path": "src/PlayerLevelSystem.client.lua"
           }
         },
         "PlayerSystem": {
           "$path": "src/PlayerSystem.lua",
           "server": {
+            "$className": "ModuleScript",
             "$path": "src/PlayerSystem.server.lua"
           },
           "client": {
+            "$className": "ModuleScript",
             "$path": "src/PlayerSystem.client.lua"
           }
         },
         "RewardGaugeSystem": {
           "$path": "src/RewardGaugeSystem.lua",
           "server": {
+            "$className": "ModuleScript",
             "$path": "src/RewardGaugeSystem.server.lua"
           },
           "client": {
+            "$className": "ModuleScript",
             "$path": "src/RewardGaugeSystem.client.lua"
           }
         },
         "StatUpgradeSystem": {
           "$path": "src/StatUpgradeSystem.lua",
           "server": {
+            "$className": "ModuleScript",
             "$path": "src/StatUpgradeSystem.server.lua"
           },
           "client": {
+            "$className": "ModuleScript",
             "$path": "src/StatUpgradeSystem.client.lua"
           }
         }
@@ -108,78 +125,95 @@
         "CurrencySystem": {
           "$path": "src/CurrencySystem.lua",
           "server": {
+            "$className": "ModuleScript",
             "$path": "src/CurrencySystem.server.lua"
           },
           "client": {
+            "$className": "ModuleScript",
             "$path": "src/CurrencySystem.client.lua"
           }
         },
         "GachaSystem": {
           "$path": "src/GachaSystem.lua",
           "server": {
+            "$className": "ModuleScript",
             "$path": "src/GachaSystem.server.lua"
           }
         },
         "InventoryModule": {
           "$path": "src/InventoryModule.lua",
           "server": {
+            "$className": "ModuleScript",
             "$path": "src/InventoryModule.server.lua"
           },
           "client": {
+            "$className": "ModuleScript",
             "$path": "src/InventoryModule.client.lua"
           }
         },
         "LevelSystem": {
           "$path": "src/LevelSystem.lua",
           "server": {
+            "$className": "ModuleScript",
             "$path": "src/LevelSystem.server.lua"
           },
           "client": {
+            "$className": "ModuleScript",
             "$path": "src/LevelSystem.client.lua"
           }
         },
         "PlayerInputSystem": {
           "$path": "src/PlayerInputSystem.lua",
           "server": {
+            "$className": "ModuleScript",
             "$path": "src/PlayerInputSystem.server.lua"
           },
           "client": {
+            "$className": "ModuleScript",
             "$path": "src/PlayerInputSystem.client.lua"
           }
         },
         "PlayerLevelSystem": {
           "$path": "src/PlayerLevelSystem.lua",
           "server": {
+            "$className": "ModuleScript",
             "$path": "src/PlayerLevelSystem.server.lua"
           },
           "client": {
+            "$className": "ModuleScript",
             "$path": "src/PlayerLevelSystem.client.lua"
           }
         },
         "PlayerSystem": {
           "$path": "src/PlayerSystem.lua",
           "server": {
+            "$className": "ModuleScript",
             "$path": "src/PlayerSystem.server.lua"
           },
           "client": {
+            "$className": "ModuleScript",
             "$path": "src/PlayerSystem.client.lua"
           }
         },
         "RewardGaugeSystem": {
           "$path": "src/RewardGaugeSystem.lua",
           "server": {
+            "$className": "ModuleScript",
             "$path": "src/RewardGaugeSystem.server.lua"
           },
           "client": {
+            "$className": "ModuleScript",
             "$path": "src/RewardGaugeSystem.client.lua"
           }
         },
         "StatUpgradeSystem": {
           "$path": "src/StatUpgradeSystem.lua",
           "server": {
+            "$className": "ModuleScript",
             "$path": "src/StatUpgradeSystem.server.lua"
           },
           "client": {
+            "$className": "ModuleScript",
             "$path": "src/StatUpgradeSystem.client.lua"
           }
         }
