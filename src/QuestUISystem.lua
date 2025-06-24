@@ -1,9 +1,10 @@
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
-local QuestUISystem = {
 local RunService = game:GetService("RunService")
 if RunService:IsServer() then
     error("QuestUISystem should only be required on the client", 2)
 end
+
+local QuestUISystem = {
     useRobloxObjects = EnvironmentUtil.detectRoblox(),
     gui = nil,
     questSystem = nil,
@@ -13,13 +14,7 @@ end
 
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
-local RunService = game:GetService("RunService")
-local QuestSystem
-if RunService:IsServer() then
-    QuestSystem = require(script.Parent:WaitForChild("QuestSystem"))
-else
-    QuestSystem = require(script.Parent:WaitForChild("ClientQuestSystem"))
-end
+local QuestSystem = require(script.Parent:WaitForChild("ClientQuestSystem"))
 local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
