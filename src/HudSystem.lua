@@ -47,6 +47,7 @@ local levelUpColor = Color3 and Color3.fromRGB(255, 240, 120) or {r=255,g=240,b=
 local function createInstance(className)
     if HudSystem.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
         local inst = Instance.new(className)
+        if className == "ScreenGui" and inst.IgnoreGuiInset ~= nil then inst.IgnoreGuiInset = true end
         if Theme then
             if className == "TextLabel" then Theme.styleLabel(inst)
             elseif className == "TextButton" then Theme.styleButton(inst)
