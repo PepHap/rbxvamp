@@ -180,6 +180,9 @@ function HudSystem:start()
     self.healthText = createInstance("TextLabel")
     self.skillFrame = createInstance("Frame")
     self.skillLayout = createInstance("UIListLayout")
+    GuiUtil.applyResponsive(self.healthFrame, 10, 150, 20, 800, 40)
+    GuiUtil.applyResponsive(self.progressFrame, 16, 200, 20, 1000, 40)
+    GuiUtil.applyResponsive(self.skillFrame, nil, 150, 60, 800, 80)
     if Theme and Theme.colors then
         self.healthFill.BackgroundColor3 = Theme.colors.progressBar
     end
@@ -361,6 +364,15 @@ function HudSystem:update(dt)
     local maxHp = PlayerSystem.maxHealth or 100
     local hpRatio = maxHp > 0 and hp / maxHp or 0
     self.healthText.Text = string.format("%d/%d", hp, maxHp)
+    if Theme and Theme.getHealthColor then
+        local color = Theme.getHealthColor(hpRatio)
+        local ok = pcall(function()
+            self.healthFill.BackgroundColor3 = color
+        end)
+        if not ok and type(self.healthFill)=="table" then
+            self.healthFill.BackgroundColor3 = color
+        end
+    end
     if UDim2 and type(UDim2.new)=="function" then
         self.healthFill.Size = UDim2.new(hpRatio, 0, 1, 0)
     else
@@ -448,6 +460,17 @@ function HudSystem:update(dt)
             GuiUtil.applyHoverEffect(btn)
             parent(btn, self.skillFrame)
             self.skillButtons[i] = btn
+            -- display the key number in the corner for quick reference
+            local keyLabel = createInstance("TextLabel")
+            keyLabel.Name = "Key" .. i
+            keyLabel.BackgroundTransparency = 1
+            keyLabel.TextScaled = true
+            keyLabel.Text = tostring(i)
+            if UDim2 and type(UDim2.new)=="function" then
+                keyLabel.Size = UDim2.new(0.3, 0, 0.3, 0)
+                keyLabel.Position = UDim2.new(0.7, 0, 0.7, 0)
+            end
+            parent(keyLabel, btn)
         end
         btn.Image = skill.image or ""
         local cdLabel = self.cooldownLabels[i]
@@ -477,7 +500,7 @@ function HudSystem:update(dt)
     if UDim2 and type(UDim2.new)=="function" then
         self.progressFrame.Position = UDim2.new(0.5, -200, 0.02, 0)
         self.progressFrame.Size = UDim2.new(0.4, 0, 0, 25)
-        local fillColor = Color3.fromRGB(80, 120, 220)
+        local fillColor = Theme and Theme.colors and Theme.colors.progressBar or Color3.fromRGB(80, 120, 220)
         if self.levelUpTimer > 0 then
             self.levelUpTimer = math.max(0, self.levelUpTimer - dt)
             fillColor = levelUpColor
@@ -492,7 +515,7 @@ function HudSystem:update(dt)
             self.levelUpTimer = math.max(0, self.levelUpTimer - dt)
             self.progressFill.color = levelUpColor
         else
-            self.progressFill.color = nil
+            self.progressFill.color = Theme and Theme.colors and Theme.colors.progressBar
         end
         self.progressFill.FillRatio = ratio
     end

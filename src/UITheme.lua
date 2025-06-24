@@ -12,6 +12,10 @@ UITheme.colors = {
     -- Accent color used for selected buttons or highlighted elements
     highlight = Color3 and Color3.fromRGB and Color3.fromRGB(100, 200, 255) or {r=100,g=200,b=255},
     progressBar = Color3 and Color3.fromRGB and Color3.fromRGB(100, 200, 255) or {r=100,g=200,b=255},
+    -- Color for full player health
+    healthHigh = Color3 and Color3.fromRGB and Color3.fromRGB(80, 220, 80) or {r=80,g=220,b=80},
+    -- Color for very low player health
+    healthLow = Color3 and Color3.fromRGB and Color3.fromRGB(220, 80, 80) or {r=220,g=80,b=80},
 }
 
 UITheme.rarityColors = {
@@ -171,6 +175,25 @@ function UITheme.styleInput(input)
         BackgroundColor3 = toColor3(UITheme.colors.buttonBackground),
     })
     addCorner(input)
+end
+
+---Returns an interpolated color from green to red based on the health ratio.
+-- @param ratio number value between 0 and 1 representing current HP
+function UITheme.getHealthColor(ratio)
+    ratio = math.clamp and math.clamp(ratio or 1, 0, 1) or math.max(0, math.min(ratio or 1, 1))
+    local hi = toColor3(UITheme.colors.healthHigh)
+    local lo = toColor3(UITheme.colors.healthLow)
+    if Color3 and Color3.new and typeof then
+        local r = lo.R + (hi.R - lo.R) * ratio
+        local g = lo.G + (hi.G - lo.G) * ratio
+        local b = lo.B + (hi.B - lo.B) * ratio
+        return Color3.new(r, g, b)
+    end
+    return {
+        r = lo.r + (hi.r - lo.r) * ratio,
+        g = lo.g + (hi.g - lo.g) * ratio,
+        b = lo.b + (hi.b - lo.b) * ratio,
+    }
 end
 
 return UITheme
