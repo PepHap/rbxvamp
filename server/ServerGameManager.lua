@@ -6,6 +6,11 @@ if not RunService:IsServer() then
     error("ServerGameManager can only be required on the server", 2)
 end
 
-local GameManager = require(script.Parent:WaitForChild("GameManager"))
+local src = script.Parent.Parent:WaitForChild("src")
+local GameManager = require(src:WaitForChild("GameManager"))
+
+-- Attach server-only functionality
+local extend = require(script.Parent:WaitForChild("ServerGameExtensions"))
+extend(GameManager, src)
 
 return GameManager

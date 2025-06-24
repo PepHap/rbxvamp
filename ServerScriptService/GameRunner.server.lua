@@ -7,7 +7,8 @@ if not game:IsLoaded() then
 end
 
 local src = script.Parent:WaitForChild("src")
-local GameManager = require(src:WaitForChild("ServerGameManager"))
+local server = script.Parent:WaitForChild("server")
+local GameManager = require(server:WaitForChild("ServerGameManager"))
 
 -- Enable Roblox object creation for modules that support it so the
 -- user can actually see models and interfaces when running the game
