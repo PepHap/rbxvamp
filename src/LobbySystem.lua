@@ -17,7 +17,7 @@ function LobbySystem:start(playerSys)
     local RunService = game:GetService("RunService")
     if not playerSys then
         if RunService:IsServer() then
-            playerSys = require(script.Parent:WaitForChild("PlayerSystem"))
+            playerSys = require(script.Parent.Parent:WaitForChild("server"):WaitForChild("ServerPlayerSystem"))
         else
             playerSys = require(script.Parent:WaitForChild("ClientPlayerSystem"))
         end

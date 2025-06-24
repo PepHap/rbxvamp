@@ -9,8 +9,14 @@ end
 local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
 
 -- Methods that manipulate server state are stripped out for the client.
+-- Exclude any functions that would change the authoritative
+-- player state on the server. The client should never invoke
+-- these methods directly.
 local blacklist = {
     onDeath = true,
+    takeDamage = true,
+    heal = true,
+    setPosition = true,
 }
 
 local ClientPlayerSystem = {}

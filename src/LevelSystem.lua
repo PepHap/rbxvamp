@@ -245,7 +245,7 @@ function LevelSystem:advance()
     -- load PlayerSystem lazily to avoid circular require issues
     if not PlayerSystem then
         if RunService:IsServer() then
-            PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
+            PlayerSystem = require(script.Parent.Parent:WaitForChild("server"):WaitForChild("ServerPlayerSystem"))
         else
             PlayerSystem = require(script.Parent:WaitForChild("ClientPlayerSystem"))
         end

@@ -17,7 +17,7 @@ local ADMIN_IDS = {game.CreatorId}
 -- Only non-UI modules should run on the server to avoid
 -- duplicating interface elements for each client.
 local modulesWithUI = {
-    require(src:WaitForChild("PlayerSystem")),
+    require(server:WaitForChild("ServerPlayerSystem")),
     require(src:WaitForChild("EnemySystem")),
     require(src:WaitForChild("DataPersistenceSystem")),
 }
