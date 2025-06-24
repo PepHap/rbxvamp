@@ -142,6 +142,15 @@ function GameManager:update(dt)
     end
 end
 
+---Passes admin id list to the AdminConsole system if present.
+-- @param ids table array of user ids
+function GameManager:setAdminIds(ids)
+    local console = self.systems and self.systems.AdminConsole
+    if console and console.setAdminIds then
+        console:setAdminIds(ids)
+    end
+end
+
 -- Integrate the default enemy system only on the server
 if IS_SERVER then
     local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")

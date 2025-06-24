@@ -13,6 +13,7 @@ local AdminConsole = {
     outputLabel = nil,
     hintLabel = nil,
     adminIds = {},
+    localPlayer = nil,
     gameManager = nil,
 }
 
@@ -98,6 +99,14 @@ end
 function AdminConsole:start(manager, admins)
     self.gameManager = manager or self.gameManager
     if admins then self.adminIds = admins end
+    if self.useRobloxObjects and game and game.Players then
+        local ok, plr = pcall(function()
+            return game.Players.LocalPlayer
+        end)
+        if ok then
+            self.localPlayer = plr
+        end
+    end
     local gui = ensureGui()
     local window = GuiUtil.createWindow("ConsoleWindow")
     if UDim2 and type(UDim2.new)=="function" then
@@ -148,7 +157,7 @@ function AdminConsole:start(manager, admins)
     end
 
     GuiUtil.connectButton(self.executeBtn, function()
-        AdminConsole:runCommand(self.commandBox.Text)
+        AdminConsole:runCommand(AdminConsole.commandBox.Text)
     end)
 
     parent(self.commandBox, window)
@@ -157,6 +166,14 @@ function AdminConsole:start(manager, admins)
     parent(self.executeBtn, window)
     self:showHelp()
     return gui
+end
+
+---Updates the list of admin user ids.
+-- @param ids table array of user ids
+function AdminConsole:setAdminIds(ids)
+    if type(ids) == "table" then
+        self.adminIds = ids
+    end
 end
 
 function AdminConsole:setVisible(on)
@@ -169,6 +186,11 @@ end
 function AdminConsole:toggle()
     if not self.gui then
         self:start(self.gameManager, self.adminIds)
+    end
+    if self.useRobloxObjects and self.localPlayer then
+        if not self:isAdmin(self.localPlayer.UserId) then
+            return
+        end
     end
     self:setVisible(not self.visible)
 end
@@ -196,6 +218,14 @@ end
 
 function AdminConsole:runCommand(text)
     if not text or text == "" then return end
+    if self.useRobloxObjects and self.localPlayer then
+        if not self:isAdmin(self.localPlayer.UserId) then
+            if self.outputLabel then
+                self.outputLabel.Text = "Not an admin"
+            end
+            return "Not an admin"
+        end
+    end
 
     -- Split the command string into words
     local args = {}
