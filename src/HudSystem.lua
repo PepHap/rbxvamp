@@ -707,7 +707,7 @@ function HudSystem:manualAttack()
     if self.autoEnabled then
         return
     end
-    local PlayerInputSystem = require(script.Parent:WaitForChild("PlayerInputSystem.client"))
+    local PlayerInputSystem = require(script.Parent:WaitForChild("PlayerInputSystem"))
     PlayerInputSystem:manualAttack()
 end
 

@@ -582,7 +582,7 @@ end
 
 -- Manual player input when auto battle is disabled
 if RunService:IsClient() then
-    local PlayerInputSystem = require(script.Parent:WaitForChild("PlayerInputSystem.client"))
+    local PlayerInputSystem = require(script.Parent:WaitForChild("PlayerInputSystem"))
     GameManager:addSystem("PlayerInput", PlayerInputSystem)
 end
 
