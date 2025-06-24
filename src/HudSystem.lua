@@ -569,6 +569,11 @@ function HudSystem:update(dt)
                 keyLabel.Size = UDim2.new(0.3, 0, 0.3, 0)
                 keyLabel.Position = UDim2.new(0.7, 0, 0.7, 0)
             end
+            if keyLabel.ZIndex ~= nil then
+                keyLabel.ZIndex = 2
+            else
+                keyLabel.zIndex = 2
+            end
             parent(keyLabel, btn)
             -- hint that holding the button opens the skill menu
             local hint = createInstance("TextLabel")
@@ -580,6 +585,11 @@ function HudSystem:update(dt)
                 hint.Size = UDim2.new(0.3,0,0.3,0)
                 hint.Position = UDim2.new(0.7,0,0,0)
             end
+            if hint.ZIndex ~= nil then
+                hint.ZIndex = 2
+            else
+                hint.zIndex = 2
+            end
             parent(hint, btn)
             local overlay = createInstance("Frame")
             overlay.BackgroundTransparency = 0.4
@@ -587,6 +597,11 @@ function HudSystem:update(dt)
             overlay.BorderSizePixel = 0
             if UDim2 and type(UDim2.new)=="function" then
                 overlay.Size = UDim2.new(1,0,1,0)
+            end
+            if overlay.ZIndex ~= nil then
+                overlay.ZIndex = 1
+            else
+                overlay.zIndex = 1
             end
             parent(overlay, btn)
             self.cooldownOverlays[i] = overlay
@@ -605,6 +620,11 @@ function HudSystem:update(dt)
             cdLabel.TextYAlignment = Enum and Enum.TextYAlignment.Center or cdLabel.TextYAlignment
             parent(cdLabel, btn)
             self.cooldownLabels[i] = cdLabel
+        end
+        if cdLabel.ZIndex ~= nil then
+            cdLabel.ZIndex = 2
+        else
+            cdLabel.zIndex = 2
         end
         self.cooldowns[i] = self.cooldowns[i] or 0
     end

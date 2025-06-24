@@ -194,6 +194,12 @@ function GuiUtil.addCrossDecor(frame)
             bar.BackgroundColor3 = toColor3(Theme.colors.highlight)
             bar.BackgroundTransparency = 0.2
         end
+        -- Ensure decorative bars sit behind other elements
+        if bar.ZIndex ~= nil then
+            bar.ZIndex = 0
+        else
+            bar.zIndex = 0
+        end
         if UDim2 and type(UDim2.new)=="function" then
             bar.Position = vals[1]
             bar.Size = vals[2]
