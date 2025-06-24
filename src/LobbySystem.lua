@@ -15,7 +15,10 @@ local Players = game:GetService("Players")
 
 function LobbySystem:start(playerSys)
     self.playerSystem = playerSys or self.playerSystem or require(script.Parent:WaitForChild("PlayerSystem"))
-    self.teleportSystem = self.teleportSystem or require(script.Parent:WaitForChild("TeleportSystem"))
+    local RunService = game:GetService("RunService")
+    if RunService and RunService:IsServer() then
+        self.teleportSystem = self.teleportSystem or require(script.Parent:WaitForChild("TeleportSystem"))
+    end
 end
 
 ---Moves the given player into the lobby and stores their previous position.

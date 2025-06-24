@@ -13,7 +13,7 @@ local DungeonUI = {
 }
 
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
-local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
+local DungeonSystem
 local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
@@ -21,6 +21,10 @@ local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
 if not ok then Theme = nil end
+
+if game:GetService("RunService"):IsServer() then
+    DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
+end
 
 local function createInstance(className)
     if DungeonUI.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
@@ -200,12 +204,14 @@ function DungeonUI:startDungeon(kind)
     if NetworkSystem and NetworkSystem.fireServer then
         NetworkSystem:fireServer("DungeonRequest", kind)
     end
-    if not self.dungeonSystem then return false end
-    local ok = self.dungeonSystem:start(kind)
-    if ok then
-        self:update()
+    if game:GetService("RunService"):IsServer() and self.dungeonSystem then
+        local ok = self.dungeonSystem:start(kind)
+        if ok then
+            self:update()
+        end
+        return ok
     end
-    return ok
+    return false
 end
 
 function DungeonUI:setVisible(on)

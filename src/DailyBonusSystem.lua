@@ -1,6 +1,15 @@
 -- DailyBonusSystem.lua
 -- Grants a daily login bonus of crystals.
 
+local RunService = game:GetService("RunService")
+-- Prevent client access following Roblox security guidelines:
+-- https://create.roblox.com/docs/reference/engine/classes/RunService#IsServer
+if RunService and RunService.IsClient and RunService.IsServer then
+    if RunService:IsClient() then
+        error("DailyBonusSystem should only be required on the server", 2)
+    end
+end
+
 local DailyBonusSystem = {}
 
 local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))

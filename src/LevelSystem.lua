@@ -12,13 +12,18 @@ LevelSystem.highestClearedStage = 0
 
 -- Enemy system is required so that level progression can trigger new waves
 -- or boss spawns depending on the current level reached.
-local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
+local EnemySystem
 local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
 local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
-local TeleportSystem = require(script.Parent:WaitForChild("TeleportSystem"))
+local TeleportSystem
 local WaveConfig = require(script.Parent:WaitForChild("WaveConfig"))
 local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
 local PlayerSystem -- loaded on demand to avoid circular dependency
+
+if RunService:IsServer() then
+    EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
+    TeleportSystem = require(script.Parent:WaitForChild("TeleportSystem"))
+end
 
 --- Tracks the player's current level.
 --  Starts at ``1`` when the game begins.

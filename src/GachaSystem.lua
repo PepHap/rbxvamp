@@ -63,7 +63,10 @@ local CompanionSystem = require(script.Parent:WaitForChild("CompanionSystem"))
 local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
 local RunService = game:GetService("RunService")
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
-local LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
+local LoggingSystem
+if RunService and RunService.IsServer and RunService:IsServer() then
+    LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
+end
 
 -- Simple currency storage
 GachaSystem.tickets = {skill = 0, companion = 0, equipment = 0}

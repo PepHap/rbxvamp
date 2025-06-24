@@ -5,7 +5,13 @@ local SalvageSystem = {}
 
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
-local LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
+local LoggingSystem
+do
+    local RunService = game:GetService("RunService")
+    if RunService and RunService.IsServer and RunService:IsServer() then
+        LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
+    end
+end
 
 -- Base reward values per rarity. Values are multiplied by the item level
 SalvageSystem.rarityValues = {

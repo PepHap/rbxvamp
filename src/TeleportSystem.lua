@@ -1,6 +1,15 @@
 -- TeleportSystem.lua
 -- Handles teleporting groups of players between places.
 
+local RunService = game:GetService("RunService")
+-- TeleportService APIs are server-only:
+-- https://create.roblox.com/docs/reference/engine/classes/TeleportService
+if RunService and RunService.IsClient and RunService.IsServer then
+    if RunService:IsClient() then
+        error("TeleportSystem should only be required on the server", 2)
+    end
+end
+
 local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
 local TeleportSystem = {

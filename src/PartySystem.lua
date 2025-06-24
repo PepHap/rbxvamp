@@ -1,6 +1,15 @@
 -- PartySystem.lua
 -- Manages groups of players for co-op features.
 
+local RunService = game:GetService("RunService")
+-- Party logic involves teleporting players and should run on the server:
+-- https://create.roblox.com/docs/reference/engine/classes/RunService#IsServer
+if RunService and RunService.IsClient and RunService.IsServer then
+    if RunService:IsClient() then
+        error("PartySystem should only be required on the server", 2)
+    end
+end
+
 local PartySystem = {}
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local LobbySystem = require(script.Parent:WaitForChild("LobbySystem"))

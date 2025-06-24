@@ -1,5 +1,14 @@
 -- Awards currency, experience, ether and gauge points when enemies are defeated.
 
+local RunService = game:GetService("RunService")
+-- Restrict access to the server side only as described in:
+-- https://create.roblox.com/docs/reference/engine/classes/RunService#IsServer
+if RunService and RunService.IsClient and RunService.IsServer then
+    if RunService:IsClient() then
+        error("LootSystem should only be required on the server", 2)
+    end
+end
+
 local LootSystem = {}
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
 

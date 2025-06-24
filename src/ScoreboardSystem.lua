@@ -1,9 +1,17 @@
 -- ScoreboardSystem.lua
 -- Tracks the highest stage reached by each player and shares the top scores.
 
+-- This module persists data using DataStoreService which is server-only:
+-- https://create.roblox.com/docs/reference/engine/classes/RunService#IsServer
+local RunService = game:GetService("RunService")
+if RunService and RunService.IsClient and RunService.IsServer then
+    if RunService:IsClient() then
+        error("ScoreboardSystem should only be required on the server", 2)
+    end
+end
+
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
-local RunService = game:GetService("RunService")
 local ScoreboardSystem = {
     useRobloxObjects = EnvironmentUtil.detectRoblox(),
     datastore = nil,

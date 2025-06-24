@@ -21,12 +21,17 @@ local function playRareEffect(skill)
     end
 end
 
-local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
+local EnemySystem
 local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
-local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
+local DungeonSystem
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
 local SkillSystem = require(script.Parent:WaitForChild("SkillSystem"))
+
+if RunService:IsServer() then
+    EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
+    DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
+end
 
 ---Initializes the cast system with a skill system instance.
 -- @param skillSys table optional SkillSystem instance

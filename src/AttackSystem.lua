@@ -1,6 +1,15 @@
 -- AttackSystem.lua
 -- Processes player attack requests on the server to prevent cheating.
 
+local RunService = game:GetService("RunService")
+-- Ensure this module only runs on the server as recommended by Roblox:
+-- https://create.roblox.com/docs/reference/engine/classes/RunService#IsServer
+if RunService and RunService.IsClient and RunService.IsServer then
+    if RunService:IsClient() then
+        error("AttackSystem should only be required on the server", 2)
+    end
+end
+
 local AttackSystem = {}
 
 -- Maximum allowed damage per attack to mitigate exploit attempts

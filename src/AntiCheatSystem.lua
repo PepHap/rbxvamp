@@ -1,6 +1,15 @@
 -- AntiCheatSystem.lua
 -- Basic server-side checks for suspicious behavior.
 
+local RunService = game:GetService("RunService")
+-- This module must only execute on the server according to Roblox docs:
+-- https://create.roblox.com/docs/reference/engine/classes/RunService#IsServer
+if RunService and RunService.IsClient and RunService.IsServer then
+    if RunService:IsClient() then
+        error("AntiCheatSystem should only be required on the server", 2)
+    end
+end
+
 local AntiCheatSystem = {
     expPerMinute = 1000,
     currencyPerMinute = 1000,
