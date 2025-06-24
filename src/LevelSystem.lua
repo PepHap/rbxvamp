@@ -365,4 +365,22 @@ function LevelSystem:loadData(data)
     updateWaveSize()
 end
 
+local RunService = game:GetService("RunService")
+if RunService:IsClient() then
+    -- Strip out methods that modify server state from the client copy
+    local serverOnly = {
+        start = true,
+        scaleStats = true,
+        strengthenMonsters = true,
+        checkAdvance = true,
+        addKill = true,
+        update = true,
+        advance = true,
+        onPlayerDeath = true,
+    }
+    for name in pairs(serverOnly) do
+        LevelSystem[name] = nil
+    end
+end
+
 return LevelSystem

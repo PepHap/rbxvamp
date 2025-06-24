@@ -201,4 +201,16 @@ function PlayerLevelSystem:loadData(data)
     end
 end
 
+if RunService:IsClient() then
+    -- Remove server-only functionality from the client side
+    local serverOnly = {
+        unlockForLevel = true,
+        checkThreshold = true,
+        addExperience = true,
+    }
+    for name in pairs(serverOnly) do
+        PlayerLevelSystem[name] = nil
+    end
+end
+
 return PlayerLevelSystem
