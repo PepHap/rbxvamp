@@ -151,6 +151,7 @@ function HudSystem:start()
     self.scoreboardButton = createInstance("ImageButton")
     self.menuButton = createInstance("ImageButton")
     self.buttonFrame = createInstance("Frame")
+    GuiUtil.addCrossDecor(self.buttonFrame)
     self.buttonLayout = createInstance("UIGridLayout")
     if Enum and Enum.FillDirection then
         self.buttonLayout.FillDirection = Enum.FillDirection.Horizontal
@@ -162,9 +163,13 @@ function HudSystem:start()
         self.buttonFrame.Size = UDim2.new(0.22, 0, 0.25, 0)
         self.buttonFrame.Position = UDim2.new(0.02, 0, 0.7, 0)
     end
+    GuiUtil.applyResponsive(self.buttonFrame, nil, 240, 60, 400, 120)
     self.progressFrame = createInstance("Frame")
     self.progressFill = createInstance("Frame")
     self.progressText = createInstance("TextLabel")
+    if self.progressFrame.FindFirstChild and not self.progressFrame:FindFirstChild("Top") then
+        GuiUtil.addCrossDecor(self.progressFrame)
+    end
     self.progressText.Text = "Lv.1"
     self.autoButton.Text = "Auto: OFF"
     self.attackButton.Text = "Attack"
@@ -185,6 +190,12 @@ function HudSystem:start()
     self.healthFill = createInstance("Frame")
     self.healthText = createInstance("TextLabel")
     self.skillFrame = createInstance("Frame")
+    if self.healthFrame.FindFirstChild and not self.healthFrame:FindFirstChild("Top") then
+        GuiUtil.addCrossDecor(self.healthFrame)
+    end
+    if self.skillFrame.FindFirstChild and not self.skillFrame:FindFirstChild("Top") then
+        GuiUtil.addCrossDecor(self.skillFrame)
+    end
     self.skillLayout = createInstance("UIListLayout")
     GuiUtil.applyResponsive(self.healthFrame, 10, 150, 20, 800, 40)
     GuiUtil.applyResponsive(self.progressFrame, 16, 200, 20, 1000, 40)
@@ -335,6 +346,9 @@ function HudSystem:update(dt)
     parent(self.skillLayout, self.skillFrame)
     parent(self.skillFrame, gui)
     self.buttonFrame = self.buttonFrame or createInstance("Frame")
+    if self.buttonFrame.FindFirstChild and not self.buttonFrame:FindFirstChild("Top") then
+        GuiUtil.addCrossDecor(self.buttonFrame)
+    end
     self.buttonLayout = self.buttonLayout or createInstance("UIGridLayout")
     if Enum and Enum.FillDirection then
         self.buttonLayout.FillDirection = Enum.FillDirection.Horizontal
@@ -346,6 +360,7 @@ function HudSystem:update(dt)
         self.buttonFrame.Size = UDim2.new(0.22, 0, 0.25, 0)
         self.buttonFrame.Position = UDim2.new(0.02, 0, 0.7, 0)
     end
+    GuiUtil.applyResponsive(self.buttonFrame, nil, 240, 60, 400, 120)
     parent(self.buttonLayout, self.buttonFrame)
     parent(self.buttonFrame, gui)
     self.skillLayout = self.skillLayout or createInstance("UIListLayout")
@@ -463,6 +478,12 @@ function HudSystem:update(dt)
             if UDim2 and type(UDim2.new)=="function" then
                 btn.Size = UDim2.new(0, 60, 0, 60)
             end
+            GuiUtil.addCrossDecor(btn)
+            if Instance and typeof and typeof(Instance.new)=="function" then
+                local aspect = Instance.new("UIAspectRatioConstraint")
+                aspect.AspectRatio = 1
+                aspect.Parent = btn
+            end
             btn.LayoutOrder = i
             GuiUtil.connectButton(btn, function()
                 NetworkSystem:fireServer("SkillRequest", i)
@@ -554,6 +575,7 @@ function HudSystem:update(dt)
         self.currencyLabel.Position = UDim2.new(0.02, 0, 0.06, 0)
         self.buttonFrame.Size = UDim2.new(0.22, 0, 0.25, 0)
         self.buttonFrame.Position = UDim2.new(0.02, 0, 0.7, 0)
+        GuiUtil.applyResponsive(self.buttonFrame, nil, 240, 60, 400, 120)
         self.healthFrame.Position = UDim2.new(0.02, 0, 0.1, 0)
         self.healthFrame.Size = UDim2.new(0.25, 0, 0.04, 0)
         -- Position skill buttons near the bottom-right similar to modern action RPGs
