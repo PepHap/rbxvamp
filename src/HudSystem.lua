@@ -139,8 +139,8 @@ function HudSystem:start()
     if UDim2 and type(UDim2.new) == "function" then
         self.buttonLayout.CellSize = UDim2.new(0, 110, 0, 30)
         self.buttonLayout.CellPadding = UDim2.new(0, 5, 0, 5)
-        self.buttonFrame.Size = UDim2.new(0, 360, 0, 170)
-        self.buttonFrame.Position = UDim2.new(0, 20, 1, -190)
+        self.buttonFrame.Size = UDim2.new(0, 360, 0, 180)
+        self.buttonFrame.Position = UDim2.new(0, 20, 1, -200)
     end
     self.progressFrame = createInstance("Frame")
     self.progressFill = createInstance("Frame")
@@ -260,8 +260,8 @@ function HudSystem:update(dt)
     if UDim2 and type(UDim2.new) == "function" then
         self.buttonLayout.CellSize = UDim2.new(0, 110, 0, 30)
         self.buttonLayout.CellPadding = UDim2.new(0, 5, 0, 5)
-        self.buttonFrame.Size = UDim2.new(0, 360, 0, 170)
-        self.buttonFrame.Position = UDim2.new(0, 20, 1, -190)
+        self.buttonFrame.Size = UDim2.new(0, 360, 0, 180)
+        self.buttonFrame.Position = UDim2.new(0, 20, 1, -200)
     end
     parent(self.buttonLayout, self.buttonFrame)
     parent(self.buttonFrame, gui)
@@ -377,8 +377,8 @@ function HudSystem:update(dt)
         self.levelLabel.Position = UDim2.new(0, 20, 0, 10)
         self.currencyLabel.Position = UDim2.new(0, 20, 0, 30)
         if not self.buttonFrame.Size then
-            self.buttonFrame.Size = UDim2.new(0, 360, 0, 170)
-            self.buttonFrame.Position = UDim2.new(0, 20, 1, -190)
+            self.buttonFrame.Size = UDim2.new(0, 360, 0, 180)
+            self.buttonFrame.Position = UDim2.new(0, 20, 1, -200)
         end
     end
 end
