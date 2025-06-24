@@ -2,6 +2,10 @@
 -- Automatically casts skills using SkillCastSystem when enabled
 
 local RunService = game:GetService("RunService")
+
+local server = script.Parent
+local src = script.Parent.Parent.Parent:WaitForChild("src")
+
 local AutoSkillSystem = {
     enabled = false,
     skillCastSystem = nil,
@@ -11,15 +15,10 @@ local AutoSkillSystem = {
 local EnemySystem
 local AutoBattleSystem
 if RunService:IsServer() then
-    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
-    AutoBattleSystem = require(serverFolder:WaitForChild("AutoBattleSystem"))
+    AutoBattleSystem = require(server:WaitForChild("AutoBattleSystem"))
+    EnemySystem = require(server:WaitForChild("EnemySystem"))
 end
-local SkillCastSystem = require(script.Parent:WaitForChild("SkillCastSystem"))
-
-if RunService:IsServer() then
-    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
-    EnemySystem = require(serverFolder:WaitForChild("EnemySystem"))
-end
+local SkillCastSystem = require(server:WaitForChild("SkillCastSystem"))
 
 ---Initializes the system with a SkillCastSystem instance.
 -- @param castSys table optional SkillCastSystem instance

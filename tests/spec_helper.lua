@@ -17,6 +17,12 @@ _G.game = _G.game or {
                                 return "src." .. sub
                             end
                         }
+                    elseif child == "server" then
+                        return {
+                            WaitForChild = function(_, sub)
+                                return "server.systems." .. sub
+                            end
+                        }
                     end
                 end
             }
@@ -34,7 +40,15 @@ _G.Instance = _G.Instance or { new = function(class) return {ClassName = class} 
 _G.script = _G.script or {
     Parent = {
         WaitForChild = function(_, name)
-            return "src." .. name
+            if name == "server" then
+                return {
+                    WaitForChild = function(_, sub)
+                        return "server.systems." .. sub
+                    end
+                }
+            else
+                return "src." .. name
+            end
         end,
         FindFirstChild = function(_, name)
             return "src." .. name
