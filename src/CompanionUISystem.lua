@@ -19,7 +19,6 @@ local CompanionUISystem = {
 }
 
 local CompanionSystem = require(script.Parent:WaitForChild("CompanionSystem"))
-local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)

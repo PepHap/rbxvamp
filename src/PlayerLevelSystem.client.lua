@@ -8,7 +8,8 @@ end
 
 local PlayerLevelSystem = {}
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+-- Use the client wrapper so no server-only methods are exposed
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
 
 PlayerLevelSystem.level = 1
 PlayerLevelSystem.exp = 0

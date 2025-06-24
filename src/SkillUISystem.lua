@@ -19,7 +19,6 @@ local SkillUISystem = {
 }
 
 local SkillSystem = require(script.Parent:WaitForChild("SkillSystem"))
-local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
