@@ -604,16 +604,7 @@ function InventoryUI:salvageSlot(slot)
         NetworkSystem:fireServer("SalvageRequest", "equipped", slot)
         return true
     end
-    local ItemSalvageSystem = require(script.Parent:WaitForChild("ItemSalvageSystem"))
-    local itm = self.itemSystem:unequip(slot)
-    if not itm then
-        return false
-    end
-    local ok = ItemSalvageSystem:salvageItem(itm)
-    if ok then
-        self:update()
-    end
-    return ok
+    return false
 end
 
 ---Salvages an item from the inventory list.
@@ -626,12 +617,7 @@ function InventoryUI:salvageInventoryItem(index)
         NetworkSystem:fireServer("SalvageRequest", "inventory", index)
         return true
     end
-    local ItemSalvageSystem = require(script.Parent:WaitForChild("ItemSalvageSystem"))
-    local ok = ItemSalvageSystem:salvageFromInventory(self.itemSystem, index)
-    if ok then
-        self:update()
-    end
-    return ok
+    return false
 end
 
 ---Sets whether the inventory UI is visible.
