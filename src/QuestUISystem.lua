@@ -12,7 +12,7 @@ end
 }
 
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
 local RunService = game:GetService("RunService")
 local QuestSystem
 if RunService:IsServer() then

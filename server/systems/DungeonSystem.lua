@@ -18,7 +18,7 @@ local src = script.Parent.Parent.Parent:WaitForChild("src")
 local KeySystem = require(src:WaitForChild("KeySystem"))
 local CurrencySystem = require(src:WaitForChild("CurrencySystem"))
 local RaidSystem = require(server:WaitForChild("RaidSystem"))
-local NetworkSystem = require(src:WaitForChild("NetworkSystem"))
+local NetworkSystem = require(src:WaitForChild("NetworkServer"))
 
 -- Definition of available dungeons. Each dungeon specifies the key
 -- type required to enter, the currency rewarded and the number of

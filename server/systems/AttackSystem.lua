@@ -18,7 +18,7 @@ AttackSystem.maxDamage = 20
 local src = script.Parent.Parent.Parent:WaitForChild("src")
 local server = script.Parent
 
-local NetworkSystem = require(src:WaitForChild("NetworkSystem"))
+local NetworkSystem = require(src:WaitForChild("NetworkServer"))
 local EnemySystem = require(server:WaitForChild("EnemySystem"))
 local LevelSystem = require(src:WaitForChild("LevelSystem"))
 local DungeonSystem = require(server:WaitForChild("DungeonSystem"))

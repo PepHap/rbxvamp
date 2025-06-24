@@ -52,7 +52,7 @@ if RunService:IsServer() then
 else
     PlayerSystem = require(script.Parent:WaitForChild("ClientPlayerSystem"))
 end
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkServer"))
 local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
 local InventoryUISystem = require(script.Parent:WaitForChild("InventoryUISystem"))
 local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
@@ -76,7 +76,7 @@ local AdminConsoleSystem = require(script.Parent:FindFirstChild("AdminConsoleSys
 local LobbySystem = require(script.Parent:WaitForChild("LobbySystem"))
 local LobbyUISystem = require(script.Parent:WaitForChild("LobbyUISystem"))
 local PartyUISystem = require(script.Parent:WaitForChild("PartyUISystem"))
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkServer"))
 
 -- Utility to connect Roblox input events when available
 local function connectRoblox()

@@ -14,7 +14,7 @@ local ScoreboardUI = {
     visible = false,
 }
 
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))

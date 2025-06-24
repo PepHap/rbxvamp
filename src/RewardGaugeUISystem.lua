@@ -17,6 +17,7 @@ local RewardGaugeUISystem = {
 }
 
 local RewardGaugeSystem = require(script.Parent:WaitForChild("ClientRewardGaugeSystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
 local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)

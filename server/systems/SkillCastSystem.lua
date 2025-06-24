@@ -28,7 +28,7 @@ end
 local EnemySystem
 local LevelSystem = require(src:WaitForChild("LevelSystem"))
 local DungeonSystem
-local NetworkSystem = require(src:WaitForChild("NetworkSystem"))
+local NetworkSystem = require(src:WaitForChild("NetworkServer"))
 local EventManager = require(src:WaitForChild("EventManager"))
 local SkillSystem = require(src:WaitForChild("SkillSystem"))
 
