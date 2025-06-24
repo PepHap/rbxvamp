@@ -89,6 +89,7 @@ function UITheme.styleButton(btn)
         TextColor3 = toColor3(UITheme.colors.buttonText),
         BackgroundColor3 = toColor3(UITheme.colors.buttonBackground),
         AutoButtonColor = false,
+        TextScaled = true,
     })
     addCorner(btn)
 end
@@ -98,6 +99,7 @@ function UITheme.styleLabel(lbl)
         Font = UITheme.font,
         TextColor3 = toColor3(UITheme.colors.labelText),
         BackgroundTransparency = lbl.BackgroundTransparency or 1,
+        TextScaled = true,
     })
     addCorner(lbl)
 end

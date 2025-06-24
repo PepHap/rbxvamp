@@ -103,6 +103,10 @@ function RewardGaugeUISystem:start()
     else
         -- simple frame; image removed to keep repository text only
         self.window = GuiUtil.createWindow("RewardWindow")
+        if UDim2 and type(UDim2.new)=="function" then
+            self.window.Size = UDim2.new(0.3, 0, 0.25, 0)
+            self.window.Position = UDim2.new(0.35, 0, 0.35, 0)
+        end
         parent(self.window, gui)
 
         self.gaugeLabel = createInstance("TextLabel")
