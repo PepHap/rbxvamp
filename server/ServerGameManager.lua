@@ -9,10 +9,6 @@ end
 local src = script.Parent.Parent:WaitForChild("src")
 local GameManager = require(src:WaitForChild("GameManager"))
 
--- Extend GachaSystem with server-only methods
-local extendGacha = require(script.Parent:WaitForChild("GachaServer"))
-extendGacha(src)
-
 -- Attach server-only functionality
 local extend = require(script.Parent:WaitForChild("ServerGameExtensions"))
 extend(GameManager, src)
