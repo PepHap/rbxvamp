@@ -46,7 +46,7 @@ local PlayerInputSystem = {
 }
 
 local RunService = game:GetService("RunService")
-local PlayerSystem = require(script.Parent:WaitForChild("ClientPlayerSystem"))
+local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
 local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
 local CompanionUISystem = require(script.Parent:WaitForChild("CompanionUISystem"))
 local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))

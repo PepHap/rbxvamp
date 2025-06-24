@@ -247,7 +247,7 @@ function LevelSystem:advance()
         if RunService:IsServer() then
             PlayerSystem = require(script.Parent.Parent:WaitForChild("server"):WaitForChild("ServerPlayerSystem"))
         else
-            PlayerSystem = require(script.Parent:WaitForChild("ClientPlayerSystem"))
+            PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
         end
     end
     local nextLevel = self.currentLevel + 1

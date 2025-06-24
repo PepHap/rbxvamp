@@ -12,7 +12,7 @@ local PlayerSystem
 if RunService:IsServer() then
     PlayerSystem = require(script.Parent.Parent:WaitForChild("ServerPlayerSystem"))
 else
-    PlayerSystem = require(src:WaitForChild("ClientPlayerSystem"))
+    PlayerSystem = require(src:WaitForChild("PlayerSystem"))
 end
 local SkillCastSystem = require(server:WaitForChild("SkillCastSystem"))
 local StatUpgradeSystem = require(src:WaitForChild("StatUpgradeSystem"))

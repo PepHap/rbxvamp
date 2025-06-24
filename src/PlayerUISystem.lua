@@ -21,7 +21,7 @@ local PlayerUI = {
 
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
-local PlayerSystem = require(script.Parent:WaitForChild("ClientPlayerSystem"))
+local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
 local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
