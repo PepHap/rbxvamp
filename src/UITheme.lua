@@ -3,16 +3,17 @@ local UITheme = {}
 -- Base colors inspired by Genshin Impact's UI
 UITheme.colors = {
     -- slightly brighter palette for a modern look
-    windowBackground = Color3 and Color3.fromRGB and Color3.fromRGB(45, 50, 70) or {r=45,g=50,b=70},
-    windowBackground2 = Color3 and Color3.fromRGB and Color3.fromRGB(35, 40, 60) or {r=35,g=40,b=60},
-    buttonBackground = Color3 and Color3.fromRGB and Color3.fromRGB(70, 140, 240) or {r=70,g=140,b=240},
+    -- slightly brighter palette for a modern look
+    windowBackground = Color3 and Color3.fromRGB and Color3.fromRGB(50, 55, 80) or {r=50,g=55,b=80},
+    windowBackground2 = Color3 and Color3.fromRGB and Color3.fromRGB(40, 45, 70) or {r=40,g=45,b=70},
+    buttonBackground = Color3 and Color3.fromRGB and Color3.fromRGB(80, 150, 255) or {r=80,g=150,b=255},
     buttonText = Color3 and Color3.fromRGB and Color3.fromRGB(255, 255, 255) or {r=1,g=1,b=1},
     labelText = Color3 and Color3.fromRGB and Color3.fromRGB(235, 235, 235) or {r=235,g=235,b=235},
     -- Slightly brighter background when hovering buttons
-    buttonHover = Color3 and Color3.fromRGB and Color3.fromRGB(90, 160, 250) or {r=90,g=160,b=250},
+    buttonHover = Color3 and Color3.fromRGB and Color3.fromRGB(100, 170, 255) or {r=100,g=170,b=255},
     -- Accent color used for selected buttons or highlighted elements
-    highlight = Color3 and Color3.fromRGB and Color3.fromRGB(130, 220, 255) or {r=130,g=220,b=255},
-    progressBar = Color3 and Color3.fromRGB and Color3.fromRGB(120, 220, 255) or {r=120,g=220,b=255},
+    highlight = Color3 and Color3.fromRGB and Color3.fromRGB(150, 230, 255) or {r=150,g=230,b=255},
+    progressBar = Color3 and Color3.fromRGB and Color3.fromRGB(130, 230, 255) or {r=130,g=230,b=255},
     -- Semi-transparent overlay used for skill cooldowns
     cooldownOverlay = Color3 and Color3.fromRGB and Color3.fromRGB(0, 0, 0) or {r=0,g=0,b=0},
     -- Color for full player health
