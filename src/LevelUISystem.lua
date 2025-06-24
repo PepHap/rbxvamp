@@ -6,6 +6,10 @@ local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
 local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
 local LocalizationSystem = require(script.Parent:WaitForChild("LocalizationSystem"))
+local ok, Theme = pcall(function()
+    return require(script.Parent:WaitForChild("UITheme"))
+end)
+if not ok then Theme = nil end
 
 local LevelUI = {
     useRobloxObjects = EnvironmentUtil.detectRoblox(),
@@ -22,9 +26,20 @@ local function createInstance(className)
         if className == "ScreenGui" and inst.IgnoreGuiInset ~= nil then
             inst.IgnoreGuiInset = true
         end
+        if Theme then
+            if className == "TextLabel" then Theme.styleLabel(inst)
+            elseif className == "TextButton" then Theme.styleButton(inst)
+            elseif className == "Frame" then Theme.styleWindow(inst) end
+        end
         return inst
     end
-    return {ClassName = className}
+    local tbl = {ClassName = className}
+    if Theme then
+        if className == "TextLabel" then Theme.styleLabel(tbl)
+        elseif className == "TextButton" then Theme.styleButton(tbl)
+        elseif className == "Frame" then Theme.styleWindow(tbl) end
+    end
+    return tbl
 end
 
 local function parent(child, parentObj)
