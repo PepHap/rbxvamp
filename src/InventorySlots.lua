@@ -18,6 +18,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local assets = ReplicatedStorage:WaitForChild("assets")
 local slotIcons = require(assets:WaitForChild("slot_icons"))
 
+-- Slots are arranged in two columns and three rows
+local COLUMN_COUNT = 2
+
 local function createInstance(className)
     if InventorySlots.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
         local inst = Instance.new(className)
@@ -91,8 +94,8 @@ function InventorySlots:create(parentFrame)
         if UDim2 and type(UDim2.new)=="function" then
             btn.Size = UDim2.new(0, 80, 0, 80)
             if not gridSupported then
-                local row = math.floor((i-1) / 2)
-                local col = (i-1) % 2
+                local row = math.floor((i-1) / COLUMN_COUNT)
+                local col = (i-1) % COLUMN_COUNT
                 btn.Position = UDim2.new(0, col * 82, 0, row * 82)
             end
         end
