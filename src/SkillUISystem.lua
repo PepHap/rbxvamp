@@ -71,6 +71,7 @@ local function ensureGui(parent)
     if gui.Enabled ~= nil then
         gui.Enabled = true
     end
+    GuiUtil.makeFullScreen(gui)
     SkillUISystem.gui = gui
     if SkillUISystem.useRobloxObjects and pgui then
         gui.Parent = pgui
