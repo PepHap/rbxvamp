@@ -58,8 +58,13 @@ local function ensureGui()
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "SkillTreeUI"
+    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
+    GuiUtil.makeFullScreen(gui)
     if gui.Enabled ~= nil then
         gui.Enabled = true
+    end
+    if gui.ResetOnSpawn ~= nil then
+        gui.ResetOnSpawn = false
     end
     SkillTreeUISystem.gui = gui
     if SkillTreeUISystem.useRobloxObjects and pgui then

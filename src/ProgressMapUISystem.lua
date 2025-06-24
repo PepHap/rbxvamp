@@ -81,8 +81,13 @@ local function ensureGui()
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "ProgressMapUI"
+    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
+    GuiUtil.makeFullScreen(gui)
     if gui.Enabled ~= nil then
         gui.Enabled = true
+    end
+    if gui.ResetOnSpawn ~= nil then
+        gui.ResetOnSpawn = false
     end
     ProgressMapUI.gui = gui
     if ProgressMapUI.useRobloxObjects and pgui then

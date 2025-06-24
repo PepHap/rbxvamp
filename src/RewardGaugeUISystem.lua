@@ -71,8 +71,13 @@ local function ensureGui()
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "RewardGaugeUI"
+    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
+    GuiUtil.makeFullScreen(gui)
     if gui.Enabled ~= nil then
         gui.Enabled = true
+    end
+    if gui.ResetOnSpawn ~= nil then
+        gui.ResetOnSpawn = false
     end
     RewardGaugeUISystem.gui = gui
     if RewardGaugeUISystem.useRobloxObjects and pgui then
