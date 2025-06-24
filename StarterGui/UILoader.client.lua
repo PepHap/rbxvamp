@@ -11,7 +11,7 @@ local src = ReplicatedStorage:WaitForChild("src")
 
 local QuestUISystem = require(src:WaitForChild("QuestUISystem"))
 local RewardGaugeUISystem = require(src:WaitForChild("RewardGaugeUISystem"))
-local GameManager = require(src:WaitForChild("ClientGameManager"))
+local GameManager = require(src:WaitForChild("GameManager"))
 
 local modules = {
     QuestUISystem,

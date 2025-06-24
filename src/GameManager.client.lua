@@ -1,0 +1,513 @@
+-- GameManager.client.lua
+-- Client-side GameManager excluding server features
+-- Central game management module
+-- Handles initialization and main game loop
+
+--[[
+    GameManager.lua
+    Central management module responsible for initializing and
+    updating registered game systems.
+
+    Systems can be any table that optionally exposes ``start`` and
+    ``update`` methods. Systems are stored by name for easy retrieval.
+--]]
+
+local GameManager = {
+    -- Mapping of system name to implementation
+    systems = {},
+    -- Ordered list of system names for deterministic iteration
+    order = {}
+}
+
+local RunService = game:GetService("RunService")
+local IS_SERVER = RunService:IsServer()
+
+--- Registers a system for later initialization and updates.
+-- @param name string unique key for the system
+-- @param system table table implementing optional start/update methods
+function GameManager:addSystem(name, system)
+    assert(name ~= nil, "System name must be provided")
+    assert(system ~= nil, "System table must be provided")
+    self.systems[name] = system
+    table.insert(self.order, name)
+end
+
+function GameManager:start()
+    -- Initialize all registered systems in the order they were added
+    for _, name in ipairs(self.order) do
+        local system = self.systems[name]
+        if type(system.start) == "function" then
+            system:start()
+        end
+    end
+
+end
+
+function GameManager:update(dt)
+    -- Forward the update call to every registered system
+    for _, name in ipairs(self.order) do
+        local system = self.systems[name]
+        if type(system.update) == "function" then
+            system:update(dt)
+        end
+    end
+end
+
+-- Integrate the default enemy system only on the server
+if IS_SERVER then
+    local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
+    GameManager:addSystem("Enemy", EnemySystem)
+end
+
+-- Auto battle functionality can optionally control the player's actions
+local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
+GameManager:addSystem("AutoBattle", AutoBattleSystem)
+
+-- Handle player attack requests strictly on the server
+if IS_SERVER then
+    local AttackSystem = require(script.Parent:WaitForChild("AttackSystem"))
+    GameManager:addSystem("Attack", AttackSystem)
+end
+
+-- Player progression handling available on both client and server
+local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
+GameManager:addSystem("PlayerLevel", PlayerLevelSystem)
+
+-- Player health management
+local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
+GameManager:addSystem("Player", PlayerSystem)
+
+-- Stage progression between floors
+local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+GameManager:addSystem("Level", LevelSystem)
+
+-- Tracks which area the player is currently exploring
+local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
+GameManager:addSystem("Location", LocationSystem)
+
+-- Applies UI theme based on the current location
+local ThemeSystem = require(script.Parent:WaitForChild("ThemeSystem"))
+ThemeSystem.locationSystem = LocationSystem
+GameManager:addSystem("Theme", ThemeSystem)
+
+-- Environment lighting adjustments per location
+local LightingSystem = require(script.Parent:WaitForChild("LightingSystem"))
+LightingSystem.locationSystem = LocationSystem
+GameManager:addSystem("Lighting", LightingSystem)
+
+-- Simple post processing effects for boss encounters
+local PostProcessingSystem = require(script.Parent:WaitForChild("PostProcessingSystem"))
+GameManager:addSystem("PostFX", PostProcessingSystem)
+
+-- Gacha system used for rolling random rewards
+local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
+GameManager:addSystem("Gacha", GachaSystem)
+
+-- Gauge based reward choices independent of stage/XP
+local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
+GameManager:addSystem("RewardGauge", RewardGaugeSystem)
+RewardGaugeSystem.onSelect = function(choice)
+    if not choice then return end
+    if GameManager.inventory and GameManager.inventory.EquipItem then
+        GameManager.inventory:EquipItem(choice.slot, choice.item)
+    else
+        GameManager.itemSystem:equip(choice.slot, choice.item)
+    end
+end
+
+-- Achievement tracking for milestone rewards
+local AchievementSystem = require(script.Parent:WaitForChild("AchievementSystem"))
+GameManager.achievementSystem = AchievementSystem
+GameManager:addSystem("Achievements", AchievementSystem)
+
+-- Equipment handling
+local InventoryModule = require(script.Parent:WaitForChild("InventoryModule"))
+local ItemSystem = require(script.Parent:WaitForChild("ItemSystem"))
+GameManager.inventory = InventoryModule.new()
+GameManager.itemSystem = GameManager.inventory.itemSystem
+GameManager:addSystem("Items", GameManager.itemSystem)
+
+do
+    local function clone(tbl)
+        if type(tbl) ~= "table" then return tbl end
+        local c = {}
+        for k, v in pairs(tbl) do
+            c[k] = clone(v)
+        end
+        return c
+    end
+    local t = ItemSystem.templates
+    if t and t.Weapon and t.Weapon[1] then
+        local itm = clone(t.Weapon[1])
+        GameManager.itemSystem:assignId(itm)
+        GameManager.itemSystem:equip("Weapon", itm)
+    end
+    if t and t.Hat and t.Hat[1] then
+        local itm = clone(t.Hat[1])
+        GameManager.itemSystem:assignId(itm)
+        GameManager.itemSystem:addItem(itm)
+    end
+    if t and t.Ring and t.Ring[1] then
+        local itm = clone(t.Ring[1])
+        GameManager.itemSystem:assignId(itm)
+        GameManager.itemSystem:addItem(itm)
+    end
+end
+
+-- Equipment set bonuses
+local SetBonusSystem = require(script.Parent:WaitForChild("SetBonusSystem"))
+SetBonusSystem.itemSystem = GameManager.itemSystem
+GameManager.setBonusSystem = SetBonusSystem
+GameManager:addSystem("SetBonuses", SetBonusSystem)
+
+-- Item salvage handling for converting equipment into currency
+local ItemSalvageSystem = require(script.Parent:WaitForChild("ItemSalvageSystem"))
+GameManager.itemSalvageSystem = ItemSalvageSystem
+GameManager:addSystem("ItemSalvage", ItemSalvageSystem)
+
+-- Quests provide structured objectives and rewards
+local QuestSystem = require(script.Parent:WaitForChild("QuestSystem"))
+GameManager:addSystem("Quest", QuestSystem)
+
+-- Keys used to unlock special areas and modes
+local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
+GameManager:addSystem("Keys", KeySystem)
+
+-- Remote event networking
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+GameManager.networkSystem = NetworkSystem
+GameManager:addSystem("Network", NetworkSystem)
+
+-- Handles teleporting groups between places (server only)
+local TeleportSystem
+if IS_SERVER then
+    TeleportSystem = require(script.Parent:WaitForChild("TeleportSystem"))
+    GameManager.teleportSystem = TeleportSystem
+    GameManager:addSystem("Teleport", TeleportSystem)
+    TeleportSystem.raidPlaceId = 0
+    TeleportSystem.lobbyPlaceId = 0
+    if TeleportSystem.start then
+        TeleportSystem:start()
+    end
+end
+
+local PartySystem
+if IS_SERVER then
+    PartySystem = require(script.Parent:WaitForChild("PartySystem"))
+    if TeleportSystem then
+        PartySystem.teleportSystem = TeleportSystem
+    end
+    GameManager.partySystem = PartySystem
+    GameManager:addSystem("Party", PartySystem)
+end
+
+local RaidSystem
+if IS_SERVER then
+    RaidSystem = require(script.Parent:WaitForChild("RaidSystem"))
+    if PartySystem then
+        RaidSystem.partySystem = PartySystem
+    end
+    RaidSystem.lobbyTime = 5
+    GameManager.raidSystem = RaidSystem
+    GameManager:addSystem("Raid", RaidSystem)
+end
+
+-- Optional dungeon runs for earning upgrade currency
+local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
+GameManager:addSystem("Dungeon", DungeonSystem)
+
+-- Base stats like attack and defense upgrades
+local StatUpgradeSystem = require(script.Parent:WaitForChild("StatUpgradeSystem"))
+GameManager:addSystem("Stats", StatUpgradeSystem)
+GameManager.inventory.statSystem = StatUpgradeSystem
+GameManager.inventory.setSystem = SetBonusSystem
+-- Define some base player stats used by the inventory display
+StatUpgradeSystem:addStat("Health", 100)
+StatUpgradeSystem:addStat("Attack", 5)
+StatUpgradeSystem:addStat("Defense", 0)
+StatUpgradeSystem:addStat("Magic", 0)
+StatUpgradeSystem:addStat("CritChance", 0.05)
+StatUpgradeSystem:addStat("CritDamage", 1.5)
+StatUpgradeSystem:addStat("HealthRegen", 1)
+StatUpgradeSystem:addStat("MaxMana", 100)
+StatUpgradeSystem:addStat("ManaRegen", 5)
+StatUpgradeSystem:addStat("Speed", 1)
+StatUpgradeSystem:addStat("AttackSpeed", 1)
+
+-- Data persistence for saving and loading progress (server only)
+local DataPersistenceSystem
+if IS_SERVER then
+    DataPersistenceSystem = require(script.Parent:WaitForChild("DataPersistenceSystem"))
+    GameManager:addSystem("Save", DataPersistenceSystem)
+    GameManager.saveSystem = DataPersistenceSystem
+end
+
+-- Automatically saves player progress at intervals
+local AutoSaveSystem
+if IS_SERVER then
+    AutoSaveSystem = require(script.Parent:WaitForChild("AutoSaveSystem"))
+    GameManager.autoSaveSystem = AutoSaveSystem
+    GameManager:addSystem("AutoSave", AutoSaveSystem)
+end
+
+-- Simple currency tracking
+local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+GameManager.currencySystem = CurrencySystem
+GameManager:addSystem("Currency", CurrencySystem)
+
+local LoggingSystem
+if IS_SERVER then
+    LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
+    GameManager.loggingSystem = LoggingSystem
+    GameManager:addSystem("Logging", LoggingSystem)
+end
+
+local AntiCheatSystem = require(script.Parent:WaitForChild("AntiCheatSystem"))
+GameManager:addSystem("AntiCheat", AntiCheatSystem)
+
+local LootSystem = require(script.Parent:WaitForChild("LootSystem"))
+GameManager.lootSystem = LootSystem
+GameManager:addSystem("Loot", LootSystem)
+
+-- Daily login bonuses award extra crystals
+local DailyBonusSystem = require(script.Parent:WaitForChild("DailyBonusSystem"))
+GameManager.dailyBonusSystem = DailyBonusSystem
+GameManager:addSystem("DailyBonus", DailyBonusSystem)
+
+
+-- Exchange crystals for tickets or upgrade currency
+local CrystalExchangeSystem = require(script.Parent:WaitForChild("CrystalExchangeSystem"))
+GameManager.crystalExchangeSystem = CrystalExchangeSystem
+GameManager:addSystem("CrystalExchange", CrystalExchangeSystem)
+
+-- Skill management and upgrades
+local SkillSystem = require(script.Parent:WaitForChild("SkillSystem"))
+GameManager.skillSystem = SkillSystem.new()
+GameManager:addSystem("Skills", GameManager.skillSystem)
+
+-- Skill trees for branch upgrades
+local SkillTreeSystem = require(script.Parent:WaitForChild("SkillTreeSystem"))
+GameManager.skillTreeSystem = SkillTreeSystem.new(GameManager.skillSystem)
+GameManager:addSystem("SkillTree", GameManager.skillTreeSystem)
+
+-- Skill casting using mana and cooldowns
+local SkillCastSystem = require(script.Parent:WaitForChild("SkillCastSystem"))
+SkillCastSystem.skillSystem = GameManager.skillSystem
+GameManager.skillCastSystem = SkillCastSystem
+GameManager:addSystem("SkillCast", SkillCastSystem)
+AutoBattleSystem.skillCastSystem = SkillCastSystem
+local RegenSystem = require(script.Parent:WaitForChild("RegenSystem"))
+RegenSystem.playerSystem = PlayerSystem
+RegenSystem.skillCastSystem = SkillCastSystem
+RegenSystem.statSystem = StatUpgradeSystem
+GameManager:addSystem("Regen", RegenSystem)
+
+-- Optional automatic skill casting
+local AutoSkillSystem = require(script.Parent:WaitForChild("AutoSkillSystem"))
+AutoSkillSystem.skillCastSystem = SkillCastSystem
+GameManager.autoSkillSystem = AutoSkillSystem
+GameManager:addSystem("AutoSkill", AutoSkillSystem)
+
+-- Companion management
+local CompanionSystem = require(script.Parent:WaitForChild("CompanionSystem"))
+GameManager.companionSystem = CompanionSystem
+GameManager:addSystem("Companions", CompanionSystem)
+
+-- Companions follow the player and attack nearby enemies
+local CompanionAttackSystem = require(script.Parent:WaitForChild("CompanionAttackSystem"))
+CompanionAttackSystem.companionSystem = GameManager.companionSystem
+GameManager:addSystem("CompanionAI", CompanionAttackSystem)
+
+-- Social lobby for trading
+local LobbySystem = require(script.Parent:WaitForChild("LobbySystem"))
+GameManager.lobbySystem = LobbySystem
+GameManager:addSystem("Lobby", LobbySystem)
+
+if RunService:IsClient() then
+    -- Minimal UI for displaying rewards and gacha results
+    local UISystem = require(script.Parent:WaitForChild("UISystem"))
+    GameManager:addSystem("UI", UISystem)
+
+    -- Inventory UI provides equipment and bag management
+    local InventoryUISystem = require(script.Parent:WaitForChild("InventoryUISystem"))
+    InventoryUISystem.itemSystem = GameManager.itemSystem
+    InventoryUISystem.statSystem = StatUpgradeSystem
+    InventoryUISystem.setSystem = SetBonusSystem
+    GameManager:addSystem("InventoryUI", InventoryUISystem)
+
+    -- Gacha UI for rolling rewards
+    local GachaUISystem = require(script.Parent:WaitForChild("GachaUISystem"))
+    GachaUISystem.gameManager = GameManager
+    GameManager:addSystem("GachaUI", GachaUISystem)
+
+    -- Heads-up display with level, experience and currency
+    local HudSystem = require(script.Parent:WaitForChild("HudSystem"))
+    GameManager:addSystem("HUD", HudSystem)
+
+    -- Skill and companion UI modules
+    local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
+    SkillUISystem.skillSystem = GameManager.skillSystem
+    GameManager:addSystem("SkillUI", SkillUISystem)
+
+    local SkillTreeUISystem = require(script.Parent:WaitForChild("SkillTreeUISystem"))
+    SkillTreeUISystem.treeSystem = GameManager.skillTreeSystem
+    GameManager:addSystem("SkillTreeUI", SkillTreeUISystem)
+
+    local CompanionUISystem = require(script.Parent:WaitForChild("CompanionUISystem"))
+    CompanionUISystem.companionSystem = GameManager.companionSystem
+    GameManager:addSystem("CompanionUI", CompanionUISystem)
+
+    local AchievementUISystem = require(script.Parent:WaitForChild("AchievementUISystem"))
+    AchievementUISystem.achievementSystem = AchievementSystem
+    GameManager:addSystem("AchievementUI", AchievementUISystem)
+
+    -- Main menu UI providing access to inventory and skills
+    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
+    GameManager:addSystem("MenuUI", MenuUISystem)
+
+    -- UI for upgrading base stats
+    local StatUpgradeUISystem = require(script.Parent:WaitForChild("StatUpgradeUISystem"))
+    StatUpgradeUISystem.statSystem = StatUpgradeSystem
+    GameManager:addSystem("StatUI", StatUpgradeUISystem)
+
+    -- UI for exchanging crystals into tickets or currency
+    local CrystalExchangeUISystem = require(script.Parent:WaitForChild("CrystalExchangeUISystem"))
+    CrystalExchangeUISystem.exchangeSystem = CrystalExchangeSystem
+    GameManager:addSystem("CrystalExchangeUI", CrystalExchangeUISystem)
+
+    local DungeonUISystem = require(script.Parent:WaitForChild("DungeonUISystem"))
+    DungeonUISystem.dungeonSystem = DungeonSystem
+    GameManager:addSystem("DungeonUI", DungeonUISystem)
+
+    local LobbyUISystem = require(script.Parent:WaitForChild("LobbyUISystem"))
+    LobbyUISystem.lobbySystem = LobbySystem
+    GameManager:addSystem("LobbyUI", LobbyUISystem)
+
+    local PartyUISystem = require(script.Parent:WaitForChild("PartyUISystem"))
+    GameManager:addSystem("PartyUI", PartyUISystem)
+
+    local RaidUISystem = require(script.Parent:WaitForChild("RaidUISystem"))
+    GameManager:addSystem("RaidUI", RaidUISystem)
+
+    local EnemyUISystem = require(script.Parent:WaitForChild("EnemyUISystem"))
+    GameManager:addSystem("EnemyUI", EnemyUISystem)
+
+    local PlayerUISystem = require(script.Parent:WaitForChild("PlayerUISystem"))
+    GameManager:addSystem("PlayerUI", PlayerUISystem)
+
+    local ScoreboardUISystem = require(script.Parent:WaitForChild("ScoreboardUISystem"))
+    GameManager:addSystem("ScoreboardUI", ScoreboardUISystem)
+
+    -- Admin console for privileged commands
+    local adminModule
+    local ok, result = pcall(function()
+        return require(script.Parent:WaitForChild("AdminConsoleSystem"))
+    end)
+    if ok then
+        adminModule = result
+    end
+    if adminModule then
+        adminModule.gameManager = GameManager
+        GameManager:addSystem("AdminConsole", adminModule)
+    end
+end
+
+-- Manual player input when auto battle is disabled
+local PlayerInputSystem = require(script.Parent:WaitForChild("PlayerInputSystem"))
+GameManager:addSystem("PlayerInput", PlayerInputSystem)
+
+-- Visual effects during boss fights
+local BossEffectSystem = require(script.Parent:WaitForChild("BossEffectSystem"))
+GameManager:addSystem("BossEffects", BossEffectSystem)
+
+-- Track progress across locations
+local ProgressMapSystem = require(script.Parent:WaitForChild("ProgressMapSystem"))
+GameManager.progressMapSystem = ProgressMapSystem
+GameManager:addSystem("ProgressMap", ProgressMapSystem)
+
+-- Leaderboard tracking highest cleared stages
+local ScoreboardSystem
+if IS_SERVER then
+    ScoreboardSystem = require(script.Parent:WaitForChild("ScoreboardSystem"))
+    GameManager.scoreboardSystem = ScoreboardSystem
+    GameManager:addSystem("Scoreboard", ScoreboardSystem)
+end
+
+-- Simple map UI
+local ProgressMapUISystem = require(script.Parent:WaitForChild("ProgressMapUISystem"))
+ProgressMapUISystem.progressSystem = ProgressMapSystem
+if RunService:IsClient() then
+    GameManager:addSystem("ProgressMapUI", ProgressMapUISystem)
+end
+
+-- Tutorial hints
+local TutorialSystem = require(script.Parent:WaitForChild("TutorialSystem"))
+GameManager:addSystem("Tutorial", TutorialSystem)
+
+---Triggers a skill gacha roll.
+
+---Returns the gauge progress toward the next reward (0-1).
+function GameManager:getGaugePercent()
+    if RewardGaugeSystem.getPercent then
+        return RewardGaugeSystem:getPercent()
+    end
+    return 0
+end
+
+---Returns stage progress toward clearing the current level (0-1).
+function GameManager:getLevelPercent()
+    if LevelSystem.getPercent then
+        return LevelSystem:getPercent()
+    end
+    return 0
+end
+
+---Returns reward options when the gauge is full.
+function GameManager:getRewardOptions()
+    return RewardGaugeSystem:getOptions()
+end
+
+---Chooses one of the reward options.
+-- @param index number option index
+    RewardGaugeSystem:loadData(data.rewardGauge)
+    AchievementSystem:loadData(data.achievements)
+    DailyBonusSystem:loadData(data.dailyBonus)
+    QuestSystem:loadData(data.quests)
+end
+
+---Salvages an item from the inventory into currency and crystals.
+-- @param index number inventory index
+-- @return boolean success
+
+---Immediately writes the current save data using the auto save system.
+function GameManager:forceAutoSave()
+    if self.autoSaveSystem and self.autoSaveSystem.forceSave then
+        self.autoSaveSystem:forceSave()
+    end
+end
+
+-- Remove server-only methods when this module is required on the client to
+-- avoid exposing privileged functionality. The Roblox client should never
+-- invoke these functions directly. See:
+-- https://create.roblox.com/docs/reference/engine/classes/RunService#IsServer
+if RunService:IsClient() then
+    local serverOnly = {
+        salvageInventoryItem = true,
+        salvageEquippedItem = true,
+        createParty = true,
+        joinParty = true,
+        leaveParty = true,
+        startRaid = true,
+        loadPlayerData = true,
+        savePlayerData = true,
+        startAutoSave = true,
+        forceAutoSave = true,
+    }
+    for name in pairs(serverOnly) do
+        GameManager[name] = nil
+    end
+end
+
+
+
+return GameManager

@@ -19,7 +19,10 @@
         "$path": "assets"
       },
       "src": {
-        "$path": "src"
+        "$path": "src",
+        "GameManager": {
+          "$path": "src/GameManager.client.lua"
+        }
       }
     },
     "StarterPlayer": {
