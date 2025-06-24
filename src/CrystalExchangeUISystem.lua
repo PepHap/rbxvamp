@@ -81,6 +81,7 @@ function CrystalExchangeUI:start(exchangeSys)
 
     self.window = GuiUtil.createWindow("CrystalExchangeWindow")
     parent(self.window, gui)
+    GuiUtil.makeFullScreen(self.window)
 
     local actions = {
         {"Buy Skill Ticket", function() self:buyTicket("skill") end},

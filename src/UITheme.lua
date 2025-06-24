@@ -3,6 +3,7 @@ local UITheme = {}
 -- Base colors inspired by Genshin Impact's UI
 UITheme.colors = {
     windowBackground = Color3 and Color3.fromRGB and Color3.fromRGB(35, 40, 55) or {r=35,g=40,b=55},
+    windowBackground2 = Color3 and Color3.fromRGB and Color3.fromRGB(25, 30, 45) or {r=25,g=30,b=45},
     buttonBackground = Color3 and Color3.fromRGB and Color3.fromRGB(70, 100, 140) or {r=70,g=100,b=140},
     buttonText = Color3 and Color3.fromRGB and Color3.fromRGB(255, 255, 255) or {r=1,g=1,b=1},
     labelText = Color3 and Color3.fromRGB and Color3.fromRGB(240, 240, 240) or {r=240,g=240,b=240},
@@ -80,6 +81,19 @@ function UITheme.styleWindow(frame)
         BackgroundTransparency = 0.1,
         BackgroundColor3 = toColor3(UITheme.colors.windowBackground),
     })
+    if typeof and typeof(frame) == "Instance" and Instance and type(Instance.new) == "function" then
+        local ok, grad = pcall(function()
+            return Instance.new("UIGradient")
+        end)
+        if ok and grad and ColorSequence then
+            local c1 = toColor3(UITheme.colors.windowBackground)
+            local c2 = toColor3(UITheme.colors.windowBackground2)
+            grad.Color = ColorSequence.new(c1, c2)
+            grad.Parent = frame
+        end
+    else
+        frame.gradient = {UITheme.colors.windowBackground, UITheme.colors.windowBackground2}
+    end
     addCorner(frame)
 end
 

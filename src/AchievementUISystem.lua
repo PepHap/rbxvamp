@@ -80,6 +80,7 @@ function AchievementUI:start(sys)
     end
     self.window = GuiUtil.createWindow("AchievementWindow")
     parent(self.window, gui)
+    GuiUtil.makeFullScreen(self.window)
     self:update()
     self:setVisible(self.visible)
 end

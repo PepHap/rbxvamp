@@ -93,6 +93,7 @@ function GachaUI:start(manager, parentGui)
     end
     if self.window.Parent ~= parentTarget then
         parent(self.window, parentTarget)
+        GuiUtil.makeFullScreen(self.window)
     end
     self.gui = parentTarget
 

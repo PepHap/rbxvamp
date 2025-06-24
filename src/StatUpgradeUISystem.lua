@@ -80,6 +80,7 @@ function StatUpgradeUISystem:start(statSys, parentGui)
     end
     if self.window.Parent ~= parentTarget then
         parent(self.window, parentTarget)
+        GuiUtil.makeFullScreen(self.window)
     end
     if not self.statListFrame then
         self.statListFrame = createInstance("Frame")
