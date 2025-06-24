@@ -50,4 +50,45 @@ for k, v in pairs(GameManager) do
     end
 end
 
+---Applies persistent data from the server to the local systems.
+-- This mirrors ``applySaveData`` on the server but excludes
+-- any server-only logic. Client code can safely call this
+-- to initialize UI with the player's saved progress.
+-- https://create.roblox.com/docs/reference/engine/classes/Player
+function ClientGameManager:applyClientData(data)
+    if type(data) ~= "table" then return end
+    local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+    local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
+    local ItemSystem = require(script.Parent:WaitForChild("ItemSystem"))
+    local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
+    local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+    local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
+    local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
+    local AchievementSystem = require(script.Parent:WaitForChild("AchievementSystem"))
+    local DailyBonusSystem = require(script.Parent:WaitForChild("DailyBonusSystem"))
+    local QuestSystem = require(script.Parent:WaitForChild("QuestSystem"))
+    local StatUpgradeSystem = require(script.Parent:WaitForChild("StatUpgradeSystem"))
+
+    CurrencySystem:loadData(data.currency)
+    GachaSystem:loadData(data.gacha)
+    local newItems = ItemSystem.fromData(data.items or {})
+    self.itemSystem = newItems
+    if self.inventory then
+        self.inventory.itemSystem = newItems
+    end
+    if self.setBonusSystem then
+        self.setBonusSystem.itemSystem = newItems
+    end
+    self.skillSystem:loadData(data.skills)
+    self.companionSystem:loadData(data.companions)
+    StatUpgradeSystem:loadData(data.stats)
+    PlayerLevelSystem:loadData(data.playerLevel)
+    LevelSystem:loadData(data.levelState)
+    KeySystem:loadData(data.keys)
+    RewardGaugeSystem:loadData(data.rewardGauge)
+    AchievementSystem:loadData(data.achievements)
+    DailyBonusSystem:loadData(data.dailyBonus)
+    QuestSystem:loadData(data.quests)
+end
+
 return ClientGameManager

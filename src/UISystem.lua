@@ -147,29 +147,24 @@ function UISystem:showRewardOptions()
     return opts
 end
 
----Selects a reward option by index and prints the result.
+---Selects a reward option by index and notifies the server.
 -- @param index number option index
--- @return table|nil chosen reward
 function UISystem:selectReward(index)
-    local chosen = RewardGaugeSystem:choose(index)
-
+    if NetworkSystem and NetworkSystem.fireServer then
+        NetworkSystem:fireServer("RewardChoice", index)
+    end
     local gui = ensureGui()
     self.selectionLabel = self.selectionLabel or createInstance("TextLabel")
     parent(self.selectionLabel, gui)
     gui.selectionLabel = self.selectionLabel
-
-    if chosen then
-        self.selectionLabel.Text = ("Selected %s for %s"):format(chosen.item.name, chosen.slot)
-    else
-        self.selectionLabel.Text = "Invalid reward selection"
-    end
+    self.selectionLabel.Text = "Reward choice sent"
 
     self.rewardButtons = nil
     if self.optionsWindow then
         GuiUtil.setVisible(self.optionsWindow, false)
     end
 
-    return chosen
+    return nil
 end
 
 ---Displays the result of a gacha roll.
