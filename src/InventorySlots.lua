@@ -71,7 +71,7 @@ function InventorySlots:create(parentFrame)
             layout.FillDirection = Enum.FillDirection.Horizontal
             layout.SortOrder = Enum.SortOrder.LayoutOrder
             if layout.FillDirectionMaxCells ~= nil then
-                layout.FillDirectionMaxCells = 2
+                layout.FillDirectionMaxCells = 2 -- two columns per row
             end
             if layout.StartCorner ~= nil then
                 layout.StartCorner = Enum.StartCorner.TopLeft
