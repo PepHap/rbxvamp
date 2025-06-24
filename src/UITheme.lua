@@ -2,16 +2,16 @@ local UITheme = {}
 
 -- Base colors inspired by Genshin Impact's UI
 UITheme.colors = {
-    windowBackground = Color3 and Color3.fromRGB and Color3.fromRGB(35, 40, 55) or {r=35,g=40,b=55},
-    windowBackground2 = Color3 and Color3.fromRGB and Color3.fromRGB(25, 30, 45) or {r=25,g=30,b=45},
-    buttonBackground = Color3 and Color3.fromRGB and Color3.fromRGB(70, 100, 140) or {r=70,g=100,b=140},
+    windowBackground = Color3 and Color3.fromRGB and Color3.fromRGB(40, 42, 54) or {r=40,g=42,b=54},
+    windowBackground2 = Color3 and Color3.fromRGB and Color3.fromRGB(30, 32, 46) or {r=30,g=32,b=46},
+    buttonBackground = Color3 and Color3.fromRGB and Color3.fromRGB(70, 120, 200) or {r=70,g=120,b=200},
     buttonText = Color3 and Color3.fromRGB and Color3.fromRGB(255, 255, 255) or {r=1,g=1,b=1},
-    labelText = Color3 and Color3.fromRGB and Color3.fromRGB(240, 240, 240) or {r=240,g=240,b=240},
+    labelText = Color3 and Color3.fromRGB and Color3.fromRGB(220, 220, 230) or {r=220,g=220,b=230},
     -- Slightly brighter background when hovering buttons
-    buttonHover = Color3 and Color3.fromRGB and Color3.fromRGB(100, 140, 190) or {r=100,g=140,b=190},
+    buttonHover = Color3 and Color3.fromRGB and Color3.fromRGB(90, 140, 220) or {r=90,g=140,b=220},
     -- Accent color used for selected buttons or highlighted elements
-    highlight = Color3 and Color3.fromRGB and Color3.fromRGB(100, 170, 230) or {r=100,g=170,b=230},
-    progressBar = Color3 and Color3.fromRGB and Color3.fromRGB(100, 170, 255) or {r=100,g=170,b=255},
+    highlight = Color3 and Color3.fromRGB and Color3.fromRGB(120, 180, 255) or {r=120,g=180,b=255},
+    progressBar = Color3 and Color3.fromRGB and Color3.fromRGB(120, 180, 255) or {r=120,g=180,b=255},
 }
 
 UITheme.rarityColors = {
@@ -27,7 +27,7 @@ UITheme.rarityColors = {
 -- Fallback font if Enum.Font is unavailable
 UITheme.font = Enum and Enum.Font and Enum.Font.GothamBold
 
-UITheme.cornerRadius = 12
+UITheme.cornerRadius = 16
 
 -- Convert RGB table values returned in test environments to actual Color3
 -- values when running inside Roblox. This prevents type mismatches when
@@ -104,8 +104,22 @@ function UITheme.styleButton(btn)
         BackgroundColor3 = toColor3(UITheme.colors.buttonBackground),
         AutoButtonColor = false,
         TextScaled = true,
+        BorderSizePixel = 0,
     })
     addCorner(btn)
+    if typeof and typeof(btn) == "Instance" and Instance and type(Instance.new) == "function" then
+        local ok, grad = pcall(function()
+            return Instance.new("UIGradient")
+        end)
+        if ok and grad and ColorSequence then
+            local c1 = toColor3(UITheme.colors.buttonBackground)
+            local c2 = toColor3(UITheme.colors.buttonHover)
+            grad.Color = ColorSequence.new(c1, c2)
+            grad.Parent = btn
+        end
+    else
+        btn.gradient = {UITheme.colors.buttonBackground, UITheme.colors.buttonHover}
+    end
 end
 
 function UITheme.styleLabel(lbl)

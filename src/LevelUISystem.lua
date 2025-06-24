@@ -103,6 +103,7 @@ function LevelUI:start(pls, lvlSys, parentGui)
 
     self.window = GuiUtil.createWindow("LevelWindow")
     parent(self.window, parentTarget)
+    GuiUtil.makeFullScreen(self.window)
 
     self.levelLabel = createInstance("TextLabel")
     parent(self.levelLabel, self.window)
