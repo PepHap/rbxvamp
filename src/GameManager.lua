@@ -799,6 +799,28 @@ function GameManager:forceAutoSave()
     end
 end
 
+-- Remove server-only methods when this module is required on the client to
+-- avoid exposing privileged functionality. The Roblox client should never
+-- invoke these functions directly. See:
+-- https://create.roblox.com/docs/reference/engine/classes/RunService#IsServer
+if RunService:IsClient() then
+    local serverOnly = {
+        salvageInventoryItem = true,
+        salvageEquippedItem = true,
+        createParty = true,
+        joinParty = true,
+        leaveParty = true,
+        startRaid = true,
+        loadPlayerData = true,
+        savePlayerData = true,
+        startAutoSave = true,
+        forceAutoSave = true,
+    }
+    for name in pairs(serverOnly) do
+        GameManager[name] = nil
+    end
+end
+
 
 
 return GameManager
