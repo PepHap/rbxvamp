@@ -533,8 +533,9 @@ if RunService:IsClient() then
     local EnemyUISystem = require(script.Parent:WaitForChild("EnemyUISystem"))
     GameManager:addSystem("EnemyUI", EnemyUISystem)
 
-    local PlayerUISystem = require(script.Parent:WaitForChild("PlayerUISystem"))
-    GameManager:addSystem("PlayerUI", PlayerUISystem)
+    -- The old PlayerUI duplicated HUD elements and caused visual overlap.
+    -- HudSystem already displays health and status information in a modern
+    -- layout, so the legacy PlayerUI is no longer started.
 
     local ScoreboardUISystem = require(script.Parent:WaitForChild("ScoreboardUISystem"))
     GameManager:addSystem("ScoreboardUI", ScoreboardUISystem)
