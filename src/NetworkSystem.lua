@@ -47,7 +47,7 @@ function NetworkSystem:start()
         "DungeonProgress", "PlayerLevelUp", "StageAdvance", "StageRollback",
         "RewardReroll", "EnemySpawn", "EnemyRemove", "EnemyUpdate",
         "SalvageRequest", "SalvageResult", "PlayerAttack", "PartyRequest",
-        "RaidRequest", "AttackRequest", "SkillRequest", "QuestUpdate",
+        "RaidRequest", "AttackRequest", "SkillRequest", "SkillCooldown", "QuestUpdate",
         "QuestData", "QuestRequest", "PlayerDied"
     }
     for _, alias in ipairs(aliases) do

@@ -35,6 +35,7 @@ return {
     RaidRequest = "ev_rrq_v2",
     AttackRequest = "ev_ar_v2",
     SkillRequest = "ev_skq_v2",
+    SkillCooldown = "ev_scd_v2",
     QuestUpdate = "ev_qu_v2",
     QuestData = "ev_qd_v2",
     QuestRequest = "ev_qrq_v2",

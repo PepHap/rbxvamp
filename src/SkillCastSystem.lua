@@ -98,6 +98,7 @@ function SkillCastSystem:useSkill(index, target)
     self.mana = self.mana - cost
     local baseCooldown = skill.cooldown or 5
     self.cooldowns[index] = baseCooldown
+    NetworkSystem:fireAllClients("SkillCooldown", index, baseCooldown)
     playRareEffect(skill)
     target = target or EnemySystem:getNearestEnemy({x = 0, y = 0})
     local damage = (skill.damage or 0) * (skill.level or 1)
