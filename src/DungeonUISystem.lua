@@ -25,9 +25,7 @@ local ok, Theme = pcall(function()
 end)
 if not ok then Theme = nil end
 
-if game:GetService("RunService"):IsServer() then
-    DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
-end
+
 
 local function createInstance(className)
     if DungeonUI.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
@@ -211,13 +209,6 @@ end
 function DungeonUI:startDungeon(kind)
     if NetworkSystem and NetworkSystem.fireServer then
         NetworkSystem:fireServer("DungeonRequest", kind)
-    end
-    if game:GetService("RunService"):IsServer() and self.dungeonSystem then
-        local ok = self.dungeonSystem:start(kind)
-        if ok then
-            self:update()
-        end
-        return ok
     end
     return false
 end
