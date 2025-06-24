@@ -52,11 +52,16 @@ end)
 ```
 
 ### Controls
-Press **B** during gameplay to toggle the inventory UI. The player can also use
-**K** to open skills, **L** for companions and **M** for the main menu.
+Press **B** during gameplay to toggle the inventory UI. The panel displays six
+equipment slots arranged in three rows with two slots in each row. The player
+can also use **K** to open skills, **L** for companions and **M** for the main
+menu.
 Use the number keys **1**&ndash;**4** to cast the skills in your slots. When
 the AutoSkill system is enabled, skills will fire automatically whenever they
 are off cooldown.
+
+Press **F10** to open the admin console. Only players listed as admins (by
+default the game creator) can run console commands such as adding crystals.
 
 Quest rewards now include raid keys which allow parties to initiate raid runs
 through the **Party** interface. When the raid begins, the `TeleportSystem`
