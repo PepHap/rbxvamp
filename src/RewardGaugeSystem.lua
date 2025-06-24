@@ -1,7 +1,8 @@
+local ModuleUtil = require(script.Parent:WaitForChild("ModuleUtil"))
 local RunService = game:GetService("RunService")
 
 if RunService:IsServer() then
-    return require(script.Parent:WaitForChild("RewardGaugeSystem.server"))
+    return ModuleUtil.requireChild(script.Parent, "RewardGaugeSystem.server")
 else
-    return require(script.Parent:WaitForChild("RewardGaugeSystem.client"))
+    return ModuleUtil.requireChild(script.Parent, "RewardGaugeSystem.client")
 end

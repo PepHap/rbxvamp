@@ -1,7 +1,8 @@
+local ModuleUtil = require(script.Parent:WaitForChild("ModuleUtil"))
 local RunService = game:GetService("RunService")
 
 if RunService:IsServer() then
-    return require(script.Parent:WaitForChild("GachaSystem.server"))
+    return ModuleUtil.requireChild(script.Parent, "GachaSystem.server")
 else
-    return require(script.Parent:WaitForChild("ClientGachaSystem"))
+    return ModuleUtil.requireChild(script.Parent, "ClientGachaSystem")
 end
