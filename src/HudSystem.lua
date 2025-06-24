@@ -29,8 +29,10 @@ local HudSystem = {
     skillFrame = nil,
     skillLayout = nil,
     skillButtons = nil,
+    cooldownOverlays = nil,
     cooldownLabels = nil,
     cooldowns = nil,
+    maxCooldowns = nil,
     playerHealth = nil,
     progressFrame = nil,
     progressFill = nil,
@@ -226,8 +228,10 @@ function HudSystem:start()
         self.healthText.TextScaled = true
     end
     self.skillButtons = {}
+    self.cooldownOverlays = {}
     self.cooldownLabels = {}
     self.cooldowns = {}
+    self.maxCooldowns = {}
     GuiUtil.connectButton(self.autoButton, function()
         HudSystem:toggleAutoBattle()
     end)
@@ -336,6 +340,7 @@ function HudSystem:start()
     end)
     NetworkSystem:onClientEvent("SkillCooldown", function(idx, cd)
         HudSystem.cooldowns[idx] = cd
+        HudSystem.maxCooldowns[idx] = cd
     end)
     self:update()
 end
@@ -356,8 +361,10 @@ function HudSystem:update(dt)
     self.skillFrame = self.skillFrame or createInstance("Frame")
     self.skillLayout = self.skillLayout or createInstance("UIListLayout")
     self.skillButtons = self.skillButtons or {}
+    self.cooldownOverlays = self.cooldownOverlays or {}
     self.cooldownLabels = self.cooldownLabels or {}
     self.cooldowns = self.cooldowns or {}
+    self.maxCooldowns = self.maxCooldowns or {}
     parent(self.progressFill, self.progressFrame)
     parent(self.progressText, self.progressFrame)
     parent(self.progressFrame, gui)
@@ -547,8 +554,18 @@ function HudSystem:update(dt)
                 keyLabel.Position = UDim2.new(0.7, 0, 0.7, 0)
             end
             parent(keyLabel, btn)
+            local overlay = createInstance("Frame")
+            overlay.BackgroundTransparency = 0.4
+            overlay.BackgroundColor3 = Color3 and Color3.fromRGB and Color3.fromRGB(0,0,0) or {r=0,g=0,b=0}
+            overlay.BorderSizePixel = 0
+            if UDim2 and type(UDim2.new)=="function" then
+                overlay.Size = UDim2.new(1,0,1,0)
+            end
+            parent(overlay, btn)
+            self.cooldownOverlays[i] = overlay
         end
         btn.Image = skill.image or ""
+        self.maxCooldowns[i] = self.maxCooldowns[i] or (skill.cooldown or 1)
         local cdLabel = self.cooldownLabels[i]
         if not cdLabel then
             cdLabel = createInstance("TextLabel")
@@ -599,13 +616,25 @@ function HudSystem:update(dt)
     for i, cd in pairs(self.cooldowns) do
         if cd > 0 then
             self.cooldowns[i] = math.max(0, cd - dt)
-            if self.cooldownLabels[i] then
+        end
+        local overlay = self.cooldownOverlays[i]
+        local maxCd = self.maxCooldowns[i] or cd
+        if overlay and UDim2 and type(UDim2.new)=="function" then
+            local ratio = (self.cooldowns[i] or 0) / math.max(maxCd, 1)
+            overlay.Size = UDim2.new(1,0,ratio,0)
+            overlay.Position = UDim2.new(0,0,1-ratio,0)
+            overlay.Visible = self.cooldowns[i] > 0
+        elseif overlay then
+            overlay.Visible = self.cooldowns[i] > 0
+        end
+        if self.cooldownLabels[i] then
+            if self.cooldowns[i] > 0 then
                 self.cooldownLabels[i].Text = tostring(math.ceil(self.cooldowns[i]))
                 self.cooldownLabels[i].Visible = true
+            else
+                self.cooldownLabels[i].Visible = false
+                self.cooldownLabels[i].Text = ""
             end
-        elseif self.cooldownLabels[i] then
-            self.cooldownLabels[i].Visible = false
-            self.cooldownLabels[i].Text = ""
         end
     end
 

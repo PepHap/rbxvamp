@@ -50,6 +50,24 @@ local function toColor3(value)
     return value
 end
 
+local function lighten(col, factor)
+    local c = toColor3(col)
+    factor = math.clamp and math.clamp(factor or 0, 0, 1) or math.max(0, math.min(factor or 0, 1))
+    if typeof and typeof(c) == "Color3" then
+        local r = c.R + (1 - c.R) * factor
+        local g = c.G + (1 - c.G) * factor
+        local b = c.B + (1 - c.B) * factor
+        return Color3.new(r, g, b)
+    elseif type(c) == "table" then
+        return {
+            r = c.r + (255 - c.r) * factor,
+            g = c.g + (255 - c.g) * factor,
+            b = c.b + (255 - c.b) * factor,
+        }
+    end
+    return c
+end
+
 local function addCorner(obj)
     if not obj then return end
     local radius = UITheme.cornerRadius or 0
@@ -186,6 +204,15 @@ function UITheme.styleProgressBar(bar)
     })
     addCorner(bar)
     if typeof and typeof(bar) == "Instance" and Instance and type(Instance.new) == "function" then
+        local okGrad, grad = pcall(function()
+            return Instance.new("UIGradient")
+        end)
+        if okGrad and grad and ColorSequence then
+            local start = lighten(UITheme.colors.progressBar, 0.3)
+            local finish = toColor3(UITheme.colors.progressBar)
+            grad.Color = ColorSequence.new(toColor3(start), finish)
+            grad.Parent = bar
+        end
         local okStroke, stroke = pcall(function()
             return Instance.new("UIStroke")
         end)
