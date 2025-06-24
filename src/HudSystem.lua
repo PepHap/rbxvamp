@@ -556,7 +556,7 @@ function HudSystem:update(dt)
             cdLabel.Size = UDim2.new(1,0,1,0)
             cdLabel.TextScaled = true
             cdLabel.TextColor3 = Theme and Theme.colors.labelText or Color3.new(1,1,1)
-            cdLabel.BackgroundColor3 = Color3.fromRGB(0,0,0)
+            cdLabel.BackgroundColor3 = Color3 and Color3.fromRGB and Color3.fromRGB(0,0,0) or {r=0,g=0,b=0}
             cdLabel.TextXAlignment = Enum and Enum.TextXAlignment.Center or cdLabel.TextXAlignment
             cdLabel.TextYAlignment = Enum and Enum.TextYAlignment.Center or cdLabel.TextYAlignment
             parent(cdLabel, btn)
