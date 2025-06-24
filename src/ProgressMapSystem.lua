@@ -8,10 +8,15 @@ local ProgressMapSystem = {
 }
 
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
+local RunService = game:GetService("RunService")
 
 function ProgressMapSystem:start(locSys, lvlSys)
     self.locationSystem = locSys or self.locationSystem or require(script.Parent:WaitForChild("LocationSystem"))
-    self.levelSystem = lvlSys or self.levelSystem or require(script.Parent:WaitForChild("LevelSystem"))
+    if RunService and RunService:IsClient() then
+        self.levelSystem = lvlSys or self.levelSystem or require(script.Parent:WaitForChild("ClientLevelSystem"))
+    else
+        self.levelSystem = lvlSys or self.levelSystem or require(script.Parent:WaitForChild("LevelSystem"))
+    end
     self.progress.location = self.locationSystem.currentIndex
     self.progress.stage = self.levelSystem.currentLevel
     EventManager:Get("LevelAdvance"):Connect(function(lvl)

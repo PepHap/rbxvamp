@@ -167,7 +167,7 @@ function ProgressMapUI:update()
     end
     parent(self.label, self.window or gui)
     local pr = ps:getProgress()
-    local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
+    local LevelSystem = require(script.Parent:WaitForChild("ClientLevelSystem"))
     local nextLevel, stageType, killsLeft, bossName, milestoneKills, milestoneType = LevelSystem:getNextStageInfo()
     local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
     local loc = LocationSystem:getCurrent()
@@ -212,7 +212,7 @@ function ProgressMapUI:update()
     if reward.gauge and reward.gauge > 0 then
         table.insert(parts, string.format("+%d %s", reward.gauge, LocalizationSystem:get("Gauge")))
     end
-    local gauge = require(script.Parent:WaitForChild("RewardGaugeSystem"))
+    local gauge = require(script.Parent:WaitForChild("ClientRewardGaugeSystem"))
     local percent = math.floor((gauge:getPercent() or 0) * 100)
     table.insert(parts, string.format("%d%% %s", percent, LocalizationSystem:get("Gauge")))
     table.insert(parts, string.format("%s: +%d %s", LocalizationSystem:get("Next Reward"), reward.exp, LocalizationSystem:get("XP")))
