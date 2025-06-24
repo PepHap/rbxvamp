@@ -24,17 +24,27 @@ PlayerSystem.position = {x = 0, y = 0, z = 0}
 ---Reference to the player's model table or Instance.
 PlayerSystem.model = nil
 
+local RunService = game:GetService("RunService")
 local LevelSystem -- lazy loaded to avoid circular dependency
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
-local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
-local AntiCheatSystem = require(script.Parent:WaitForChild("AntiCheatSystem"))
+local AutoBattleSystem
+local AntiCheatSystem
+if RunService:IsServer() then
+    local serverFolder = script.Parent.Parent:FindFirstChild("server")
+    if serverFolder then
+        local systems = serverFolder:FindFirstChild("systems")
+        if systems then
+            AutoBattleSystem = require(systems:WaitForChild("AutoBattleSystem"))
+            AntiCheatSystem = require(systems:WaitForChild("AntiCheatSystem"))
+        end
+    end
+end
 
 -- Forward declare helper functions so they can be referenced inside
 -- PlayerSystem methods defined above them.
 local createVector3
 local getSpawnPosition
 local spawnModel
-local RunService = game:GetService("RunService")
 
 local function broadcastState()
     -- Only the server should replicate player state to connected clients
@@ -177,8 +187,12 @@ function PlayerSystem:setPosition(pos)
     else
         self.position = {x = pos.x, y = pos.y, z = pos.z}
     end
-    AutoBattleSystem.playerPosition = self.position
-    AntiCheatSystem:checkMovement(nil, self.position)
+    if AutoBattleSystem then
+        AutoBattleSystem.playerPosition = self.position
+    end
+    if AntiCheatSystem and AntiCheatSystem.checkMovement then
+        AntiCheatSystem:checkMovement(nil, self.position)
+    end
     local model = self.model
     if model then
         local part = model.PrimaryPart or model.primaryPart
@@ -198,7 +212,9 @@ function PlayerSystem:start()
     self.health = self.maxHealth
     local pos = getSpawnPosition()
     self.position = {x = pos.x, y = pos.y, z = pos.z}
-    AutoBattleSystem.playerPosition = self.position
+    if AutoBattleSystem then
+        AutoBattleSystem.playerPosition = self.position
+    end
     if self.spawnModels ~= false then
         spawnModel()
     end
@@ -221,8 +237,12 @@ function PlayerSystem:update(dt)
             self.position.x = pos.X
             self.position.y = pos.Y
             self.position.z = pos.Z
-            AutoBattleSystem.playerPosition = self.position
-            AntiCheatSystem:checkMovement(nil, self.position)
+            if AutoBattleSystem then
+                AutoBattleSystem.playerPosition = self.position
+            end
+            if AntiCheatSystem and AntiCheatSystem.checkMovement then
+                AntiCheatSystem:checkMovement(nil, self.position)
+            end
             broadcastState()
         end
     end

@@ -9,7 +9,8 @@ local LoggingSystem
 do
     local RunService = game:GetService("RunService")
     if RunService and RunService.IsServer and RunService:IsServer() then
-        LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
+        local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+        LoggingSystem = require(serverFolder:WaitForChild("LoggingSystem"))
     end
 end
 

@@ -29,8 +29,9 @@ local EventManager = require(script.Parent:WaitForChild("EventManager"))
 local SkillSystem = require(script.Parent:WaitForChild("SkillSystem"))
 
 if RunService:IsServer() then
-    EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
-    DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    EnemySystem = require(serverFolder:WaitForChild("EnemySystem"))
+    DungeonSystem = require(serverFolder:WaitForChild("DungeonSystem"))
 end
 
 ---Initializes the cast system with a skill system instance.

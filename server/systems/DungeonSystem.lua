@@ -12,10 +12,13 @@ end
 
 local DungeonSystem = {}
 
-local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
-local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
-local RaidSystem = require(script.Parent:WaitForChild("RaidSystem"))
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local server = script.Parent
+local src = script.Parent.Parent.Parent:WaitForChild("src")
+
+local KeySystem = require(src:WaitForChild("KeySystem"))
+local CurrencySystem = require(src:WaitForChild("CurrencySystem"))
+local RaidSystem = require(server:WaitForChild("RaidSystem"))
+local NetworkSystem = require(src:WaitForChild("NetworkSystem"))
 
 -- Definition of available dungeons. Each dungeon specifies the key
 -- type required to enter, the currency rewarded and the number of

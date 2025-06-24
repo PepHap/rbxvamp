@@ -45,7 +45,11 @@ local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
 local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
-local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
+local AutoBattleSystem
+if RunService:IsServer() then
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    AutoBattleSystem = require(serverFolder:WaitForChild("AutoBattleSystem"))
+end
 local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local GameManager = require(script.Parent:WaitForChild("ClientGameManager"))
@@ -419,13 +423,13 @@ function HudSystem:update(dt)
 
     self.autoButton = self.autoButton or createInstance("TextButton")
     parent(self.autoButton, self.buttonFrame)
-    local state = AutoBattleSystem.enabled and "ON" or "OFF"
+    local state = (AutoBattleSystem and AutoBattleSystem.enabled) and "ON" or "OFF"
     self.autoButton.Text = "Auto: " .. state
 
     self.attackButton = self.attackButton or createInstance("TextButton")
     parent(self.attackButton, self.buttonFrame)
     self.attackButton.Text = "Attack"
-    if AutoBattleSystem.enabled then
+    if AutoBattleSystem and AutoBattleSystem.enabled then
         self.attackButton.Active = false
     else
         self.attackButton.Active = true
@@ -617,6 +621,7 @@ function HudSystem:update(dt)
 end
 
 function HudSystem:toggleAutoBattle()
+    if not AutoBattleSystem then return end
     if AutoBattleSystem.enabled then
         AutoBattleSystem:disable()
     else
@@ -626,7 +631,7 @@ function HudSystem:toggleAutoBattle()
 end
 
 function HudSystem:manualAttack()
-    if AutoBattleSystem.enabled then
+    if AutoBattleSystem and AutoBattleSystem.enabled then
         return
     end
     local PlayerInputSystem = require(script.Parent:WaitForChild("PlayerInputSystem"))

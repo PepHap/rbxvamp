@@ -11,9 +11,11 @@ if RunService and RunService.IsClient and RunService.IsServer then
 end
 
 local PartySystem = {}
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
-local LobbySystem = require(script.Parent:WaitForChild("LobbySystem"))
-local TeleportSystem = require(script.Parent:WaitForChild("TeleportSystem"))
+local server = script.Parent
+local src = script.Parent.Parent.Parent:WaitForChild("src")
+local NetworkSystem = require(src:WaitForChild("NetworkSystem"))
+local LobbySystem = require(src:WaitForChild("LobbySystem"))
+local TeleportSystem = require(server:WaitForChild("TeleportSystem"))
 local Players = game:GetService("Players")
 
 ---Optional teleport system used when removing players from a party.

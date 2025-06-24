@@ -8,17 +8,18 @@ local AutoBattleSystem = {}
 -- keeps unit tests functional even when they load modules using relative paths
 -- like "../src/AutoBattleSystem".
 -- Parent folder containing the other systems
-local parent = script.Parent
+local server = script.Parent
+local src = script.Parent.Parent.Parent:WaitForChild("src")
 local EnemySystem
-local LevelSystem = require(parent:WaitForChild("LevelSystem"))
+local LevelSystem = require(src:WaitForChild("LevelSystem"))
 local DungeonSystem
-local NetworkSystem = require(parent:WaitForChild("NetworkSystem"))
-local EventManager = require(parent:WaitForChild("EventManager"))
-local StatUpgradeSystem = require(parent:WaitForChild("StatUpgradeSystem"))
+local NetworkSystem = require(src:WaitForChild("NetworkSystem"))
+local EventManager = require(src:WaitForChild("EventManager"))
+local StatUpgradeSystem = require(src:WaitForChild("StatUpgradeSystem"))
 
 if RunService:IsServer() then
-    EnemySystem = require(parent:WaitForChild("EnemySystem"))
-    DungeonSystem = require(parent:WaitForChild("DungeonSystem"))
+    EnemySystem = require(server:WaitForChild("EnemySystem"))
+    DungeonSystem = require(server:WaitForChild("DungeonSystem"))
 end
 
 ---Current player position used for simple movement calculations.

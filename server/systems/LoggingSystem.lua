@@ -11,7 +11,8 @@ if RunService and RunService.IsClient and RunService.IsServer then
     end
 end
 
-local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
+local src = script.Parent.Parent.Parent:WaitForChild("src")
+local EnvironmentUtil = require(src:WaitForChild("EnvironmentUtil"))
 
 local LoggingSystem = {
     logs = {},

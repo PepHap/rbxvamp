@@ -12,12 +12,15 @@ end
 
 local RaidSystem = {}
 
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
-local TeleportSystem = require(script.Parent:WaitForChild("TeleportSystem"))
-local LobbySystem = require(script.Parent:WaitForChild("LobbySystem"))
-local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
-local SlotConstants = require(script.Parent:WaitForChild("SlotConstants"))
-local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
+local server = script.Parent
+local src = script.Parent.Parent.Parent:WaitForChild("src")
+
+local NetworkSystem = require(src:WaitForChild("NetworkSystem"))
+local TeleportSystem = require(server:WaitForChild("TeleportSystem"))
+local LobbySystem = require(src:WaitForChild("LobbySystem"))
+local CurrencySystem = require(src:WaitForChild("CurrencySystem"))
+local SlotConstants = require(src:WaitForChild("SlotConstants"))
+local GachaSystem = require(src:WaitForChild("GachaSystem"))
 local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
 
 local EventManager = require(script.Parent:WaitForChild("EventManager"))

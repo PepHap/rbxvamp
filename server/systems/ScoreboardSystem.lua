@@ -10,8 +10,10 @@ if RunService and RunService.IsClient and RunService.IsServer then
     end
 end
 
-local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
-local EventManager = require(script.Parent:WaitForChild("EventManager"))
+local server = script.Parent
+local src = script.Parent.Parent.Parent:WaitForChild("src")
+local EnvironmentUtil = require(src:WaitForChild("EnvironmentUtil"))
+local EventManager = require(src:WaitForChild("EventManager"))
 local ScoreboardSystem = {
     useRobloxObjects = EnvironmentUtil.detectRoblox(),
     datastore = nil,
@@ -23,8 +25,8 @@ local ScoreboardSystem = {
 
 ---Initializes the datastore and loads existing scores.
 function ScoreboardSystem:start(levelSys, netSys)
-    self.levelSystem = levelSys or self.levelSystem or require(script.Parent:WaitForChild("LevelSystem"))
-    self.networkSystem = netSys or self.networkSystem or require(script.Parent:WaitForChild("NetworkSystem"))
+    self.levelSystem = levelSys or self.levelSystem or require(src:WaitForChild("LevelSystem"))
+    self.networkSystem = netSys or self.networkSystem or require(src:WaitForChild("NetworkSystem"))
     if self.useRobloxObjects and RunService:IsServer() and game and game.GetService then
         local ok, dsService = pcall(function()
             return game:GetService("DataStoreService")

@@ -12,8 +12,10 @@ end
 
 local DailyBonusSystem = {}
 
-local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
-local DataPersistenceSystem = require(script.Parent:WaitForChild("DataPersistenceSystem"))
+local src = script.Parent.Parent.Parent:WaitForChild("src")
+
+local GachaSystem = require(src:WaitForChild("GachaSystem"))
+local DataPersistenceSystem = require(src:WaitForChild("DataPersistenceSystem"))
 
 ---Timestamp of the last claimed bonus (Unix epoch seconds).
 DailyBonusSystem.lastClaim = 0
