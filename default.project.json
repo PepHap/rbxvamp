@@ -1,6 +1,10 @@
 {
   "$schema": "https://raw.githubusercontent.com/rojo-rbx/rojo/master/default.project.json",
   "name": "rbxvamp",
+  "serve": {
+    "port": 34872,
+    "placeId": 0
+  },
   "tree": {
     "$className": "DataModel",
     "ServerScriptService": {
