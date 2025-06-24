@@ -3,6 +3,7 @@
 
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
+local RunService = game:GetService("RunService")
 local DataPersistenceSystem = {
     ---When true and running inside Roblox, DataStoreService will be used.
     useRobloxObjects = EnvironmentUtil.detectRoblox(),
@@ -16,7 +17,7 @@ local DataPersistenceSystem = {
 
 ---Initializes the DataStore connection if possible.
 function DataPersistenceSystem:start()
-    if self.useRobloxObjects and game and type(game.GetService) == "function" then
+    if self.useRobloxObjects and RunService:IsServer() and game and type(game.GetService) == "function" then
         local ok, service = pcall(function()
             return game:GetService("DataStoreService")
         end)
@@ -47,7 +48,7 @@ function DataPersistenceSystem:load(playerId)
         return self.cache[playerId]
     end
     local data
-    if self.datastore then
+    if RunService:IsServer() and self.datastore then
         local success, result = pcall(function()
             return self.datastore:GetAsync(playerId)
         end)
@@ -71,7 +72,7 @@ end
 function DataPersistenceSystem:save(playerId, data)
     playerId = tostring(playerId)
     self.cache[playerId] = data
-    if self.datastore then
+    if RunService:IsServer() and self.datastore then
         local ok, err = pcall(function()
             self.datastore:SetAsync(playerId, data)
         end)
