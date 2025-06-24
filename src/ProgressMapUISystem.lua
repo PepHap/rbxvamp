@@ -86,11 +86,8 @@ function ProgressMapUI:start(ps)
         return
     end
     self.window = GuiUtil.createWindow("ProgressMapWindow")
-    if UDim2 and type(UDim2.new)=="function" then
-        self.window.Size = UDim2.new(0, 250, 0, 80)
-        self.window.Position = UDim2.new(0.5, -125, 0, 20)
-    end
     parent(self.window, gui)
+    GuiUtil.makeFullScreen(self.window)
 
     local closeBtn = createInstance("TextButton")
     closeBtn.Name = "CloseButton"

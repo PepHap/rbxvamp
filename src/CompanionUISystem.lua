@@ -83,6 +83,7 @@ function CompanionUISystem:start(compSys, parentGui)
     end
     if self.window.Parent ~= parentTarget then
         parent(self.window, parentTarget)
+        GuiUtil.makeFullScreen(self.window)
     end
     self.gui = parentTarget
     self:update()

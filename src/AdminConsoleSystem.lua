@@ -102,9 +102,11 @@ function AdminConsole:start(manager, admins)
     window.Visible = self.visible
     self.window = window
     parent(window, gui)
+    GuiUtil.makeFullScreen(window)
 
     self.commandBox = createInstance("TextBox")
     self.commandBox.PlaceholderText = "Enter command"
+    if Theme and Theme.styleInput then Theme.styleInput(self.commandBox) end
     if UDim2 and type(UDim2.new)=="function" then
         self.commandBox.Position = UDim2.new(0,5,0,5)
         self.commandBox.Size = UDim2.new(1,-10,0,25)

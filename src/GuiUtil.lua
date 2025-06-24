@@ -220,6 +220,27 @@ function GuiUtil.createWindow(name, image)
     return frame
 end
 
+---Stretches a frame to cover the entire screen.
+---@param frame table|Instance Frame to modify
+function GuiUtil.makeFullScreen(frame)
+    if not frame then return end
+    if UDim2 and type(UDim2.new)=="function" then
+        local size = UDim2.new(1,0,1,0)
+        local pos = UDim2.new(0,0,0,0)
+        local ok = pcall(function()
+            frame.Size = size
+            frame.Position = pos
+        end)
+        if not ok and type(frame)=="table" then
+            frame.Size = size
+            frame.Position = pos
+        end
+    else
+        frame.Size = {scaleX=1,offsetX=0,scaleY=1,offsetY=0}
+        frame.Position = {scaleX=0,offsetX=0,scaleY=0,offsetY=0}
+    end
+end
+
 ---Sets visibility on a GUI element using either ``Enabled`` or ``Visible``.
 ---@param obj table|Instance GUI element to modify
 ---@param on boolean whether the element should be visible

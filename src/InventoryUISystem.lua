@@ -179,6 +179,7 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     end
     if self.window.Parent ~= parentTarget then
         parent(self.window, parentTarget)
+        GuiUtil.makeFullScreen(self.window)
     end
     self.gui = parentTarget
     if UDim2 and type(UDim2.new)=="function" then

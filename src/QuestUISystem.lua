@@ -62,6 +62,7 @@ function QuestUISystem:start(questSys, parentGui)
     end
     if self.window.Parent ~= parentTarget then
         parent(self.window, parentTarget)
+        GuiUtil.makeFullScreen(self.window)
     end
     self.gui = parentTarget
     if NetworkSystem and NetworkSystem.fireServer then

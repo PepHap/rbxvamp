@@ -81,6 +81,7 @@ function SkillTreeUISystem:start(treeSys)
     end
     self.window = GuiUtil.createWindow("SkillTreeWindow")
     parent(self.window, gui)
+    GuiUtil.makeFullScreen(self.window)
     self:update()
 end
 
