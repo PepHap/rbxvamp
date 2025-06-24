@@ -16,11 +16,11 @@ QuestSystem.quests = {}
 
 -- CurrencySystem is used for basic reward handling
 local ModuleUtil = require(script.Parent:WaitForChild("ModuleUtil"))
-local CurrencySystem = ModuleUtil.requireChild(script.Parent, "CurrencySystem")
-local KeySystem = ModuleUtil.requireChild(script.Parent, "KeySystem")
-local GachaSystem = ModuleUtil.requireChild(script.Parent, "GachaSystem")
-local EventManager = ModuleUtil.requireChild(script.Parent, "EventManager")
-local NetworkSystem = ModuleUtil.requireChild(script.Parent, "NetworkSystem")
+local CurrencySystem = ModuleUtil.requireChild(script.Parent, "CurrencySystem", 10)
+local KeySystem = ModuleUtil.requireChild(script.Parent, "KeySystem", 10)
+local GachaSystem = ModuleUtil.requireChild(script.Parent, "GachaSystem", 10)
+local EventManager = ModuleUtil.requireChild(script.Parent, "EventManager", 10)
+local NetworkSystem = ModuleUtil.requireChild(script.Parent, "NetworkSystem", 10)
 local RunService = game:GetService("RunService")
 
 ---Initializes built-in quests and connects event listeners.
