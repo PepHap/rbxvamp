@@ -13,6 +13,7 @@ local CrystalExchangeUI = {
 
 local CrystalExchangeSystem = require(script.Parent:WaitForChild("CrystalExchangeSystem"))
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
@@ -106,11 +107,19 @@ function CrystalExchangeUI:start(exchangeSys)
 end
 
 function CrystalExchangeUI:buyTicket(kind)
+    if NetworkSystem and NetworkSystem.fireServer then
+        NetworkSystem:fireServer("ExchangeRequest", "ticket", kind, 1)
+        return true
+    end
     if not self.exchangeSystem then return false end
     return self.exchangeSystem:buyTickets(kind, 1)
 end
 
 function CrystalExchangeUI:buyCurrency(kind)
+    if NetworkSystem and NetworkSystem.fireServer then
+        NetworkSystem:fireServer("ExchangeRequest", "currency", kind, 1)
+        return true
+    end
     if not self.exchangeSystem then return false end
     return self.exchangeSystem:buyCurrency(kind, 1)
 end
