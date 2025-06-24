@@ -67,7 +67,7 @@ ClientGameManager.systems.Quest = require(script.Parent:WaitForChild("ClientQues
 function ClientGameManager:applyClientData(data)
     if type(data) ~= "table" then return end
     local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
-    local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
+    local GachaSystem = require(script.Parent:WaitForChild("ClientGachaSystem"))
     local ItemSystem = require(script.Parent:WaitForChild("ItemSystem"))
     local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
     local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))

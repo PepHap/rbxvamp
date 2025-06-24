@@ -11,6 +11,7 @@ ServerScriptService
         CurrencySystem (ModuleScript)
         EnemySystem (ModuleScript)
         GachaSystem (ModuleScript)
+        ClientGachaSystem (ModuleScript)
         GameManager (ModuleScript)
         ItemSystem (ModuleScript)
         ItemSalvageSystem (ModuleScript)
