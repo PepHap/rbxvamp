@@ -12,7 +12,7 @@ local StatUpgradeUISystem = {
 }
 
 local StatUpgradeSystem = require(script.Parent:WaitForChild("StatUpgradeSystem"))
-local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
@@ -103,6 +103,15 @@ function StatUpgradeUISystem:start(statSys, parentGui)
     self.gui = parentTarget
     self:update()
     self:setVisible(self.visible)
+    if NetworkSystem and NetworkSystem.onClientEvent then
+        NetworkSystem:onClientEvent("StatUpdate", function(stat, level)
+            local s = self.statSystem and self.statSystem.stats[stat]
+            if s then
+                s.level = level
+                self:update()
+            end
+        end)
+    end
 end
 
 local function clearChildren(container)
@@ -210,15 +219,11 @@ function StatUpgradeUISystem:update()
 end
 
 function StatUpgradeUISystem:upgrade(name)
-    if not self.statSystem then
-        return false
+    if NetworkSystem and NetworkSystem.fireServer then
+        NetworkSystem:fireServer("StatUpgradeRequest", name)
+        return true
     end
-    local method = self.statSystem.upgradeStatWithFallback or self.statSystem.upgradeStat
-    local ok = method(self.statSystem, name, 1, "gold")
-    if ok then
-        self:update()
-    end
-    return ok
+    return false
 end
 
 function StatUpgradeUISystem:setVisible(on)
