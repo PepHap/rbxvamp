@@ -282,10 +282,12 @@ SetBonusSystem.itemSystem = GameManager.itemSystem
 GameManager.setBonusSystem = SetBonusSystem
 GameManager:addSystem("SetBonuses", SetBonusSystem)
 
--- Item salvage handling for converting equipment into currency
-local ItemSalvageSystem = require(script.Parent:WaitForChild("ItemSalvageSystem"))
-GameManager.itemSalvageSystem = ItemSalvageSystem
-GameManager:addSystem("ItemSalvage", ItemSalvageSystem)
+local ItemSalvageSystem
+if IS_SERVER then
+    ItemSalvageSystem = require(script.Parent:WaitForChild("ItemSalvageSystem"))
+    GameManager.itemSalvageSystem = ItemSalvageSystem
+    GameManager:addSystem("ItemSalvage", ItemSalvageSystem)
+end
 
 -- Quests provide structured objectives and rewards
 local QuestSystem = require(script.Parent:WaitForChild("QuestSystem"))
