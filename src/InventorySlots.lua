@@ -18,8 +18,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local assets = ReplicatedStorage:WaitForChild("assets")
 local slotIcons = require(assets:WaitForChild("slot_icons"))
 
--- Slots are arranged in two columns and three rows
+-- Slots are arranged in three rows with two columns each
 local COLUMN_COUNT = 2
+local ROW_COUNT = 3
 
 local function createInstance(className)
     if InventorySlots.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
@@ -74,10 +75,16 @@ function InventorySlots:create(parentFrame)
             layout.FillDirection = Enum.FillDirection.Horizontal
             layout.SortOrder = Enum.SortOrder.LayoutOrder
             if layout.FillDirectionMaxCells ~= nil then
-                layout.FillDirectionMaxCells = 2 -- two columns per row
+                layout.FillDirectionMaxCells = COLUMN_COUNT
             end
             if layout.StartCorner ~= nil then
                 layout.StartCorner = Enum.StartCorner.TopLeft
+            end
+            if layout.HorizontalAlignment ~= nil then
+                layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+            end
+            if layout.VerticalAlignment ~= nil then
+                layout.VerticalAlignment = Enum.VerticalAlignment.Top
             end
         end
     end
