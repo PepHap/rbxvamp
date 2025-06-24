@@ -21,6 +21,7 @@ local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
 if not ok then Theme = nil end
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 
 local commandList = {
     currency = "currency <kind> <amount>",
@@ -103,6 +104,15 @@ function AdminConsole:start(manager, admins)
     self.window = window
     parent(window, gui)
     GuiUtil.makeFullScreen(window)
+
+    if NetworkSystem and NetworkSystem.onClientEvent then
+        NetworkSystem:onClientEvent("GachaResult", function(kind, reward)
+            if AdminConsole.outputLabel then
+                local txt = reward and ("Rolled " .. reward.name) or "No reward"
+                AdminConsole.outputLabel.Text = txt
+            end
+        end)
+    end
 
     self.commandBox = createInstance("TextBox")
     self.commandBox.PlaceholderText = "Enter command"
@@ -220,19 +230,12 @@ function AdminConsole:runCommand(text)
             return string.format("Added %d crystals", amount)
         end,
         roll = function(self, a)
-            if not self.gameManager then return "No manager" end
             local kind = a[1]
-            if kind == "skill" then
-                local r = self.gameManager:rollSkill()
-                return r and ("Rolled " .. r.name) or "No currency"
-            elseif kind == "companion" then
-                local r = self.gameManager:rollCompanion()
-                return r and ("Rolled " .. r.name) or "No currency"
-            elseif kind == "equipment" then
-                local slot = a[2] or "Weapon"
-                local r = self.gameManager:rollEquipment(slot)
-                return r and string.format("Rolled %s (%s)", r.name, slot) or "No currency"
+            local slot = a[2]
+            if NetworkSystem and NetworkSystem.fireServer then
+                NetworkSystem:fireServer("GachaRequest", kind, slot)
             end
+            return "Roll requested"
         end,
         upgrade = function(self, a)
             if not self.gameManager then return "No manager" end

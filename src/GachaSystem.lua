@@ -338,4 +338,24 @@ function GachaSystem:rollEquipmentMultiple(slot, count)
     return results
 end
 
+local RunService = game:GetService("RunService")
+if RunService:IsClient() then
+    local serverOnly = {
+        setRarityWeights = true,
+        addCrystals = true,
+        spendCrystals = true,
+        addTickets = true,
+        rollSkill = true,
+        rollSkills = true,
+        rollCompanion = true,
+        rollCompanions = true,
+        rollEquipment = true,
+        rollEquipmentMultiple = true,
+        setInventory = true,
+    }
+    for name in pairs(serverOnly) do
+        GachaSystem[name] = nil
+    end
+end
+
 return GachaSystem

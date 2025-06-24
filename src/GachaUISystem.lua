@@ -18,6 +18,7 @@ local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
 if not ok then Theme = nil end
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 
 local function createInstance(className)
@@ -149,9 +150,25 @@ function GachaUI:start(manager, parentGui)
         end
         parent(self.equipmentButton, self.window)
 
-        connect(self.skillButton, function() GachaUI:rollSkill() end)
-        connect(self.companionButton, function() GachaUI:rollCompanion() end)
-        connect(self.equipmentButton, function() GachaUI:rollEquipment("Weapon") end)
+        connect(self.skillButton, function()
+            NetworkSystem:fireServer("GachaRequest", "skill")
+        end)
+        connect(self.companionButton, function()
+            NetworkSystem:fireServer("GachaRequest", "companion")
+        end)
+        connect(self.equipmentButton, function()
+            NetworkSystem:fireServer("GachaRequest", "equipment", "Weapon")
+        end)
+    end
+
+    if NetworkSystem and NetworkSystem.onClientEvent then
+        NetworkSystem:onClientEvent("GachaResult", function(kind, reward)
+            if reward then
+                GachaUI:showResult(reward)
+            else
+                GachaUI:showResult(nil)
+            end
+        end)
     end
 
     self:setVisible(self.visible)
@@ -186,24 +203,21 @@ function GachaUI:showResult(result)
 end
 
 function GachaUI:rollSkill()
-    if not self.gameManager then return nil end
-    local reward = self.gameManager:rollSkill()
-    self:showResult(reward)
-    return reward
+    if NetworkSystem then
+        NetworkSystem:fireServer("GachaRequest", "skill")
+    end
 end
 
 function GachaUI:rollCompanion()
-    if not self.gameManager then return nil end
-    local reward = self.gameManager:rollCompanion()
-    self:showResult(reward)
-    return reward
+    if NetworkSystem then
+        NetworkSystem:fireServer("GachaRequest", "companion")
+    end
 end
 
 function GachaUI:rollEquipment(slot)
-    if not self.gameManager then return nil end
-    local reward = self.gameManager:rollEquipment(slot)
-    self:showResult(reward)
-    return reward
+    if NetworkSystem then
+        NetworkSystem:fireServer("GachaRequest", "equipment", slot)
+    end
 end
 
 return GachaUI

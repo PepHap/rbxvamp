@@ -189,4 +189,22 @@ function RewardGaugeSystem:loadData(data)
     end
 end
 
+local RunService = game:GetService("RunService")
+if RunService:IsClient() then
+    local serverOnly = {
+        setMaxGauge = true,
+        setOptionCount = true,
+        setRerollCost = true,
+        generateOptions = true,
+        addPoints = true,
+        choose = true,
+        reroll = true,
+        resetGauge = true,
+        saveData = true,
+    }
+    for name in pairs(serverOnly) do
+        RewardGaugeSystem[name] = nil
+    end
+end
+
 return RewardGaugeSystem

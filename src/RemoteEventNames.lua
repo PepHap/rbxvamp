@@ -40,4 +40,6 @@ return {
     QuestData = "ev_qd_v2",
     QuestRequest = "ev_qrq_v2",
     PlayerDied = "ev_pd_v2",
+    GachaRequest = "ev_grq_v2",
+    GachaResult = "ev_grs_v2",
 }
