@@ -44,7 +44,7 @@ local HudSystem = {
 }
 
 local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
-local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem.client"))
 local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
 local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
