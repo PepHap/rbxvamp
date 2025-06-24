@@ -1,0 +1,18 @@
+return {
+    Inventory = "rbxassetid://2010001",
+    Skills = "rbxassetid://2010002",
+    Achievements = "rbxassetid://2010003",
+    Companions = "rbxassetid://2010004",
+    Stats = "rbxassetid://2010005",
+    Levels = "rbxassetid://2010006",
+    Gacha = "rbxassetid://2010007",
+    Quests = "rbxassetid://2010008",
+    Dungeons = "rbxassetid://2010009",
+    Exchange = "rbxassetid://2010010",
+    Progress = "rbxassetid://2010011",
+    Party = "rbxassetid://2010012",
+    Scoreboard = "rbxassetid://2010013",
+    Reward = "rbxassetid://2010014",
+    Map = "rbxassetid://2010015",
+    Menu = "rbxassetid://2010016",
+}
