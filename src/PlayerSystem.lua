@@ -1,7 +1,8 @@
+local ModuleUtil = require(script.Parent:WaitForChild("ModuleUtil"))
 local RunService = game:GetService("RunService")
 
 if RunService:IsServer() then
-    return require(script.Parent:WaitForChild("PlayerSystem.server"))
+    return ModuleUtil.requireChild(script.Parent, "PlayerSystem.server")
 else
-    return require(script.Parent:WaitForChild("PlayerSystem.client"))
+    return ModuleUtil.requireChild(script.Parent, "PlayerSystem.client")
 end

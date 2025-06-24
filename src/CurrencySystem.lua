@@ -1,7 +1,8 @@
+local ModuleUtil = require(script.Parent:WaitForChild("ModuleUtil"))
 local RunService = game:GetService("RunService")
 
 if RunService:IsServer() then
-    return require(script.Parent:WaitForChild("CurrencySystem.server"))
+    return ModuleUtil.requireChild(script.Parent, "CurrencySystem.server")
 else
-    return require(script.Parent:WaitForChild("CurrencySystem.client"))
+    return ModuleUtil.requireChild(script.Parent, "CurrencySystem.client")
 end
