@@ -20,6 +20,7 @@ local HudSystem = {
     dungeonButton = nil,
     partyButton = nil,
     scoreboardButton = nil,
+    menuButton = nil,
     buttonFrame = nil,
     buttonLayout = nil,
     healthFrame = nil,
@@ -145,6 +146,7 @@ function HudSystem:start()
     self.dungeonButton = createInstance("TextButton")
     self.partyButton = createInstance("TextButton")
     self.scoreboardButton = createInstance("TextButton")
+    self.menuButton = createInstance("TextButton")
     self.buttonFrame = createInstance("Frame")
     self.buttonLayout = createInstance("UIGridLayout")
     if Enum and Enum.FillDirection then
@@ -174,6 +176,7 @@ function HudSystem:start()
     self.dungeonButton.Text = "Dungeon"
     self.partyButton.Text = "Party"
     self.scoreboardButton.Text = "Scores"
+    self.menuButton.Text = "Menu"
 
     self.healthFrame = createInstance("Frame")
     self.healthFill = createInstance("Frame")
@@ -182,7 +185,8 @@ function HudSystem:start()
     self.skillLayout = createInstance("UIListLayout")
     GuiUtil.applyResponsive(self.healthFrame, 10, 150, 20, 800, 40)
     GuiUtil.applyResponsive(self.progressFrame, 16, 200, 20, 1000, 40)
-    GuiUtil.applyResponsive(self.skillFrame, nil, 150, 60, 800, 80)
+    -- Keep the skill bar a fixed height while scaling for different resolutions
+    GuiUtil.applyResponsive(self.skillFrame, nil, 240, 60, 240, 60)
     if Theme and Theme.colors then
         self.healthFill.BackgroundColor3 = Theme.colors.progressBar
     end
@@ -245,6 +249,10 @@ function HudSystem:start()
         HudSystem:toggleScoreboard()
     end)
     GuiUtil.applyHoverEffect(self.scoreboardButton)
+    GuiUtil.connectButton(self.menuButton, function()
+        HudSystem:toggleMenu()
+    end)
+    GuiUtil.applyHoverEffect(self.menuButton)
     parent(self.healthFill, self.healthFrame)
     parent(self.healthText, self.healthFrame)
     parent(self.healthFrame, gui)
@@ -270,6 +278,7 @@ function HudSystem:start()
     parent(self.dungeonButton, self.buttonFrame)
     parent(self.partyButton, self.buttonFrame)
     parent(self.scoreboardButton, self.buttonFrame)
+    parent(self.menuButton, self.buttonFrame)
 
     NetworkSystem:onClientEvent("StageAdvance", function(level)
         if HudSystem.progressText then
@@ -437,6 +446,10 @@ function HudSystem:update(dt)
     parent(self.scoreboardButton, self.buttonFrame)
     self.scoreboardButton.Text = "Scores"
 
+    self.menuButton = self.menuButton or createInstance("TextButton")
+    parent(self.menuButton, self.buttonFrame)
+    self.menuButton.Text = "Menu"
+
     local skills = GameManager and GameManager.skillSystem and GameManager.skillSystem.skills or {}
     for i = 1, math.min(4, #skills) do
         local skill = skills[i]
@@ -540,8 +553,10 @@ function HudSystem:update(dt)
         self.buttonFrame.Position = UDim2.new(0.02, 0, 0.7, 0)
         self.healthFrame.Position = UDim2.new(0.02, 0, 0.1, 0)
         self.healthFrame.Size = UDim2.new(0.25, 0, 0.04, 0)
-        self.skillFrame.Position = UDim2.new(0.5, -150, 0.9, -60)
-        self.skillFrame.Size = UDim2.new(0.3, 0, 0, 60)
+        -- Position skill buttons near the bottom-right similar to modern action RPGs
+        -- https://create.roblox.com/docs/reference/engine/classes/UDim2
+        self.skillFrame.Position = UDim2.new(1, -250, 1, -70)
+        self.skillFrame.Size = UDim2.new(0, 240, 0, 60)
         self.progressFrame.Position = UDim2.new(0.5, -200, 0.02, 0)
         self.progressFrame.Size = UDim2.new(0.4, 0, 0, 25)
     end
@@ -617,6 +632,11 @@ end
 function HudSystem:toggleScoreboard()
     local ScoreboardUISystem = require(script.Parent:WaitForChild("ScoreboardUISystem"))
     ScoreboardUISystem:toggle()
+end
+
+function HudSystem:toggleMenu()
+    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
+    MenuUISystem:toggle()
 end
 
 return HudSystem
