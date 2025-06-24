@@ -1,5 +1,9 @@
 -- InventoryUISystem.lua
 -- Basic inventory GUI handling for equipment slots and stored items
+local RunService = game:GetService("RunService")
+if RunService:IsServer() then
+    error("InventoryUISystem should only be required on the client", 2)
+end
 
 local function detectRoblox()
     -- typeof and Instance only exist within Roblox

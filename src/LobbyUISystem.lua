@@ -1,5 +1,9 @@
 -- LobbyUISystem.lua
 -- Minimal interface for leaving the lobby.
+local RunService = game:GetService("RunService")
+if RunService:IsServer() then
+    error("LobbyUISystem should only be required on the client", 2)
+end
 
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local LobbyUI = {

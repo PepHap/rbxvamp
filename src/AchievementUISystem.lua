@@ -2,6 +2,10 @@
 -- Displays achievement progress and allows claiming rewards.
 
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
+local RunService = game:GetService("RunService")
+if RunService:IsServer() then
+    error("AchievementUISystem should only be required on the client", 2)
+end
 local AchievementUI = {
     useRobloxObjects = EnvironmentUtil.detectRoblox(),
     gui = nil,

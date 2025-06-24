@@ -1,5 +1,9 @@
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local QuestUISystem = {
+local RunService = game:GetService("RunService")
+if RunService:IsServer() then
+    error("QuestUISystem should only be required on the client", 2)
+end
     useRobloxObjects = EnvironmentUtil.detectRoblox(),
     gui = nil,
     questSystem = nil,

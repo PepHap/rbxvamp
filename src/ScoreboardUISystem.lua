@@ -1,5 +1,9 @@
 -- ScoreboardUISystem.lua
 -- Displays the top stage scores sent by ScoreboardSystem.
+local RunService = game:GetService("RunService")
+if RunService:IsServer() then
+    error("ScoreboardUISystem should only be required on the client", 2)
+end
 
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local ScoreboardUI = {

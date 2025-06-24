@@ -1,5 +1,9 @@
 -- LevelUISystem.lua
 -- Displays the current player level and stage progress in a small window
+local RunService = game:GetService("RunService")
+if RunService:IsServer() then
+    error("LevelUISystem should only be required on the client", 2)
+end
 
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))

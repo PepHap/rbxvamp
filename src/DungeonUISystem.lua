@@ -1,5 +1,9 @@
 -- DungeonUISystem.lua
 -- Simple interface for starting optional dungeons using keys
+local RunService = game:GetService("RunService")
+if RunService:IsServer() then
+    error("DungeonUISystem should only be required on the client", 2)
+end
 
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local DungeonUI = {

@@ -1,5 +1,9 @@
 -- SkillTreeUISystem.lua
 -- UI for selecting skill branches and upgrading within them
+local RunService = game:GetService("RunService")
+if RunService:IsServer() then
+    error("SkillTreeUISystem should only be required on the client", 2)
+end
 
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local SkillTreeUISystem = {

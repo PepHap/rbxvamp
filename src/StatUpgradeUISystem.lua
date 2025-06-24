@@ -1,5 +1,9 @@
 -- StatUpgradeUISystem.lua
 -- Simple UI for upgrading basic stats using currency
+local RunService = game:GetService("RunService")
+if RunService:IsServer() then
+    error("StatUpgradeUISystem should only be required on the client", 2)
+end
 
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local StatUpgradeUISystem = {

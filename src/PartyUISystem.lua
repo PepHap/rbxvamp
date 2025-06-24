@@ -1,5 +1,9 @@
 -- PartyUISystem.lua
 -- Minimal interface for managing parties and raids
+local RunService = game:GetService("RunService")
+if RunService:IsServer() then
+    error("PartyUISystem should only be required on the client", 2)
+end
 
 local function detectRoblox()
     return typeof ~= nil and Instance ~= nil and type(Instance.new) == "function"

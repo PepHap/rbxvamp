@@ -1,5 +1,9 @@
 -- SkillUISystem.lua
 -- Displays owned skills and allows upgrading them with ether.
+local RunService = game:GetService("RunService")
+if RunService:IsServer() then
+    error("SkillUISystem should only be required on the client", 2)
+end
 
 local function detectRoblox()
     return typeof ~= nil and Instance ~= nil and type(Instance.new) == "function"
