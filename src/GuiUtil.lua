@@ -190,7 +190,9 @@ function GuiUtil.addCrossDecor(frame)
         bar.Name = name
         bar.BorderSizePixel = 0
         if Theme and Theme.colors then
-            bar.BackgroundColor3 = toColor3(Theme.colors.buttonBackground)
+            -- Use the highlight color with slight transparency for a modern look
+            bar.BackgroundColor3 = toColor3(Theme.colors.highlight)
+            bar.BackgroundTransparency = 0.2
         end
         if UDim2 and type(UDim2.new)=="function" then
             bar.Position = vals[1]
