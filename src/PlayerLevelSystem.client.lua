@@ -3,7 +3,7 @@
 
 local RunService = game:GetService("RunService")
 if RunService:IsServer() then
-    error("PlayerLevelSystem.client should only be required on the client", 2)
+    error("PlayerLevelSystem client module should only be required on the client", 2)
 end
 
 local PlayerLevelSystem = {}
