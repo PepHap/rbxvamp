@@ -13,7 +13,25 @@ local ProgressMapUI = {
 }
 
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
-local LootSystem = require(script.Parent:WaitForChild("LootSystem"))
+local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
+local rewards = {
+    normal   = {coins = 1,  exp = 5,   gauge = 10, ether = 0, crystals = 0},
+    mini     = {coins = 5,  exp = 20,  gauge = 20, ether = 1, crystals = 1},
+    boss     = {coins = 10, exp = 50,  gauge = 30, ether = 2, crystals = 2},
+    location = {coins = 20, exp = 100, gauge = 50, ether = 3, crystals = 3},
+}
+
+local function getRewardInfo(enemyType)
+    return rewards[enemyType or "normal"] or rewards.normal
+end
+
+local function getCurrencyType()
+    local loc = LocationSystem:getCurrent()
+    if loc and loc.currency then
+        return loc.currency
+    end
+    return "gold"
+end
 local LocalizationSystem = require(script.Parent:WaitForChild("LocalizationSystem"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local ok, Theme = pcall(function()
@@ -154,8 +172,8 @@ function ProgressMapUI:update()
     elseif stageType == "location" then
         typeLabel = LocalizationSystem:get("Area Boss")
     end
-    local reward = LootSystem.getRewardInfo(stageType)
-    local currency = LootSystem.getCurrencyType()
+    local reward = getRewardInfo(stageType)
+    local currency = getCurrencyType()
     local locName = loc and loc.name or ""
     local parts = {
         string.format("%s: %s", LocalizationSystem:get("Location"), locName),

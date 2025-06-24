@@ -148,9 +148,10 @@ if IS_SERVER then
     GameManager:addSystem("Enemy", EnemySystem)
 end
 
--- Auto battle functionality can optionally control the player's actions
-local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
-GameManager:addSystem("AutoBattle", AutoBattleSystem)
+if IS_SERVER then
+    local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
+    GameManager:addSystem("AutoBattle", AutoBattleSystem)
+end
 
 -- Handle player attack requests strictly on the server
 if IS_SERVER then
@@ -302,8 +303,11 @@ if IS_SERVER then
 end
 
 -- Optional dungeon runs for earning upgrade currency
-local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
-GameManager:addSystem("Dungeon", DungeonSystem)
+local DungeonSystem
+if IS_SERVER then
+    DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
+    GameManager:addSystem("Dungeon", DungeonSystem)
+end
 
 -- Base stats like attack and defense upgrades
 local StatUpgradeSystem = require(script.Parent:WaitForChild("StatUpgradeSystem"))
@@ -332,9 +336,11 @@ if IS_SERVER then
 end
 
 -- Automatically saves player progress at intervals
-local AutoSaveSystem = require(script.Parent:WaitForChild("AutoSaveSystem"))
-GameManager.autoSaveSystem = AutoSaveSystem
-GameManager:addSystem("AutoSave", AutoSaveSystem)
+if IS_SERVER then
+    local AutoSaveSystem = require(script.Parent:WaitForChild("AutoSaveSystem"))
+    GameManager.autoSaveSystem = AutoSaveSystem
+    GameManager:addSystem("AutoSave", AutoSaveSystem)
+end
 
 -- Simple currency tracking
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
@@ -351,23 +357,31 @@ do
     end
 end
 
-local AntiCheatSystem = require(script.Parent:WaitForChild("AntiCheatSystem"))
-GameManager:addSystem("AntiCheat", AntiCheatSystem)
+if IS_SERVER then
+    local AntiCheatSystem = require(script.Parent:WaitForChild("AntiCheatSystem"))
+    GameManager:addSystem("AntiCheat", AntiCheatSystem)
+end
 
 local LootSystem = require(script.Parent:WaitForChild("LootSystem"))
-GameManager.lootSystem = LootSystem
-GameManager:addSystem("Loot", LootSystem)
+if IS_SERVER then
+    GameManager.lootSystem = LootSystem
+    GameManager:addSystem("Loot", LootSystem)
+end
 
 -- Daily login bonuses award extra crystals
-local DailyBonusSystem = require(script.Parent:WaitForChild("DailyBonusSystem"))
-GameManager.dailyBonusSystem = DailyBonusSystem
-GameManager:addSystem("DailyBonus", DailyBonusSystem)
+if IS_SERVER then
+    local DailyBonusSystem = require(script.Parent:WaitForChild("DailyBonusSystem"))
+    GameManager.dailyBonusSystem = DailyBonusSystem
+    GameManager:addSystem("DailyBonus", DailyBonusSystem)
+end
 
 
 -- Exchange crystals for tickets or upgrade currency
-local CrystalExchangeSystem = require(script.Parent:WaitForChild("CrystalExchangeSystem"))
-GameManager.crystalExchangeSystem = CrystalExchangeSystem
-GameManager:addSystem("CrystalExchange", CrystalExchangeSystem)
+if IS_SERVER then
+    local CrystalExchangeSystem = require(script.Parent:WaitForChild("CrystalExchangeSystem"))
+    GameManager.crystalExchangeSystem = CrystalExchangeSystem
+    GameManager:addSystem("CrystalExchange", CrystalExchangeSystem)
+end
 
 -- Skill management and upgrades
 local SkillSystem = require(script.Parent:WaitForChild("SkillSystem"))
@@ -384,7 +398,9 @@ local SkillCastSystem = require(script.Parent:WaitForChild("SkillCastSystem"))
 SkillCastSystem.skillSystem = GameManager.skillSystem
 GameManager.skillCastSystem = SkillCastSystem
 GameManager:addSystem("SkillCast", SkillCastSystem)
-AutoBattleSystem.skillCastSystem = SkillCastSystem
+if IS_SERVER then
+    AutoBattleSystem.skillCastSystem = SkillCastSystem
+end
 local RegenSystem = require(script.Parent:WaitForChild("RegenSystem"))
 RegenSystem.playerSystem = PlayerSystem
 RegenSystem.skillCastSystem = SkillCastSystem
@@ -392,10 +408,12 @@ RegenSystem.statSystem = StatUpgradeSystem
 GameManager:addSystem("Regen", RegenSystem)
 
 -- Optional automatic skill casting
-local AutoSkillSystem = require(script.Parent:WaitForChild("AutoSkillSystem"))
-AutoSkillSystem.skillCastSystem = SkillCastSystem
-GameManager.autoSkillSystem = AutoSkillSystem
-GameManager:addSystem("AutoSkill", AutoSkillSystem)
+if IS_SERVER then
+    local AutoSkillSystem = require(script.Parent:WaitForChild("AutoSkillSystem"))
+    AutoSkillSystem.skillCastSystem = SkillCastSystem
+    GameManager.autoSkillSystem = AutoSkillSystem
+    GameManager:addSystem("AutoSkill", AutoSkillSystem)
+end
 
 -- Companion management
 local CompanionSystem = require(script.Parent:WaitForChild("CompanionSystem"))
@@ -403,9 +421,11 @@ GameManager.companionSystem = CompanionSystem
 GameManager:addSystem("Companions", CompanionSystem)
 
 -- Companions follow the player and attack nearby enemies
-local CompanionAttackSystem = require(script.Parent:WaitForChild("CompanionAttackSystem"))
-CompanionAttackSystem.companionSystem = GameManager.companionSystem
-GameManager:addSystem("CompanionAI", CompanionAttackSystem)
+if IS_SERVER then
+    local CompanionAttackSystem = require(script.Parent:WaitForChild("CompanionAttackSystem"))
+    CompanionAttackSystem.companionSystem = GameManager.companionSystem
+    GameManager:addSystem("CompanionAI", CompanionAttackSystem)
+end
 
 -- Social lobby for trading
 local LobbySystem = require(script.Parent:WaitForChild("LobbySystem"))
@@ -461,11 +481,15 @@ if RunService:IsClient() then
 
     -- UI for exchanging crystals into tickets or currency
     local CrystalExchangeUISystem = require(script.Parent:WaitForChild("CrystalExchangeUISystem"))
-    CrystalExchangeUISystem.exchangeSystem = CrystalExchangeSystem
+    if CrystalExchangeSystem then
+        CrystalExchangeUISystem.exchangeSystem = CrystalExchangeSystem
+    end
     GameManager:addSystem("CrystalExchangeUI", CrystalExchangeUISystem)
 
     local DungeonUISystem = require(script.Parent:WaitForChild("DungeonUISystem"))
-    DungeonUISystem.dungeonSystem = DungeonSystem
+    if DungeonSystem then
+        DungeonUISystem.dungeonSystem = DungeonSystem
+    end
     GameManager:addSystem("DungeonUI", DungeonUISystem)
 
     local LobbyUISystem = require(script.Parent:WaitForChild("LobbyUISystem"))
@@ -515,9 +539,11 @@ GameManager.progressMapSystem = ProgressMapSystem
 GameManager:addSystem("ProgressMap", ProgressMapSystem)
 
 -- Leaderboard tracking highest cleared stages
-local ScoreboardSystem = require(script.Parent:WaitForChild("ScoreboardSystem"))
-GameManager.scoreboardSystem = ScoreboardSystem
-GameManager:addSystem("Scoreboard", ScoreboardSystem)
+if IS_SERVER then
+    local ScoreboardSystem = require(script.Parent:WaitForChild("ScoreboardSystem"))
+    GameManager.scoreboardSystem = ScoreboardSystem
+    GameManager:addSystem("Scoreboard", ScoreboardSystem)
+end
 
 -- Simple map UI
 local ProgressMapUISystem = require(script.Parent:WaitForChild("ProgressMapUISystem"))

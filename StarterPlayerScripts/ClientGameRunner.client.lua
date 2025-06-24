@@ -19,9 +19,7 @@ PlayerInputSystem.useRobloxObjects = true
 -- have initialized data like quests and inventory.
 local GameManager = require(src:WaitForChild("ClientGameManager"))
 GameManager:start()
-if GameManager.systems and GameManager.systems.AutoBattle then
-    GameManager.systems.AutoBattle:enable()
-end
+-- Auto battle runs exclusively on the server
 
 -- Load saved data from the server and apply it to the local GameManager
 
