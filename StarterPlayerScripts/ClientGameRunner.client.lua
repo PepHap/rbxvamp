@@ -10,15 +10,18 @@ local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
 
 local src = ReplicatedStorage:WaitForChild("src")
+local ModuleUtil = require(src:WaitForChild("ModuleUtil"))
 
 -- Handle player input locally so UI modules can toggle windows
-local PlayerInputSystem = require(src:WaitForChild("PlayerInputSystem"))
+local PlayerInputSystem = ModuleUtil.requireChild(src, "PlayerInputSystem") or {}
 PlayerInputSystem.useRobloxObjects = true
 
 -- Start core gameplay systems on the client so UI modules
 -- have initialized data like quests and inventory.
-local GameManager = require(src:WaitForChild("ClientGameManager"))
-GameManager:start()
+local GameManager = ModuleUtil.requireChild(src, "ClientGameManager") or {}
+if type(GameManager.start) == "function" then
+    GameManager:start()
+end
 -- Auto battle runs exclusively on the server
 
 -- Load saved data from the server and apply it to the local GameManager
