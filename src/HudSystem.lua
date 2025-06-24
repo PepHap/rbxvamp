@@ -722,7 +722,7 @@ function HudSystem:manualAttack()
     if AutoBattleSystem and AutoBattleSystem.enabled then
         return
     end
-    local PlayerInputSystem = require(script.Parent:WaitForChild("PlayerInputSystem"))
+    local PlayerInputSystem = require(script.Parent:WaitForChild("PlayerInputSystem.client"))
     PlayerInputSystem:manualAttack()
 end
 

@@ -562,7 +562,12 @@ if RunService:IsClient() then
 end
 
 -- Manual player input when auto battle is disabled
-local PlayerInputSystem = require(script.Parent:WaitForChild("PlayerInputSystem"))
+local PlayerInputSystem
+if IS_SERVER then
+    PlayerInputSystem = require(script.Parent:WaitForChild("PlayerInputSystem.server"))
+else
+    PlayerInputSystem = require(script.Parent:WaitForChild("PlayerInputSystem.client"))
+end
 GameManager:addSystem("PlayerInput", PlayerInputSystem)
 
 -- Visual effects during boss fights
