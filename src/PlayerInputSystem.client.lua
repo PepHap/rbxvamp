@@ -63,7 +63,7 @@ local CrystalExchangeUISystem = require(script.Parent:WaitForChild("CrystalExcha
 local ProgressMapUISystem = require(script.Parent:WaitForChild("ProgressMapUISystem"))
 local LevelUISystem = require(script.Parent:WaitForChild("LevelUISystem"))
 local AdminConsoleSystem = require(script.Parent:FindFirstChild("AdminConsoleSystem"))
-local LobbySystem = require(script.Parent:WaitForChild("LobbySystem"))
+local ClientLobbySystem = require(script.Parent:WaitForChild("ClientLobbySystem"))
 local LobbyUISystem = require(script.Parent:WaitForChild("LobbyUISystem"))
 local PartyUISystem = require(script.Parent:WaitForChild("PartyUISystem"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
@@ -139,7 +139,7 @@ function PlayerInputSystem:setKeyState(key, isDown)
     elseif key == self.exchangeKey and isDown then
         CrystalExchangeUISystem:toggle()
     elseif key == self.lobbyKey and isDown then
-        LobbySystem:enter()
+        ClientLobbySystem:enter()
         LobbyUISystem:toggle()
     elseif key == self.partyKey and isDown then
         PartyUISystem:toggle()

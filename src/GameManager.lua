@@ -132,6 +132,13 @@ function GameManager:start()
             local lvl = StatUpgradeSystem.stats[stat] and StatUpgradeSystem.stats[stat].level or 0
             self.networkSystem:fireClient(player, "StatUpdate", stat, lvl)
         end)
+        self.networkSystem:onServerEvent("LobbyRequest", function(player, action)
+            if action == "enter" then
+                LobbySystem:enter(player)
+            elseif action == "leave" then
+                LobbySystem:leave(player)
+            end
+        end)
     end
 end
 
@@ -463,7 +470,12 @@ if IS_SERVER then
 end
 
 -- Social lobby for trading
-local LobbySystem = require(script.Parent:WaitForChild("LobbySystem"))
+local LobbySystem
+if IS_SERVER then
+    LobbySystem = require(script.Parent:WaitForChild("LobbySystem"))
+else
+    LobbySystem = require(script.Parent:WaitForChild("ClientLobbySystem"))
+end
 GameManager.lobbySystem = LobbySystem
 GameManager:addSystem("Lobby", LobbySystem)
 
