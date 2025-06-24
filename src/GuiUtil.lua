@@ -124,18 +124,47 @@ end
 ---@param maxY number? maximum height in pixels
 function GuiUtil.applyResponsive(frame, ratio, minX, minY, maxX, maxY)
     if not frame then return end
+    local aspect
+    if frame.FindFirstChild then
+        aspect = frame:FindFirstChild("Aspect")
+    elseif type(frame) == "table" and frame.children then
+        for _, child in ipairs(frame.children) do
+            if child.Name == "Aspect" then
+                aspect = child
+                break
+            end
+        end
+    end
     if ratio then
-        local aspect = createInstance("UIAspectRatioConstraint")
-        aspect.Name = "Aspect"
+        if not aspect then
+            aspect = createInstance("UIAspectRatioConstraint")
+            aspect.Name = "Aspect"
+            parent(aspect, frame)
+        end
         if aspect.AspectRatio ~= nil then
             aspect.AspectRatio = ratio
+        else
+            aspect.aspectRatio = ratio
         end
-        parent(aspect, frame)
     end
 
+    local sizeConst
+    if frame.FindFirstChild then
+        sizeConst = frame:FindFirstChild("SizeLimit")
+    elseif type(frame) == "table" and frame.children then
+        for _, child in ipairs(frame.children) do
+            if child.Name == "SizeLimit" then
+                sizeConst = child
+                break
+            end
+        end
+    end
     if minX or minY or maxX or maxY then
-        local sizeConst = createInstance("UISizeConstraint")
-        sizeConst.Name = "SizeLimit"
+        if not sizeConst then
+            sizeConst = createInstance("UISizeConstraint")
+            sizeConst.Name = "SizeLimit"
+            parent(sizeConst, frame)
+        end
         if sizeConst.MinSize and Vector2 and Vector2.new then
             sizeConst.MinSize = Vector2.new(minX or 0, minY or 0)
             sizeConst.MaxSize = Vector2.new(maxX or 0, maxY or 0)
@@ -143,7 +172,6 @@ function GuiUtil.applyResponsive(frame, ratio, minX, minY, maxX, maxY)
             sizeConst.MinSize = {x = minX or 0, y = minY or 0}
             sizeConst.MaxSize = {x = maxX or 0, y = maxY or 0}
         end
-        parent(sizeConst, frame)
     end
 end
 
