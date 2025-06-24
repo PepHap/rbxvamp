@@ -124,4 +124,17 @@ function NetworkSystem:onClientEvent(name, callback)
     end
 end
 
+-- Remove inappropriate methods depending on context so the client can't
+-- invoke server-only functionality and vice versa. The Roblox API restricts
+-- certain RemoteEvent methods to a specific environment. Stripping the
+-- functions ensures an exploiter cannot misuse them locally.
+if RunService:IsClient() then
+    NetworkSystem.fireAllClients = nil
+    NetworkSystem.onServerEvent = nil
+elseif RunService:IsServer() then
+    -- The server never needs to call FireServer or listen to OnClientEvent
+    NetworkSystem.fireServer = nil
+    NetworkSystem.onClientEvent = nil
+end
+
 return NetworkSystem
