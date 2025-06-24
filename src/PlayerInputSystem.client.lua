@@ -1,5 +1,10 @@
 -- PlayerInputSystem.lua
 -- Allows manual player control and attacks when auto-battle is disabled.
+local RunService = game:GetService("RunService")
+if RunService:IsServer() then
+    error("PlayerInputSystem.client should only be required on the client", 2)
+end
+
 
 local function detectRoblox()
     return typeof ~= nil and Instance ~= nil and type(Instance.new) == "function"
@@ -41,23 +46,13 @@ local PlayerInputSystem = {
 }
 
 local RunService = game:GetService("RunService")
-local PlayerSystem
-if RunService:IsServer() then
-    PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
-else
-    PlayerSystem = require(script.Parent:WaitForChild("ClientPlayerSystem"))
-end
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
-local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
-local InventoryUISystem = require(script.Parent:WaitForChild("InventoryUISystem"))
+local PlayerSystem = require(script.Parent:WaitForChild("ClientPlayerSystem"))
 local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
 local CompanionUISystem = require(script.Parent:WaitForChild("CompanionUISystem"))
+local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
+local InventoryUISystem = require(script.Parent:WaitForChild("InventoryUISystem"))
 local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
-local SkillCastSystem
-if RunService:IsServer() then
-    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
-    SkillCastSystem = require(serverFolder:WaitForChild("SkillCastSystem"))
-end
+local SkillCastSystem = nil
 local GachaUISystem = require(script.Parent:WaitForChild("GachaUISystem"))
 local RewardGaugeUISystem = require(script.Parent:WaitForChild("RewardGaugeUISystem"))
 local StatUpgradeUISystem = require(script.Parent:WaitForChild("StatUpgradeUISystem"))

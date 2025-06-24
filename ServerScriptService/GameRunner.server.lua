@@ -18,7 +18,6 @@ local ADMIN_IDS = {game.CreatorId}
 -- duplicating interface elements for each client.
 local modulesWithUI = {
     require(src:WaitForChild("PlayerSystem")),
-    require(src:WaitForChild("PlayerInputSystem")),
     require(src:WaitForChild("EnemySystem")),
     require(src:WaitForChild("DataPersistenceSystem")),
 }
