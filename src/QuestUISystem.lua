@@ -9,6 +9,13 @@ local QuestUISystem = {
 
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
+local RunService = game:GetService("RunService")
+local QuestSystem
+if RunService:IsServer() then
+    QuestSystem = require(script.Parent:WaitForChild("QuestSystem"))
+else
+    QuestSystem = require(script.Parent:WaitForChild("ClientQuestSystem"))
+end
 local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
@@ -76,7 +83,7 @@ local function ensureGui()
 end
 
 function QuestUISystem:start(questSys, parentGui)
-    self.questSystem = questSys or self.questSystem or require(script.Parent:WaitForChild("QuestSystem"))
+    self.questSystem = questSys or self.questSystem or QuestSystem
     local guiRoot = ensureGui()
     local parentTarget = parentGui or guiRoot
     if not self.window then

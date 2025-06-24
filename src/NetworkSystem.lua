@@ -48,7 +48,7 @@ function NetworkSystem:start()
         "RewardReroll", "EnemySpawn", "EnemyRemove", "EnemyUpdate",
         "SalvageRequest", "SalvageResult", "PlayerAttack", "PartyRequest",
         "RaidRequest", "AttackRequest", "SkillRequest", "SkillCooldown", "QuestUpdate",
-        "QuestData", "QuestRequest", "PlayerDied", "GachaRequest", "GachaResult",
+        "QuestData", "QuestRequest", "QuestClaim", "PlayerDied", "GachaRequest", "GachaResult",
         "ExchangeRequest", "ExchangeResult", "StatUpgradeRequest", "StatUpdate"
     }
     for _, alias in ipairs(aliases) do
