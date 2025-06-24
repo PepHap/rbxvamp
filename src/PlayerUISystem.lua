@@ -21,13 +21,7 @@ local PlayerUI = {
 
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
-local RunService = game:GetService("RunService")
-local PlayerSystem
-if RunService:IsServer() then
-    PlayerSystem = require(script.Parent.Parent:WaitForChild("server"):WaitForChild("ServerPlayerSystem"))
-else
-    PlayerSystem = require(script.Parent:WaitForChild("ClientPlayerSystem"))
-end
+local PlayerSystem = require(script.Parent:WaitForChild("ClientPlayerSystem"))
 local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)

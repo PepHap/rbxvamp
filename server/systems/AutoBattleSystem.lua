@@ -58,6 +58,11 @@ function AutoBattleSystem:start()
                 AutoBattleSystem.skillCastSystem:useSkill(index)
             end
         end)
+        NetworkSystem:onServerEvent("AutoBattleToggle", function(player)
+            AutoBattleSystem:toggle()
+            NetworkSystem:fireClient(player, "AutoBattleToggle", AutoBattleSystem.enabled)
+        end)
+        NetworkSystem:fireAllClients("AutoBattleToggle", AutoBattleSystem.enabled)
     end
 end
 
@@ -69,6 +74,14 @@ end
 ---Disables auto-battle mode.
 function AutoBattleSystem:disable()
     self.enabled = false
+end
+
+function AutoBattleSystem:toggle()
+    if self.enabled then
+        self:disable()
+    else
+        self:enable()
+    end
 end
 
 function AutoBattleSystem:disableForDuration(duration)
