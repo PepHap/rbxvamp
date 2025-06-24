@@ -49,6 +49,9 @@ local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
 local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local GameManager = require(script.Parent:WaitForChild("GameManager"))
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local assets = ReplicatedStorage:WaitForChild("assets")
+local menuIcons = require(assets:WaitForChild("menu_icons"))
 local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
@@ -135,18 +138,18 @@ function HudSystem:start()
     self.currencyLabel = createInstance("TextLabel")
     self.autoButton = createInstance("TextButton")
     self.attackButton = createInstance("TextButton")
-    self.gachaButton = createInstance("TextButton")
-    self.inventoryButton = createInstance("TextButton")
-    self.rewardButton = createInstance("TextButton")
-    self.skillButton = createInstance("TextButton")
-    self.companionButton = createInstance("TextButton")
-    self.questButton = createInstance("TextButton")
-    self.progressButton = createInstance("TextButton")
-    self.exchangeButton = createInstance("TextButton")
-    self.dungeonButton = createInstance("TextButton")
-    self.partyButton = createInstance("TextButton")
-    self.scoreboardButton = createInstance("TextButton")
-    self.menuButton = createInstance("TextButton")
+    self.gachaButton = createInstance("ImageButton")
+    self.inventoryButton = createInstance("ImageButton")
+    self.rewardButton = createInstance("ImageButton")
+    self.skillButton = createInstance("ImageButton")
+    self.companionButton = createInstance("ImageButton")
+    self.questButton = createInstance("ImageButton")
+    self.progressButton = createInstance("ImageButton")
+    self.exchangeButton = createInstance("ImageButton")
+    self.dungeonButton = createInstance("ImageButton")
+    self.partyButton = createInstance("ImageButton")
+    self.scoreboardButton = createInstance("ImageButton")
+    self.menuButton = createInstance("ImageButton")
     self.buttonFrame = createInstance("Frame")
     self.buttonLayout = createInstance("UIGridLayout")
     if Enum and Enum.FillDirection then
@@ -165,18 +168,18 @@ function HudSystem:start()
     self.progressText.Text = "Lv.1"
     self.autoButton.Text = "Auto: OFF"
     self.attackButton.Text = "Attack"
-    self.gachaButton.Text = "Gacha"
-    self.inventoryButton.Text = "Inventory"
-    self.rewardButton.Text = "Rewards"
-    self.skillButton.Text = "Skills"
-    self.companionButton.Text = "Companions"
-    self.questButton.Text = "Quests"
-    self.progressButton.Text = "Map"
-    self.exchangeButton.Text = "Exchange"
-    self.dungeonButton.Text = "Dungeon"
-    self.partyButton.Text = "Party"
-    self.scoreboardButton.Text = "Scores"
-    self.menuButton.Text = "Menu"
+    self.gachaButton.Image = menuIcons.Gacha
+    self.inventoryButton.Image = menuIcons.Inventory
+    self.rewardButton.Image = menuIcons.Reward
+    self.skillButton.Image = menuIcons.Skills
+    self.companionButton.Image = menuIcons.Companions
+    self.questButton.Image = menuIcons.Quests
+    self.progressButton.Image = menuIcons.Map
+    self.exchangeButton.Image = menuIcons.Exchange
+    self.dungeonButton.Image = menuIcons.Dungeons
+    self.partyButton.Image = menuIcons.Party
+    self.scoreboardButton.Image = menuIcons.Scoreboard
+    self.menuButton.Image = menuIcons.Menu
 
     self.healthFrame = createInstance("Frame")
     self.healthFill = createInstance("Frame")
@@ -402,53 +405,53 @@ function HudSystem:update(dt)
         self.attackButton.Active = true
     end
 
-    self.gachaButton = self.gachaButton or createInstance("TextButton")
+    self.gachaButton = self.gachaButton or createInstance("ImageButton")
     parent(self.gachaButton, self.buttonFrame)
-    self.gachaButton.Text = "Gacha"
+    self.gachaButton.Image = menuIcons.Gacha
 
-    self.inventoryButton = self.inventoryButton or createInstance("TextButton")
+    self.inventoryButton = self.inventoryButton or createInstance("ImageButton")
     parent(self.inventoryButton, self.buttonFrame)
-    self.inventoryButton.Text = "Inventory"
+    self.inventoryButton.Image = menuIcons.Inventory
 
-    self.rewardButton = self.rewardButton or createInstance("TextButton")
+    self.rewardButton = self.rewardButton or createInstance("ImageButton")
     parent(self.rewardButton, self.buttonFrame)
-    self.rewardButton.Text = string.format("Rewards %d/%d", RewardGaugeSystem.gauge, RewardGaugeSystem.maxGauge)
+    self.rewardButton.Image = menuIcons.Reward
 
-    self.skillButton = self.skillButton or createInstance("TextButton")
+    self.skillButton = self.skillButton or createInstance("ImageButton")
     parent(self.skillButton, self.buttonFrame)
-    self.skillButton.Text = "Skills"
+    self.skillButton.Image = menuIcons.Skills
 
-    self.companionButton = self.companionButton or createInstance("TextButton")
+    self.companionButton = self.companionButton or createInstance("ImageButton")
     parent(self.companionButton, self.buttonFrame)
-    self.companionButton.Text = "Companions"
+    self.companionButton.Image = menuIcons.Companions
 
-    self.questButton = self.questButton or createInstance("TextButton")
+    self.questButton = self.questButton or createInstance("ImageButton")
     parent(self.questButton, self.buttonFrame)
-    self.questButton.Text = "Quests"
+    self.questButton.Image = menuIcons.Quests
 
-    self.progressButton = self.progressButton or createInstance("TextButton")
+    self.progressButton = self.progressButton or createInstance("ImageButton")
     parent(self.progressButton, self.buttonFrame)
-    self.progressButton.Text = "Map"
+    self.progressButton.Image = menuIcons.Map
 
-    self.exchangeButton = self.exchangeButton or createInstance("TextButton")
+    self.exchangeButton = self.exchangeButton or createInstance("ImageButton")
     parent(self.exchangeButton, self.buttonFrame)
-    self.exchangeButton.Text = "Exchange"
+    self.exchangeButton.Image = menuIcons.Exchange
 
-    self.dungeonButton = self.dungeonButton or createInstance("TextButton")
+    self.dungeonButton = self.dungeonButton or createInstance("ImageButton")
     parent(self.dungeonButton, self.buttonFrame)
-    self.dungeonButton.Text = "Dungeon"
+    self.dungeonButton.Image = menuIcons.Dungeons
 
-    self.partyButton = self.partyButton or createInstance("TextButton")
+    self.partyButton = self.partyButton or createInstance("ImageButton")
     parent(self.partyButton, self.buttonFrame)
-    self.partyButton.Text = "Party"
+    self.partyButton.Image = menuIcons.Party
 
-    self.scoreboardButton = self.scoreboardButton or createInstance("TextButton")
+    self.scoreboardButton = self.scoreboardButton or createInstance("ImageButton")
     parent(self.scoreboardButton, self.buttonFrame)
-    self.scoreboardButton.Text = "Scores"
+    self.scoreboardButton.Image = menuIcons.Scoreboard
 
-    self.menuButton = self.menuButton or createInstance("TextButton")
+    self.menuButton = self.menuButton or createInstance("ImageButton")
     parent(self.menuButton, self.buttonFrame)
-    self.menuButton.Text = "Menu"
+    self.menuButton.Image = menuIcons.Menu
 
     local skills = GameManager and GameManager.skillSystem and GameManager.skillSystem.skills or {}
     for i = 1, math.min(4, #skills) do
@@ -466,8 +469,8 @@ function HudSystem:update(dt)
             end)
             if btn.MouseButton2Click then
                 btn.MouseButton2Click:Connect(function()
-                    local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
-                    SkillUISystem:toggle()
+                    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
+                    MenuUISystem:openTab("Skills")
                 end)
             end
             GuiUtil.applyHoverEffect(btn)
@@ -580,13 +583,13 @@ function HudSystem:manualAttack()
 end
 
 function HudSystem:toggleGacha()
-    local GachaUISystem = require(script.Parent:WaitForChild("GachaUISystem"))
-    GachaUISystem:toggle()
+    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
+    MenuUISystem:openTab("Gacha")
 end
 
 function HudSystem:toggleInventory()
-    local InventoryUISystem = require(script.Parent:WaitForChild("InventoryUISystem"))
-    InventoryUISystem:toggle()
+    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
+    MenuUISystem:openTab("Inventory")
 end
 
 function HudSystem:toggleRewardGauge()
@@ -595,33 +598,33 @@ function HudSystem:toggleRewardGauge()
 end
 
 function HudSystem:toggleSkillUI()
-    local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
-    SkillUISystem:toggle()
+    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
+    MenuUISystem:openTab("Skills")
 end
 
 function HudSystem:toggleCompanionUI()
-    local CompanionUISystem = require(script.Parent:WaitForChild("CompanionUISystem"))
-    CompanionUISystem:toggle()
+    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
+    MenuUISystem:openTab("Companions")
 end
 
 function HudSystem:toggleQuestUI()
-    local QuestUISystem = require(script.Parent:WaitForChild("QuestUISystem"))
-    QuestUISystem:toggle()
+    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
+    MenuUISystem:openTab("Quests")
 end
 
 function HudSystem:toggleProgressMap()
-    local ProgressMapUISystem = require(script.Parent:WaitForChild("ProgressMapUISystem"))
-    ProgressMapUISystem:toggle()
+    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
+    MenuUISystem:openTab("Progress")
 end
 
 function HudSystem:toggleExchangeUI()
-    local CrystalExchangeUISystem = require(script.Parent:WaitForChild("CrystalExchangeUISystem"))
-    CrystalExchangeUISystem:toggle()
+    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
+    MenuUISystem:openTab("Exchange")
 end
 
 function HudSystem:toggleDungeonUI()
-    local DungeonUISystem = require(script.Parent:WaitForChild("DungeonUISystem"))
-    DungeonUISystem:toggle()
+    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
+    MenuUISystem:openTab("Dungeons")
 end
 
 function HudSystem:togglePartyUI()
