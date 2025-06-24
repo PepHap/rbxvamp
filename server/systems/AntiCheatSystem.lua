@@ -21,7 +21,8 @@ local AntiCheatSystem = {
 }
 
 local RunService = game:GetService("RunService")
-local LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
+local server = script.Parent
+local LoggingSystem = require(server:WaitForChild("LoggingSystem"))
 
 local function getId(player)
     if typeof and typeof(player) == "Instance" and player.UserId then

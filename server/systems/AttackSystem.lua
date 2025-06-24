@@ -15,14 +15,17 @@ local AttackSystem = {}
 -- Maximum allowed damage per attack to mitigate exploit attempts
 AttackSystem.maxDamage = 20
 
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
-local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
-local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
-local DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
-local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
-local EventManager = require(script.Parent:WaitForChild("EventManager"))
-local AntiCheatSystem = require(script.Parent:WaitForChild("AntiCheatSystem"))
-local LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
+local src = script.Parent.Parent.Parent:WaitForChild("src")
+local server = script.Parent
+
+local NetworkSystem = require(src:WaitForChild("NetworkSystem"))
+local EnemySystem = require(server:WaitForChild("EnemySystem"))
+local LevelSystem = require(src:WaitForChild("LevelSystem"))
+local DungeonSystem = require(server:WaitForChild("DungeonSystem"))
+local PlayerSystem = require(src:WaitForChild("PlayerSystem"))
+local EventManager = require(src:WaitForChild("EventManager"))
+local AntiCheatSystem = require(server:WaitForChild("AntiCheatSystem"))
+local LoggingSystem = require(server:WaitForChild("LoggingSystem"))
 
 AttackSystem.damage = 1
 AttackSystem.range = 5

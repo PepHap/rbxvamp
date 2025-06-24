@@ -7,7 +7,8 @@ local RunService = game:GetService("RunService")
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local LoggingSystem
 if RunService and RunService.IsServer and RunService:IsServer() then
-    LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    LoggingSystem = require(serverFolder:WaitForChild("LoggingSystem"))
 end
 
 -- Table of balances by currency key
@@ -18,8 +19,18 @@ CurrencySystem.balances = {}
 -- @param amount number amount to add
 function CurrencySystem:add(kind, amount)
     local n = tonumber(amount) or 0
-    local AntiCheatSystem = require(script.Parent:WaitForChild("AntiCheatSystem"))
-    AntiCheatSystem:recordCurrency(nil, n)
+    if RunService:IsServer() then
+        local serverFolder = script.Parent.Parent:FindFirstChild("server")
+        if serverFolder then
+            local systems = serverFolder:FindFirstChild("systems")
+            if systems then
+                local AntiCheatSystem = require(systems:WaitForChild("AntiCheatSystem"))
+                if AntiCheatSystem.recordCurrency then
+                    AntiCheatSystem:recordCurrency(nil, n)
+                end
+            end
+        end
+    end
     if RunService:IsServer() then
         LoggingSystem:logCurrency(nil, kind, n)
     end

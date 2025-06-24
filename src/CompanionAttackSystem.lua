@@ -15,13 +15,18 @@ local CompanionAttackSystem = {
     positions = {},
 }
 
-local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
+local AutoBattleSystem
+if RunService:IsServer() then
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    AutoBattleSystem = require(serverFolder:WaitForChild("AutoBattleSystem"))
+end
 local EnemySystem
 local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
 
 if RunService:IsServer() then
-    EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
-    DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    EnemySystem = require(serverFolder:WaitForChild("EnemySystem"))
+    DungeonSystem = require(serverFolder:WaitForChild("DungeonSystem"))
 end
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local EventManager = require(script.Parent:WaitForChild("EventManager"))

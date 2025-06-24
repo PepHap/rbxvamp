@@ -10,14 +10,16 @@ if RunService and RunService.IsClient and RunService.IsServer then
 end
 
 local LootSystem = {}
-local EventManager = require(script.Parent:WaitForChild("EventManager"))
+local server = script.Parent
+local src = script.Parent.Parent.Parent:WaitForChild("src")
+local EventManager = require(src:WaitForChild("EventManager"))
 
-local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
-local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
-local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
-local RewardGaugeSystem = require(script.Parent:WaitForChild("RewardGaugeSystem"))
-local LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
-local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
+local CurrencySystem = require(src:WaitForChild("CurrencySystem"))
+local GachaSystem = require(src:WaitForChild("GachaSystem"))
+local PlayerLevelSystem = require(src:WaitForChild("PlayerLevelSystem"))
+local RewardGaugeSystem = require(src:WaitForChild("RewardGaugeSystem"))
+local LevelSystem = require(src:WaitForChild("LevelSystem"))
+local LocationSystem = require(src:WaitForChild("LocationSystem"))
 local AchievementSystem = require(script.Parent:WaitForChild("AchievementSystem"))
 
 -- Exposed reward tables for referencing from UI modules.

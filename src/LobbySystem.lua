@@ -17,7 +17,8 @@ function LobbySystem:start(playerSys)
     self.playerSystem = playerSys or self.playerSystem or require(script.Parent:WaitForChild("PlayerSystem"))
     local RunService = game:GetService("RunService")
     if RunService and RunService:IsServer() then
-        self.teleportSystem = self.teleportSystem or require(script.Parent:WaitForChild("TeleportSystem"))
+        local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+        self.teleportSystem = self.teleportSystem or require(serverFolder:WaitForChild("TeleportSystem"))
     end
 end
 

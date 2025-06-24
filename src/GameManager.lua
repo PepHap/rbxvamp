@@ -144,18 +144,21 @@ end
 
 -- Integrate the default enemy system only on the server
 if IS_SERVER then
-    local EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    local EnemySystem = require(serverFolder:WaitForChild("EnemySystem"))
     GameManager:addSystem("Enemy", EnemySystem)
 end
 
 if IS_SERVER then
-    local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    local AutoBattleSystem = require(serverFolder:WaitForChild("AutoBattleSystem"))
     GameManager:addSystem("AutoBattle", AutoBattleSystem)
 end
 
 -- Handle player attack requests strictly on the server
 if IS_SERVER then
-    local AttackSystem = require(script.Parent:WaitForChild("AttackSystem"))
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    local AttackSystem = require(serverFolder:WaitForChild("AttackSystem"))
     GameManager:addSystem("Attack", AttackSystem)
 end
 
@@ -271,7 +274,8 @@ GameManager:addSystem("Network", NetworkSystem)
 -- Handles teleporting groups between places (server only)
 local TeleportSystem
 if IS_SERVER then
-    TeleportSystem = require(script.Parent:WaitForChild("TeleportSystem"))
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    TeleportSystem = require(serverFolder:WaitForChild("TeleportSystem"))
     GameManager.teleportSystem = TeleportSystem
     GameManager:addSystem("Teleport", TeleportSystem)
     TeleportSystem.raidPlaceId = 0
@@ -283,7 +287,8 @@ end
 
 local PartySystem
 if IS_SERVER then
-    PartySystem = require(script.Parent:WaitForChild("PartySystem"))
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    PartySystem = require(serverFolder:WaitForChild("PartySystem"))
     if TeleportSystem then
         PartySystem.teleportSystem = TeleportSystem
     end
@@ -293,7 +298,8 @@ end
 
 local RaidSystem
 if IS_SERVER then
-    RaidSystem = require(script.Parent:WaitForChild("RaidSystem"))
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    RaidSystem = require(serverFolder:WaitForChild("RaidSystem"))
     if PartySystem then
         RaidSystem.partySystem = PartySystem
     end
@@ -305,7 +311,8 @@ end
 -- Optional dungeon runs for earning upgrade currency
 local DungeonSystem
 if IS_SERVER then
-    DungeonSystem = require(script.Parent:WaitForChild("DungeonSystem"))
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    DungeonSystem = require(serverFolder:WaitForChild("DungeonSystem"))
     GameManager:addSystem("Dungeon", DungeonSystem)
 end
 
@@ -330,14 +337,16 @@ StatUpgradeSystem:addStat("AttackSpeed", 1)
 -- Data persistence for saving and loading progress (server only)
 local DataPersistenceSystem
 if IS_SERVER then
-    DataPersistenceSystem = require(script.Parent:WaitForChild("DataPersistenceSystem"))
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    DataPersistenceSystem = require(serverFolder:WaitForChild("DataPersistenceSystem"))
     GameManager:addSystem("Save", DataPersistenceSystem)
     GameManager.saveSystem = DataPersistenceSystem
 end
 
 -- Automatically saves player progress at intervals
 if IS_SERVER then
-    local AutoSaveSystem = require(script.Parent:WaitForChild("AutoSaveSystem"))
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    local AutoSaveSystem = require(serverFolder:WaitForChild("AutoSaveSystem"))
     GameManager.autoSaveSystem = AutoSaveSystem
     GameManager:addSystem("AutoSave", AutoSaveSystem)
 end
@@ -351,18 +360,21 @@ local LoggingSystem
 do
     local RunService = game:GetService("RunService")
     if RunService and RunService.IsServer and RunService:IsServer() then
-        LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
+        local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+        LoggingSystem = require(serverFolder:WaitForChild("LoggingSystem"))
         GameManager.loggingSystem = LoggingSystem
         GameManager:addSystem("Logging", LoggingSystem)
     end
 end
 
 if IS_SERVER then
-    local AntiCheatSystem = require(script.Parent:WaitForChild("AntiCheatSystem"))
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    local AntiCheatSystem = require(serverFolder:WaitForChild("AntiCheatSystem"))
     GameManager:addSystem("AntiCheat", AntiCheatSystem)
 end
 
-local LootSystem = require(script.Parent:WaitForChild("LootSystem"))
+local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+local LootSystem = require(serverFolder:WaitForChild("LootSystem"))
 if IS_SERVER then
     GameManager.lootSystem = LootSystem
     GameManager:addSystem("Loot", LootSystem)
@@ -370,7 +382,8 @@ end
 
 -- Daily login bonuses award extra crystals
 if IS_SERVER then
-    local DailyBonusSystem = require(script.Parent:WaitForChild("DailyBonusSystem"))
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    local DailyBonusSystem = require(serverFolder:WaitForChild("DailyBonusSystem"))
     GameManager.dailyBonusSystem = DailyBonusSystem
     GameManager:addSystem("DailyBonus", DailyBonusSystem)
 end
@@ -378,7 +391,8 @@ end
 
 -- Exchange crystals for tickets or upgrade currency
 if IS_SERVER then
-    local CrystalExchangeSystem = require(script.Parent:WaitForChild("CrystalExchangeSystem"))
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    local CrystalExchangeSystem = require(serverFolder:WaitForChild("CrystalExchangeSystem"))
     GameManager.crystalExchangeSystem = CrystalExchangeSystem
     GameManager:addSystem("CrystalExchange", CrystalExchangeSystem)
 end
@@ -540,7 +554,8 @@ GameManager:addSystem("ProgressMap", ProgressMapSystem)
 
 -- Leaderboard tracking highest cleared stages
 if IS_SERVER then
-    local ScoreboardSystem = require(script.Parent:WaitForChild("ScoreboardSystem"))
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    local ScoreboardSystem = require(serverFolder:WaitForChild("ScoreboardSystem"))
     GameManager.scoreboardSystem = ScoreboardSystem
     GameManager:addSystem("Scoreboard", ScoreboardSystem)
 end

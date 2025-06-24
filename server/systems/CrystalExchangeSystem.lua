@@ -8,8 +8,10 @@ end
 
 local CrystalExchangeSystem = {}
 
-local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
-local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+local src = script.Parent.Parent.Parent:WaitForChild("src")
+
+local GachaSystem = require(src:WaitForChild("GachaSystem"))
+local CurrencySystem = require(src:WaitForChild("CurrencySystem"))
 
 ---Cost in crystals per ticket type
 CrystalExchangeSystem.ticketPrices = {

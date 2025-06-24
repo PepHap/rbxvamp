@@ -21,8 +21,9 @@ local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"
 local PlayerSystem -- loaded on demand to avoid circular dependency
 
 if RunService:IsServer() then
-    EnemySystem = require(script.Parent:WaitForChild("EnemySystem"))
-    TeleportSystem = require(script.Parent:WaitForChild("TeleportSystem"))
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    EnemySystem = require(serverFolder:WaitForChild("EnemySystem"))
+    TeleportSystem = require(serverFolder:WaitForChild("TeleportSystem"))
 end
 
 --- Tracks the player's current level.
@@ -62,8 +63,10 @@ function LevelSystem:scaleStats(level)
     elseif level % 5 == 0 then
         factor = factor * 1.1
     end
-    EnemySystem.healthScale = factor
-    EnemySystem.damageScale = factor
+    if EnemySystem then
+        EnemySystem.healthScale = factor
+        EnemySystem.damageScale = factor
+    end
 end
 
 ---Number of enemies spawned per wave.
@@ -184,8 +187,10 @@ function LevelSystem:strengthenMonsters(stageType)
         location = 1.25
     }
     local factor = factors[stageType] or 1.05
-    EnemySystem.healthScale = (EnemySystem.healthScale or 1) * factor
-    EnemySystem.damageScale = (EnemySystem.damageScale or 1) * factor
+    if EnemySystem then
+        EnemySystem.healthScale = (EnemySystem.healthScale or 1) * factor
+        EnemySystem.damageScale = (EnemySystem.damageScale or 1) * factor
+    end
 end
 
 --- Checks if the player has enough kills to advance and, if so,
@@ -217,14 +222,18 @@ function LevelSystem:update()
         return
     end
     -- Spawn another wave when no enemies remain (server only)
-    if RunService:IsServer() and #EnemySystem.enemies == 0 then
+    if RunService:IsServer() and EnemySystem and #EnemySystem.enemies == 0 then
         local remaining = self.requiredKills - self.killCount
         local count = math.min(self.waveSize, remaining)
         local cfg = WaveConfig.levels[self.currentLevel]
         if cfg and not cfg.boss then
-            EnemySystem:spawnWaveForLevel(self.currentLevel, cfg)
+            if EnemySystem then
+                EnemySystem:spawnWaveForLevel(self.currentLevel, cfg)
+            end
         else
-            EnemySystem:spawnWave(self.currentLevel, count)
+            if EnemySystem then
+                EnemySystem:spawnWave(self.currentLevel, count)
+            end
         end
     end
 end

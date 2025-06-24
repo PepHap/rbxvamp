@@ -10,7 +10,8 @@ if RunService and RunService.IsClient and RunService.IsServer then
     end
 end
 
-local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
+local src = script.Parent.Parent.Parent:WaitForChild("src")
+local EnvironmentUtil = require(src:WaitForChild("EnvironmentUtil"))
 local LoggingSystem = require(script.Parent:WaitForChild("LoggingSystem"))
 local DataPersistenceSystem = {
     ---When true and running inside Roblox, DataStoreService will be used.
