@@ -29,6 +29,7 @@ local serverOnly = {
     upgradeItemWithCrystals = true,
     startDungeon = true,
     getSaveData = true,
+    applySaveData = true,
     salvageInventoryItem = true,
     salvageEquippedItem = true,
     createParty = true,
