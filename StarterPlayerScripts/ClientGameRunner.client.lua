@@ -23,7 +23,7 @@ GameManager:start()
 
 -- Load saved data from the server and apply it to the local GameManager
 
-local function applySaveData()
+local function applyClientData()
     local player = Players.LocalPlayer
     if not player then return end
     local json = player:GetAttribute("SaveData")
@@ -36,12 +36,14 @@ local function applySaveData()
             return HttpService:JSONDecode(json)
         end)
         if ok then
-            GameManager:applySaveData(data)
+            if GameManager.applyClientData then
+                GameManager:applyClientData(data)
+            end
         end
     end
 end
 
-applySaveData()
+applyClientData()
 
 if type(PlayerInputSystem.start) == "function" then
     PlayerInputSystem:start()
