@@ -43,7 +43,13 @@ local HudSystem = {
 local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
-local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
+local RunService = game:GetService("RunService")
+local PlayerSystem
+if RunService:IsServer() then
+    PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
+else
+    PlayerSystem = require(script.Parent:WaitForChild("ClientPlayerSystem"))
+end
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local AutoBattleSystem
 if RunService:IsServer() then

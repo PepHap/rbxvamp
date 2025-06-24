@@ -40,7 +40,13 @@ local PlayerInputSystem = {
     skillKeyMap = {One = 1, Two = 2, Three = 3, Four = 4},
 }
 
-local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
+local RunService = game:GetService("RunService")
+local PlayerSystem
+if RunService:IsServer() then
+    PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
+else
+    PlayerSystem = require(script.Parent:WaitForChild("ClientPlayerSystem"))
+end
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
 local InventoryUISystem = require(script.Parent:WaitForChild("InventoryUISystem"))

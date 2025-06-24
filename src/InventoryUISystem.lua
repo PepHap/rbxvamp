@@ -51,7 +51,13 @@ local slotOrder = SlotConstants.list
 
 local ItemSystem = require(script.Parent:WaitForChild("ItemSystem"))
 
-local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
+local RunService = game:GetService("RunService")
+local PlayerSystem
+if RunService:IsServer() then
+    PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
+else
+    PlayerSystem = require(script.Parent:WaitForChild("ClientPlayerSystem"))
+end
 local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
 end)
