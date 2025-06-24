@@ -30,6 +30,9 @@ local commandList = {
     crystals = "crystals <amount>",
     roll = "roll <skill|companion|equipment> [slot]",
     upgrade = "upgrade <slot> [amount] [currency]",
+    partycreate = "partycreate",
+    partyinvite = "partyinvite <player>",
+    partyleave = "partyleave",
     buyticket = "buyticket <kind> [amount]",
     buycurrency = "buycurrency <kind> [amount]",
     upgradec = "upgradec <slot> [amount] [currency]",
@@ -349,6 +352,27 @@ function AdminConsole:runCommand(text)
                 end
             end
             return "Crystal upgrade failed"
+        end,
+        partycreate = function(self)
+            if NetworkSystem and NetworkSystem.fireServer then
+                NetworkSystem:fireServer("PartyRequest", "create")
+            end
+            return "Party create requested"
+        end,
+        partyinvite = function(self, a)
+            local target = a[1]
+            if target and NetworkSystem and NetworkSystem.fireServer then
+                NetworkSystem:fireServer("PartyInvite", target)
+                return "Invite sent"
+            end
+            return "Invite failed"
+        end,
+        partyleave = function(self)
+            if NetworkSystem and NetworkSystem.fireServer then
+                NetworkSystem:fireServer("PartyRequest", "leave")
+                return "Leave requested"
+            end
+            return "Leave failed"
         end,
         -- Salvage an inventory item into currency
         salvageinv = function(self, a)
