@@ -24,8 +24,7 @@
         "$path": "assets"
       },
       "src": {
-        "$path": "src",
-        "$ignore": ["**/*.server.lua"]
+        "$path": "src"
       }
     },
     "StarterPlayer": {
