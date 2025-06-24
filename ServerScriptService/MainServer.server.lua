@@ -7,7 +7,7 @@ if not game:IsLoaded() then
 end
 
 local src = script.Parent:WaitForChild("src")
-local GameManager = require(src:WaitForChild("GameManager"))
+local GameManager = require(src:WaitForChild("ServerGameManager"))
 
 local function onPlayerAdded(player)
     local data = GameManager:loadPlayerData(player.UserId)

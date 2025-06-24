@@ -78,7 +78,7 @@ local function connect(btn, callback)
 end
 
 function GachaUI:start(manager, parentGui)
-    self.gameManager = manager or self.gameManager or require(script.Parent:WaitForChild("GameManager"))
+    self.gameManager = manager or self.gameManager or require(script.Parent:WaitForChild("ClientGameManager"))
     local guiRoot = ensureGui()
     local parentTarget = parentGui or guiRoot
     local created = false
