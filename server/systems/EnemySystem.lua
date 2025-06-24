@@ -464,7 +464,7 @@ end
 -- @param dt number delta time since the last update
 function EnemySystem:update(dt)
     AutoBattleSystem = AutoBattleSystem or require(server:WaitForChild("AutoBattleSystem"))
-    PlayerSystem = PlayerSystem or require(src:WaitForChild("PlayerSystem"))
+    PlayerSystem = PlayerSystem or require(script.Parent.Parent:WaitForChild("ServerPlayerSystem"))
     local playerPos = AutoBattleSystem.playerPosition
     if not playerPos then
         return

@@ -48,7 +48,7 @@ local PlayerInputSystem = {
 local RunService = game:GetService("RunService")
 local PlayerSystem
 if RunService:IsServer() then
-    PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
+    PlayerSystem = require(script.Parent.Parent:WaitForChild("server"):WaitForChild("ServerPlayerSystem"))
 else
     PlayerSystem = require(script.Parent:WaitForChild("ClientPlayerSystem"))
 end

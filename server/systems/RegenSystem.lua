@@ -10,7 +10,7 @@ local src = script.Parent.Parent.Parent:WaitForChild("src")
 
 local PlayerSystem
 if RunService:IsServer() then
-    PlayerSystem = require(src:WaitForChild("PlayerSystem"))
+    PlayerSystem = require(script.Parent.Parent:WaitForChild("ServerPlayerSystem"))
 else
     PlayerSystem = require(src:WaitForChild("ClientPlayerSystem"))
 end
