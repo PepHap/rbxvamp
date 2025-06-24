@@ -1,5 +1,9 @@
 -- PlayerUISystem.lua
 -- Displays the player's current health and position using RemoteEvents.
+local RunService = game:GetService("RunService")
+if RunService:IsServer() then
+    error("PlayerUISystem should only be required on the client", 2)
+end
 
 local function detectRoblox()
     return typeof ~= nil and Instance ~= nil and type(Instance.new) == "function"

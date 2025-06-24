@@ -1,5 +1,9 @@
 -- RaidUISystem.lua
 -- Displays basic raid progress updates sent by the server.
+local RunService = game:GetService("RunService")
+if RunService:IsServer() then
+    error("RaidUISystem should only be required on the client", 2)
+end
 
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local RaidUI = {

@@ -1,5 +1,9 @@
 -- ProgressMapUISystem.lua
 -- Simple UI displaying progress through locations and stages.
+local RunService = game:GetService("RunService")
+if RunService:IsServer() then
+    error("ProgressMapUISystem should only be required on the client", 2)
+end
 
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local ProgressMapUI = {

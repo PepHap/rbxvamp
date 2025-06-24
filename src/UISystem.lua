@@ -1,4 +1,8 @@
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
+local RunService = game:GetService("RunService")
+if RunService:IsServer() then
+    error("UISystem should only be required on the client", 2)
+end
 local UISystem = {
     ---When true and running inside Roblox, real Instances will be created.
     useRobloxObjects = EnvironmentUtil.detectRoblox(),

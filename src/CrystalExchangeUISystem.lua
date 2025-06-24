@@ -1,5 +1,9 @@
 -- CrystalExchangeUISystem.lua
 -- UI for purchasing gacha tickets and upgrade currency with crystals
+local RunService = game:GetService("RunService")
+if RunService:IsServer() then
+    error("CrystalExchangeUISystem should only be required on the client", 2)
+end
 
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local CrystalExchangeUI = {

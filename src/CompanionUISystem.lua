@@ -1,5 +1,9 @@
 -- CompanionUISystem.lua
 -- Displays owned companions and allows upgrading them with ether.
+local RunService = game:GetService("RunService")
+if RunService:IsServer() then
+    error("CompanionUISystem should only be required on the client", 2)
+end
 
 local function detectRoblox()
     return typeof ~= nil and Instance ~= nil and type(Instance.new) == "function"

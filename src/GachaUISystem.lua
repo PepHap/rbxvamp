@@ -1,5 +1,9 @@
 -- GachaUISystem.lua
 -- Provides a simple interface to roll gacha rewards via buttons
+local RunService = game:GetService("RunService")
+if RunService:IsServer() then
+    error("GachaUISystem should only be required on the client", 2)
+end
 
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local GachaUI = {

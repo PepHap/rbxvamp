@@ -1,5 +1,9 @@
 -- RewardGaugeUISystem.lua
 -- Displays reward gauge progress and allows selecting options
+local RunService = game:GetService("RunService")
+if RunService:IsServer() then
+    error("RewardGaugeUISystem should only be required on the client", 2)
+end
 
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local RewardGaugeUISystem = {
