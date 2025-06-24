@@ -19,7 +19,6 @@ local DungeonUI = {
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local DungeonSystem
 local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
-local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
 local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))

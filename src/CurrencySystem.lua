@@ -91,4 +91,12 @@ function CurrencySystem:loadData(data)
     end
 end
 
+-- Strip server-only methods when running on the client
+if RunService:IsClient() then
+    local serverOnly = { add = true, spend = true, saveData = true }
+    for name in pairs(serverOnly) do
+        CurrencySystem[name] = nil
+    end
+end
+
 return CurrencySystem
