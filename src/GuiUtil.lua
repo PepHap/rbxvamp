@@ -120,24 +120,27 @@ end
 ---@param maxY number? maximum height in pixels
 function GuiUtil.applyResponsive(frame, ratio, minX, minY, maxX, maxY)
     if not frame then return end
-    ratio = ratio or 1.5
-    local aspect = createInstance("UIAspectRatioConstraint")
-    aspect.Name = "Aspect"
-    if aspect.AspectRatio ~= nil then
-        aspect.AspectRatio = ratio
+    if ratio then
+        local aspect = createInstance("UIAspectRatioConstraint")
+        aspect.Name = "Aspect"
+        if aspect.AspectRatio ~= nil then
+            aspect.AspectRatio = ratio
+        end
+        parent(aspect, frame)
     end
-    parent(aspect, frame)
 
-    local sizeConst = createInstance("UISizeConstraint")
-    sizeConst.Name = "SizeLimit"
-    if sizeConst.MinSize and Vector2 and Vector2.new then
-        sizeConst.MinSize = Vector2.new(minX or 150, minY or 100)
-        sizeConst.MaxSize = Vector2.new(maxX or 600, maxY or 400)
-    elseif type(sizeConst) == "table" then
-        sizeConst.MinSize = {x = minX or 150, y = minY or 100}
-        sizeConst.MaxSize = {x = maxX or 600, y = maxY or 400}
+    if minX or minY or maxX or maxY then
+        local sizeConst = createInstance("UISizeConstraint")
+        sizeConst.Name = "SizeLimit"
+        if sizeConst.MinSize and Vector2 and Vector2.new then
+            sizeConst.MinSize = Vector2.new(minX or 0, minY or 0)
+            sizeConst.MaxSize = Vector2.new(maxX or 0, maxY or 0)
+        elseif type(sizeConst) == "table" then
+            sizeConst.MinSize = {x = minX or 0, y = minY or 0}
+            sizeConst.MaxSize = {x = maxX or 0, y = maxY or 0}
+        end
+        parent(sizeConst, frame)
     end
-    parent(sizeConst, frame)
 end
 
 ---Adds a simple cross decoration using thin Frames around the edges.
@@ -207,7 +210,8 @@ function GuiUtil.createWindow(name, image)
     if Theme and Theme.styleWindow then
         Theme.styleWindow(frame)
     end
-    GuiUtil.applyResponsive(frame)
+    -- Allow windows to fill the screen without hard limits
+    GuiUtil.applyResponsive(frame, nil)
     GuiUtil.addCrossDecor(frame)
     return frame
 end
