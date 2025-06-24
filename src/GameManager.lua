@@ -166,8 +166,13 @@ end
 local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
 GameManager:addSystem("PlayerLevel", PlayerLevelSystem)
 
--- Player health management
-local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
+local RunService = game:GetService("RunService")
+local PlayerSystem
+if RunService:IsServer() then
+    PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
+else
+    PlayerSystem = require(script.Parent:WaitForChild("ClientPlayerSystem"))
+end
 GameManager:addSystem("Player", PlayerSystem)
 
 -- Stage progression between floors

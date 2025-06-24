@@ -3,7 +3,13 @@
 
 local RegenSystem = {}
 
-local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
+local RunService = game:GetService("RunService")
+local PlayerSystem
+if RunService:IsServer() then
+    PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
+else
+    PlayerSystem = require(script.Parent:WaitForChild("ClientPlayerSystem"))
+end
 local SkillCastSystem = require(script.Parent:WaitForChild("SkillCastSystem"))
 local StatUpgradeSystem = require(script.Parent:WaitForChild("StatUpgradeSystem"))
 

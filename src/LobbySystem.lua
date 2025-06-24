@@ -14,7 +14,15 @@ local LobbySystem = {
 local Players = game:GetService("Players")
 
 function LobbySystem:start(playerSys)
-    self.playerSystem = playerSys or self.playerSystem or require(script.Parent:WaitForChild("PlayerSystem"))
+    local RunService = game:GetService("RunService")
+    if not playerSys then
+        if RunService:IsServer() then
+            playerSys = require(script.Parent:WaitForChild("PlayerSystem"))
+        else
+            playerSys = require(script.Parent:WaitForChild("ClientPlayerSystem"))
+        end
+    end
+    self.playerSystem = playerSys or self.playerSystem
     local RunService = game:GetService("RunService")
     if RunService and RunService:IsServer() then
         local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
