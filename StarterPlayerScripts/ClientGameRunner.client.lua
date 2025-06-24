@@ -12,7 +12,7 @@ local HttpService = game:GetService("HttpService")
 local src = ReplicatedStorage:WaitForChild("src")
 
 -- Handle player input locally so UI modules can toggle windows
-local PlayerInputSystem = require(src:WaitForChild("PlayerInputSystem.client"))
+local PlayerInputSystem = require(src:WaitForChild("PlayerInputSystem"))
 PlayerInputSystem.useRobloxObjects = true
 
 -- Start core gameplay systems on the client so UI modules
