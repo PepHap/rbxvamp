@@ -3,6 +3,7 @@
 
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
+local RunService = game:GetService("RunService")
 local ScoreboardSystem = {
     useRobloxObjects = EnvironmentUtil.detectRoblox(),
     datastore = nil,
@@ -16,7 +17,7 @@ local ScoreboardSystem = {
 function ScoreboardSystem:start(levelSys, netSys)
     self.levelSystem = levelSys or self.levelSystem or require(script.Parent:WaitForChild("LevelSystem"))
     self.networkSystem = netSys or self.networkSystem or require(script.Parent:WaitForChild("NetworkSystem"))
-    if self.useRobloxObjects and game and game.GetService then
+    if self.useRobloxObjects and RunService:IsServer() and game and game.GetService then
         local ok, dsService = pcall(function()
             return game:GetService("DataStoreService")
         end)
@@ -56,7 +57,7 @@ end
 
 ---Saves the scoreboard table back to the datastore.
 function ScoreboardSystem:save()
-    if not self.datastore then return end
+    if not RunService:IsServer() or not self.datastore then return end
     pcall(function()
         self.datastore:SetAsync("scores", self.scores)
     end)
@@ -89,7 +90,7 @@ end
 
 ---Records the player's new highest stage when it increases.
 function ScoreboardSystem:recordProgress()
-    if not self.useRobloxObjects then
+    if not self.useRobloxObjects or not RunService:IsServer() then
         return
     end
     local playersService = game:GetService("Players")
