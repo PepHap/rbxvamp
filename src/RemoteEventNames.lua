@@ -48,4 +48,5 @@ return {
     StatUpgradeRequest = "ev_sur_v1",
     LobbyRequest = "ev_lr_v1",
     StatUpdate = "ev_su_v1",
+    AutoBattleToggle = "ev_abt_v1",
 }

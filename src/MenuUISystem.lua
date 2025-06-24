@@ -1,9 +1,10 @@
 local function detectRoblox()
     return typeof ~= nil and Instance ~= nil and type(Instance.new) == "function"
+end
+
 local RunService = game:GetService("RunService")
 if RunService:IsServer() then
     error("MenuUISystem should only be required on the client", 2)
-end
 end
 
 local MenuUI = {

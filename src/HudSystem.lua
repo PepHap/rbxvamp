@@ -34,6 +34,7 @@ local HudSystem = {
     cooldowns = nil,
     maxCooldowns = nil,
     playerHealth = nil,
+    autoEnabled = false,
     progressFrame = nil,
     progressFill = nil,
     progressText = nil,
@@ -45,19 +46,9 @@ local HudSystem = {
 local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
-local RunService = game:GetService("RunService")
-local PlayerSystem
-if RunService:IsServer() then
-    PlayerSystem = require(script.Parent.Parent:WaitForChild("server"):WaitForChild("ServerPlayerSystem"))
-else
-    PlayerSystem = require(script.Parent:WaitForChild("ClientPlayerSystem"))
-end
+local PlayerSystem = require(script.Parent:WaitForChild("ClientPlayerSystem"))
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
-local AutoBattleSystem
-if RunService:IsServer() then
-    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
-    AutoBattleSystem = require(serverFolder:WaitForChild("AutoBattleSystem"))
-end
+local RunService = game:GetService("RunService")
 local RewardGaugeSystem = require(script.Parent:WaitForChild("ClientRewardGaugeSystem"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
 local GameManager = require(script.Parent:WaitForChild("ClientGameManager"))
@@ -132,6 +123,10 @@ end
 
 function HudSystem:start()
     local gui = ensureGui()
+    NetworkSystem:onClientEvent("AutoBattleToggle", function(enabled)
+        self.autoEnabled = not not enabled
+        self:update()
+    end)
     if self.levelLabel then
         if self.levelLabel.Parent ~= gui then
             parent(self.levelLabel, gui)
@@ -452,17 +447,13 @@ function HudSystem:update(dt)
 
     self.autoButton = self.autoButton or createInstance("TextButton")
     parent(self.autoButton, self.buttonFrame)
-    local state = (AutoBattleSystem and AutoBattleSystem.enabled) and "ON" or "OFF"
+    local state = self.autoEnabled and "ON" or "OFF"
     self.autoButton.Text = "Auto: " .. state
 
     self.attackButton = self.attackButton or createInstance("TextButton")
     parent(self.attackButton, self.buttonFrame)
     self.attackButton.Text = "Attack"
-    if AutoBattleSystem and AutoBattleSystem.enabled then
-        self.attackButton.Active = false
-    else
-        self.attackButton.Active = true
-    end
+    self.attackButton.Active = not self.autoEnabled
 
     self.gachaButton = self.gachaButton or createInstance("ImageButton")
     parent(self.gachaButton, self.buttonFrame)
@@ -709,17 +700,11 @@ function HudSystem:update(dt)
 end
 
 function HudSystem:toggleAutoBattle()
-    if not AutoBattleSystem then return end
-    if AutoBattleSystem.enabled then
-        AutoBattleSystem:disable()
-    else
-        AutoBattleSystem:enable()
-    end
-    self:update()
+    NetworkSystem:fireServer("AutoBattleToggle")
 end
 
 function HudSystem:manualAttack()
-    if AutoBattleSystem and AutoBattleSystem.enabled then
+    if self.autoEnabled then
         return
     end
     local PlayerInputSystem = require(script.Parent:WaitForChild("PlayerInputSystem.client"))
