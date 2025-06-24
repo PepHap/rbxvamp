@@ -210,6 +210,9 @@ function GachaSystem:spendCrystals(amount)
         if LoggingSystem and LoggingSystem.logCurrency then
             LoggingSystem:logCurrency(nil, "crystal", -n)
         end
+        if NetworkSystem and NetworkSystem.fireAllClients then
+            NetworkSystem:fireAllClients("CurrencyUpdate", "crystal", self.crystals)
+        end
         return true
     end
     return false

@@ -97,6 +97,9 @@ end
 -- @param leader any player identifier
 -- @return number new party id
 function PartySystem:createParty(leader)
+    if self.playerParty[leader] then
+        self:removeMember(self.playerParty[leader], leader)
+    end
     local id = self.nextId
     self.nextId = id + 1
     self.parties[id] = {leader = leader, members = {[leader] = true}}

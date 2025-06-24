@@ -98,7 +98,12 @@ end
 
 function AdminConsole:start(manager, admins)
     self.gameManager = manager or self.gameManager
-    if admins then self.adminIds = admins end
+    if type(admins) == "table" then
+        self.adminIds = admins
+    end
+    if not self.adminIds then
+        self.adminIds = {}
+    end
     if self.useRobloxObjects and game and game.Players then
         local ok, plr = pcall(function()
             return game.Players.LocalPlayer
@@ -197,6 +202,9 @@ end
 
 function AdminConsole:isAdmin(userId)
     if not userId then return false end
+    if #self.adminIds == 0 then
+        return true
+    end
     for _, id in ipairs(self.adminIds) do
         if id == userId then return true end
     end
@@ -233,6 +241,9 @@ function AdminConsole:runCommand(text)
         table.insert(args, word)
     end
     local cmd = table.remove(args, 1)
+    if type(cmd) == "string" then
+        cmd = string.lower(cmd)
+    end
     local result = "Executed: " .. text
 
     -- Command handlers for basic game functionality

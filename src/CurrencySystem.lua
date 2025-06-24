@@ -31,7 +31,7 @@ function CurrencySystem:add(kind, amount)
             end
         end
     end
-    if RunService:IsServer() then
+    if RunService:IsServer() and LoggingSystem and LoggingSystem.logCurrency then
         LoggingSystem:logCurrency(nil, kind, n)
     end
     self.balances[kind] = (self.balances[kind] or 0) + n
@@ -55,7 +55,9 @@ function CurrencySystem:spend(kind, amount)
     if self:get(kind) >= amount then
         self.balances[kind] = self.balances[kind] - amount
         if RunService:IsServer() then
-            LoggingSystem:logCurrency(nil, kind, -amount)
+            if LoggingSystem and LoggingSystem.logCurrency then
+                LoggingSystem:logCurrency(nil, kind, -amount)
+            end
             NetworkSystem:fireAllClients("CurrencyUpdate", kind, self.balances[kind])
         end
         return true
@@ -81,7 +83,9 @@ function CurrencySystem:loadData(data)
     for k, v in pairs(data) do
         self.balances[k] = v
         if RunService:IsServer() then
-            LoggingSystem:logCurrency(nil, k, v)
+            if LoggingSystem and LoggingSystem.logCurrency then
+                LoggingSystem:logCurrency(nil, k, v)
+            end
             NetworkSystem:fireAllClients("CurrencyUpdate", k, v)
         end
     end
