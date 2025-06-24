@@ -213,6 +213,9 @@ function HudSystem:start()
         GuiUtil.addCrossDecor(self.skillFrame)
     end
     self.skillLayout = createInstance("UIListLayout")
+    if self.skillLayout.Padding ~= nil then
+        self.skillLayout.Padding = UDim.new(0, 4)
+    end
     if Theme and Theme.styleProgressBar then
         Theme.styleProgressBar(self.progressFrame)
         Theme.styleProgressBar(self.healthFrame)
@@ -220,7 +223,8 @@ function HudSystem:start()
     GuiUtil.applyResponsive(self.healthFrame, 10, 150, 20, 800, 40)
     GuiUtil.applyResponsive(self.progressFrame, 16, 200, 20, 1000, 40)
     -- Keep the skill bar a fixed height while scaling for different resolutions
-    GuiUtil.applyResponsive(self.skillFrame, nil, 240, 60, 240, 60)
+    -- Reserve extra width so four 60x60 icons fit with padding
+    GuiUtil.applyResponsive(self.skillFrame, nil, 252, 60, 252, 60)
     if UDim2 and type(UDim2.new) == "function" then
         self.progressFrame.AnchorPoint = Vector2.new(0.5, 0)
         self.skillFrame.AnchorPoint = Vector2.new(1, 1)
@@ -366,6 +370,9 @@ function HudSystem:update(dt)
     end
     self.skillFrame = self.skillFrame or createInstance("Frame")
     self.skillLayout = self.skillLayout or createInstance("UIListLayout")
+    if self.skillLayout.Padding ~= nil then
+        self.skillLayout.Padding = UDim.new(0, 4)
+    end
     self.skillButtons = self.skillButtons or {}
     self.cooldownOverlays = self.cooldownOverlays or {}
     self.cooldownLabels = self.cooldownLabels or {}
@@ -401,6 +408,9 @@ function HudSystem:update(dt)
     if Enum and Enum.FillDirection then
         self.skillLayout.FillDirection = Enum.FillDirection.Horizontal
         self.skillLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    end
+    if self.skillLayout.Padding ~= nil then
+        self.skillLayout.Padding = UDim.new(0, 4)
     end
 
     self.levelLabel = self.levelLabel or createInstance("TextLabel")
@@ -669,8 +679,8 @@ function HudSystem:update(dt)
         self.healthFrame.Size = UDim2.new(0.25, 0, 0.04, 0)
         -- Position skill buttons near the bottom-right similar to modern action RPGs
         -- https://create.roblox.com/docs/reference/engine/classes/UDim2
-        self.skillFrame.Position = UDim2.new(1, -250, 1, -70)
-        self.skillFrame.Size = UDim2.new(0, 240, 0, 60)
+        self.skillFrame.Position = UDim2.new(1, -262, 1, -70)
+        self.skillFrame.Size = UDim2.new(0, 252, 0, 60)
         self.skillFrame.AnchorPoint = Vector2.new(1, 1)
         self.progressFrame.Position = UDim2.new(0.5, -200, 0.02, 0)
         self.progressFrame.Size = UDim2.new(0.4, 0, 0, 25)
