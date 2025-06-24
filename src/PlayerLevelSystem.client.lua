@@ -66,4 +66,16 @@ function PlayerLevelSystem:loadData(data)
     end
 end
 
+---Returns the next milestone level greater than the current client level.
+--  This mirrors the server method for UI purposes.
+function PlayerLevelSystem:getNextMilestoneLevel()
+    local levels = {5,10,15,20,25,40,70,100,130,160,190,220}
+    for _, lvl in ipairs(levels) do
+        if lvl > self.level then
+            return lvl
+        end
+    end
+    return nil
+end
+
 return PlayerLevelSystem

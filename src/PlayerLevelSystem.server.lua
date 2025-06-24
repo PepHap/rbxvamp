@@ -62,6 +62,19 @@ local milestones = {
     [220] = { unlock = "Haunted Manor", reward = {crystals = 7} },
 }
 
+---Returns the next milestone level higher than the current level.
+--  This allows UI elements to display upcoming unlocks.
+--  @return number|nil nextLevel
+function PlayerLevelSystem:getNextMilestoneLevel()
+    local nextLevel
+    for lvl in pairs(milestones) do
+        if lvl > self.level and (not nextLevel or lvl < nextLevel) then
+            nextLevel = lvl
+        end
+    end
+    return nextLevel
+end
+
 ---Grants milestone rewards such as currency, tickets or keys.
 -- @param reward table reward descriptor
 local function grantMilestoneReward(reward)
