@@ -50,7 +50,7 @@ local PlayerSystem
 if RunService:IsServer() then
     PlayerSystem = require(script.Parent.Parent:WaitForChild("server"):WaitForChild("ServerPlayerSystem"))
 else
-    PlayerSystem = require(script.Parent:WaitForChild("ClientPlayerSystem"))
+    PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
 end
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkServer"))
 local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
