@@ -174,4 +174,149 @@ local function consumeCurrency(self, field)
     return false
 end
 
+---Overrides the rarity weights for a specific category.
+-- @param category string category name
+-- @param weights table list of {rarity, weight}
+function GachaSystem:setRarityWeights(category, weights)
+    if type(category) ~= "string" or type(weights) ~= "table" then
+        return
+    end
+    self.rarityWeights[category] = weights
+end
+
+---Adds crystals to the player's balance.
+-- @param amount number quantity to add
+function GachaSystem:addCrystals(amount)
+    local n = tonumber(amount) or 0
+    self.crystals = self.crystals + n
+    if LoggingSystem and LoggingSystem.logCurrency then
+        LoggingSystem:logCurrency(nil, "crystal", n)
+    end
+    if NetworkSystem and NetworkSystem.fireAllClients then
+        NetworkSystem:fireAllClients("CurrencyUpdate", "crystal", self.crystals)
+    end
+end
+
+---Attempts to spend crystals from the balance.
+-- @param amount number amount to deduct
+-- @return boolean success
+function GachaSystem:spendCrystals(amount)
+    local n = tonumber(amount) or 0
+    if n <= 0 then
+        return false
+    end
+    if self.crystals >= n then
+        self.crystals = self.crystals - n
+        if LoggingSystem and LoggingSystem.logCurrency then
+            LoggingSystem:logCurrency(nil, "crystal", -n)
+        end
+        return true
+    end
+    return false
+end
+
+---Adds gacha tickets of the given type.
+function GachaSystem:addTickets(kind, amount)
+    if self.tickets[kind] == nil then
+        return
+    end
+    local n = tonumber(amount) or 0
+    self.tickets[kind] = self.tickets[kind] + n
+    if LoggingSystem and LoggingSystem.logCurrency then
+        LoggingSystem:logCurrency(nil, kind .. "_ticket", n)
+    end
+end
+
+---Sets an inventory module for storing rolled equipment.
+function GachaSystem:setInventory(inv)
+    self.inventory = inv
+end
+
+---Rolls a skill reward consuming currency when available.
+function GachaSystem:rollSkill()
+    if not consumeCurrency(self, "skill") then
+        return nil
+    end
+    local rarity = self:rollRarity("skill")
+    local reward = selectByRarity(skillPool, rarity)
+    if reward and LoggingSystem and LoggingSystem.logItem then
+        LoggingSystem:logItem(nil, reward, "skill")
+    end
+    return reward
+end
+
+---Rolls multiple skills up to ``count`` times.
+function GachaSystem:rollSkills(count)
+    local results = {}
+    local n = tonumber(count) or 1
+    for _ = 1, n do
+        local reward = self:rollSkill()
+        if not reward then
+            break
+        end
+        table.insert(results, reward)
+    end
+    return results
+end
+
+---Rolls a companion reward.
+function GachaSystem:rollCompanion()
+    if not consumeCurrency(self, "companion") then
+        return nil
+    end
+    local rarity = self:rollRarity("companion")
+    local reward = selectByRarity(companionPool, rarity)
+    if reward and LoggingSystem and LoggingSystem.logItem then
+        LoggingSystem:logItem(nil, reward, "companion")
+    end
+    return reward
+end
+
+---Rolls multiple companions.
+function GachaSystem:rollCompanions(count)
+    local results = {}
+    local n = tonumber(count) or 1
+    for _ = 1, n do
+        local reward = self:rollCompanion()
+        if not reward then
+            break
+        end
+        table.insert(results, reward)
+    end
+    return results
+end
+
+---Rolls an equipment item for the specified slot.
+function GachaSystem:rollEquipment(slot)
+    if not consumeCurrency(self, "equipment") then
+        return nil
+    end
+    local rarity = self:rollRarity("equipment")
+    local reward = EquipmentGenerator.getRandomItem(slot, rarity, itemPool)
+    if not reward then
+        return nil
+    end
+    if self.inventory and self.inventory.AddItem then
+        self.inventory:AddItem(reward)
+    end
+    if reward and LoggingSystem and LoggingSystem.logItem then
+        LoggingSystem:logItem(nil, reward, "equipment")
+    end
+    return reward
+end
+
+---Rolls multiple equipment items until currency runs out.
+function GachaSystem:rollEquipmentMultiple(slot, count)
+    local results = {}
+    local n = tonumber(count) or 1
+    for _ = 1, n do
+        local reward = self:rollEquipment(slot)
+        if not reward then
+            break
+        end
+        table.insert(results, reward)
+    end
+    return results
+end
+
 return GachaSystem

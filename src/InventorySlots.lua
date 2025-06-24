@@ -73,6 +73,9 @@ function InventorySlots:create(parentFrame)
             if layout.FillDirectionMaxCells ~= nil then
                 layout.FillDirectionMaxCells = 2
             end
+            if layout.StartCorner ~= nil then
+                layout.StartCorner = Enum.StartCorner.TopLeft
+            end
         end
     end
     parent(layout, frame)
