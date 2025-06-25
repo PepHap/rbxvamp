@@ -176,9 +176,14 @@ function RewardGaugeUISystem:update()
     self.gaugeLabel = self.gaugeLabel or createInstance("TextLabel")
     parent(self.gaugeLabel, parentGui)
     local segments = 10
-    local filled = math.floor((RewardGaugeSystem.gauge / RewardGaugeSystem.maxGauge) * segments)
+    local max = RewardGaugeSystem.maxGauge
+    if not max or max <= 0 then
+        max = 1
+    end
+    local ratio = RewardGaugeSystem.gauge / max
+    local filled = math.floor(ratio * segments)
     local bar = string.rep("●", filled) .. string.rep("○", segments - filled)
-    self.gaugeLabel.Text = string.format("Gauge: %s %d/%d", bar, RewardGaugeSystem.gauge, RewardGaugeSystem.maxGauge)
+    self.gaugeLabel.Text = string.format("Gauge: %s %d/%d", bar, RewardGaugeSystem.gauge, max)
 end
 
 function RewardGaugeUISystem:showOptions()
