@@ -36,6 +36,8 @@ local InventoryUI = {
     window = nil,
     ---Optional blur effect applied when the window is visible
     blur = nil,
+    ---@type RBXScriptConnection?
+    respawnConnection = nil,
     ---Reference to the active ItemSystem instance provided by GameManager
     itemSystem = nil,
     ---Reference to the StatUpgradeSystem for base stats
@@ -185,6 +187,16 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     end
     if self.window.Parent ~= parentTarget then
         parent(self.window, parentTarget)
+    end
+    if self.useRobloxObjects and not self.respawnConnection then
+        local ok, player = pcall(function()
+            return game:GetService("Players").LocalPlayer
+        end)
+        if ok and player and player.CharacterAdded then
+            self.respawnConnection = player.CharacterAdded:Connect(function()
+                self:setVisible(false)
+            end)
+        end
     end
     self.gui = parentTarget
     if UDim2 and type(UDim2.new)=="function" then

@@ -15,6 +15,8 @@ local MenuUI = {
     tabButtons = {},
     currentTab = 1,
     visible = false,
+    ---@type RBXScriptConnection?
+    respawnConnection = nil,
 }
 
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
@@ -131,6 +133,16 @@ function MenuUI:start()
             parent(self.window, gui)
             self.gui = gui
         end
+        if self.useRobloxObjects and not self.respawnConnection then
+            local ok, player = pcall(function()
+                return game:GetService("Players").LocalPlayer
+            end)
+            if ok and player and player.CharacterAdded then
+                self.respawnConnection = player.CharacterAdded:Connect(function()
+                    self:setVisible(false)
+                end)
+            end
+        end
         return
     end
     self:addDefaultTabs()
@@ -142,6 +154,16 @@ function MenuUI:start()
         self.window.Size = UDim2.new(1, 0, 1, 0)
     end
     parent(self.window, gui)
+    if self.useRobloxObjects and not self.respawnConnection then
+        local ok, player = pcall(function()
+            return game:GetService("Players").LocalPlayer
+        end)
+        if ok and player and player.CharacterAdded then
+            self.respawnConnection = player.CharacterAdded:Connect(function()
+                self:setVisible(false)
+            end)
+        end
+    end
 
 
     self.tabFrame = createInstance("Frame")
