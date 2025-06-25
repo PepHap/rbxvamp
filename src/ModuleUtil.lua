@@ -6,30 +6,45 @@ local ModuleUtil = {}
 -- @param timeout number? maximum time to wait for the child
 -- @return any loaded module or nil
 function ModuleUtil.requireChild(parent, name, timeout)
-    local child = parent:FindFirstChild(name)
-    if not child then
-        -- Rojo-style layouts may name modules like "Module.client.module". When
-        -- running the source directly in Studio those children might not be
-        -- created, so attempt to locate them by alternative names.
-        local altNames = {
-            parent.Name .. "." .. name .. ".module",
-            parent.Name .. "." .. name .. ".module.lua",
-            name .. ".module",
-            name .. ".module.lua",
-            parent.Name .. "." .. name,
-        }
-        for _, n in ipairs(altNames) do
-            child = parent:FindFirstChild(n)
-            if child then break end
+    local containers = {parent, parent.Parent}
+    local child
+    local function search(container)
+        local found = container and container:FindFirstChild(name)
+        if not found and container then
+            -- Rojo-style layouts may name modules like "Module.client.module".
+            local altNames = {
+                container.Name .. "." .. name .. ".module",
+                container.Name .. "." .. name .. ".module.lua",
+                name .. ".module",
+                name .. ".module.lua",
+                container.Name .. "." .. name,
+            }
+            for _, n in ipairs(altNames) do
+                found = container:FindFirstChild(n)
+                if found then break end
+            end
         end
+        return found
     end
+
+    for _, c in ipairs(containers) do
+        child = search(c)
+        if child then break end
+    end
+
     if not child then
         timeout = timeout or 5
-        local ok, result = pcall(parent.WaitForChild, parent, name, timeout)
-        if ok then
-            child = result
+        for _, c in ipairs(containers) do
+            if c then
+                local ok, result = pcall(c.WaitForChild, c, name, timeout)
+                if ok then
+                    child = result
+                    break
+                end
+            end
         end
     end
+
     if not child then
         warn(("Missing module %s under %s"):format(name, parent:GetFullName()))
         return nil
