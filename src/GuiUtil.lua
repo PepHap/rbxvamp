@@ -272,17 +272,25 @@ function GuiUtil.makeFullScreen(frame)
     if UDim2 and type(UDim2.new)=="function" then
         local size = UDim2.new(1,0,1,0)
         local pos = UDim2.new(0,0,0,0)
+        local anchor = Vector2 and Vector2.new(0,0) or nil
         local ok = pcall(function()
             frame.Size = size
             frame.Position = pos
+            if anchor then
+                frame.AnchorPoint = anchor
+            elseif frame.AnchorPoint then
+                frame.AnchorPoint = Vector2.new(0,0)
+            end
         end)
         if not ok and type(frame)=="table" then
             frame.Size = size
             frame.Position = pos
+            frame.AnchorPoint = anchor or {x=0,y=0}
         end
     else
         frame.Size = {scaleX=1,offsetX=0,scaleY=1,offsetY=0}
         frame.Position = {scaleX=0,offsetX=0,scaleY=0,offsetY=0}
+        frame.AnchorPoint = {x=0,y=0}
     end
 end
 
