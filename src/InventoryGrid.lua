@@ -1,11 +1,9 @@
 local InventoryGrid = {}
 InventoryGrid.__index = InventoryGrid
 
-local function detectRoblox()
-    return typeof ~= nil and Instance ~= nil and type(Instance.new) == "function"
-end
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 
-InventoryGrid.useRobloxObjects = detectRoblox()
+InventoryGrid.useRobloxObjects = EnvironmentUtil.detectRoblox()
 
 local function createInstance(className)
     if InventoryGrid.useRobloxObjects and Instance and type(Instance.new)=="function" then

@@ -5,12 +5,10 @@ if RunService:IsServer() then
     error("PartyUISystem should only be required on the client", 2)
 end
 
-local function detectRoblox()
-    return typeof ~= nil and Instance ~= nil and type(Instance.new) == "function"
-end
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 
 local PartyUI = {
-    useRobloxObjects = detectRoblox(),
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
     gui = nil,
     window = nil,
     listLabel = nil,

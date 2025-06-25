@@ -6,13 +6,11 @@ if RunService:IsServer() then
 end
 
 
-local function detectRoblox()
-    return typeof ~= nil and Instance ~= nil and type(Instance.new) == "function"
-end
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 
 local PlayerInputSystem = {
     ---When true and running inside Roblox, connects to UserInputService.
-    useRobloxObjects = detectRoblox(),
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
     ---Movement speed in studs per second.
     moveSpeed = 5,
     ---Damage dealt per manual attack.

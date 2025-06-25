@@ -1,13 +1,12 @@
-local function detectRoblox()
-    return typeof ~= nil and Instance ~= nil and type(Instance.new) == "function"
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
+
 local RunService = game:GetService("RunService")
 if RunService:IsServer() then
     error("EnemyUISystem should only be required on the client", 2)
 end
-end
 
 local EnemyUISystem = {
-    useRobloxObjects = detectRoblox(),
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
     enemies = {}
 }
 

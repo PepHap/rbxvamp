@@ -5,12 +5,10 @@ if RunService:IsServer() then
     error("SkillUISystem should only be required on the client", 2)
 end
 
-local function detectRoblox()
-    return typeof ~= nil and Instance ~= nil and type(Instance.new) == "function"
-end
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 
 local SkillUISystem = {
-    useRobloxObjects = detectRoblox(),
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
     gui = nil,
     visible = false,
     skillSystem = nil,
