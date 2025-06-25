@@ -117,13 +117,13 @@ function AdminConsole:start(manager, admins)
     local window = GuiUtil.createWindow("ConsoleWindow")
     if UDim2 and type(UDim2.new)=="function" then
         window.Size = UDim2.new(0, 300, 0, 150)
-        window.Position = UDim2.new(0, 0, 1, -150)
+        window.AnchorPoint = Vector2.new(0.5, 0.5)
+        window.Position = UDim2.new(0.5, 0, 0.5, 0)
     end
     window.Name = "Window"
     window.Visible = self.visible
     self.window = window
     parent(window, gui)
-    GuiUtil.makeFullScreen(window)
 
     if NetworkSystem and NetworkSystem.onClientEvent then
         NetworkSystem:onClientEvent("GachaResult", function(kind, reward)

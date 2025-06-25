@@ -97,13 +97,13 @@ function GachaUI:start(manager, parentGui)
         self.window = GuiUtil.createWindow("GachaWindow")
         if UDim2 and type(UDim2.new)=="function" then
             self.window.Size = UDim2.new(0.4, 0, 0.4, 0)
-            self.window.Position = UDim2.new(0.3, 0, 0.3, 0)
+            self.window.AnchorPoint = Vector2.new(0.5, 0.5)
+            self.window.Position = UDim2.new(0.5, 0, 0.5, 0)
         end
         created = true
     end
     if self.window.Parent ~= parentTarget then
         parent(self.window, parentTarget)
-        GuiUtil.makeFullScreen(self.window)
     end
     self.gui = parentTarget
 

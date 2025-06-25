@@ -113,8 +113,11 @@ function RewardGaugeUISystem:start()
     else
         -- simple frame; image removed to keep repository text only
         self.window = GuiUtil.createWindow("RewardWindow")
+        if UDim2 and type(UDim2.new)=="function" then
+            self.window.AnchorPoint = Vector2.new(0.5, 0.5)
+            self.window.Position = UDim2.new(0.5, 0, 0.5, 0)
+        end
         parent(self.window, gui)
-        GuiUtil.makeFullScreen(self.window)
         
         self.gaugeLabel = createInstance("TextLabel")
         parent(self.gaugeLabel, self.window)

@@ -88,8 +88,11 @@ function AchievementUI:start(sys)
         return
     end
     self.window = GuiUtil.createWindow("AchievementWindow")
+    if UDim2 and type(UDim2.new)=="function" then
+        self.window.AnchorPoint = Vector2.new(0.5, 0.5)
+        self.window.Position = UDim2.new(0.5, 0, 0.5, 0)
+    end
     parent(self.window, gui)
-    GuiUtil.makeFullScreen(self.window)
     self:update()
     self:setVisible(self.visible)
 end

@@ -87,8 +87,11 @@ function RaidUI:start()
         end
     else
         self.window = GuiUtil.createWindow("RaidWindow")
+        if UDim2 and type(UDim2.new)=="function" then
+            self.window.AnchorPoint = Vector2.new(0.5, 0.5)
+            self.window.Position = UDim2.new(0.5, 0, 0.5, 0)
+        end
         parent(self.window, gui)
-        GuiUtil.makeFullScreen(self.window)
         self.statusLabel = createInstance("TextLabel")
         parent(self.statusLabel, self.window)
     end

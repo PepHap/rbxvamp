@@ -75,8 +75,11 @@ function ScoreboardUI:start()
     local gui = ensureGui()
     if not self.window then
         self.window = GuiUtil.createWindow("ScoreboardWindow")
+        if UDim2 and type(UDim2.new)=="function" then
+            self.window.AnchorPoint = Vector2.new(0.5, 0.5)
+            self.window.Position = UDim2.new(0.5, 0, 0.5, 0)
+        end
         parent(self.window, gui)
-        GuiUtil.makeFullScreen(self.window)
         self.label = createInstance("TextLabel")
         if UDim2 and type(UDim2.new)=="function" then
             self.label.Size = UDim2.new(1, -10, 1, -10)
