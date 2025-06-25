@@ -154,6 +154,12 @@ function MenuUI:start()
     if Enum and Enum.FillDirection then
         layout.FillDirection = Enum.FillDirection.Horizontal
         layout.SortOrder = Enum.SortOrder.LayoutOrder
+        if layout.HorizontalAlignment ~= nil then
+            layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+        end
+        if layout.VerticalAlignment ~= nil then
+            layout.VerticalAlignment = Enum.VerticalAlignment.Center
+        end
     end
     parent(layout, self.tabFrame)
 

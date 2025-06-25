@@ -211,6 +211,16 @@ function HudSystem:start()
     if self.skillLayout.Padding ~= nil then
         self.skillLayout.Padding = UDim.new(0, 4)
     end
+    if Enum and Enum.FillDirection then
+        self.skillLayout.FillDirection = Enum.FillDirection.Horizontal
+        self.skillLayout.SortOrder = Enum.SortOrder.LayoutOrder
+        if self.skillLayout.HorizontalAlignment ~= nil then
+            self.skillLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+        end
+        if self.skillLayout.VerticalAlignment ~= nil then
+            self.skillLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+        end
+    end
     if Theme and Theme.styleProgressBar then
         Theme.styleProgressBar(self.progressFrame)
         Theme.styleProgressBar(self.healthFrame)
@@ -368,6 +378,16 @@ function HudSystem:update(dt)
     if self.skillLayout.Padding ~= nil then
         self.skillLayout.Padding = UDim.new(0, 4)
     end
+    if Enum and Enum.FillDirection then
+        self.skillLayout.FillDirection = Enum.FillDirection.Horizontal
+        self.skillLayout.SortOrder = Enum.SortOrder.LayoutOrder
+        if self.skillLayout.HorizontalAlignment ~= nil then
+            self.skillLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+        end
+        if self.skillLayout.VerticalAlignment ~= nil then
+            self.skillLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+        end
+    end
     self.skillButtons = self.skillButtons or {}
     self.cooldownOverlays = self.cooldownOverlays or {}
     self.cooldownLabels = self.cooldownLabels or {}
@@ -403,6 +423,12 @@ function HudSystem:update(dt)
     if Enum and Enum.FillDirection then
         self.skillLayout.FillDirection = Enum.FillDirection.Horizontal
         self.skillLayout.SortOrder = Enum.SortOrder.LayoutOrder
+        if self.skillLayout.HorizontalAlignment ~= nil then
+            self.skillLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+        end
+        if self.skillLayout.VerticalAlignment ~= nil then
+            self.skillLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+        end
     end
     if self.skillLayout.Padding ~= nil then
         self.skillLayout.Padding = UDim.new(0, 4)

@@ -140,6 +140,16 @@ function QuestUISystem:update()
         if UDim and type(UDim.new) == "function" then
             layout.Padding = UDim.new(0, 5)
         end
+        if Enum and Enum.HorizontalAlignment then
+            if layout.HorizontalAlignment ~= nil then
+                layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+            end
+        end
+        if Enum and Enum.VerticalAlignment then
+            if layout.VerticalAlignment ~= nil then
+                layout.VerticalAlignment = Enum.VerticalAlignment.Center
+            end
+        end
         parent(layout, container)
     end
 

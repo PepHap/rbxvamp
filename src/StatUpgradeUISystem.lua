@@ -100,6 +100,12 @@ function StatUpgradeUISystem:start(statSys, parentGui)
         if Enum and Enum.FillDirection then
             layout.FillDirection = Enum.FillDirection.Vertical
             layout.SortOrder = Enum.SortOrder.LayoutOrder
+            if layout.HorizontalAlignment ~= nil then
+                layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+            end
+            if layout.VerticalAlignment ~= nil then
+                layout.VerticalAlignment = Enum.VerticalAlignment.Center
+            end
         end
         if UDim and type(UDim.new) == "function" then
             layout.Padding = UDim.new(0, 5)
@@ -144,6 +150,12 @@ local function renderStats(container, sys)
         if Enum and Enum.FillDirection then
             layout.FillDirection = Enum.FillDirection.Vertical
             layout.SortOrder = Enum.SortOrder.LayoutOrder
+            if layout.HorizontalAlignment ~= nil then
+                layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+            end
+            if layout.VerticalAlignment ~= nil then
+                layout.VerticalAlignment = Enum.VerticalAlignment.Center
+            end
         end
         if UDim and type(UDim.new) == "function" then
             layout.Padding = UDim.new(0, 5)
@@ -215,6 +227,12 @@ function StatUpgradeUISystem:update()
         if Enum and Enum.FillDirection then
             layout.FillDirection = Enum.FillDirection.Vertical
             layout.SortOrder = Enum.SortOrder.LayoutOrder
+            if layout.HorizontalAlignment ~= nil then
+                layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+            end
+            if layout.VerticalAlignment ~= nil then
+                layout.VerticalAlignment = Enum.VerticalAlignment.Center
+            end
         end
         if UDim and type(UDim.new) == "function" then
             layout.Padding = UDim.new(0, 5)
