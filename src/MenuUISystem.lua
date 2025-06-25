@@ -157,6 +157,7 @@ function MenuUI:start()
         self.window.AnchorPoint = Vector2.new(0, 0)
         self.window.Position = UDim2.new(0, 0, 0, 0)
         self.window.Size = UDim2.new(1, 0, 1, 0)
+        GuiUtil.clampToScreen(self.window)
     end
     parent(self.window, gui)
     if self.useRobloxObjects and not self.respawnConnection then

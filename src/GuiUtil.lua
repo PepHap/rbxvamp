@@ -208,6 +208,47 @@ function GuiUtil.addCrossDecor(frame)
     end
 end
 
+---Ensures a frame remains fully within the viewport boundaries.
+---@param frame table|Instance Frame to clamp
+function GuiUtil.clampToScreen(frame)
+    if not frame then return end
+    if not UDim2 or type(UDim2.new) ~= "function" then
+        -- table fallback
+        local clamp = math.clamp or function(v, lo, hi) return math.max(lo, math.min(hi, v)) end
+        local size = frame.Size or {scaleX = 1, offsetX = 0, scaleY = 1, offsetY = 0}
+        local pos = frame.Position or {scaleX = 0, offsetX = 0, scaleY = 0, offsetY = 0}
+        size.scaleX = clamp(size.scaleX or 1, 0, 1)
+        size.scaleY = clamp(size.scaleY or 1, 0, 1)
+        pos.scaleX = clamp(pos.scaleX or 0, 0, 1 - size.scaleX)
+        pos.scaleY = clamp(pos.scaleY or 0, 0, 1 - size.scaleY)
+        frame.Size = size
+        frame.Position = pos
+        return
+    end
+    local ok = pcall(function()
+        local clamp = math.clamp or function(v, lo, hi) return math.max(lo, math.min(hi, v)) end
+        local s = frame.Size
+        local p = frame.Position
+        local sx = clamp(s.X.Scale, 0, 1)
+        local sy = clamp(s.Y.Scale, 0, 1)
+        frame.Size = UDim2.new(sx, s.X.Offset, sy, s.Y.Offset)
+        local px = clamp(p.X.Scale, 0, 1 - sx)
+        local py = clamp(p.Y.Scale, 0, 1 - sy)
+        frame.Position = UDim2.new(px, p.X.Offset, py, p.Y.Offset)
+    end)
+    if not ok and type(frame) == "table" then
+        local clamp = math.clamp or function(v, lo, hi) return math.max(lo, math.min(hi, v)) end
+        local size = frame.Size or {scaleX = 1, offsetX = 0, scaleY = 1, offsetY = 0}
+        local pos = frame.Position or {scaleX = 0, offsetX = 0, scaleY = 0, offsetY = 0}
+        size.scaleX = clamp(size.scaleX or 1, 0, 1)
+        size.scaleY = clamp(size.scaleY or 1, 0, 1)
+        pos.scaleX = clamp(pos.scaleX or 0, 0, 1 - size.scaleX)
+        pos.scaleY = clamp(pos.scaleY or 0, 0, 1 - size.scaleY)
+        frame.Size = size
+        frame.Position = pos
+    end
+end
+
 ---Creates a basic window Frame. A background image asset id may be specified,
 ---though no images are bundled in the repository so it remains text-only.
 ---When running outside of Roblox, table objects are used instead of instances.
@@ -264,6 +305,7 @@ function GuiUtil.createWindow(name, image)
     end
     -- Ensure windows never exceed the viewport
     GuiUtil.makeFullScreen(frame)
+    GuiUtil.clampToScreen(frame)
     -- Allow windows to fill the screen without hard limits
     GuiUtil.applyResponsive(frame, nil)
     GuiUtil.addCrossDecor(frame)

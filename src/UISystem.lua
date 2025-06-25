@@ -118,6 +118,7 @@ function UISystem:showRewardOptions()
             self.optionsWindow.Size = UDim2.new(1, 0, 1, 0)
             self.optionsWindow.Position = UDim2.new(0, 0, 0, 0)
             self.optionsWindow.AnchorPoint = Vector2.new(0, 0)
+            GuiUtil.clampToScreen(self.optionsWindow)
         end
         parent(self.optionsWindow, gui)
         local closeBtn = createInstance("TextButton")
