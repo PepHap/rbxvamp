@@ -214,19 +214,7 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
         end
     end
 
-    if self.useRobloxObjects then
-        local lighting = game:GetService("Lighting")
-        if lighting and not self.blur then
-            local ok, effect = pcall(function()
-                return Instance.new("BlurEffect")
-            end)
-            if ok and effect then
-                effect.Size = 0
-                effect.Parent = lighting
-                self.blur = effect
-            end
-        end
-    end
+    -- The blur effect is now only created when the window becomes visible.
 
     local btnParent = self.window
 
@@ -287,7 +275,8 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     salvageBtn.Name = "Salvage"
     salvageBtn.Text = "Salvage"
     if UDim2 and type(UDim2.new)=="function" then
-        salvageBtn.Position = UDim2.new(0.8, 0, 1, -70)
+        -- place salvage button below the crystal upgrade button
+        salvageBtn.Position = UDim2.new(0.8, 0, 1, -100)
     end
     parent(salvageBtn, btnParent)
     GuiUtil.connectButton(salvageBtn, function()

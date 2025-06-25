@@ -84,6 +84,10 @@ function PlayerUI:update()
     if not self.healthLabel then
         self.healthLabel = createInstance("TextLabel")
         self.positionLabel = createInstance("TextLabel")
+        if UDim2 and type(UDim2.new)=="function" then
+            self.healthLabel.AnchorPoint = Vector2.new(1, 0)
+            self.positionLabel.AnchorPoint = Vector2.new(1, 0)
+        end
         parent(self.healthLabel, gui)
         parent(self.positionLabel, gui)
     end
