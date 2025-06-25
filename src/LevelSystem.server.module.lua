@@ -3,8 +3,8 @@
 -- monster scaling in the future.
 
 local LevelSystem = {}
-local EventManager = require(script.Parent.Parent:WaitForChild("EventManager"))
-local NetworkSystem = require(script.Parent.Parent:WaitForChild("NetworkSystem"))
+local EventManager = require(script.Parent:WaitForChild("EventManager"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local RunService = game:GetService("RunService")
 
 --- Highest stage the player has cleared so far.
@@ -13,11 +13,11 @@ LevelSystem.highestClearedStage = 0
 -- Enemy system is required so that level progression can trigger new waves
 -- or boss spawns depending on the current level reached.
 local EnemySystem
-local KeySystem = require(script.Parent.Parent:WaitForChild("KeySystem"))
-local LocationSystem = require(script.Parent.Parent:WaitForChild("LocationSystem"))
+local KeySystem = require(script.Parent:WaitForChild("KeySystem"))
+local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
 local TeleportSystem
-local WaveConfig = require(script.Parent.Parent:WaitForChild("WaveConfig"))
-local PlayerLevelSystem = require(script.Parent.Parent:WaitForChild("PlayerLevelSystem"))
+local WaveConfig = require(script.Parent:WaitForChild("WaveConfig"))
+local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
 local PlayerSystem -- loaded on demand to avoid circular dependency
 
 if RunService:IsServer() then
@@ -247,7 +247,7 @@ function LevelSystem:advance()
         if RunService:IsServer() then
             PlayerSystem = require(script.Parent.Parent:WaitForChild("server"):WaitForChild("ServerPlayerSystem"))
         else
-            PlayerSystem = require(script.Parent.Parent:WaitForChild("PlayerSystem"))
+            PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
         end
     end
     local nextLevel = self.currentLevel + 1

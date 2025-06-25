@@ -12,7 +12,7 @@ StatUpgradeSystem.stats = {}
 --  tune overall stat progression difficulty.
 StatUpgradeSystem.costFactor = 1
 
-local CurrencySystem = require(script.Parent.Parent:WaitForChild("CurrencySystem"))
+local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 local RunService = game:GetService("RunService")
 
 ---Adds a new stat with the provided base value.
@@ -75,7 +75,7 @@ function StatUpgradeSystem:upgradeStatWithFallback(name, amount, currency)
     end
     local cost = StatUpgradeSystem:getUpgradeCost(name, n)
     if not CurrencySystem:spend(currency, cost) then
-        local CrystalExchangeSystem = require(script.Parent.Parent:WaitForChild("CrystalExchangeSystem"))
+        local CrystalExchangeSystem = require(script.Parent:WaitForChild("CrystalExchangeSystem"))
         if not CrystalExchangeSystem:buyCurrency(currency, cost) then
             return false
         end

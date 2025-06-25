@@ -7,9 +7,9 @@ if RunService:IsServer() then
 end
 
 local PlayerLevelSystem = {}
-local EventManager = require(script.Parent.Parent:WaitForChild("EventManager"))
+local EventManager = require(script.Parent:WaitForChild("EventManager"))
 -- Use the client wrapper so no server-only methods are exposed
-local NetworkSystem = require(script.Parent.Parent:WaitForChild("NetworkClient"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
 
 PlayerLevelSystem.level = 1
 PlayerLevelSystem.exp = 0

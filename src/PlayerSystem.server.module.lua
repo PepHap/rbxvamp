@@ -1,10 +1,10 @@
 -- PlayerSystem.lua
 -- Tracks player health and handles death events.
 
-local EnvironmentUtil = require(script.Parent.Parent:WaitForChild("EnvironmentUtil"))
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 local PlayerSystem = {}
-local EventManager = require(script.Parent.Parent:WaitForChild("EventManager"))
-local LocationSystem = require(script.Parent.Parent:WaitForChild("LocationSystem"))
+local EventManager = require(script.Parent:WaitForChild("EventManager"))
+local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
 
 -- Forward declarations for functions defined later in this file
 local getSpawnPosition
@@ -26,7 +26,7 @@ PlayerSystem.model = nil
 
 local RunService = game:GetService("RunService")
 local LevelSystem -- lazy loaded to avoid circular dependency
-local NetworkSystem = require(script.Parent.Parent:WaitForChild("NetworkSystem"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local AutoBattleSystem
 local AntiCheatSystem
 if RunService:IsServer() then
@@ -89,7 +89,7 @@ function PlayerSystem:onDeath()
     -- load LevelSystem here to avoid circular require error
     if RunService:IsServer() then
         if not LevelSystem then
-            LevelSystem = require(script.Parent.Parent:WaitForChild("LevelSystem"))
+            LevelSystem = require(script.Parent:WaitForChild("LevelSystem"))
         end
         if LevelSystem and LevelSystem.onPlayerDeath then
             LevelSystem:onPlayerDeath()
