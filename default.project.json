@@ -10,120 +10,91 @@
         "$path": "src",
         "$className": "Folder",
         "CurrencySystem": {
-          "$path": "src/CurrencySystem.lua",
-          "$className": "ModuleScript"
+          "$path": "src/CurrencySystem.lua"
         },
         "CurrencySystem_server": {
-          "$path": "src/CurrencySystem.server.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/CurrencySystem.server.module.lua"
         },
         "CurrencySystem_client": {
-          "$path": "src/CurrencySystem.client.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/CurrencySystem.client.module.lua"
         },
         "GachaSystem": {
-          "$path": "src/GachaSystem.lua",
-          "$className": "ModuleScript"
+          "$path": "src/GachaSystem.lua"
         },
         "GachaSystem_server": {
-          "$path": "src/GachaSystem.server.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/GachaSystem.server.module.lua"
         },
         "AutoBattleSystem": {
-          "$path": "src/AutoBattleSystem.lua",
-          "$className": "ModuleScript"
+          "$path": "src/AutoBattleSystem.lua"
         },
         "AutoBattleSystem_server": {
-          "$path": "src/AutoBattleSystem.server.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/AutoBattleSystem.server.module.lua"
         },
         "AutoBattleSystem_client": {
-          "$path": "src/AutoBattleSystem.client.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/AutoBattleSystem.client.module.lua"
         },
         "InventoryModule": {
-          "$path": "src/InventoryModule.lua",
-          "$className": "ModuleScript"
+          "$path": "src/InventoryModule.lua"
         },
         "InventoryModule_server": {
-          "$path": "src/InventoryModule.server.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/InventoryModule.server.module.lua"
         },
         "InventoryModule_client": {
-          "$path": "src/InventoryModule.client.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/InventoryModule.client.module.lua"
         },
         "LevelSystem": {
-          "$path": "src/LevelSystem.lua",
-          "$className": "ModuleScript"
+          "$path": "src/LevelSystem.lua"
         },
         "LevelSystem_server": {
-          "$path": "src/LevelSystem.server.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/LevelSystem.server.module.lua"
         },
         "LevelSystem_client": {
-          "$path": "src/LevelSystem.client.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/LevelSystem.client.module.lua"
         },
         "PlayerInputSystem": {
-          "$path": "src/PlayerInputSystem.lua",
-          "$className": "ModuleScript"
+          "$path": "src/PlayerInputSystem.lua"
         },
         "PlayerInputSystem_server": {
-          "$path": "src/PlayerInputSystem.server.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/PlayerInputSystem.server.module.lua"
         },
         "PlayerInputSystem_client": {
-          "$path": "src/PlayerInputSystem.client.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/PlayerInputSystem.client.module.lua"
         },
         "PlayerLevelSystem": {
-          "$path": "src/PlayerLevelSystem.lua",
-          "$className": "ModuleScript"
+          "$path": "src/PlayerLevelSystem.lua"
         },
         "PlayerLevelSystem_server": {
-          "$path": "src/PlayerLevelSystem.server.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/PlayerLevelSystem.server.module.lua"
         },
         "PlayerLevelSystem_client": {
-          "$path": "src/PlayerLevelSystem.client.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/PlayerLevelSystem.client.module.lua"
         },
         "PlayerSystem": {
-          "$path": "src/PlayerSystem.lua",
-          "$className": "ModuleScript"
+          "$path": "src/PlayerSystem.lua"
         },
         "PlayerSystem_server": {
-          "$path": "src/PlayerSystem.server.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/PlayerSystem.server.module.lua"
         },
         "PlayerSystem_client": {
-          "$path": "src/PlayerSystem.client.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/PlayerSystem.client.module.lua"
         },
         "RewardGaugeSystem": {
-          "$path": "src/RewardGaugeSystem.lua",
-          "$className": "ModuleScript"
+          "$path": "src/RewardGaugeSystem.lua"
         },
         "RewardGaugeSystem_server": {
-          "$path": "src/RewardGaugeSystem.server.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/RewardGaugeSystem.server.module.lua"
         },
         "RewardGaugeSystem_client": {
-          "$path": "src/RewardGaugeSystem.client.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/RewardGaugeSystem.client.module.lua"
         },
         "StatUpgradeSystem": {
-          "$path": "src/StatUpgradeSystem.lua",
-          "$className": "ModuleScript"
+          "$path": "src/StatUpgradeSystem.lua"
         },
         "StatUpgradeSystem_server": {
-          "$path": "src/StatUpgradeSystem.server.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/StatUpgradeSystem.server.module.lua"
         },
         "StatUpgradeSystem_client": {
-          "$path": "src/StatUpgradeSystem.client.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/StatUpgradeSystem.client.module.lua"
         }
       },
       "server": {
@@ -144,120 +115,91 @@
         "$path": "src",
         "$className": "Folder",
         "CurrencySystem": {
-          "$path": "src/CurrencySystem.lua",
-          "$className": "ModuleScript"
+          "$path": "src/CurrencySystem.lua"
         },
         "CurrencySystem_server": {
-          "$path": "src/CurrencySystem.server.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/CurrencySystem.server.module.lua"
         },
         "CurrencySystem_client": {
-          "$path": "src/CurrencySystem.client.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/CurrencySystem.client.module.lua"
         },
         "GachaSystem": {
-          "$path": "src/GachaSystem.lua",
-          "$className": "ModuleScript"
+          "$path": "src/GachaSystem.lua"
         },
         "GachaSystem_server": {
-          "$path": "src/GachaSystem.server.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/GachaSystem.server.module.lua"
         },
         "AutoBattleSystem": {
-          "$path": "src/AutoBattleSystem.lua",
-          "$className": "ModuleScript"
+          "$path": "src/AutoBattleSystem.lua"
         },
         "AutoBattleSystem_server": {
-          "$path": "src/AutoBattleSystem.server.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/AutoBattleSystem.server.module.lua"
         },
         "AutoBattleSystem_client": {
-          "$path": "src/AutoBattleSystem.client.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/AutoBattleSystem.client.module.lua"
         },
         "InventoryModule": {
-          "$path": "src/InventoryModule.lua",
-          "$className": "ModuleScript"
+          "$path": "src/InventoryModule.lua"
         },
         "InventoryModule_server": {
-          "$path": "src/InventoryModule.server.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/InventoryModule.server.module.lua"
         },
         "InventoryModule_client": {
-          "$path": "src/InventoryModule.client.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/InventoryModule.client.module.lua"
         },
         "LevelSystem": {
-          "$path": "src/LevelSystem.lua",
-          "$className": "ModuleScript"
+          "$path": "src/LevelSystem.lua"
         },
         "LevelSystem_server": {
-          "$path": "src/LevelSystem.server.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/LevelSystem.server.module.lua"
         },
         "LevelSystem_client": {
-          "$path": "src/LevelSystem.client.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/LevelSystem.client.module.lua"
         },
         "PlayerInputSystem": {
-          "$path": "src/PlayerInputSystem.lua",
-          "$className": "ModuleScript"
+          "$path": "src/PlayerInputSystem.lua"
         },
         "PlayerInputSystem_server": {
-          "$path": "src/PlayerInputSystem.server.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/PlayerInputSystem.server.module.lua"
         },
         "PlayerInputSystem_client": {
-          "$path": "src/PlayerInputSystem.client.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/PlayerInputSystem.client.module.lua"
         },
         "PlayerLevelSystem": {
-          "$path": "src/PlayerLevelSystem.lua",
-          "$className": "ModuleScript"
+          "$path": "src/PlayerLevelSystem.lua"
         },
         "PlayerLevelSystem_server": {
-          "$path": "src/PlayerLevelSystem.server.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/PlayerLevelSystem.server.module.lua"
         },
         "PlayerLevelSystem_client": {
-          "$path": "src/PlayerLevelSystem.client.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/PlayerLevelSystem.client.module.lua"
         },
         "PlayerSystem": {
-          "$path": "src/PlayerSystem.lua",
-          "$className": "ModuleScript"
+          "$path": "src/PlayerSystem.lua"
         },
         "PlayerSystem_server": {
-          "$path": "src/PlayerSystem.server.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/PlayerSystem.server.module.lua"
         },
         "PlayerSystem_client": {
-          "$path": "src/PlayerSystem.client.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/PlayerSystem.client.module.lua"
         },
         "RewardGaugeSystem": {
-          "$path": "src/RewardGaugeSystem.lua",
-          "$className": "ModuleScript"
+          "$path": "src/RewardGaugeSystem.lua"
         },
         "RewardGaugeSystem_server": {
-          "$path": "src/RewardGaugeSystem.server.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/RewardGaugeSystem.server.module.lua"
         },
         "RewardGaugeSystem_client": {
-          "$path": "src/RewardGaugeSystem.client.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/RewardGaugeSystem.client.module.lua"
         },
         "StatUpgradeSystem": {
-          "$path": "src/StatUpgradeSystem.lua",
-          "$className": "ModuleScript"
+          "$path": "src/StatUpgradeSystem.lua"
         },
         "StatUpgradeSystem_server": {
-          "$path": "src/StatUpgradeSystem.server.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/StatUpgradeSystem.server.module.lua"
         },
         "StatUpgradeSystem_client": {
-          "$path": "src/StatUpgradeSystem.client.module.lua",
-          "$className": "ModuleScript"
+          "$path": "src/StatUpgradeSystem.client.module.lua"
         }
       }
     },
