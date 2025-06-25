@@ -94,8 +94,11 @@ function DungeonUI:start(dungeonSys)
     end
 
     self.window = GuiUtil.createWindow("DungeonWindow")
+    if UDim2 and type(UDim2.new)=="function" then
+        self.window.AnchorPoint = Vector2.new(0.5, 0.5)
+        self.window.Position = UDim2.new(0.5, 0, 0.5, 0)
+    end
     parent(self.window, gui)
-    GuiUtil.makeFullScreen(self.window)
     self.listFrame = createInstance("Frame")
     if UDim2 and type(UDim2.new)=="function" then
         self.listFrame.Position = UDim2.new(0, 0, 0, 0)

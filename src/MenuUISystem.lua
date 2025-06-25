@@ -136,8 +136,11 @@ function MenuUI:start()
     self:addDefaultTabs()
     local gui = ensureGui()
     self.window = GuiUtil.createWindow("MenuWindow")
+    if UDim2 and type(UDim2.new)=="function" then
+        self.window.AnchorPoint = Vector2.new(0.5, 0.5)
+        self.window.Position = UDim2.new(0.5, 0, 0.5, 0)
+    end
     parent(self.window, gui)
-    GuiUtil.makeFullScreen(self.window)
 
 
     self.tabFrame = createInstance("Frame")

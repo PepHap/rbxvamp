@@ -91,8 +91,11 @@ function LobbyUI:start(ls)
         return
     end
     self.window = GuiUtil.createWindow("LobbyWindow")
+    if UDim2 and type(UDim2.new)=="function" then
+        self.window.AnchorPoint = Vector2.new(0.5, 0.5)
+        self.window.Position = UDim2.new(0.5, 0, 0.5, 0)
+    end
     parent(self.window, gui)
-    GuiUtil.makeFullScreen(self.window)
     local btn = createInstance("TextButton")
     btn.Text = "Exit Lobby"
     if UDim2 and type(UDim2.new)=="function" then

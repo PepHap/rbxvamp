@@ -185,12 +185,12 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     end
     if self.window.Parent ~= parentTarget then
         parent(self.window, parentTarget)
-        GuiUtil.makeFullScreen(self.window)
     end
     self.gui = parentTarget
     if UDim2 and type(UDim2.new)=="function" then
         self.window.Size = UDim2.new(1, 0, 1, 0)
-        self.window.Position = UDim2.new(0, 0, 0, 0)
+        self.window.AnchorPoint = Vector2.new(0.5, 0.5)
+        self.window.Position = UDim2.new(0.5, 0, 0.5, 0)
     end
     -- slightly visible background for readability
     if self.window.BackgroundTransparency ~= nil then
