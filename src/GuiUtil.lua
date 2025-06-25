@@ -300,6 +300,13 @@ function GuiUtil.createWindow(name, image)
         end
         parent(bg, frame)
     end
+    if frame.ClipsDescendants ~= nil then
+        -- prevent children from overflowing which can push UI off-screen
+        -- https://create.roblox.com/docs/reference/engine/classes/GuiBase2d#ClipsDescendants
+        frame.ClipsDescendants = true
+    elseif type(frame) == "table" then
+        frame.ClipsDescendants = true
+    end
     if Theme and Theme.styleWindow then
         Theme.styleWindow(frame)
     end
@@ -319,9 +326,15 @@ function GuiUtil.makeFullScreen(frame)
     if typeof and typeof(frame) == "Instance" and frame:IsA("ScreenGui") then
         if frame.IgnoreGuiInset ~= nil then frame.IgnoreGuiInset = true end
         if frame.ResetOnSpawn ~= nil then frame.ResetOnSpawn = false end
+        if frame.ZIndexBehavior ~= nil and Enum and Enum.ZIndexBehavior then
+            -- use Sibling so overlapping ScreenGuis do not clip each other
+            -- https://create.roblox.com/docs/reference/engine/classes/ScreenGui#ZIndexBehavior
+            frame.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        end
     elseif type(frame) == "table" and frame.ClassName == "ScreenGui" then
         frame.IgnoreGuiInset = true
         frame.ResetOnSpawn = false
+        frame.ZIndexBehavior = "Sibling"
     end
     if UDim2 and type(UDim2.new)=="function" then
         local size = UDim2.new(1,0,1,0)
