@@ -1,12 +1,16 @@
+local ModuleUtil = require(script.Parent:WaitForChild("ModuleUtil"))
 local RunService = game:GetService("RunService")
 
--- Provide a minimal interface on the client to avoid missing module errors.
--- The real implementation lives in server/systems/AutoBattleSystem.lua
--- and is loaded only on the server.
-
+local mod
 if RunService:IsServer() then
-    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
-    return require(serverFolder:WaitForChild("AutoBattleSystem"))
+    mod = ModuleUtil.requireChild(script, "server", 10)
 else
-    return { enabled = false }
+    mod = ModuleUtil.requireChild(script, "client", 10)
 end
+
+if not mod then
+    warn("AutoBattleSystem child module missing; using fallback implementation")
+    mod = { enabled = false }
+end
+
+return mod
