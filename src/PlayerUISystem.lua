@@ -125,6 +125,7 @@ function PlayerUI:setVisible(on)
     self.visible = newVis
     local gui = ensureGui()
     GuiUtil.setVisible(gui, self.visible)
+    GuiUtil.clampToScreen(gui)
 end
 
 function PlayerUI:toggle()

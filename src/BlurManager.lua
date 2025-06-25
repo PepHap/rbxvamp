@@ -31,7 +31,7 @@ local function createEffect()
 end
 
 function BlurManager:add()
-    self.refCount = self.refCount + 1
+    self.refCount = (self.refCount or 0) + 1
     createEffect()
     if self.effect then
         local ok = pcall(function()
@@ -44,7 +44,7 @@ function BlurManager:add()
 end
 
 function BlurManager:remove()
-    if self.refCount <= 0 then return end
+    if (self.refCount or 0) <= 0 then return end
     self.refCount = self.refCount - 1
     if self.refCount == 0 and self.effect then
         local ok = pcall(function()

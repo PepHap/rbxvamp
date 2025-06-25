@@ -31,6 +31,7 @@ local DungeonUISystem = require(script.Parent:WaitForChild("DungeonUISystem"))
 local CrystalExchangeUISystem = require(script.Parent:WaitForChild("CrystalExchangeUISystem"))
 local ProgressMapUISystem = require(script.Parent:WaitForChild("ProgressMapUISystem"))
 local LevelUISystem = require(script.Parent:WaitForChild("LevelUISystem"))
+local BlurManager = require(script.Parent:WaitForChild("BlurManager"))
 
 local ok, Theme = pcall(function()
     return require(script.Parent:WaitForChild("UITheme"))
@@ -276,6 +277,15 @@ function MenuUI:setVisible(on)
     local gui = ensureGui()
     local parentGui = self.window or gui
     GuiUtil.setVisible(parentGui, self.visible)
+    GuiUtil.clampToScreen(parentGui)
+    if self.visible then
+        BlurManager:add()
+    else
+        BlurManager:remove()
+        if not BlurManager:isActive() then
+            BlurManager:reset()
+        end
+    end
 
     if not self.visible then
         for _, tab in ipairs(self.tabs) do
