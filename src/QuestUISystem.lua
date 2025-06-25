@@ -135,7 +135,17 @@ function QuestUISystem:update()
         container:ClearAllChildren()
     end
 
-    local layout = container:FindFirstChild("QuestLayout")
+    local layout
+    if container.FindFirstChild then
+        layout = container:FindFirstChild("QuestLayout")
+    elseif type(container) == "table" and container.children then
+        for _, child in ipairs(container.children) do
+            if child.Name == "QuestLayout" then
+                layout = child
+                break
+            end
+        end
+    end
     if not layout then
         layout = createInstance("UIListLayout")
         layout.Name = "QuestLayout"
