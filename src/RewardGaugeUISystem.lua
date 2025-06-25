@@ -126,6 +126,12 @@ function RewardGaugeUISystem:start()
         if Enum and Enum.FillDirection then
             self.layout.FillDirection = Enum.FillDirection.Vertical
             self.layout.SortOrder = Enum.SortOrder.LayoutOrder
+            if self.layout.HorizontalAlignment ~= nil then
+                self.layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+            end
+            if self.layout.VerticalAlignment ~= nil then
+                self.layout.VerticalAlignment = Enum.VerticalAlignment.Center
+            end
         end
         parent(self.layout, self.window)
     end
@@ -184,6 +190,12 @@ function RewardGaugeUISystem:showOptions()
         if Enum and Enum.FillDirection then
             self.layout.FillDirection = Enum.FillDirection.Vertical
             self.layout.SortOrder = Enum.SortOrder.LayoutOrder
+            if self.layout.HorizontalAlignment ~= nil then
+                self.layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+            end
+            if self.layout.VerticalAlignment ~= nil then
+                self.layout.VerticalAlignment = Enum.VerticalAlignment.Center
+            end
         end
         parent(self.layout, parentGui)
     end

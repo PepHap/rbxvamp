@@ -407,6 +407,12 @@ local function renderStats(container, items, stats, setSys)
         if Enum and Enum.FillDirection and Enum.SortOrder then
             layout.FillDirection = Enum.FillDirection.Vertical
             layout.SortOrder = Enum.SortOrder.LayoutOrder
+            if layout.HorizontalAlignment ~= nil then
+                layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+            end
+            if layout.VerticalAlignment ~= nil then
+                layout.VerticalAlignment = Enum.VerticalAlignment.Center
+            end
         end
         if layout.Padding ~= nil then
             layout.Padding = UDim.new(0, 2)
