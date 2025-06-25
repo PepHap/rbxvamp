@@ -643,6 +643,9 @@ function InventoryUI:setVisible(on)
         BlurManager:add()
     else
         BlurManager:remove()
+        if BlurManager:isActive() == false then
+            BlurManager:reset()
+        end
     end
 end
 

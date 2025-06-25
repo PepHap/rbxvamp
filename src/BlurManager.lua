@@ -61,6 +61,11 @@ function BlurManager:remove()
     end
 end
 
+---Returns true when a blur effect is currently active.
+function BlurManager:isActive()
+    return self.refCount > 0
+end
+
 ---Forcibly clears the blur effect and resets the reference count.
 function BlurManager:reset()
     self.refCount = 0
