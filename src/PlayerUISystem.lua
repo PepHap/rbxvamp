@@ -116,7 +116,14 @@ function PlayerUI:start()
 end
 
 function PlayerUI:setVisible(on)
-    self.visible = not not on
+    local newVis = not not on
+    if newVis == self.visible then
+        local gui = ensureGui()
+        GuiUtil.setVisible(gui, self.visible)
+        return
+    end
+
+    self.visible = newVis
     local gui = ensureGui()
     GuiUtil.setVisible(gui, self.visible)
 end

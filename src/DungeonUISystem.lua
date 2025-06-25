@@ -219,7 +219,15 @@ function DungeonUI:startDungeon(kind)
 end
 
 function DungeonUI:setVisible(on)
-    self.visible = not not on
+    local newVis = not not on
+    if newVis == self.visible then
+        local gui = ensureGui()
+        local parentGui = self.window or gui
+        GuiUtil.setVisible(parentGui, self.visible)
+        return
+    end
+
+    self.visible = newVis
     local gui = ensureGui()
     local parentGui = self.window or gui
     GuiUtil.setVisible(parentGui, self.visible)
