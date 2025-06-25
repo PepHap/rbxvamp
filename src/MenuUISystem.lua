@@ -1,6 +1,4 @@
-local function detectRoblox()
-    return typeof ~= nil and Instance ~= nil and type(Instance.new) == "function"
-end
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 
 local RunService = game:GetService("RunService")
 if RunService:IsServer() then
@@ -8,7 +6,7 @@ if RunService:IsServer() then
 end
 
 local MenuUI = {
-    useRobloxObjects = detectRoblox(),
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
     gui = nil,
     window = nil,
     tabFrame = nil,

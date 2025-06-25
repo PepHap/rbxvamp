@@ -1,12 +1,10 @@
 -- AdminConsoleSystem.lua
 -- Simple console interface for admins to issue commands during gameplay
 
-local function detectRoblox()
-    return typeof ~= nil and Instance ~= nil and type(Instance.new) == "function"
-end
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 
 local AdminConsole = {
-    useRobloxObjects = detectRoblox(),
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
     gui = nil,
     visible = false,
     commandBox = nil,

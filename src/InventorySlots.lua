@@ -1,12 +1,10 @@
 -- InventorySlots.lua
 -- Creates equipment slot buttons and stores references for easy access
 
-local function detectRoblox()
-    return typeof ~= nil and Instance ~= nil and type(Instance.new) == "function"
-end
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 
 local InventorySlots = {
-    useRobloxObjects = detectRoblox(),
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
     slots = {},
     container = nil,
 }

@@ -5,12 +5,10 @@ if RunService:IsServer() then
     error("CompanionUISystem should only be required on the client", 2)
 end
 
-local function detectRoblox()
-    return typeof ~= nil and Instance ~= nil and type(Instance.new) == "function"
-end
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 
 local CompanionUISystem = {
-    useRobloxObjects = detectRoblox(),
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
     gui = nil,
     visible = false,
     companionSystem = nil,

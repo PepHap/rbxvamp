@@ -5,14 +5,11 @@ if RunService:IsServer() then
     error("InventoryUISystem should only be required on the client", 2)
 end
 
-local function detectRoblox()
-    -- typeof and Instance only exist within Roblox
-    return typeof ~= nil and Instance ~= nil and type(Instance.new) == "function"
-end
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
 
 local InventoryUI = {
     ---When true and running within Roblox, real Instance objects are used.
-    useRobloxObjects = detectRoblox(),
+    useRobloxObjects = EnvironmentUtil.detectRoblox(),
     ---Reference to the created ScreenGui container
     gui = nil,
     ---Whether the inventory is currently visible
