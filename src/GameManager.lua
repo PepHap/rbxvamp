@@ -404,9 +404,9 @@ if IS_SERVER then
     GameManager:addSystem("AntiCheat", AntiCheatSystem)
 end
 
-local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
-local LootSystem = require(serverFolder:WaitForChild("LootSystem"))
 if IS_SERVER then
+    local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
+    local LootSystem = require(serverFolder:WaitForChild("LootSystem"))
     GameManager.lootSystem = LootSystem
     GameManager:addSystem("Loot", LootSystem)
 end
