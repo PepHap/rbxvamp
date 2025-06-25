@@ -121,6 +121,10 @@ function RewardGaugeUISystem:start()
         parent(self.window, gui)
         
         self.gaugeLabel = createInstance("TextLabel")
+        if UDim2 and type(UDim2.new)=="function" then
+            self.gaugeLabel.Position = UDim2.new(0, 5, 0, 5)
+            self.gaugeLabel.Size = UDim2.new(1, -10, 0, 20)
+        end
         parent(self.gaugeLabel, self.window)
 
         self.layout = createInstance("UIListLayout")
