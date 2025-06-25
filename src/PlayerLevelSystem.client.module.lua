@@ -1,4 +1,4 @@
--- PlayerLevelSystem.client.lua
+-- PlayerLevelSystem.client.module.lua
 -- Client-side interface for tracking player levels without server-only logic.
 
 local RunService = game:GetService("RunService")

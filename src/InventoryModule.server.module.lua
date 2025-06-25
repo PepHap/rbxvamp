@@ -1,11 +1,12 @@
--- InventoryModule.client.lua
--- Client-side inventory wrapper without server-only features.
+-- InventoryModule.server.module.lua
+-- Server-side inventory wrapper exposing full functionality.
 
 local InventoryModule = {}
 InventoryModule.__index = InventoryModule
 
 local ItemSystem = require(script.Parent.Parent:WaitForChild("ItemSystem"))
 local StatUpgradeSystem = require(script.Parent.Parent:WaitForChild("StatUpgradeSystem"))
+local ItemSalvageSystem = require(script.Parent.Parent:WaitForChild("ItemSalvageSystem"))
 
 function InventoryModule.new(statSystem, setSystem)
     local self = setmetatable({}, InventoryModule)
@@ -51,7 +52,13 @@ function InventoryModule:UpgradeItemWithCrystals(slot, amount, currencyType)
     return self.itemSystem:upgradeItemWithFallback(slot, amount, currencyType)
 end
 
--- Salvage functions are intentionally omitted on the client
+function InventoryModule:SalvageInventoryItem(index)
+    return ItemSalvageSystem:salvageFromInventory(self.itemSystem, index)
+end
+
+function InventoryModule:SalvageEquippedItem(slot)
+    return ItemSalvageSystem:salvageFromSlot(self.itemSystem, slot)
+end
 
 function InventoryModule:TransferItem(index, target)
     if not target or not target.itemSystem then
