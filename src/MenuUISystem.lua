@@ -140,10 +140,8 @@ function MenuUI:start()
             if ok and player and player.CharacterAdded then
                 self.respawnConnection = player.CharacterAdded:Connect(function()
                     self:setVisible(false)
-                    local inv = require(script.Parent:WaitForChild("InventoryUISystem"))
-                    inv:setVisible(false)
-                    local blur = require(script.Parent:WaitForChild("BlurManager"))
-                    blur:reset()
+                    InventoryUISystem:setVisible(false)
+                    BlurManager:reset()
                 end)
             end
         end
@@ -168,10 +166,8 @@ function MenuUI:start()
         if ok and player and player.CharacterAdded then
             self.respawnConnection = player.CharacterAdded:Connect(function()
                 self:setVisible(false)
-                local inv = require(script.Parent:WaitForChild("InventoryUISystem"))
-                inv:setVisible(false)
-                local blur = require(script.Parent:WaitForChild("BlurManager"))
-                blur:reset()
+                InventoryUISystem:setVisible(false)
+                BlurManager:reset()
             end)
         end
     end
@@ -277,6 +273,7 @@ function MenuUI:setVisible(on)
     local gui = ensureGui()
     local parentGui = self.window or gui
     GuiUtil.setVisible(parentGui, self.visible)
+    GuiUtil.makeFullScreen(parentGui)
     GuiUtil.clampToScreen(parentGui)
     if self.visible then
         BlurManager:add()
