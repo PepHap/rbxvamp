@@ -76,7 +76,6 @@ local function ensureGui()
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "UISystemGui"
-    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
     GuiUtil.makeFullScreen(gui)
     if gui.Enabled ~= nil then
         gui.Enabled = true

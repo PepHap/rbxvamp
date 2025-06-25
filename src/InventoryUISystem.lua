@@ -134,7 +134,6 @@ local function ensureGui(parent)
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "InventoryUI"
-    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
     GuiUtil.makeFullScreen(gui)
     if gui.Enabled ~= nil then
         gui.Enabled = true
