@@ -6,8 +6,8 @@ if RunService:IsServer() then
     error("PlayerSystem client module should only be required on the client", 2)
 end
 
-local EnvironmentUtil = require(script.Parent.Parent:WaitForChild("EnvironmentUtil"))
-local NetworkSystem = require(script.Parent.Parent:WaitForChild("NetworkClient"))
+local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
 
 local PlayerSystem = {
     spawnModels = true,
