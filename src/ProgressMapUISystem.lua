@@ -64,7 +64,6 @@ local function createInstance(className)
 end
 
 local function parent(child, parentObj)
-    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
     GuiUtil.parent(child, parentObj)
 end
 
@@ -85,7 +84,6 @@ local function ensureGui()
     end
     local gui = createInstance("ScreenGui")
     gui.Name = "ProgressMapUI"
-    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
     GuiUtil.makeFullScreen(gui)
     if gui.Enabled ~= nil then
         gui.Enabled = true

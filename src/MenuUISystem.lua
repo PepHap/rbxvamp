@@ -58,7 +58,6 @@ local function createInstance(className)
 end
 
 local function parent(child, parentObj)
-    local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
     GuiUtil.parent(child, parentObj)
 end
 
