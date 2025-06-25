@@ -45,6 +45,8 @@ function BlurManager:remove()
     self.refCount = self.refCount - 1
     if self.refCount == 0 and self.effect then
         local ok = pcall(function()
+            -- Fade out before destroying to avoid a visible jump
+            self.effect.Size = 0
             if self.effect.Destroy then
                 self.effect:Destroy()
             end

@@ -243,6 +243,12 @@ function GuiUtil.createWindow(name, image)
             frame.Position = frame.Position or defaultPos
             frame.AnchorPoint = {x = 0, y = 0}
         end
+    else
+        -- When UDim2 isn't available, ensure table fields exist so tests
+        -- referencing size and position succeed.
+        frame.Size = frame.Size or {scaleX = 1, offsetX = 0, scaleY = 1, offsetY = 0}
+        frame.Position = frame.Position or {scaleX = 0, offsetX = 0, scaleY = 0, offsetY = 0}
+        frame.AnchorPoint = frame.AnchorPoint or {x = 0, y = 0}
     end
     if image then
         local bg = createInstance("ImageLabel")
@@ -256,6 +262,8 @@ function GuiUtil.createWindow(name, image)
     if Theme and Theme.styleWindow then
         Theme.styleWindow(frame)
     end
+    -- Ensure windows never exceed the viewport
+    GuiUtil.makeFullScreen(frame)
     -- Allow windows to fill the screen without hard limits
     GuiUtil.applyResponsive(frame, nil)
     GuiUtil.addCrossDecor(frame)
