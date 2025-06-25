@@ -96,9 +96,11 @@ function GachaUI:start(manager, parentGui)
         -- use a plain window frame; banner images were removed
         self.window = GuiUtil.createWindow("GachaWindow")
         if UDim2 and type(UDim2.new)=="function" then
-            self.window.Size = UDim2.new(0.4, 0, 0.4, 0)
-            self.window.AnchorPoint = Vector2.new(0.5, 0.5)
-            self.window.Position = UDim2.new(0.5, 0, 0.5, 0)
+            -- Show the gacha interface across the entire screen for a cleaner
+            -- layout on various resolutions.
+            self.window.Size = UDim2.new(1, 0, 1, 0)
+            self.window.AnchorPoint = Vector2.new(0, 0)
+            self.window.Position = UDim2.new(0, 0, 0, 0)
         end
         created = true
     end

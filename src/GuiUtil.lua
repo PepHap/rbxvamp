@@ -227,17 +227,21 @@ function GuiUtil.createWindow(name, image)
         frame.BackgroundColor3 = toColor3(col)
     end
     if UDim2 and type(UDim2.new)=="function" then
-        local defaultSize = UDim2.new(0, 300, 0, 200)
-        local defaultPos = UDim2.new(0.5, -150, 0.5, -100)
+        -- Default windows now stretch across the entire screen. This prevents
+        -- nested UI elements from exceeding the viewport when multiple systems
+        -- create their own windows.
+        -- https://create.roblox.com/docs/reference/engine/classes/UDim2
+        local defaultSize = UDim2.new(1, 0, 1, 0)
+        local defaultPos = UDim2.new(0, 0, 0, 0)
         local ok = pcall(function()
             if not frame.Size then frame.Size = defaultSize end
             if not frame.Position then frame.Position = defaultPos end
-            frame.AnchorPoint = Vector2.new(0.5, 0.5)
+            frame.AnchorPoint = Vector2.new(0, 0)
         end)
         if not ok and type(frame) == "table" then
             frame.Size = frame.Size or defaultSize
             frame.Position = frame.Position or defaultPos
-            frame.AnchorPoint = Vector2.new(0.5, 0.5)
+            frame.AnchorPoint = {x = 0, y = 0}
         end
     end
     if image then

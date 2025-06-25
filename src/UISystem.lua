@@ -116,8 +116,9 @@ function UISystem:showRewardOptions()
     if not self.optionsWindow then
         self.optionsWindow = GuiUtil.createWindow("RewardOptions")
         if UDim2 and type(UDim2.new)=="function" then
-            self.optionsWindow.Size = UDim2.new(0, 200, 0, 150)
-            self.optionsWindow.Position = UDim2.new(0.5, -100, 0.5, -75)
+            self.optionsWindow.Size = UDim2.new(1, 0, 1, 0)
+            self.optionsWindow.Position = UDim2.new(0, 0, 0, 0)
+            self.optionsWindow.AnchorPoint = Vector2.new(0, 0)
         end
         parent(self.optionsWindow, gui)
         local closeBtn = createInstance("TextButton")
