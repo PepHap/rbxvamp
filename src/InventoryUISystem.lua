@@ -621,13 +621,24 @@ end
 ---Sets whether the inventory UI is visible.
 -- @param on boolean
 function InventoryUI:setVisible(on)
-    self.visible = not not on
+    local newVis = not not on
+    if newVis == self.visible then
+        -- avoid altering blur when no change occurred
+        local gui = ensureGui()
+        local parentGui = self.window or gui
+        GuiUtil.setVisible(parentGui, self.visible)
+        return
+    end
+
+    self.visible = newVis
     if not self.visible then
         clearSelection()
     end
+
     local gui = ensureGui()
     local parentGui = self.window or gui
     GuiUtil.setVisible(parentGui, self.visible)
+
     if self.visible then
         BlurManager:add()
     else
