@@ -346,6 +346,9 @@ function GuiUtil.makeFullScreen(frame)
         frame.Position = {scaleX=0,offsetX=0,scaleY=0,offsetY=0}
         frame.AnchorPoint = {x=0,y=0}
     end
+
+    -- Clamp after stretching to ensure the window never exceeds the viewport
+    GuiUtil.clampToScreen(frame)
 end
 
 ---Sets visibility on a GUI element using either ``Enabled`` or ``Visible``.
