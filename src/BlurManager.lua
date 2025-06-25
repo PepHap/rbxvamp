@@ -61,4 +61,21 @@ function BlurManager:remove()
     end
 end
 
+---Forcibly clears the blur effect and resets the reference count.
+function BlurManager:reset()
+    self.refCount = 0
+    if self.effect then
+        local ok = pcall(function()
+            self.effect.Size = 0
+            if self.effect.Destroy then
+                self.effect:Destroy()
+            end
+        end)
+        if not ok and type(self.effect) == "table" then
+            self.effect = nil
+        end
+        self.effect = nil
+    end
+end
+
 return BlurManager

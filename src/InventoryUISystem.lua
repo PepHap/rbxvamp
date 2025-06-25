@@ -195,6 +195,7 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
         if ok and player and player.CharacterAdded then
             self.respawnConnection = player.CharacterAdded:Connect(function()
                 self:setVisible(false)
+                BlurManager:reset()
             end)
         end
     end
