@@ -639,13 +639,35 @@ function InventoryUI:setVisible(on)
     local gui = ensureGui()
     local parentGui = self.window or gui
     GuiUtil.setVisible(parentGui, self.visible)
-    if self.blur then
-        local size = self.visible and 10 or 0
+    if self.visible then
+        if self.useRobloxObjects and not self.blur then
+            local lighting = game:GetService("Lighting")
+            if lighting then
+                local ok, effect = pcall(function()
+                    return Instance.new("BlurEffect")
+                end)
+                if ok and effect then
+                    effect.Size = 10
+                    effect.Parent = lighting
+                    self.blur = effect
+                end
+            end
+        elseif self.blur then
+            local ok = pcall(function()
+                self.blur.Size = 10
+            end)
+            if not ok and type(self.blur) == "table" then
+                self.blur.Size = 10
+            end
+        end
+    elseif self.blur then
         local ok = pcall(function()
-            self.blur.Size = size
+            self.blur:Destroy()
         end)
         if not ok and type(self.blur) == "table" then
-            self.blur.Size = size
+            self.blur = nil
+        else
+            self.blur = nil
         end
     end
 end
