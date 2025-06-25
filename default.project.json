@@ -11,6 +11,7 @@
         "$className": "Folder",
         "CurrencySystem": {
           "$path": "src/CurrencySystem.lua",
+          "$className": "ModuleScript",
           "server": {
             "$path": "src/CurrencySystem.server.module.lua",
             "$className": "ModuleScript"
@@ -22,6 +23,7 @@
         },
         "GachaSystem": {
           "$path": "src/GachaSystem.lua",
+          "$className": "ModuleScript",
           "server": {
             "$path": "src/GachaSystem.server.module.lua",
             "$className": "ModuleScript"
@@ -29,6 +31,7 @@
         },
         "AutoBattleSystem": {
           "$path": "src/AutoBattleSystem.lua",
+          "$className": "ModuleScript",
           "server": {
             "$path": "src/AutoBattleSystem.server.module.lua",
             "$className": "ModuleScript"
@@ -40,6 +43,7 @@
         },
         "InventoryModule": {
           "$path": "src/InventoryModule.lua",
+          "$className": "ModuleScript",
           "server": {
             "$path": "src/InventoryModule.server.module.lua",
             "$className": "ModuleScript"
@@ -51,6 +55,7 @@
         },
         "LevelSystem": {
           "$path": "src/LevelSystem.lua",
+          "$className": "ModuleScript",
           "server": {
             "$path": "src/LevelSystem.server.module.lua",
             "$className": "ModuleScript"
@@ -62,6 +67,7 @@
         },
         "PlayerInputSystem": {
           "$path": "src/PlayerInputSystem.lua",
+          "$className": "ModuleScript",
           "server": {
             "$path": "src/PlayerInputSystem.server.module.lua",
             "$className": "ModuleScript"
@@ -73,6 +79,7 @@
         },
         "PlayerLevelSystem": {
           "$path": "src/PlayerLevelSystem.lua",
+          "$className": "ModuleScript",
           "server": {
             "$path": "src/PlayerLevelSystem.server.module.lua",
             "$className": "ModuleScript"
@@ -84,6 +91,7 @@
         },
         "PlayerSystem": {
           "$path": "src/PlayerSystem.lua",
+          "$className": "ModuleScript",
           "server": {
             "$path": "src/PlayerSystem.server.module.lua",
             "$className": "ModuleScript"
@@ -95,6 +103,7 @@
         },
         "RewardGaugeSystem": {
           "$path": "src/RewardGaugeSystem.lua",
+          "$className": "ModuleScript",
           "server": {
             "$path": "src/RewardGaugeSystem.server.module.lua",
             "$className": "ModuleScript"
@@ -106,6 +115,7 @@
         },
         "StatUpgradeSystem": {
           "$path": "src/StatUpgradeSystem.lua",
+          "$className": "ModuleScript",
           "server": {
             "$path": "src/StatUpgradeSystem.server.module.lua",
             "$className": "ModuleScript"
@@ -135,6 +145,7 @@
         "$className": "Folder",
         "CurrencySystem": {
           "$path": "src/CurrencySystem.lua",
+          "$className": "ModuleScript",
           "server": {
             "$path": "src/CurrencySystem.server.module.lua",
             "$className": "ModuleScript"
@@ -146,6 +157,7 @@
         },
         "GachaSystem": {
           "$path": "src/GachaSystem.lua",
+          "$className": "ModuleScript",
           "server": {
             "$path": "src/GachaSystem.server.module.lua",
             "$className": "ModuleScript"
@@ -153,6 +165,7 @@
         },
         "AutoBattleSystem": {
           "$path": "src/AutoBattleSystem.lua",
+          "$className": "ModuleScript",
           "server": {
             "$path": "src/AutoBattleSystem.server.module.lua",
             "$className": "ModuleScript"
@@ -164,6 +177,7 @@
         },
         "InventoryModule": {
           "$path": "src/InventoryModule.lua",
+          "$className": "ModuleScript",
           "server": {
             "$path": "src/InventoryModule.server.module.lua",
             "$className": "ModuleScript"
@@ -175,6 +189,7 @@
         },
         "LevelSystem": {
           "$path": "src/LevelSystem.lua",
+          "$className": "ModuleScript",
           "server": {
             "$path": "src/LevelSystem.server.module.lua",
             "$className": "ModuleScript"
@@ -186,6 +201,7 @@
         },
         "PlayerInputSystem": {
           "$path": "src/PlayerInputSystem.lua",
+          "$className": "ModuleScript",
           "server": {
             "$path": "src/PlayerInputSystem.server.module.lua",
             "$className": "ModuleScript"
@@ -197,6 +213,7 @@
         },
         "PlayerLevelSystem": {
           "$path": "src/PlayerLevelSystem.lua",
+          "$className": "ModuleScript",
           "server": {
             "$path": "src/PlayerLevelSystem.server.module.lua",
             "$className": "ModuleScript"
@@ -208,6 +225,7 @@
         },
         "PlayerSystem": {
           "$path": "src/PlayerSystem.lua",
+          "$className": "ModuleScript",
           "server": {
             "$path": "src/PlayerSystem.server.module.lua",
             "$className": "ModuleScript"
@@ -219,6 +237,7 @@
         },
         "RewardGaugeSystem": {
           "$path": "src/RewardGaugeSystem.lua",
+          "$className": "ModuleScript",
           "server": {
             "$path": "src/RewardGaugeSystem.server.module.lua",
             "$className": "ModuleScript"
@@ -230,6 +249,7 @@
         },
         "StatUpgradeSystem": {
           "$path": "src/StatUpgradeSystem.lua",
+          "$className": "ModuleScript",
           "server": {
             "$path": "src/StatUpgradeSystem.server.module.lua",
             "$className": "ModuleScript"
