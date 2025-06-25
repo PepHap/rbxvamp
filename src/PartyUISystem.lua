@@ -124,9 +124,11 @@ function PartyUI:start()
     parent(declineBtn, window)
     parent(list, window)
     if UDim2 then
-        window.AnchorPoint = Vector2.new(0.5, 0.5)
-        window.Position = UDim2.new(0.5, 0, 0.5, 0)
-        window.Size = UDim2.new(0, 200, 0, 270)
+        -- Display the party window as a full-screen overlay to prevent
+        -- nested frames from exceeding the viewport on different devices.
+        window.AnchorPoint = Vector2.new(0, 0)
+        window.Position = UDim2.new(0, 0, 0, 0)
+        window.Size = UDim2.new(1, 0, 1, 0)
         createBtn.Position = UDim2.new(0, 10, 0, 10)
         createBtn.Size = UDim2.new(0, 180, 0, 30)
         leaveBtn.Position = UDim2.new(0, 10, 0, 50)
