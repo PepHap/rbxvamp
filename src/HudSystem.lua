@@ -51,7 +51,14 @@ local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local RunService = game:GetService("RunService")
 local RewardGaugeSystem = require(script.Parent:WaitForChild("ClientRewardGaugeSystem"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
-local GameManager = require(script.Parent:WaitForChild("ClientGameManager"))
+-- Delayed require to avoid circular dependency with GameManager
+local GameManager
+local function getGameManager()
+    if not GameManager then
+        GameManager = require(script.Parent:WaitForChild("ClientGameManager"))
+    end
+    return GameManager
+end
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local assets = ReplicatedStorage:WaitForChild("assets")
 local menuIcons = require(assets:WaitForChild("menu_icons"))
@@ -529,7 +536,8 @@ function HudSystem:update(dt)
     parent(self.menuButton, self.buttonFrame)
     self.menuButton.Image = menuIcons.Menu
 
-    local skills = GameManager and GameManager.skillSystem and GameManager.skillSystem.skills or {}
+    local gm = getGameManager()
+    local skills = gm and gm.skillSystem and gm.skillSystem.skills or {}
     for i = 1, math.min(4, #skills) do
         local skill = skills[i]
         local btn = self.skillButtons[i]
