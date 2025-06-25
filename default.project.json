@@ -24,6 +24,15 @@
             "$path": "src/GachaSystem.server.module.lua"
           }
         },
+        "AutoBattleSystem": {
+          "$path": "src/AutoBattleSystem.lua",
+          "server": {
+            "$path": "src/AutoBattleSystem.server.module.lua"
+          },
+          "client": {
+            "$path": "src/AutoBattleSystem.client.module.lua"
+          }
+        },
         "InventoryModule": {
           "$path": "src/InventoryModule.lua",
           "server": {
@@ -118,6 +127,15 @@
           "$path": "src/GachaSystem.lua",
           "server": {
             "$path": "src/GachaSystem.server.module.lua"
+          }
+        },
+        "AutoBattleSystem": {
+          "$path": "src/AutoBattleSystem.lua",
+          "server": {
+            "$path": "src/AutoBattleSystem.server.module.lua"
+          },
+          "client": {
+            "$path": "src/AutoBattleSystem.client.module.lua"
           }
         },
         "InventoryModule": {
