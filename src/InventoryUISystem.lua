@@ -182,6 +182,7 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     if not self.window then
         -- no bundled images; create a plain window instead
         self.window = GuiUtil.createWindow("InventoryWindow")
+        GuiUtil.makeFullScreen(self.window)
         GuiUtil.setVisible(self.window, self.visible)
     end
     if self.window.Parent ~= parentTarget then

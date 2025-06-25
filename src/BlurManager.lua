@@ -7,7 +7,11 @@ local BlurManager = {
 }
 
 local function createEffect()
-    if not BlurManager.useRobloxObjects or BlurManager.effect then
+    if not BlurManager.useRobloxObjects then
+        BlurManager.effect = BlurManager.effect or {}
+        return
+    end
+    if BlurManager.effect and BlurManager.effect.Parent then
         return
     end
     local ok, lighting = pcall(function()
@@ -28,9 +32,8 @@ end
 
 function BlurManager:add()
     self.refCount = self.refCount + 1
-    if self.refCount == 1 then
-        createEffect()
-    elseif self.effect then
+    createEffect()
+    if self.effect then
         local ok = pcall(function()
             self.effect.Size = 10
         end)
@@ -53,9 +56,8 @@ function BlurManager:remove()
         end)
         if not ok and type(self.effect) == "table" then
             self.effect = nil
-        else
-            self.effect = nil
         end
+        self.effect = nil
     end
 end
 
