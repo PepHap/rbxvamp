@@ -148,6 +148,7 @@ function MenuUI:start()
     self:addDefaultTabs()
     local gui = ensureGui()
     self.window = GuiUtil.createWindow("MenuWindow")
+    self.gui = gui
     if UDim2 and type(UDim2.new)=="function" then
         self.window.AnchorPoint = Vector2.new(0, 0)
         self.window.Position = UDim2.new(0, 0, 0, 0)

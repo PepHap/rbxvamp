@@ -79,6 +79,7 @@ end
 function AchievementUI:start(sys)
     self.achievementSystem = sys or self.achievementSystem or AchievementSystem
     local gui = ensureGui()
+    self.gui = gui
     if self.window then
         if self.window.Parent ~= gui then
             parent(self.window, gui)

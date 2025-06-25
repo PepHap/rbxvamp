@@ -82,6 +82,7 @@ end
 function LobbyUI:start(ls)
     self.lobbySystem = ls or self.lobbySystem or require(script.Parent:WaitForChild("ClientLobbySystem"))
     local gui = ensureGui()
+    self.gui = gui
     if self.window then
         if self.window.Parent ~= gui then
             parent(self.window, gui)

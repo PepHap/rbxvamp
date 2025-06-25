@@ -103,6 +103,7 @@ end
 function ProgressMapUI:start(ps)
     self.progressSystem = ps or self.progressSystem or require(script.Parent:WaitForChild("ProgressMapSystem"))
     local gui = ensureGui()
+    self.gui = gui
     if self.window then
         if self.window.Parent ~= gui then
             parent(self.window, gui)

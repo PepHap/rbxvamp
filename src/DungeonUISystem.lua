@@ -84,6 +84,7 @@ end
 function DungeonUI:start(dungeonSys)
     self.dungeonSystem = dungeonSys or self.dungeonSystem or DungeonSystem
     local gui = ensureGui()
+    self.gui = gui
     if self.window then
         if self.window.Parent ~= gui then
             parent(self.window, gui)
