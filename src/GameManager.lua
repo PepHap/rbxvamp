@@ -26,7 +26,7 @@ local IS_SERVER = RunService:IsServer()
 -- @param system table table implementing optional start/update methods
 function GameManager:addSystem(name, system)
     assert(name ~= nil, "System name must be provided")
-    assert(system ~= nil, "System table must be provided")
+    assert(system ~= nil, string.format("System table must be provided for '%s'", name))
     self.systems[name] = system
     table.insert(self.order, name)
 end
