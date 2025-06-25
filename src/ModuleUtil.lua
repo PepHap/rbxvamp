@@ -12,15 +12,33 @@ function ModuleUtil.requireChild(parent, name, timeout)
         local found = container and container:FindFirstChild(name)
         if not found and container then
             -- Rojo-style layouts may name modules like "Module.client.module".
+            -- Additionally some build setups place sibling modules like
+            -- "Module.client" under the same parent rather than as a child.
             local altNames = {
                 container.Name .. "." .. name .. ".module",
                 container.Name .. "." .. name .. ".module.lua",
                 name .. ".module",
                 name .. ".module.lua",
                 container.Name .. "." .. name,
+                parent.Name .. "." .. name .. ".module",
+                parent.Name .. "." .. name .. ".module.lua",
+                parent.Name .. "." .. name,
             }
             for _, n in ipairs(altNames) do
                 found = container:FindFirstChild(n)
+                if found then break end
+            end
+        end
+        -- Fall back to searching the container's parent for a sibling named
+        -- like "Module.client" when still not located.
+        if not found and container and container ~= container.Parent then
+            local siblingNames = {
+                parent.Name .. "." .. name,
+                parent.Name .. "." .. name .. ".module",
+                parent.Name .. "." .. name .. ".module.lua",
+            }
+            for _, n in ipairs(siblingNames) do
+                found = container.Parent and container.Parent:FindFirstChild(n)
                 if found then break end
             end
         end
