@@ -6,6 +6,7 @@ if RunService:IsServer() then
 end
 
 local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
+local BlurManager = require(script.Parent:WaitForChild("BlurManager"))
 
 local InventoryUI = {
     ---When true and running within Roblox, real Instance objects are used.
@@ -34,8 +35,6 @@ local InventoryUI = {
     salvageButton = nil,
     ---Window frame containing all inventory UI elements
     window = nil,
-    ---Optional blur effect applied when the window is visible
-    blur = nil,
     ---@type RBXScriptConnection?
     respawnConnection = nil,
     ---Reference to the active ItemSystem instance provided by GameManager
@@ -214,7 +213,6 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
         end
     end
 
-    -- The blur effect is now only created when the window becomes visible.
 
     local btnParent = self.window
 
@@ -629,35 +627,9 @@ function InventoryUI:setVisible(on)
     local parentGui = self.window or gui
     GuiUtil.setVisible(parentGui, self.visible)
     if self.visible then
-        if self.useRobloxObjects and not self.blur then
-            local lighting = game:GetService("Lighting")
-            if lighting then
-                local ok, effect = pcall(function()
-                    return Instance.new("BlurEffect")
-                end)
-                if ok and effect then
-                    effect.Size = 10
-                    effect.Parent = lighting
-                    self.blur = effect
-                end
-            end
-        elseif self.blur then
-            local ok = pcall(function()
-                self.blur.Size = 10
-            end)
-            if not ok and type(self.blur) == "table" then
-                self.blur.Size = 10
-            end
-        end
-    elseif self.blur then
-        local ok = pcall(function()
-            self.blur:Destroy()
-        end)
-        if not ok and type(self.blur) == "table" then
-            self.blur = nil
-        else
-            self.blur = nil
-        end
+        BlurManager:add()
+    else
+        BlurManager:remove()
     end
 end
 
