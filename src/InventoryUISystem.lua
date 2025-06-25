@@ -203,6 +203,7 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
         self.window.Size = UDim2.new(1, 0, 1, 0)
         self.window.AnchorPoint = Vector2.new(0, 0)
         self.window.Position = UDim2.new(0, 0, 0, 0)
+        GuiUtil.clampToScreen(self.window)
     end
     -- slightly visible background for readability
     if self.window.BackgroundTransparency ~= nil then

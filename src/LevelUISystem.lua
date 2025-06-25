@@ -111,6 +111,7 @@ function LevelUI:start(pls, lvlSys, parentGui)
     end
 
     self.window = GuiUtil.createWindow("LevelWindow")
+    GuiUtil.clampToScreen(self.window)
     parent(self.window, parentTarget)
 
     self.levelLabel = createInstance("TextLabel")
