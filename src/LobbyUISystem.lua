@@ -126,6 +126,7 @@ function LobbyUI:setVisible(on)
     local gui = ensureGui()
     local parentGui = self.window or gui
     GuiUtil.setVisible(parentGui, self.visible)
+    GuiUtil.clampToScreen(parentGui)
 end
 
 function LobbyUI:toggle()
