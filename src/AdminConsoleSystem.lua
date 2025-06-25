@@ -114,6 +114,7 @@ function AdminConsole:start(manager, admins)
         end
     end
     local gui = ensureGui()
+    self.gui = gui
     local window = GuiUtil.createWindow("ConsoleWindow")
     if UDim2 and type(UDim2.new)=="function" then
         -- Stretch the console across the screen to avoid cramped output and

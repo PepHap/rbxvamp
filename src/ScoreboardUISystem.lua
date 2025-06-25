@@ -73,6 +73,7 @@ end
 
 function ScoreboardUI:start()
     local gui = ensureGui()
+    self.gui = gui
     if not self.window then
         self.window = GuiUtil.createWindow("ScoreboardWindow")
         if UDim2 and type(UDim2.new)=="function" then

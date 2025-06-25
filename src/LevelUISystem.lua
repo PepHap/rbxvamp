@@ -100,6 +100,7 @@ function LevelUI:start(pls, lvlSys, parentGui)
 
     local guiRoot = ensureGui()
     local parentTarget = parentGui or guiRoot
+    self.gui = parentTarget
 
     if self.window then
         if self.window.Parent ~= parentTarget then

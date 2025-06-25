@@ -80,6 +80,7 @@ end
 function SkillTreeUISystem:start(treeSys)
     self.treeSystem = treeSys or self.treeSystem
     local gui = ensureGui()
+    self.gui = gui
     if self.window then
         if self.window.Parent ~= gui then
             parent(self.window, gui)
