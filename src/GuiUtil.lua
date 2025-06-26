@@ -465,13 +465,19 @@ end
 
 -- Expands a GUI object to cover the full screen area.
 function GuiUtil.makeFullScreen(obj)
-    if not obj then return end
+    if not obj then
+        return
+    end
+
     if UDim2 and type(UDim2.new) == "function" then
-        if obj.Size ~= nil then
+        if obj:IsA("GuiObject") then
             obj.Size = UDim2.new(1, 0, 1, 0)
-        end
-        if obj.Position ~= nil then
             obj.Position = UDim2.new(0, 0, 0, 0)
+        elseif obj:IsA("ScreenGui") then
+            -- ScreenGuis do not have Size/Position properties
+            if obj.IgnoreGuiInset ~= nil then
+                obj.IgnoreGuiInset = true
+            end
         end
     end
 end
