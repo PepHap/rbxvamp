@@ -13,8 +13,8 @@ local SlotConstants = require(script.Parent:WaitForChild("SlotConstants"))
 local slotNames = SlotConstants.list
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local assets = ReplicatedStorage:WaitForChild("assets")
-local slotIcons = require(assets:WaitForChild("slot_icons"))
+local ModuleUtil = require(script.Parent:WaitForChild("ModuleUtil"))
+local slotIcons = ModuleUtil.loadAssetModule("slot_icons") or {}
 
 -- Slots are arranged in three rows with two columns each using UIGridLayout
 -- https://create.roblox.com/docs/reference/engine/classes/UIGridLayout

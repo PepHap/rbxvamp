@@ -24,8 +24,8 @@ RewardGaugeSystem.onSelect = nil
 -- Required systems/assets
 local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local assets = ReplicatedStorage:WaitForChild("assets")
-local itemPool = require(assets:WaitForChild("items"))
+local ModuleUtil = require(script.Parent:WaitForChild("ModuleUtil"))
+local itemPool = ModuleUtil.loadAssetModule("items") or {}
 local EquipmentGenerator = require(script.Parent:WaitForChild("EquipmentGenerator"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 local LoggingSystem

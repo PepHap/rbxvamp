@@ -6,10 +6,10 @@ local PlayerLevelSystem
 
 -- Load location data from assets so that stages can be configured externally.
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local assets = ReplicatedStorage:WaitForChild("assets")
+local ModuleUtil = require(script.Parent:WaitForChild("ModuleUtil"))
 
 -- Ordered list of locations including coordinates, level ranges and boss info.
-LocationSystem.locations = require(assets:WaitForChild("locations"))
+LocationSystem.locations = ModuleUtil.loadAssetModule("locations") or {}
 
 ---Current location index in the locations table.
 LocationSystem.currentIndex = 1

@@ -62,11 +62,11 @@ SkillSystem.rand = math.random
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local assets = ReplicatedStorage:WaitForChild("assets")
+local ModuleUtil = require(script.Parent:WaitForChild("ModuleUtil"))
 
 -- Table of predefined skills available to the game. Each skill entry
 -- specifies its rarity and any additional parameters.
-SkillSystem.templates = require(assets:WaitForChild("skills"))
+SkillSystem.templates = ModuleUtil.loadAssetModule("skills") or {}
 
 ---Creates a new skill system instance.
 -- @return table
