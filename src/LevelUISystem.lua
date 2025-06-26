@@ -25,7 +25,7 @@ local LevelUI = {
 }
 
 local function createInstance(className)
-    if LevelUI.useRobloxObjects and typeof and Instance and type(Instance.new)=="function" then
+    if LevelUI.useRobloxObjects and typeof ~= nil and Instance and type(Instance.new)=="function" then
         local inst = Instance.new(className)
         if className == "ScreenGui" and inst.IgnoreGuiInset ~= nil then
             inst.IgnoreGuiInset = true

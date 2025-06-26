@@ -70,7 +70,7 @@ if not ok then Theme = nil end
 local levelUpColor = Color3 and Color3.fromRGB(255, 240, 120) or {r=255,g=240,b=120}
 
 local function createInstance(className)
-    if HudSystem.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
+    if HudSystem.useRobloxObjects and typeof ~= nil and Instance and type(Instance.new) == "function" then
         local inst = Instance.new(className)
         if className == "ScreenGui" and inst.IgnoreGuiInset ~= nil then inst.IgnoreGuiInset = true end
         if Theme then
@@ -546,7 +546,7 @@ function HudSystem:update(dt)
                 btn.Size = UDim2.new(0, 60, 0, 60)
             end
             GuiUtil.addCrossDecor(btn)
-            if Instance and typeof and typeof(Instance.new)=="function" then
+            if Instance and typeof ~= nil and typeof(Instance.new)=="function" then
                 local aspect = Instance.new("UIAspectRatioConstraint")
                 aspect.AspectRatio = 1
                 aspect.Parent = btn

@@ -19,13 +19,21 @@ local function display(text)
     end
     lbl.Name = "HintLabel"
     lbl.Text = text
-    if lbl.Parent ~= nil then lbl.Parent = nil end
-    if GuiUtil.applyHoverEffect then GuiUtil.styleLabel = GuiUtil.styleLabel end
+    if lbl.Parent ~= nil then
+        lbl.Parent = nil
+    end
+    if GuiUtil.styleLabel then
+        GuiUtil.styleLabel(lbl)
+    end
     if lbl.Destroy then
         lbl.Parent = gui
-        task.delay(5, function()
-            if lbl and lbl.Destroy then lbl:Destroy() end
-        end)
+        if task and task.delay then
+            task.delay(5, function()
+                if lbl and lbl.Destroy then
+                    lbl:Destroy()
+                end
+            end)
+        end
     else
         lbl.Parent = gui
         lbl.lifetime = 5

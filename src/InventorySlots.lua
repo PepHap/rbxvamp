@@ -24,7 +24,7 @@ local CELL_SIZE = 80
 local CELL_PADDING = 5
 
 local function createInstance(className)
-    if InventorySlots.useRobloxObjects and typeof and Instance and type(Instance.new) == "function" then
+    if InventorySlots.useRobloxObjects and typeof ~= nil and Instance and type(Instance.new) == "function" then
         local inst = Instance.new(className)
         if className == "ScreenGui" and inst.IgnoreGuiInset ~= nil then
             inst.IgnoreGuiInset = true
