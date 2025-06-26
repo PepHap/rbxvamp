@@ -6,8 +6,8 @@ local SetBonusSystem = {
 }
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local assets = ReplicatedStorage:WaitForChild("assets")
-SetBonusSystem.sets = require(assets:WaitForChild("set_bonuses"))
+local ModuleUtil = require(script.Parent:WaitForChild("ModuleUtil"))
+SetBonusSystem.sets = ModuleUtil.loadAssetModule("set_bonuses") or {}
 
 ---Returns a list of bonus tables for all active sets.
 function SetBonusSystem:getActiveBonuses()

@@ -15,13 +15,13 @@ do
 end
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local assets = ReplicatedStorage:WaitForChild("assets")
+local ModuleUtil = require(script.Parent:WaitForChild("ModuleUtil"))
 
 -- Preloaded item templates describing available equipment. These definitions
 -- are used when presenting random rewards to the player.
-ItemSystem.templates = require(assets:WaitForChild("items"))
-ItemSystem.upgradeCosts = require(assets:WaitForChild("item_upgrade_costs"))
-ItemSystem.rarityLimits = require(assets:WaitForChild("item_rarity_limit"))
+ItemSystem.templates = ModuleUtil.loadAssetModule("items") or {}
+ItemSystem.upgradeCosts = ModuleUtil.loadAssetModule("item_upgrade_costs") or {}
+ItemSystem.rarityLimits = ModuleUtil.loadAssetModule("item_rarity_limit") or {}
 
 -- Determine the highest level defined in the upgrade cost table. This value
 -- acts as a hard cap for item upgrades.

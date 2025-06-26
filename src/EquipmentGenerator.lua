@@ -2,8 +2,8 @@
 -- Utility for selecting random equipment items by slot and rarity
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local assets = ReplicatedStorage:WaitForChild("assets")
-local itemPool = require(assets:WaitForChild("items"))
+local ModuleUtil = require(script.Parent:WaitForChild("ModuleUtil"))
+local itemPool = ModuleUtil.loadAssetModule("items") or {}
 
 local EquipmentGenerator = {}
 

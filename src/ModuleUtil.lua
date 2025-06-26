@@ -84,4 +84,19 @@ function ModuleUtil.requireChild(parent, name, timeout)
     return mod
 end
 
+---Loads a module from the ReplicatedStorage assets folder.
+-- Falls back to returning nil when the module cannot be found.
+-- @param name string module name within ReplicatedStorage.assets
+-- @param timeout number? time to wait for the module
+-- @return any loaded module or nil
+function ModuleUtil.loadAssetModule(name, timeout)
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local assets = ReplicatedStorage:FindFirstChild("assets")
+    if not assets then
+        warn("Missing assets folder in ReplicatedStorage")
+        return nil
+    end
+    return ModuleUtil.requireChild(assets, name, timeout or 5)
+end
+
 return ModuleUtil

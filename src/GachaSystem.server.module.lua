@@ -53,10 +53,10 @@ GachaSystem.rarityWeights = {
 }
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local assets = ReplicatedStorage:WaitForChild("assets")
-local skillPool = require(assets:WaitForChild("skills"))
-local itemPool = require(assets:WaitForChild("items"))
-local companionPool = require(assets:WaitForChild("companions"))
+local ModuleUtil = require(script.Parent:WaitForChild("ModuleUtil"))
+local skillPool = ModuleUtil.loadAssetModule("skills") or {}
+local itemPool = ModuleUtil.loadAssetModule("items") or {}
+local companionPool = ModuleUtil.loadAssetModule("companions") or {}
 local EquipmentGenerator = require(script.Parent:WaitForChild("EquipmentGenerator"))
 local SkillSystem = require(script.Parent:WaitForChild("SkillSystem"))
 local CompanionSystem = require(script.Parent:WaitForChild("CompanionSystem"))
