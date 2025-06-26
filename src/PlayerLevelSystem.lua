@@ -12,7 +12,7 @@ if not mod then
     mod = { level = 1, exp = 0 }
     function mod:addExp(amount)
         amount = tonumber(amount) or 0
-        self.exp += amount
+        self.exp = (self.exp or 0) + amount
     end
     function mod:saveData()
         return { level = self.level, exp = self.exp }
