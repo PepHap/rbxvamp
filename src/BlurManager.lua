@@ -100,4 +100,38 @@ function BlurManager.Cleanup()
     isBlurred = false
 end
 
+--[[
+Compatibility layer for older code expecting object-method style API
+The new BlurManager exposes functions like EnableBlur/DisableBlur while
+existing UI modules still invoke methods "add", "remove", "reset" and
+"isActive" using the colon operator.  Provide thin wrappers mapping the
+old names to the new functionality so legacy modules continue to work
+without modification.
+--]]
+
+---Enables blur effect (legacy method).
+--@param duration number? tween time
+--@param size number? blur strength
+function BlurManager:add(duration, size)
+    return BlurManager.EnableBlur(duration, size)
+end
+
+---Disables blur effect (legacy method).
+--@param duration number? tween time
+function BlurManager:remove(duration)
+    return BlurManager.DisableBlur(duration)
+end
+
+---Returns whether blur is active (legacy method).
+--@return boolean
+function BlurManager:isActive()
+    return BlurManager.IsBlurred()
+end
+
+---Fully clears blur state (legacy method).
+function BlurManager:reset()
+    BlurManager.DisableBlur(0)
+    BlurManager.Cleanup()
+end
+
 return BlurManager

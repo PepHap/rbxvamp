@@ -212,7 +212,7 @@ function MenuUI:start()
             self.respawnConnection = player.CharacterAdded:Connect(function()
                 self:setVisible(false)
                 InventoryUISystem:setVisible(false)
-                BlurManager:reset()
+                BlurManager.Cleanup()
             end)
         end
     end
@@ -273,11 +273,11 @@ function MenuUI:setVisible(on)
     GuiUtil.makeFullScreen(parentGui)
     GuiUtil.clampToScreen(parentGui)
     if self.visible then
-        BlurManager:add()
+        BlurManager.EnableBlur()
     else
-        BlurManager:remove()
-        if not BlurManager:isActive() then
-            BlurManager:reset()
+        BlurManager.DisableBlur()
+        if not BlurManager.IsBlurred() then
+            BlurManager.Cleanup()
         end
     end
 
