@@ -51,9 +51,13 @@ local function parent(child, parentObj)
     GuiUtil.parent(child, parentObj)
 end
 
-local function ensureGui()
+local function ensureGui(parent)
     if DungeonUI.gui and (not DungeonUI.useRobloxObjects or DungeonUI.gui.Parent) then
         return DungeonUI.gui
+    end
+    if parent then
+        DungeonUI.gui = parent
+        return parent
     end
     local pgui
     if DungeonUI.useRobloxObjects then
@@ -80,14 +84,15 @@ local function ensureGui()
     return gui
 end
 
-function DungeonUI:start(dungeonSys)
+function DungeonUI:start(dungeonSys, parentGui)
     self.dungeonSystem = dungeonSys or self.dungeonSystem or DungeonSystem
-    local gui = ensureGui()
-    self.gui = gui
+    local guiRoot = ensureGui(parentGui)
+    local parentTarget = parentGui or guiRoot
     if self.window then
-        if self.window.Parent ~= gui then
-            parent(self.window, gui)
+        if self.window.Parent ~= parentTarget then
+            parent(self.window, parentTarget)
         end
+        self.gui = parentTarget
         self:update()
         self:setVisible(self.visible)
         return
@@ -100,7 +105,8 @@ function DungeonUI:start(dungeonSys)
         self.window.Size = UDim2.new(1, 0, 1, 0)
         GuiUtil.clampToScreen(self.window)
     end
-    parent(self.window, gui)
+    parent(self.window, parentTarget)
+    self.gui = parentTarget
     self.listFrame = createInstance("Frame")
     if UDim2 and type(UDim2.new)=="function" then
         self.listFrame.Position = UDim2.new(0, 0, 0, 0)

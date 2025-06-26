@@ -45,9 +45,13 @@ local function parent(child, parentObj)
     GuiUtil.parent(child, parentObj)
 end
 
-local function ensureGui()
+local function ensureGui(parent)
     if CrystalExchangeUI.gui and (not CrystalExchangeUI.useRobloxObjects or CrystalExchangeUI.gui.Parent) then
         return CrystalExchangeUI.gui
+    end
+    if parent then
+        CrystalExchangeUI.gui = parent
+        return parent
     end
     local pgui
     if CrystalExchangeUI.useRobloxObjects then
@@ -74,13 +78,13 @@ local function ensureGui()
     return gui
 end
 
-function CrystalExchangeUI:start()
-    local gui = ensureGui()
-    self.gui = gui
+function CrystalExchangeUI:start(_, parentGui)
+    local guiRoot = ensureGui(parentGui)
+    local parentTarget = parentGui or guiRoot
     if self.window then
-        if self.window.Parent ~= gui then
-            parent(self.window, gui)
-            self.gui = gui
+        if self.window.Parent ~= parentTarget then
+            parent(self.window, parentTarget)
+            self.gui = parentTarget
         end
         return
     end
@@ -92,7 +96,8 @@ function CrystalExchangeUI:start()
         self.window.Size = UDim2.new(1, 0, 1, 0)
         GuiUtil.clampToScreen(self.window)
     end
-    parent(self.window, gui)
+    parent(self.window, parentTarget)
+    self.gui = parentTarget
 
     local actions = {
         {"Buy Skill Ticket", function() self:buyTicket("skill") end},
