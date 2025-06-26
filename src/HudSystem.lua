@@ -130,6 +130,12 @@ function HudSystem:start()
     local gui = ensureGui()
     NetworkSystem:onClientEvent("AutoBattleToggle", function(enabled)
         self.autoEnabled = not not enabled
+        local ok, AutoBattle = pcall(function()
+            return require(script.Parent:WaitForChild("AutoBattleSystem"))
+        end)
+        if ok and AutoBattle then
+            AutoBattle.enabled = self.autoEnabled
+        end
         self:update()
     end)
     if self.levelLabel then
@@ -150,6 +156,13 @@ function HudSystem:start()
         return
     end
     self.levelLabel = createInstance("TextLabel")
+    if UDim2 and type(UDim2.new) == "function" then
+        self.levelLabel.AnchorPoint = Vector2.new(0.5, 0)
+        self.levelLabel.Position = UDim2.new(0.5, 0, 0.02, 0)
+        if self.levelLabel.TextXAlignment ~= nil then
+            self.levelLabel.TextXAlignment = Enum.TextXAlignment.Center
+        end
+    end
     self.currencyLabel = createInstance("TextLabel")
     self.autoButton = createInstance("TextButton")
     self.attackButton = createInstance("TextButton")
@@ -171,6 +184,9 @@ function HudSystem:start()
     if Enum and Enum.FillDirection then
         self.buttonLayout.FillDirection = Enum.FillDirection.Horizontal
         self.buttonLayout.SortOrder = Enum.SortOrder.LayoutOrder
+        if self.buttonLayout.FillDirectionMaxCells ~= nil then
+            self.buttonLayout.FillDirectionMaxCells = 4
+        end
     end
     if UDim2 and type(UDim2.new) == "function" then
         self.buttonLayout.CellSize = UDim2.new(0, 60, 0, 60)
@@ -178,8 +194,9 @@ function HudSystem:start()
         self.buttonFrame.Size = UDim2.new(0.22, 0, 0.25, 0)
         self.buttonFrame.Position = UDim2.new(0.02, 0, 0.96, 0)
         self.buttonFrame.AnchorPoint = Vector2.new(0, 1)
+        self.buttonFrame.ClipsDescendants = true
     end
-    GuiUtil.applyResponsive(self.buttonFrame, nil, 240, 60, 400, 120)
+    GuiUtil.applyResponsive(self.buttonFrame, nil, 240, 252, 400, 400)
     self.progressFrame = createInstance("Frame")
     self.progressFill = createInstance("Frame")
     self.progressText = createInstance("TextLabel")
@@ -414,14 +431,18 @@ function HudSystem:update(dt)
     if Enum and Enum.FillDirection then
         self.buttonLayout.FillDirection = Enum.FillDirection.Horizontal
         self.buttonLayout.SortOrder = Enum.SortOrder.LayoutOrder
+        if self.buttonLayout.FillDirectionMaxCells ~= nil then
+            self.buttonLayout.FillDirectionMaxCells = 4
+        end
     end
     if UDim2 and type(UDim2.new) == "function" then
         self.buttonLayout.CellSize = UDim2.new(0, 60, 0, 60)
         self.buttonLayout.CellPadding = UDim2.new(0, 4, 0, 4)
         self.buttonFrame.Size = UDim2.new(0.22, 0, 0.25, 0)
         self.buttonFrame.Position = UDim2.new(0.02, 0, 0.96, 0)
+        self.buttonFrame.ClipsDescendants = true
     end
-    GuiUtil.applyResponsive(self.buttonFrame, nil, 240, 60, 400, 120)
+    GuiUtil.applyResponsive(self.buttonFrame, nil, 240, 252, 400, 400)
     parent(self.buttonLayout, self.buttonFrame)
     parent(self.buttonFrame, gui)
     self.skillLayout = self.skillLayout or createInstance("UIListLayout")
@@ -712,12 +733,16 @@ function HudSystem:update(dt)
     end
 
     if UDim2 and type(UDim2.new)=="function" then
-        self.levelLabel.Position = UDim2.new(0.02, 0, 0.02, 0)
+        self.levelLabel.AnchorPoint = Vector2.new(0.5, 0)
+        self.levelLabel.Position = UDim2.new(0.5, 0, 0.02, 0)
+        if self.levelLabel.TextXAlignment ~= nil then
+            self.levelLabel.TextXAlignment = Enum.TextXAlignment.Center
+        end
         self.currencyLabel.Position = UDim2.new(0.02, 0, 0.06, 0)
         self.buttonFrame.Size = UDim2.new(0.22, 0, 0.25, 0)
         self.buttonFrame.Position = UDim2.new(0.02, 0, 0.96, 0)
         self.buttonFrame.AnchorPoint = Vector2.new(0, 1)
-        GuiUtil.applyResponsive(self.buttonFrame, nil, 240, 60, 400, 120)
+        GuiUtil.applyResponsive(self.buttonFrame, nil, 240, 252, 400, 400)
         self.healthFrame.Position = UDim2.new(0.02, 0, 0.1, 0)
         self.healthFrame.Size = UDim2.new(0.25, 0, 0.04, 0)
         -- Position skill buttons near the bottom-right similar to modern action RPGs
