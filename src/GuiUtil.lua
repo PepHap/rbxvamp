@@ -436,4 +436,150 @@ function GuiUtil.CreateDivider(parent, orientation)
     return divider
 end
 
+-- Adds child to parent for table and Instance representations
+function GuiUtil.parent(child, parentObj)
+    if not child or not parentObj then return end
+    if typeof and typeof(child) == "Instance" then
+        child.Parent = parentObj
+    elseif type(child) == "table" then
+        parentObj.children = parentObj.children or {}
+        table.insert(parentObj.children, child)
+        child.Parent = parentObj
+    end
+end
+
+-- Returns the PlayerGui of the LocalPlayer when running in Roblox
+function GuiUtil.getPlayerGui()
+    if typeof and game and game.GetService then
+        local players = game:GetService("Players")
+        local lp = players.LocalPlayer
+        if lp then
+            return lp:FindFirstChildOfClass("PlayerGui") or lp:FindFirstChild("PlayerGui")
+        end
+    end
+    return nil
+end
+
+-- Expands a GuiObject to cover the full screen
+function GuiUtil.makeFullScreen(gui)
+    if not gui or not UDim2 then return end
+    if gui.Size ~= nil then
+        gui.AnchorPoint = Vector2.new(0, 0)
+        gui.Position = UDim2.new(0, 0, 0, 0)
+        gui.Size = UDim2.new(1, 0, 1, 0)
+    end
+end
+
+-- Keeps the GuiObject within the current screen bounds
+function GuiUtil.clampToScreen(gui)
+    if typeof and typeof(gui) == "Instance" and gui:IsA("GuiObject") then
+        local camera = workspace.CurrentCamera
+        if camera then
+            local view = camera.ViewportSize
+            local absSize = gui.AbsoluteSize
+            local pos = gui.AbsolutePosition
+            local x = math.clamp(pos.X, 0, view.X - absSize.X)
+            local y = math.clamp(pos.Y, 0, view.Y - absSize.Y)
+            gui.Position = UDim2.new(0, x, 0, y)
+        end
+    end
+end
+
+-- Toggles visibility for both Instance and table GUI representations
+function GuiUtil.setVisible(obj, vis)
+    vis = not not vis
+    if typeof and typeof(obj) == "Instance" then
+        if obj:IsA("GuiObject") then
+            obj.Visible = vis
+        elseif obj:IsA("LayerCollector") and obj.Enabled ~= nil then
+            obj.Enabled = vis
+        end
+    elseif type(obj) == "table" then
+        obj.visible = vis
+    end
+end
+
+-- Applies aspect ratio and size constraints for responsive layouts
+function GuiUtil.applyResponsive(frame, aspect, minW, minH, maxW, maxH)
+    aspect = aspect or 1
+    minW = minW or 0
+    minH = minH or 0
+    maxW = maxW or 10000
+    maxH = maxH or 10000
+    if typeof and typeof(frame) == "Instance" then
+        local ar = Instance.new("UIAspectRatioConstraint")
+        ar.AspectRatio = aspect
+        ar.Parent = frame
+        local sc = Instance.new("UISizeConstraint")
+        sc.MinSize = Vector2.new(minW, minH)
+        sc.MaxSize = Vector2.new(maxW, maxH)
+        sc.Parent = frame
+    elseif type(frame) == "table" then
+        frame.aspectRatio = aspect
+        frame.minSize = Vector2.new(minW, minH)
+        frame.maxSize = Vector2.new(maxW, maxH)
+    end
+end
+
+-- Adds decorative cross lines over the frame
+function GuiUtil.addCrossDecor(frame)
+    if not frame then return end
+    if typeof and typeof(frame) == "Instance" then
+        local h = Instance.new("Frame")
+        h.Name = "DecorH"
+        h.Size = UDim2.new(1, 0, 0, 1)
+        h.Position = UDim2.new(0, 0, 0.5, 0)
+        h.BackgroundColor3 = UITheme.Colors.BorderDark
+        h.BorderSizePixel = 0
+        h.Parent = frame
+        local v = Instance.new("Frame")
+        v.Name = "DecorV"
+        v.Size = UDim2.new(0, 1, 1, 0)
+        v.Position = UDim2.new(0.5, 0, 0, 0)
+        v.BackgroundColor3 = UITheme.Colors.BorderDark
+        v.BorderSizePixel = 0
+        v.Parent = frame
+    elseif type(frame) == "table" then
+        frame.hasCrossDecor = true
+    end
+end
+
+-- Connects a TextButton/ImageButton to a callback with simple hover effects
+function GuiUtil.connectButton(btn, callback)
+    if not btn then return end
+    if typeof and typeof(btn) == "Instance" then
+        if callback and btn.MouseButton1Click then
+            btn.MouseButton1Click:Connect(callback)
+        end
+        if btn.MouseEnter and btn.MouseLeave and btn.BackgroundColor3 then
+            local normal = btn.BackgroundColor3
+            local hover = normal:Lerp(Color3.new(1, 1, 1), 0.2)
+            btn.MouseEnter:Connect(function()
+                btn.BackgroundColor3 = hover
+            end)
+            btn.MouseLeave:Connect(function()
+                btn.BackgroundColor3 = normal
+            end)
+        end
+    elseif type(btn) == "table" then
+        btn.hoverColor = Color3.new(1,1,1)
+        btn.callback = callback
+    end
+end
+
+-- Lowercase aliases for convenience
+GuiUtil.createWindow = GuiUtil.CreateWindow
+GuiUtil.createButton = GuiUtil.CreateButton
+GuiUtil.createSlot = GuiUtil.CreateSlot
+GuiUtil.createProgressBar = GuiUtil.CreateProgressBar
+GuiUtil.createTextBox = GuiUtil.CreateTextBox
+GuiUtil.createScrollingFrame = GuiUtil.CreateScrollingFrame
+GuiUtil.createTabSystem = GuiUtil.CreateTabSystem
+GuiUtil.createGrid = GuiUtil.CreateGrid
+GuiUtil.animateWindowOpen = GuiUtil.AnimateWindowOpen
+GuiUtil.animateWindowClose = GuiUtil.AnimateWindowClose
+GuiUtil.createNotification = GuiUtil.CreateNotification
+GuiUtil.centerElement = GuiUtil.CenterElement
+GuiUtil.createDivider = GuiUtil.CreateDivider
+
 return GuiUtil

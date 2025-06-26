@@ -37,7 +37,8 @@ end
 local function applyColors(theme)
     if type(theme) ~= "table" then return end
     for k, v in pairs(theme) do
-        UITheme.colors[k] = v
+        -- store each color value in the shared UITheme palette
+        UITheme.Colors[k] = v
     end
 end
 
