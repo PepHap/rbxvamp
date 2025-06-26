@@ -106,16 +106,17 @@ end
 function PlayerInputSystem:setKeyState(key, isDown)
     self.keyStates[key] = isDown and true or false
     if key == self.inventoryKey and isDown then
-
-    -- Toggle the inventory tab when it is already active
+        -- If the menu is already showing the inventory tab, close it on
+        -- repeated presses instead of reopening immediately.
         local invIndex = MenuUISystem:getTabIndex("Inventory")
         if MenuUISystem.visible and invIndex == MenuUISystem.currentTab then
             MenuUISystem:toggle()
-        end
-        if MenuUISystem.toggleTab then
-            MenuUISystem:toggleTab("Inventory")
         else
-            MenuUISystem:openTab("Inventory")
+            if MenuUISystem.toggleTab then
+                MenuUISystem:toggleTab("Inventory")
+            else
+                MenuUISystem:openTab("Inventory")
+            end
         end
     elseif key == self.skillKey and isDown then
         MenuUISystem:openTab("Skills")
