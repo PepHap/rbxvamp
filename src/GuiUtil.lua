@@ -530,7 +530,18 @@ end
 -- Connects ``callback`` to the button's activation event.
 function GuiUtil.connectButton(btn, callback)
     if not (btn and callback) then return end
-    btn.hoverColor = btn.hoverColor or (UITheme.Styles.ButtonHover and UITheme.Styles.ButtonHover.BackgroundColor3)
+
+    local hover = UITheme.Styles.ButtonHover and UITheme.Styles.ButtonHover.BackgroundColor3
+    if btn.SetAttribute then
+        -- Instances cannot have arbitrary properties, so use attributes
+        if btn:GetAttribute("hoverColor") == nil then
+            btn:SetAttribute("hoverColor", hover)
+        end
+    else
+        -- allow tables in tests to behave the same way
+        btn.hoverColor = btn.hoverColor or hover
+    end
+
     if btn.MouseButton1Click then
         btn.MouseButton1Click:Connect(callback)
     else
