@@ -127,38 +127,83 @@ function MenuUI:addTab(name, system)
 end
 
 function MenuUI:start()
-    if self.window then
-        local gui = ensureGui()
-        if self.window.Parent ~= gui then
-            parent(self.window, gui)
-            self.gui = gui
+    local gui = ensureGui()
+    self.gui = gui
+
+    if not self.window then
+        self.window = GuiUtil.createWindow("MenuWindow")
+        GuiUtil.makeFullScreen(self.window)
+        if UDim2 and type(UDim2.new)=="function" then
+            self.window.AnchorPoint = Vector2.new(0, 0)
+            self.window.Position = UDim2.new(0, 0, 0, 0)
+            self.window.Size = UDim2.new(1, 0, 1, 0)
+            GuiUtil.clampToScreen(self.window)
         end
-        if self.useRobloxObjects and not self.respawnConnection then
-            local ok, player = pcall(function()
-                return game:GetService("Players").LocalPlayer
-            end)
-            if ok and player and player.CharacterAdded then
-                self.respawnConnection = player.CharacterAdded:Connect(function()
-                    self:setVisible(false)
-                    InventoryUISystem:setVisible(false)
-                    BlurManager:reset()
-                end)
+        parent(self.window, gui)
+    elseif self.window.Parent ~= gui then
+        parent(self.window, gui)
+    end
+
+    if not self.tabFrame or not self.contentFrame then
+        self.tabButtons = {}
+
+        self.tabFrame = createInstance("Frame")
+        if UDim2 and type(UDim2.new)=="function" then
+            self.tabFrame.Position = UDim2.new(0,0,0,0)
+            self.tabFrame.Size = UDim2.new(1,0,0,30)
+        end
+        parent(self.tabFrame, self.window)
+
+        local layout = createInstance("UIListLayout")
+        layout.Name = "TabLayout"
+        if Enum and Enum.FillDirection then
+            layout.FillDirection = Enum.FillDirection.Horizontal
+            layout.SortOrder = Enum.SortOrder.LayoutOrder
+            if layout.HorizontalAlignment ~= nil then
+                layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+            end
+            if layout.VerticalAlignment ~= nil then
+                layout.VerticalAlignment = Enum.VerticalAlignment.Center
             end
         end
-        return
+        parent(layout, self.tabFrame)
+
+        self.contentFrame = createInstance("Frame")
+        if UDim2 and type(UDim2.new)=="function" then
+            self.contentFrame.Position = UDim2.new(0, 0, 0, 30)
+            self.contentFrame.Size = UDim2.new(1, 0, 1, -30)
+        end
+        parent(self.contentFrame, self.window)
     end
-    self:addDefaultTabs()
-    local gui = ensureGui()
-    self.window = GuiUtil.createWindow("MenuWindow")
-    GuiUtil.makeFullScreen(self.window)
-    self.gui = gui
-    if UDim2 and type(UDim2.new)=="function" then
-        self.window.AnchorPoint = Vector2.new(0, 0)
-        self.window.Position = UDim2.new(0, 0, 0, 0)
-        self.window.Size = UDim2.new(1, 0, 1, 0)
-        GuiUtil.clampToScreen(self.window)
+
+    if #self.tabs == 0 then
+        self:addDefaultTabs()
     end
-    parent(self.window, gui)
+
+    for i,tab in ipairs(self.tabs) do
+        if not self.tabButtons[i] then
+            local btn = createInstance("TextButton")
+            btn.Text = tab.name
+            if UDim2 and type(UDim2.new)=="function" then
+                btn.Size = UDim2.new(0, 100, 0, 30)
+            end
+            btn.LayoutOrder = i
+            parent(btn, self.tabFrame)
+            self.tabButtons[i] = btn
+            GuiUtil.connectButton(btn, function()
+                MenuUI:showTab(i)
+            end)
+        end
+        if tab.system and tab.system.start then
+            if tab.system == LevelUISystem then
+                tab.system:start()
+            else
+                tab.system:start(nil, self.contentFrame)
+            end
+            tab.system:setVisible(false)
+        end
+    end
+
     if self.useRobloxObjects and not self.respawnConnection then
         local ok, player = pcall(function()
             return game:GetService("Players").LocalPlayer
@@ -172,54 +217,6 @@ function MenuUI:start()
         end
     end
 
-
-    self.tabFrame = createInstance("Frame")
-    if UDim2 and type(UDim2.new)=="function" then
-        self.tabFrame.Position = UDim2.new(0,0,0,0)
-        self.tabFrame.Size = UDim2.new(1,0,0,30)
-    end
-    parent(self.tabFrame, self.window)
-
-    local layout = createInstance("UIListLayout")
-    layout.Name = "TabLayout"
-    if Enum and Enum.FillDirection then
-        layout.FillDirection = Enum.FillDirection.Horizontal
-        layout.SortOrder = Enum.SortOrder.LayoutOrder
-        if layout.HorizontalAlignment ~= nil then
-            layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-        end
-        if layout.VerticalAlignment ~= nil then
-            layout.VerticalAlignment = Enum.VerticalAlignment.Center
-        end
-    end
-    parent(layout, self.tabFrame)
-
-    self.contentFrame = createInstance("Frame")
-    if UDim2 and type(UDim2.new)=="function" then
-        self.contentFrame.Position = UDim2.new(0, 0, 0, 30)
-        self.contentFrame.Size = UDim2.new(1, 0, 1, -30)
-    end
-    parent(self.contentFrame, self.window)
-
-    for i,tab in ipairs(self.tabs) do
-        local btn = createInstance("TextButton")
-        btn.Text = tab.name
-        if UDim2 and type(UDim2.new)=="function" then
-            btn.Size = UDim2.new(0, 100, 0, 30)
-        end
-        btn.LayoutOrder = i
-        parent(btn, self.tabFrame)
-        self.tabButtons[i] = btn
-        GuiUtil.connectButton(btn, function()
-            MenuUI:showTab(i)
-        end)
-        if tab.system == LevelUISystem then
-            tab.system:start()
-        else
-            tab.system:start(nil, self.contentFrame)
-        end
-        tab.system:setVisible(false)
-    end
     self:setVisible(self.visible)
     if #self.tabs > 0 then
         self:showTab(self.currentTab)
