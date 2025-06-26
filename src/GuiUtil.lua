@@ -1,504 +1,439 @@
+-- GuiUtil.lua
+-- Набор вспомогательных функций для создания и размещения объектов интерфейса
+
 local GuiUtil = {}
+local UITheme = require(script.Parent.UITheme)
+local TweenService = game:GetService("TweenService")
 
-local ok, Theme = pcall(function()
-    return require(script.Parent:WaitForChild("UITheme"))
-end)
-if not ok then Theme = nil end
+-- Функция для создания основного фрейма окна
+function GuiUtil.CreateWindow(parent, name, size, position)
+    local window = Instance.new("Frame")
+    window.Name = name
+    window.Size = size or UITheme.Sizes.WindowMedium
+    window.Position = position or UDim2.new(0.5, 0, 0.5, 0)
+    window.AnchorPoint = Vector2.new(0.5, 0.5)
+    window.ClipsDescendants = true
+    window.Parent = parent
 
-local okTween, TweenService = pcall(function()
-    return game:GetService("TweenService")
-end)
-if not okTween then TweenService = nil end
+    UITheme.ApplyStyle(window, "Window")
 
--- Utility to ensure we always pass a Color3 to Roblox APIs.
--- When running in a test environment the theme tables may contain
--- simple RGB fields instead of a Color3. Convert those tables when
--- possible so TweenService:Create never receives a plain Lua table.
-local function toColor3(value)
-    if typeof and typeof(value) == "Color3" then
-        return value
-    end
-    if type(value) == "table" and value.r and value.g and value.b and Color3 then
-        if Color3.fromRGB then
-            return Color3.fromRGB(value.r, value.g, value.b)
-        elseif Color3.new then
-            return Color3.new(value.r/255, value.g/255, value.b/255)
-        end
-    end
-    return value
+    -- Добавляем скруглённые углы
+    UITheme.CreateCorner(12).Parent = window
+
+    -- Добавляем тень
+    UITheme.CreateShadow(window, Vector2.new(4, 4), 8)
+
+    -- Добавляем заголовочную панель
+    local titleBar = Instance.new("Frame")
+    titleBar.Name = "TitleBar"
+    titleBar.Size = UDim2.new(1, 0, 0, 40)
+    titleBar.Position = UDim2.new(0, 0, 0, 0)
+    titleBar.BackgroundColor3 = UITheme.Colors.BackgroundMedium
+    titleBar.BorderSizePixel = 0
+    titleBar.Parent = window
+
+    UITheme.CreateCorner(12).Parent = titleBar
+
+    -- Маска для нижних углов заголовка
+    local titleMask = Instance.new("Frame")
+    titleMask.Size = UDim2.new(1, 0, 0, 12)
+    titleMask.Position = UDim2.new(0, 0, 1, -12)
+    titleMask.BackgroundColor3 = UITheme.Colors.BackgroundMedium
+    titleMask.BorderSizePixel = 0
+    titleMask.Parent = titleBar
+
+    -- Заголовок
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.Name = "Title"
+    titleLabel.Size = UDim2.new(1, -80, 1, 0)
+    titleLabel.Position = UDim2.new(0, 15, 0, 0)
+    titleLabel.BackgroundTransparency = 1
+    titleLabel.Text = name
+    titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    titleLabel.Parent = titleBar
+
+    UITheme.ApplyStyle(titleLabel, "Title")
+
+    -- Кнопка закрытия
+    local closeButton = GuiUtil.CreateButton(titleBar, "✕", UDim2.new(0, 30, 0, 30))
+    closeButton.Position = UDim2.new(1, -40, 0, 5)
+    closeButton.BackgroundColor3 = UITheme.Colors.Danger
+
+    -- Область контента
+    local content = Instance.new("Frame")
+    content.Name = "Content"
+    content.Size = UDim2.new(1, 0, 1, -40)
+    content.Position = UDim2.new(0, 0, 0, 40)
+    content.BackgroundTransparency = 1
+    content.Parent = window
+
+    UITheme.CreatePadding(UITheme.Sizes.PaddingMedium).Parent = content
+
+    return window, titleBar, content, closeButton
 end
 
--- internal helper for creating a Roblox Instance when available
-local function createInstance(className)
-    if typeof and Instance and type(Instance.new) == "function" then
-        local inst = Instance.new(className)
-        if className == "ScreenGui" and inst.IgnoreGuiInset ~= nil then
-            inst.IgnoreGuiInset = true
-        end
-        return inst
-    end
-    return {ClassName = className}
-end
+-- Функция для создания кнопки
+function GuiUtil.CreateButton(parent, text, size, position)
+    local button = Instance.new("TextButton")
+    button.Name = "Button"
+    button.Size = size or UITheme.Sizes.ButtonMedium
+    button.Position = position or UDim2.new(0, 0, 0, 0)
+    button.Text = text or "Кнопка"
+    button.Parent = parent
 
-local function parent(child, parentObj)
-    if not child or not parentObj then return end
-    -- remove from previous parent table if necessary
-    if type(child) == "table" and child.Parent and child.Parent ~= parentObj then
-        local prev = child.Parent
-        if type(prev) == "table" and prev.children then
-            for i, c in ipairs(prev.children) do
-                if c == child then
-                    table.remove(prev.children, i)
-                    break
-                end
-            end
-        end
-    end
+    UITheme.ApplyStyle(button, "Button")
+    UITheme.CreateCorner(6).Parent = button
 
-    if typeof and typeof(child) == "Instance" then
-        if typeof(parentObj) == "Instance" then
-            child.Parent = parentObj
-        end
-    else
-        child.Parent = parentObj
-    end
+    -- Анимация при наведении
+    local hoverTween = TweenService:Create(button, 
+        TweenInfo.new(UITheme.Animations.FastTween), 
+        UITheme.Styles.ButtonHover
+    )
 
-    if type(parentObj) == "table" then
-        parentObj.children = parentObj.children or {}
-        for _, c in ipairs(parentObj.children) do
-            if c == child then
-                return
-            end
-        end
-        table.insert(parentObj.children, child)
-    end
-end
+    local normalTween = TweenService:Create(button, 
+        TweenInfo.new(UITheme.Animations.FastTween), 
+        {BackgroundColor3 = UITheme.Colors.Primary}
+    )
 
-GuiUtil.parent = parent
-
-function GuiUtil.getPlayerGui()
-    if not game or type(game.GetService) ~= "function" then
-        return nil
-    end
-    local ok, players = pcall(function()
-        return game:GetService("Players")
+    button.MouseEnter:Connect(function()
+        hoverTween:Play()
     end)
-    if not ok or not players then
-        return nil
+
+    button.MouseLeave:Connect(function()
+        normalTween:Play()
+    end)
+
+    return button
+end
+
+-- Функция для создания слота предмета
+function GuiUtil.CreateSlot(parent, size, position, rarity)
+    local slot = Instance.new("Frame")
+    slot.Name = "Slot"
+    slot.Size = size or UITheme.Sizes.SlotMedium
+    slot.Position = position or UDim2.new(0, 0, 0, 0)
+    slot.Parent = parent
+
+    UITheme.ApplyStyle(slot, "Slot")
+    UITheme.CreateCorner(8).Parent = slot
+
+    -- Обводка редкости
+    if rarity then
+        local stroke = UITheme.CreateStroke(UITheme.GetRarityColor(rarity), 2)
+        stroke.Parent = slot
     end
-    if players.LocalPlayer then
-        local ok, pgui = pcall(function()
-            return players.LocalPlayer:WaitForChild("PlayerGui", 5)
+
+    -- Иконка предмета
+    local icon = Instance.new("ImageLabel")
+    icon.Name = "Icon"
+    icon.Size = UDim2.new(0.8, 0, 0.8, 0)
+    icon.Position = UDim2.new(0.1, 0, 0.1, 0)
+    icon.BackgroundTransparency = 1
+    icon.ScaleType = Enum.ScaleType.Fit
+    icon.Parent = slot
+
+    -- Количество предметов
+    local countLabel = Instance.new("TextLabel")
+    countLabel.Name = "Count"
+    countLabel.Size = UDim2.new(0.4, 0, 0.3, 0)
+    countLabel.Position = UDim2.new(0.6, 0, 0.7, 0)
+    countLabel.BackgroundTransparency = 1
+    countLabel.Text = ""
+    countLabel.TextScaled = true
+    countLabel.Font = UITheme.Fonts.Bold
+    countLabel.TextColor3 = UITheme.Colors.Warning
+    countLabel.Parent = slot
+
+    -- Кнопка для клика
+    local button = Instance.new("TextButton")
+    button.Name = "Button"
+    button.Size = UDim2.new(1, 0, 1, 0)
+    button.BackgroundTransparency = 1
+    button.Text = ""
+    button.Parent = slot
+
+    return slot, icon, countLabel, button
+end
+
+-- Функция для создания прогресс-бара
+function GuiUtil.CreateProgressBar(parent, size, position, currentValue, maxValue, color)
+    local progressFrame = Instance.new("Frame")
+    progressFrame.Name = "ProgressBar"
+    progressFrame.Size = size or UDim2.new(1, 0, 0, 20)
+    progressFrame.Position = position or UDim2.new(0, 0, 0, 0)
+    progressFrame.Parent = parent
+
+    UITheme.ApplyStyle(progressFrame, "ProgressBar")
+    UITheme.CreateCorner(4).Parent = progressFrame
+
+    local fillFrame = Instance.new("Frame")
+    fillFrame.Name = "Fill"
+    fillFrame.Size = UDim2.new(math.min(currentValue / maxValue, 1), 0, 1, 0)
+    fillFrame.Position = UDim2.new(0, 0, 0, 0)
+    fillFrame.BackgroundColor3 = color or UITheme.Colors.Primary
+    fillFrame.BorderSizePixel = 0
+    fillFrame.Parent = progressFrame
+
+    UITheme.CreateCorner(4).Parent = fillFrame
+
+    -- Текст прогресса
+    local progressText = Instance.new("TextLabel")
+    progressText.Name = "ProgressText"
+    progressText.Size = UDim2.new(1, 0, 1, 0)
+    progressText.BackgroundTransparency = 1
+    progressText.Text = currentValue .. "/" .. maxValue
+    progressText.TextColor3 = UITheme.Colors.TextPrimary
+    progressText.TextScaled = true
+    progressText.Font = UITheme.Fonts.SemiBold
+    progressText.Parent = progressFrame
+
+    return progressFrame, fillFrame, progressText
+end
+
+-- Функция для создания поля ввода
+function GuiUtil.CreateTextBox(parent, placeholder, size, position)
+    local textBox = Instance.new("TextBox")
+    textBox.Name = "TextBox"
+    textBox.Size = size or UDim2.new(1, 0, 0, 40)
+    textBox.Position = position or UDim2.new(0, 0, 0, 0)
+    textBox.PlaceholderText = placeholder or "Введите текст..."
+    textBox.Text = ""
+    textBox.ClearTextOnFocus = false
+    textBox.Parent = parent
+
+    UITheme.ApplyStyle(textBox, "Input")
+    UITheme.CreateCorner(6).Parent = textBox
+    UITheme.CreatePadding(UDim.new(0, 10)).Parent = textBox
+
+    return textBox
+end
+
+-- Функция для создания списка с прокруткой
+function GuiUtil.CreateScrollingFrame(parent, size, position)
+    local scrollFrame = Instance.new("ScrollingFrame")
+    scrollFrame.Name = "ScrollingFrame"
+    scrollFrame.Size = size or UDim2.new(1, 0, 1, 0)
+    scrollFrame.Position = position or UDim2.new(0, 0, 0, 0)
+    scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+    scrollFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
+    scrollFrame.Parent = parent
+
+    UITheme.ApplyStyle(scrollFrame, "ScrollFrame")
+    UITheme.CreateCorner(8).Parent = scrollFrame
+
+    -- Компоновка содержимого
+    local listLayout = Instance.new("UIListLayout")
+    listLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    listLayout.Padding = UITheme.Sizes.PaddingSmall
+    listLayout.Parent = scrollFrame
+
+    UITheme.CreatePadding(UITheme.Sizes.PaddingMedium).Parent = scrollFrame
+
+    return scrollFrame, listLayout
+end
+
+-- Функция для создания вкладок
+function GuiUtil.CreateTabSystem(parent, tabNames)
+    local tabFrame = Instance.new("Frame")
+    tabFrame.Name = "TabFrame"
+    tabFrame.Size = UDim2.new(1, 0, 0, 50)
+    tabFrame.Position = UDim2.new(0, 0, 0, 0)
+    tabFrame.BackgroundColor3 = UITheme.Colors.BackgroundMedium
+    tabFrame.BorderSizePixel = 0
+    tabFrame.Parent = parent
+
+    local contentFrame = Instance.new("Frame")
+    contentFrame.Name = "ContentFrame"
+    contentFrame.Size = UDim2.new(1, 0, 1, -50)
+    contentFrame.Position = UDim2.new(0, 0, 0, 50)
+    contentFrame.BackgroundTransparency = 1
+    contentFrame.Parent = parent
+
+    local tabs = {}
+    local contents = {}
+    local activeTab = nil
+
+    for i, tabName in ipairs(tabNames) do
+        -- Создаём кнопку вкладки
+        local tabButton = GuiUtil.CreateButton(tabFrame, tabName, 
+            UDim2.new(1/#tabNames, -5, 1, -10))
+        tabButton.Position = UDim2.new((i-1)/#tabNames, 5, 0, 5)
+        tabButton.BackgroundColor3 = UITheme.Colors.BackgroundLight
+
+        -- Создаём содержимое вкладки
+        local tabContent = Instance.new("Frame")
+        tabContent.Name = tabName .. "Content"
+        tabContent.Size = UDim2.new(1, 0, 1, 0)
+        tabContent.BackgroundTransparency = 1
+        tabContent.Visible = i == 1
+        tabContent.Parent = contentFrame
+
+        UITheme.CreatePadding(UITheme.Sizes.PaddingMedium).Parent = tabContent
+
+        tabs[tabName] = tabButton
+        contents[tabName] = tabContent
+
+        if i == 1 then
+            activeTab = tabName
+            tabButton.BackgroundColor3 = UITheme.Colors.Primary
+        end
+
+        -- Обработчик переключения вкладок
+        tabButton.MouseButton1Click:Connect(function()
+            if activeTab then
+                tabs[activeTab].BackgroundColor3 = UITheme.Colors.BackgroundLight
+                contents[activeTab].Visible = false
+            end
+
+            activeTab = tabName
+            tabButton.BackgroundColor3 = UITheme.Colors.Primary
+            tabContent.Visible = true
         end)
-        if ok and pgui then
-            return pgui
+    end
+
+    return tabFrame, contentFrame, tabs, contents
+end
+
+-- Функция для создания сетки предметов
+function GuiUtil.CreateGrid(parent, columns, rows, slotSize, spacing)
+    local gridFrame = Instance.new("Frame")
+    gridFrame.Name = "Grid"
+    gridFrame.Size = UDim2.new(1, 0, 1, 0)
+    gridFrame.BackgroundTransparency = 1
+    gridFrame.Parent = parent
+
+    local slots = {}
+
+    for row = 1, rows do
+        slots[row] = {}
+        for col = 1, columns do
+            local slot = GuiUtil.CreateSlot(gridFrame, slotSize)
+            slot.Position = UDim2.new(0, (col-1) * (slotSize.X.Offset + spacing), 
+                                    0, (row-1) * (slotSize.Y.Offset + spacing))
+
+            slots[row][col] = slot
         end
     end
-    local list = players:GetPlayers()
-    if list and #list > 0 then
-        local p = list[1]
-        if p then
-            local ok, pgui = pcall(function()
-                return p:WaitForChild("PlayerGui", 5)
-            end)
-            if ok then
-                return pgui
-            end
-        end
-    end
-    local okCore, core = pcall(function()
-        return game:GetService("CoreGui")
+
+    return gridFrame, slots
+end
+
+-- Функция для анимации появления окна
+function GuiUtil.AnimateWindowOpen(window)
+    window.Size = UDim2.new(0, 0, 0, 0)
+    window.Visible = true
+
+    local tween = TweenService:Create(window, 
+        TweenInfo.new(UITheme.Animations.MediumTween, UITheme.Animations.EasingOut),
+        {Size = window.Size or UITheme.Sizes.WindowMedium}
+    )
+
+    tween:Play()
+    return tween
+end
+
+-- Функция для анимации закрытия окна
+function GuiUtil.AnimateWindowClose(window, callback)
+    local tween = TweenService:Create(window, 
+        TweenInfo.new(UITheme.Animations.FastTween, UITheme.Animations.EasingIn),
+        {Size = UDim2.new(0, 0, 0, 0)}
+    )
+
+    tween.Completed:Connect(function()
+        window.Visible = false
+        if callback then callback() end
     end)
-    if okCore and core then
-        return core
-    end
-    return nil
+
+    tween:Play()
+    return tween
 end
 
----Adds UIAspectRatioConstraint and UISizeConstraint for adaptive sizing.
----@param frame table|Instance Frame to modify
----@param ratio number? desired aspect ratio
----@param minX number? minimum width in pixels
----@param minY number? minimum height in pixels
----@param maxX number? maximum width in pixels
----@param maxY number? maximum height in pixels
-function GuiUtil.applyResponsive(frame, ratio, minX, minY, maxX, maxY)
-    if not frame then return end
-    local aspect
-    if frame.FindFirstChild then
-        aspect = frame:FindFirstChild("Aspect")
-    elseif type(frame) == "table" and frame.children then
-        for _, child in ipairs(frame.children) do
-            if child.Name == "Aspect" then
-                aspect = child
-                break
-            end
-        end
-    end
-    if ratio then
-        if not aspect then
-            aspect = createInstance("UIAspectRatioConstraint")
-            aspect.Name = "Aspect"
-            parent(aspect, frame)
-        end
-        if aspect.AspectRatio ~= nil then
-            aspect.AspectRatio = ratio
-        else
-            aspect.aspectRatio = ratio
-        end
-    end
+-- Функция для создания уведомления
+function GuiUtil.CreateNotification(parent, text, duration, notificationType)
+    duration = duration or 3
+    notificationType = notificationType or "info"
 
-    local sizeConst
-    if frame.FindFirstChild then
-        sizeConst = frame:FindFirstChild("SizeLimit")
-    elseif type(frame) == "table" and frame.children then
-        for _, child in ipairs(frame.children) do
-            if child.Name == "SizeLimit" then
-                sizeConst = child
-                break
-            end
-        end
-    end
-    if minX or minY or maxX or maxY then
-        if not sizeConst then
-            sizeConst = createInstance("UISizeConstraint")
-            sizeConst.Name = "SizeLimit"
-            parent(sizeConst, frame)
-        end
-        if sizeConst.MinSize and Vector2 and Vector2.new then
-            sizeConst.MinSize = Vector2.new(minX or 0, minY or 0)
-            sizeConst.MaxSize = Vector2.new(maxX or 0, maxY or 0)
-        elseif type(sizeConst) == "table" then
-            sizeConst.MinSize = {x = minX or 0, y = minY or 0}
-            sizeConst.MaxSize = {x = maxX or 0, y = maxY or 0}
-        end
-    end
-end
+    local notification = Instance.new("Frame")
+    notification.Name = "Notification"
+    notification.Size = UDim2.new(0, 300, 0, 80)
+    notification.Position = UDim2.new(1, -320, 0, 20)
+    notification.BackgroundColor3 = UITheme.Colors.BackgroundMedium
+    notification.Parent = parent
 
----Adds a simple cross decoration using thin Frames around the edges.
----@param frame table|Instance Frame to decorate
-function GuiUtil.addCrossDecor(frame)
-    if not frame then return end
-    local positions = {
-        Top = {UDim2.new(0,0,0,0), UDim2.new(1,0,0,2)},
-        Bottom = {UDim2.new(0,0,1,-2), UDim2.new(1,0,0,2)},
-        Left = {UDim2.new(0,0,0,0), UDim2.new(0,2,1,0)},
-        Right = {UDim2.new(1,-2,0,0), UDim2.new(0,2,1,0)},
+    UITheme.CreateCorner(8).Parent = notification
+    UITheme.CreateStroke(UITheme.Colors.Primary, 2).Parent = notification
+
+    -- Цвет по типу уведомления
+    local colors = {
+        info = UITheme.Colors.Primary,
+        success = UITheme.Colors.Success,
+        warning = UITheme.Colors.Warning,
+        error = UITheme.Colors.Danger,
     }
-    for name, vals in pairs(positions) do
-        local bar = createInstance("Frame")
-        bar.Name = name
-        bar.BorderSizePixel = 0
-        if Theme and Theme.colors then
-            -- Use the highlight color with slight transparency for a modern look
-            bar.BackgroundColor3 = toColor3(Theme.colors.highlight)
-            bar.BackgroundTransparency = 0.2
-        end
-        -- Ensure decorative bars sit behind other elements
-        if bar.ZIndex ~= nil then
-            bar.ZIndex = 0
-        else
-            bar.zIndex = 0
-        end
-        if UDim2 and type(UDim2.new)=="function" then
-            bar.Position = vals[1]
-            bar.Size = vals[2]
-        end
-        parent(bar, frame)
-    end
+
+    local notifColor = colors[notificationType] or UITheme.Colors.Primary
+    notification.BorderColor3 = notifColor
+
+    -- Текст уведомления
+    local textLabel = Instance.new("TextLabel")
+    textLabel.Size = UDim2.new(1, -20, 1, -20)
+    textLabel.Position = UDim2.new(0, 10, 0, 10)
+    textLabel.BackgroundTransparency = 1
+    textLabel.Text = text
+    textLabel.TextColor3 = UITheme.Colors.TextPrimary
+    textLabel.TextWrapped = true
+    textLabel.TextScaled = true
+    textLabel.Font = UITheme.Fonts.Regular
+    textLabel.Parent = notification
+
+    -- Анимация появления
+    notification.Position = UDim2.new(1, 0, 0, 20)
+    local showTween = TweenService:Create(notification,
+        TweenInfo.new(UITheme.Animations.MediumTween),
+        {Position = UDim2.new(1, -320, 0, 20)}
+    )
+    showTween:Play()
+
+    -- Автоматическое исчезновение
+    game:GetService("Debris"):AddItem(notification, duration + 1)
+
+    wait(duration)
+
+    local hideTween = TweenService:Create(notification,
+        TweenInfo.new(UITheme.Animations.MediumTween),
+        {Position = UDim2.new(1, 0, 0, 20)}
+    )
+    hideTween:Play()
+
+    return notification
 end
 
----Ensures a frame remains fully within the viewport boundaries.
----@param frame table|Instance Frame to clamp
-function GuiUtil.clampToScreen(frame)
-    if not frame then return end
-    if not UDim2 or type(UDim2.new) ~= "function" then
-        -- table fallback that preserves offset values
-        local clamp = math.clamp or function(v, lo, hi) return math.max(lo, math.min(hi, v)) end
-        local size = frame.Size or {scaleX = 1, offsetX = 0, scaleY = 1, offsetY = 0}
-        local pos = frame.Position or {scaleX = 0, offsetX = 0, scaleY = 0, offsetY = 0}
-        size.scaleX = clamp(size.scaleX or 1, 0, 1)
-        size.scaleY = clamp(size.scaleY or 1, 0, 1)
-        pos.scaleX = clamp(pos.scaleX or 0, 0, 1 - size.scaleX)
-        pos.scaleY = clamp(pos.scaleY or 0, 0, 1 - size.scaleY)
-        frame.Size = size
-        frame.Position = pos
-        return
-    end
+-- Функция для центрирования элемента
+function GuiUtil.CenterElement(element, offsetX, offsetY)
+    offsetX = offsetX or 0
+    offsetY = offsetY or 0
 
-    local function clampNumber(v, lo, hi)
-        return math.max(lo, math.min(hi, v))
-    end
-
-    local ok = pcall(function()
-        local s = frame.Size
-        local p = frame.Position
-        local sx = clampNumber(s.X.Scale, 0, 1)
-        local sy = clampNumber(s.Y.Scale, 0, 1)
-        frame.Size = UDim2.new(sx, s.X.Offset, sy, s.Y.Offset)
-
-        local ax, ay = 0, 0
-        if frame.AnchorPoint then
-            local ap = frame.AnchorPoint
-            ax = (ap.X or ap.x or 0)
-            ay = (ap.Y or ap.y or 0)
-        end
-
-        local minX = sx * ax
-        local maxX = 1 - sx * (1 - ax)
-        local minY = sy * ay
-        local maxY = 1 - sy * (1 - ay)
-
-        local px = clampNumber(p.X.Scale, minX, maxX)
-        local py = clampNumber(p.Y.Scale, minY, maxY)
-        frame.Position = UDim2.new(px, p.X.Offset, py, p.Y.Offset)
-    end)
-
-    if not ok and type(frame) == "table" then
-        local clamp = clampNumber
-        local size = frame.Size or {scaleX = 1, offsetX = 0, scaleY = 1, offsetY = 0}
-        local pos = frame.Position or {scaleX = 0, offsetX = 0, scaleY = 0, offsetY = 0}
-        local anchor = frame.AnchorPoint or {x = 0, y = 0}
-        size.scaleX = clamp(size.scaleX or 1, 0, 1)
-        size.scaleY = clamp(size.scaleY or 1, 0, 1)
-        local ax = anchor.X or anchor.x or 0
-        local ay = anchor.Y or anchor.y or 0
-        local minX = size.scaleX * ax
-        local maxX = 1 - size.scaleX * (1 - ax)
-        local minY = size.scaleY * ay
-        local maxY = 1 - size.scaleY * (1 - ay)
-        pos.scaleX = clamp(pos.scaleX or 0, minX, maxX)
-        pos.scaleY = clamp(pos.scaleY or 0, minY, maxY)
-        frame.Size = size
-        frame.Position = pos
-    end
+    element.AnchorPoint = Vector2.new(0.5, 0.5)
+    element.Position = UDim2.new(0.5, offsetX, 0.5, offsetY)
 end
 
----Creates a basic window Frame. A background image asset id may be specified,
----though no images are bundled in the repository so it remains text-only.
----When running outside of Roblox, table objects are used instead of instances.
----@param name string Name of the frame
----@param image string? asset id for an ImageLabel background
----@param addDecor boolean? whether to add decorative cross bars
--- @return table|Instance the created Frame
-function GuiUtil.createWindow(name, image, addDecor)
-    if addDecor == nil then addDecor = true end
-    local frame = createInstance("Frame")
-    frame.Name = name or "Window"
-    if frame.BackgroundTransparency ~= nil then
-        -- Provide a visible background when no theme is available
-        frame.BackgroundTransparency = Theme and 1 or 0.2
-    end
-    if frame.BackgroundColor3 ~= nil and not Theme then
-        local col = Color3 and Color3.fromRGB and Color3.fromRGB(20, 20, 30)
-            or {r = 20, g = 20, b = 30}
-        frame.BackgroundColor3 = toColor3(col)
-    end
-    if UDim2 and type(UDim2.new)=="function" then
-        -- Default windows now stretch across the entire screen. This prevents
-        -- nested UI elements from exceeding the viewport when multiple systems
-        -- create their own windows.
-        -- https://create.roblox.com/docs/reference/engine/classes/UDim2
-        local defaultSize = UDim2.new(1, 0, 1, 0)
-        local defaultPos = UDim2.new(0, 0, 0, 0)
-        local ok = pcall(function()
-            if not frame.Size then frame.Size = defaultSize end
-            if not frame.Position then frame.Position = defaultPos end
-            frame.AnchorPoint = Vector2.new(0, 0)
-        end)
-        if not ok and type(frame) == "table" then
-            frame.Size = frame.Size or defaultSize
-            frame.Position = frame.Position or defaultPos
-            frame.AnchorPoint = {x = 0, y = 0}
-        end
+-- Функция для создания разделителя
+function GuiUtil.CreateDivider(parent, orientation)
+    orientation = orientation or "horizontal"
+
+    local divider = Instance.new("Frame")
+    divider.Name = "Divider"
+    divider.BackgroundColor3 = UITheme.Colors.BorderDark
+    divider.BorderSizePixel = 0
+    divider.Parent = parent
+
+    if orientation == "horizontal" then
+        divider.Size = UDim2.new(1, 0, 0, 1)
     else
-        -- When UDim2 isn't available, ensure table fields exist so tests
-        -- referencing size and position succeed.
-        frame.Size = frame.Size or {scaleX = 1, offsetX = 0, scaleY = 1, offsetY = 0}
-        frame.Position = frame.Position or {scaleX = 0, offsetX = 0, scaleY = 0, offsetY = 0}
-        frame.AnchorPoint = frame.AnchorPoint or {x = 0, y = 0}
-    end
-    if image then
-        local bg = createInstance("ImageLabel")
-        bg.Name = "Background"
-        bg.Image = image
-        if UDim2 and type(UDim2.new)=="function" then
-            bg.Size = UDim2.new(1, 0, 1, 0)
-        end
-        parent(bg, frame)
-    end
-    if frame.ClipsDescendants ~= nil then
-        -- prevent children from overflowing which can push UI off-screen
-        -- https://create.roblox.com/docs/reference/engine/classes/GuiBase2d#ClipsDescendants
-        frame.ClipsDescendants = true
-    elseif type(frame) == "table" then
-        frame.ClipsDescendants = true
-    end
-    if Theme and Theme.styleWindow then
-        Theme.styleWindow(frame)
-    end
-    -- Ensure windows never exceed the viewport
-    GuiUtil.makeFullScreen(frame)
-    GuiUtil.clampToScreen(frame)
-    -- Allow windows to fill the screen without hard limits
-    GuiUtil.applyResponsive(frame, nil)
-    if addDecor then
-        GuiUtil.addCrossDecor(frame)
-    end
-    return frame
-end
-
----Stretches a frame to cover the entire screen.
----@param frame table|Instance Frame to modify
-function GuiUtil.makeFullScreen(frame)
-    if not frame then return end
-    if typeof and typeof(frame) == "Instance" and frame:IsA("ScreenGui") then
-        if frame.IgnoreGuiInset ~= nil then frame.IgnoreGuiInset = true end
-        if frame.ResetOnSpawn ~= nil then frame.ResetOnSpawn = false end
-        if frame.ZIndexBehavior ~= nil and Enum and Enum.ZIndexBehavior then
-            -- use Sibling so overlapping ScreenGuis do not clip each other
-            -- https://create.roblox.com/docs/reference/engine/classes/ScreenGui#ZIndexBehavior
-            frame.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-        end
-    elseif type(frame) == "table" and frame.ClassName == "ScreenGui" then
-        frame.IgnoreGuiInset = true
-        frame.ResetOnSpawn = false
-        frame.ZIndexBehavior = "Sibling"
-    end
-    if UDim2 and type(UDim2.new)=="function" then
-        local size = UDim2.new(1,0,1,0)
-        local pos = UDim2.new(0,0,0,0)
-        local anchor = Vector2 and Vector2.new(0,0) or nil
-        local ok = pcall(function()
-            frame.Size = size
-            frame.Position = pos
-            if anchor then
-                frame.AnchorPoint = anchor
-            elseif frame.AnchorPoint then
-                frame.AnchorPoint = Vector2.new(0,0)
-            end
-        end)
-        if not ok and type(frame)=="table" then
-            frame.Size = size
-            frame.Position = pos
-            frame.AnchorPoint = anchor or {x=0,y=0}
-        end
-    else
-        frame.Size = {scaleX=1,offsetX=0,scaleY=1,offsetY=0}
-        frame.Position = {scaleX=0,offsetX=0,scaleY=0,offsetY=0}
-        frame.AnchorPoint = {x=0,y=0}
+        divider.Size = UDim2.new(0, 1, 1, 0)
     end
 
-    -- Clamp after stretching to ensure the window never exceeds the viewport
-    GuiUtil.clampToScreen(frame)
-end
-
----Sets visibility on a GUI element using either ``Enabled`` or ``Visible``.
----@param obj table|Instance GUI element to modify
----@param on boolean whether the element should be visible
-function GuiUtil.setVisible(obj, on)
-    if not obj then return end
-    local show = not not on
-    -- try Roblox properties safely
-    local ok = pcall(function()
-        if obj:IsA("ScreenGui") then
-            obj.Enabled = show
-        else
-            obj.Visible = show
-        end
-    end)
-    if not ok and type(obj) == "table" then
-        if obj.Enabled ~= nil then obj.Enabled = show end
-        if obj.Visible ~= nil then obj.Visible = show end
-    end
-end
-
----Applies a simple hover effect to a button by changing its background color.
--- When running inside Roblox, a Tween will smoothly transition the color.
--- In the test environment, hoverColor is stored on the table object.
----@param button table|Instance TextButton to modify
-function GuiUtil.applyHoverEffect(button)
-    if not button then return end
-    local hoverColor = Theme and Theme.colors and toColor3(Theme.colors.buttonHover)
-    local normalColor = toColor3(button.BackgroundColor3)
-    if button.MouseEnter and button.MouseLeave then
-        if TweenService and hoverColor and normalColor then
-            local enterTween = TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = hoverColor})
-            local leaveTween = TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = normalColor})
-            button.MouseEnter:Connect(function() enterTween:Play() end)
-            button.MouseLeave:Connect(function() leaveTween:Play() end)
-        else
-            button.MouseEnter:Connect(function()
-                if hoverColor then button.BackgroundColor3 = hoverColor end
-            end)
-            button.MouseLeave:Connect(function()
-                if normalColor then button.BackgroundColor3 = normalColor end
-            end)
-        end
-    else
-        -- store hover color for table-based tests
-        button.hoverColor = hoverColor
-    end
-end
-
----Highlights or unhighlights a button using theme colors.
---  When a highlight color is defined in ``UITheme``, this will tween the
---  background to that color when ``on`` is true and restore the original
---  color when false.
----@param button table|Instance TextButton to modify
----@param on boolean whether to highlight
-function GuiUtil.highlightButton(button, on)
-    if not button then return end
-    local highlight = Theme and Theme.colors and toColor3(Theme.colors.highlight)
-    if not highlight then return end
-    local normal = toColor3(button.BackgroundColor3)
-
-    if typeof and typeof(button) == "Instance" then
-        -- Instances can't have arbitrary fields, store the color in an Attribute
-        if button:GetAttribute("_origColor") == nil then
-            button:SetAttribute("_origColor", normal)
-        end
-        local target = on and highlight or button:GetAttribute("_origColor")
-        if TweenService then
-            local tween = TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = target})
-            tween:Play()
-        else
-            button.BackgroundColor3 = target
-        end
-    else
-        if button._origColor == nil then
-            button._origColor = normal
-        end
-        local target = on and highlight or button._origColor
-        if TweenService then
-            local tween = TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = target})
-            tween:Play()
-        else
-            button.BackgroundColor3 = target
-        end
-    end
-end
-
----Connects a button click handler using ``Activated`` when available or
--- ``MouseButton1Click`` as a fallback. In the test environment where real
--- events are unavailable, the callback is stored in ``onClick``.
----@param button table|Instance TextButton to connect
----@param callback function function to run on activation
-function GuiUtil.connectButton(button, callback)
-    if not button or not callback then
-        return
-    end
-    if button.Activated then
-        button.Activated:Connect(callback)
-    elseif button.MouseButton1Click then
-        button.MouseButton1Click:Connect(callback)
-        if button.TouchTap then
-            button.TouchTap:Connect(callback)
-        end
-    else
-        button.onClick = callback
-    end
-    GuiUtil.applyHoverEffect(button)
+    return divider
 end
 
 return GuiUtil

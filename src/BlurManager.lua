@@ -1,86 +1,103 @@
-local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
+-- BlurManager.lua
+-- Управляет эффектом размытия при открытии окон
 
-local BlurManager = {
-    useRobloxObjects = EnvironmentUtil.detectRoblox(),
-    effect = nil,
-    refCount = 0,
-}
+local BlurManager = {}
+local TweenService = game:GetService("TweenService")
+local Lighting = game:GetService("Lighting")
 
-local function createEffect()
-    if not BlurManager.useRobloxObjects then
-        BlurManager.effect = BlurManager.effect or {}
-        return
-    end
-    if BlurManager.effect and BlurManager.effect.Parent then
-        return
-    end
-    local ok, lighting = pcall(function()
-        return game:GetService("Lighting")
-    end)
-    if not ok or not lighting then
-        return
-    end
-    local success, eff = pcall(function()
-        return Instance.new("BlurEffect")
-    end)
-    if success and eff then
-        eff.Size = 10
-        eff.Parent = lighting
-        BlurManager.effect = eff
+-- Настройки размытия
+local BLUR_SIZE = 24
+local BLUR_TRANSPARENCY = 0.5
+local BLUR_DURATION = 0.3
+
+-- Эффект размытия
+local blurEffect = nil
+local currentBlurTween = nil
+local isBlurred = false
+
+-- Инициализация эффекта размытия
+function BlurManager.Initialize()
+    if not blurEffect then
+        blurEffect = Instance.new("BlurEffect")
+        blurEffect.Name = "UIBlurEffect"
+        blurEffect.Size = 0
+        blurEffect.Parent = Lighting
     end
 end
 
-function BlurManager:add()
-    self.refCount = (self.refCount or 0) + 1
-    createEffect()
-    if self.effect then
-        local ok = pcall(function()
-            self.effect.Size = 10
-        end)
-        if not ok and type(self.effect) == "table" then
-            self.effect.Size = 10
-        end
+-- Включение размытия
+function BlurManager.EnableBlur(duration, size)
+    BlurManager.Initialize()
+
+    duration = duration or BLUR_DURATION
+    size = size or BLUR_SIZE
+
+    if currentBlurTween then
+        currentBlurTween:Cancel()
     end
+
+    currentBlurTween = TweenService:Create(blurEffect,
+        TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+        {Size = size}
+    )
+
+    currentBlurTween:Play()
+    isBlurred = true
+
+    return currentBlurTween
 end
 
-function BlurManager:remove()
-    if (self.refCount or 0) <= 0 then return end
-    self.refCount = self.refCount - 1
-    if self.refCount == 0 and self.effect then
-        local ok = pcall(function()
-            -- Fade out before destroying to avoid a visible jump
-            self.effect.Size = 0
-            if self.effect.Destroy then
-                self.effect:Destroy()
-            end
-        end)
-        if not ok and type(self.effect) == "table" then
-            self.effect = nil
-        end
-        self.effect = nil
+-- Отключение размытия
+function BlurManager.DisableBlur(duration)
+    if not blurEffect then return end
+
+    duration = duration or BLUR_DURATION
+
+    if currentBlurTween then
+        currentBlurTween:Cancel()
     end
+
+    currentBlurTween = TweenService:Create(blurEffect,
+        TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+        {Size = 0}
+    )
+
+    currentBlurTween:Play()
+    isBlurred = false
+
+    return currentBlurTween
 end
 
----Returns true when a blur effect is currently active.
-function BlurManager:isActive()
-    return self.refCount > 0
+-- Проверка состояния размытия
+function BlurManager.IsBlurred()
+    return isBlurred
 end
 
----Forcibly clears the blur effect and resets the reference count.
-function BlurManager:reset()
-    self.refCount = 0
-    if self.effect then
-        local ok = pcall(function()
-            self.effect.Size = 0
-            if self.effect.Destroy then
-                self.effect:Destroy()
-            end
-        end)
-        if not ok and type(self.effect) == "table" then
-            self.effect = nil
-        end
-        self.effect = nil
+-- Получение силы размытия
+function BlurManager.GetBlurSize()
+    return blurEffect and blurEffect.Size or 0
+end
+
+-- Установка силы размытия без анимации
+function BlurManager.SetBlurSize(size)
+    BlurManager.Initialize()
+    blurEffect.Size = size
+    isBlurred = size > 0
+end
+
+-- Очистка ресурсов
+function BlurManager.Cleanup()
+    if currentBlurTween then
+        currentBlurTween:Cancel()
+        currentBlurTween = nil
     end
+
+    if blurEffect then
+        blurEffect:Destroy()
+        blurEffect = nil
+    end
+
+    isBlurred = false
 end
 
 return BlurManager

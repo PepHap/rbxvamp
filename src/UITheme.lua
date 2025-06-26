@@ -1,252 +1,348 @@
+-- UITheme.lua
+-- Модуль содержит палитру цветов и стили оформления для всех элементов GUI
+
 local UITheme = {}
 
--- Base colors inspired by Genshin Impact's UI
-UITheme.colors = {
-    -- slightly brighter palette for a modern look
-    -- slightly brighter palette for a modern look
-    windowBackground = Color3 and Color3.fromRGB and Color3.fromRGB(50, 55, 80) or {r=50,g=55,b=80},
-    windowBackground2 = Color3 and Color3.fromRGB and Color3.fromRGB(40, 45, 70) or {r=40,g=45,b=70},
-    buttonBackground = Color3 and Color3.fromRGB and Color3.fromRGB(80, 150, 255) or {r=80,g=150,b=255},
-    buttonText = Color3 and Color3.fromRGB and Color3.fromRGB(255, 255, 255) or {r=1,g=1,b=1},
-    labelText = Color3 and Color3.fromRGB and Color3.fromRGB(235, 235, 235) or {r=235,g=235,b=235},
-    -- Slightly brighter background when hovering buttons
-    buttonHover = Color3 and Color3.fromRGB and Color3.fromRGB(100, 170, 255) or {r=100,g=170,b=255},
-    -- Accent color used for selected buttons or highlighted elements
-    highlight = Color3 and Color3.fromRGB and Color3.fromRGB(150, 230, 255) or {r=150,g=230,b=255},
-    progressBar = Color3 and Color3.fromRGB and Color3.fromRGB(130, 230, 255) or {r=130,g=230,b=255},
-    -- Semi-transparent overlay used for skill cooldowns
-    cooldownOverlay = Color3 and Color3.fromRGB and Color3.fromRGB(0, 0, 0) or {r=0,g=0,b=0},
-    -- Color for full player health
-    healthHigh = Color3 and Color3.fromRGB and Color3.fromRGB(80, 220, 80) or {r=80,g=220,b=80},
-    -- Color for very low player health
-    healthLow = Color3 and Color3.fromRGB and Color3.fromRGB(220, 80, 80) or {r=220,g=80,b=80},
+-- Основная цветовая палитра
+UITheme.Colors = {
+    -- Основные цвета интерфейса
+    Primary = Color3.fromRGB(59, 130, 246),      -- Синий
+    Secondary = Color3.fromRGB(168, 85, 247),    -- Фиолетовый
+    Success = Color3.fromRGB(34, 197, 94),       -- Зелёный
+    Warning = Color3.fromRGB(245, 158, 11),      -- Жёлтый
+    Danger = Color3.fromRGB(239, 68, 68),        -- Красный
+
+    -- Фоновые цвета
+    BackgroundDark = Color3.fromRGB(17, 24, 39),    -- Тёмный фон
+    BackgroundMedium = Color3.fromRGB(31, 41, 55),  -- Средний фон
+    BackgroundLight = Color3.fromRGB(55, 65, 81),   -- Светлый фон
+
+    -- Цвета границ
+    BorderDark = Color3.fromRGB(75, 85, 99),
+    BorderLight = Color3.fromRGB(156, 163, 175),
+
+    -- Цвета текста
+    TextPrimary = Color3.fromRGB(255, 255, 255),    -- Белый
+    TextSecondary = Color3.fromRGB(209, 213, 219),  -- Светло-серый
+    TextMuted = Color3.fromRGB(156, 163, 175),      -- Серый
+    TextDisabled = Color3.fromRGB(107, 114, 128),   -- Тёмно-серый
+
+    -- Цвета редкости предметов
+    RarityCommon = Color3.fromRGB(156, 163, 175),    -- Серый
+    RarityUncommon = Color3.fromRGB(34, 197, 94),    -- Зелёный
+    RarityRare = Color3.fromRGB(59, 130, 246),       -- Синий
+    RarityEpic = Color3.fromRGB(168, 85, 247),       -- Фиолетовый
+    RarityLegendary = Color3.fromRGB(245, 158, 11),  -- Золотой
+
+    -- Цвета валют
+    Gold = Color3.fromRGB(245, 158, 11),
+    Crystals = Color3.fromRGB(59, 130, 246),
+    Souls = Color3.fromRGB(168, 85, 247),
+    Keys = Color3.fromRGB(239, 68, 68),
+
+    -- Цвета состояний
+    Health = Color3.fromRGB(239, 68, 68),
+    Mana = Color3.fromRGB(59, 130, 246),
+    Stamina = Color3.fromRGB(245, 158, 11),
+    Experience = Color3.fromRGB(34, 197, 94),
+
+    -- Прозрачность
+    Transparent = Color3.fromRGB(0, 0, 0),
+    SemiTransparent = Color3.fromRGB(0, 0, 0),
 }
 
-UITheme.rarityColors = {
-    C  = Color3 and Color3.fromRGB and Color3.fromRGB(200, 200, 200) or {r=200,g=200,b=200},
-    D  = Color3 and Color3.fromRGB and Color3.fromRGB(180, 220, 255) or {r=180,g=220,b=255},
-    B  = Color3 and Color3.fromRGB and Color3.fromRGB(140, 255, 140) or {r=140,g=255,b=140},
-    A  = Color3 and Color3.fromRGB and Color3.fromRGB(255, 200, 120) or {r=255,g=200,b=120},
-    S  = Color3 and Color3.fromRGB and Color3.fromRGB(255, 150, 150) or {r=255,g=150,b=150},
-    SS = Color3 and Color3.fromRGB and Color3.fromRGB(255, 100, 255) or {r=255,g=100,b=255},
-    SSS= Color3 and Color3.fromRGB and Color3.fromRGB(255, 220, 40) or {r=255,g=220,b=40},
+-- Размеры и отступы
+UITheme.Sizes = {
+    -- Стандартные размеры кнопок
+    ButtonSmall = UDim2.new(0, 80, 0, 30),
+    ButtonMedium = UDim2.new(0, 120, 0, 40),
+    ButtonLarge = UDim2.new(0, 160, 0, 50),
+
+    -- Размеры окон
+    WindowSmall = UDim2.new(0, 400, 0, 300),
+    WindowMedium = UDim2.new(0, 600, 0, 450),
+    WindowLarge = UDim2.new(0, 800, 0, 600),
+    WindowFullscreen = UDim2.new(0.9, 0, 0.9, 0),
+
+    -- Размеры слотов
+    SlotSmall = UDim2.new(0, 40, 0, 40),
+    SlotMedium = UDim2.new(0, 60, 0, 60),
+    SlotLarge = UDim2.new(0, 80, 0, 80),
+
+    -- Отступы
+    PaddingSmall = UDim.new(0, 5),
+    PaddingMedium = UDim.new(0, 10),
+    PaddingLarge = UDim.new(0, 20),
+
+    -- Размеры текста
+    TextSmall = 12,
+    TextMedium = 14,
+    TextLarge = 18,
+    TextTitle = 24,
+    TextHeader = 32,
 }
 
--- Fallback font if Enum.Font is unavailable
-UITheme.font = Enum and Enum.Font and Enum.Font.GothamBold
+-- Шрифты
+UITheme.Fonts = {
+    Regular = Enum.Font.Gotham,
+    Bold = Enum.Font.GothamBold,
+    SemiBold = Enum.Font.GothamSemibold,
+    Light = Enum.Font.GothamLight,
+    Mono = Enum.Font.RobotoMono,
+}
 
-UITheme.cornerRadius = 16
+-- Анимации
+UITheme.Animations = {
+    FastTween = 0.15,
+    MediumTween = 0.3,
+    SlowTween = 0.5,
 
--- Convert RGB table values returned in test environments to actual Color3
--- values when running inside Roblox. This prevents type mismatches when
--- assigning colors to GUI properties or using TweenService.
-local function toColor3(value)
-    if typeof and typeof(value) == "Color3" then
-        return value
-    end
-    if type(value) == "table" and value.r and value.g and value.b and Color3 then
-        if Color3.fromRGB then
-            return Color3.fromRGB(value.r, value.g, value.b)
-        elseif Color3.new then
-            return Color3.new(value.r/255, value.g/255, value.b/255)
-        end
-    end
-    return value
+    EasingIn = Enum.EasingStyle.Quad,
+    EasingOut = Enum.EasingStyle.Quad,
+    EasingInOut = Enum.EasingStyle.Quart,
+}
+
+-- Стили для различных типов элементов
+UITheme.Styles = {
+    Window = {
+        BackgroundColor3 = UITheme.Colors.BackgroundDark,
+        BorderColor3 = UITheme.Colors.BorderDark,
+        BorderSizePixel = 2,
+    },
+
+    Panel = {
+        BackgroundColor3 = UITheme.Colors.BackgroundMedium,
+        BorderColor3 = UITheme.Colors.BorderDark,
+        BorderSizePixel = 1,
+    },
+
+    Button = {
+        BackgroundColor3 = UITheme.Colors.Primary,
+        BorderColor3 = UITheme.Colors.BorderLight,
+        BorderSizePixel = 1,
+        TextColor3 = UITheme.Colors.TextPrimary,
+        Font = UITheme.Fonts.SemiBold,
+        TextSize = UITheme.Sizes.TextMedium,
+    },
+
+    ButtonHover = {
+        BackgroundColor3 = Color3.fromRGB(37, 99, 235),
+    },
+
+    ButtonDisabled = {
+        BackgroundColor3 = UITheme.Colors.TextDisabled,
+        TextColor3 = UITheme.Colors.TextMuted,
+    },
+
+    Input = {
+        BackgroundColor3 = UITheme.Colors.BackgroundLight,
+        BorderColor3 = UITheme.Colors.BorderDark,
+        BorderSizePixel = 1,
+        TextColor3 = UITheme.Colors.TextPrimary,
+        Font = UITheme.Fonts.Regular,
+        TextSize = UITheme.Sizes.TextMedium,
+    },
+
+    Label = {
+        BackgroundTransparency = 1,
+        TextColor3 = UITheme.Colors.TextPrimary,
+        Font = UITheme.Fonts.Regular,
+        TextSize = UITheme.Sizes.TextMedium,
+    },
+
+    Title = {
+        BackgroundTransparency = 1,
+        TextColor3 = UITheme.Colors.Warning,
+        Font = UITheme.Fonts.Bold,
+        TextSize = UITheme.Sizes.TextTitle,
+    },
+
+    Slot = {
+        BackgroundColor3 = UITheme.Colors.BackgroundLight,
+        BorderColor3 = UITheme.Colors.BorderDark,
+        BorderSizePixel = 2,
+    },
+
+    ProgressBar = {
+        BackgroundColor3 = UITheme.Colors.BackgroundLight,
+        BorderColor3 = UITheme.Colors.BorderDark,
+        BorderSizePixel = 1,
+    },
+
+    ProgressFill = {
+        BorderSizePixel = 0,
+    },
+
+    ScrollFrame = {
+        BackgroundColor3 = UITheme.Colors.BackgroundMedium,
+        BorderSizePixel = 0,
+        ScrollBarImageColor3 = UITheme.Colors.Primary,
+        ScrollBarThickness = 8,
+    },
+}
+
+-- Функции для получения цветов редкости
+function UITheme.GetRarityColor(rarity)
+    local rarityColors = {
+        common = UITheme.Colors.RarityCommon,
+        uncommon = UITheme.Colors.RarityUncommon,
+        rare = UITheme.Colors.RarityRare,
+        epic = UITheme.Colors.RarityEpic,
+        legendary = UITheme.Colors.RarityLegendary,
+    }
+    return rarityColors[rarity] or UITheme.Colors.RarityCommon
 end
 
-local function lighten(col, factor)
-    local c = toColor3(col)
-    factor = math.clamp and math.clamp(factor or 0, 0, 1) or math.max(0, math.min(factor or 0, 1))
-    if typeof and typeof(c) == "Color3" then
-        local r = c.R + (1 - c.R) * factor
-        local g = c.G + (1 - c.G) * factor
-        local b = c.B + (1 - c.B) * factor
-        return Color3.new(r, g, b)
-    elseif type(c) == "table" then
-        return {
-            r = c.r + (255 - c.r) * factor,
-            g = c.g + (255 - c.g) * factor,
-            b = c.b + (255 - c.b) * factor,
-        }
+-- Функция для создания градиента
+function UITheme.CreateGradient(startColor, endColor, direction)
+    local gradient = Instance.new("UIGradient")
+    gradient.Color = ColorSequence.new(startColor, endColor)
+
+    if direction == "vertical" then
+        gradient.Rotation = 90
+    elseif direction == "diagonal" then
+        gradient.Rotation = 45
     end
-    return c
+
+    return gradient
 end
 
-local function addCorner(obj)
-    if not obj then return end
-    local radius = UITheme.cornerRadius or 0
-    if typeof and typeof(obj) == "Instance" and Instance and type(Instance.new) == "function" then
-        local ok, corner = pcall(function()
-            return Instance.new("UICorner")
-        end)
-        if ok and corner then
-            corner.CornerRadius = UDim.new(0, radius)
-            corner.Parent = obj
-        end
-    else
-        obj.cornerRadius = radius
-    end
-end
-
-local function assign(target, props)
-    if type(target) ~= "table" and (typeof and typeof(target) ~= "Instance") then
+-- Функция для применения стиля к элементу
+function UITheme.ApplyStyle(element, styleName)
+    local style = UITheme.Styles[styleName]
+    if not style then
+        warn("Стиль '" .. styleName .. "' не найден в UITheme")
         return
     end
-    for k, v in pairs(props) do
-        local ok, _ = pcall(function()
-            target[k] = v
-        end)
-        if not ok and type(target) == "table" then
-            target[k] = v
-        end
+
+    for property, value in pairs(style) do
+        element[property] = value
     end
 end
 
-function UITheme.styleWindow(frame)
-    assign(frame, {
-        BackgroundTransparency = 0.1,
-        BackgroundColor3 = toColor3(UITheme.colors.windowBackground),
-    })
-    if typeof and typeof(frame) == "Instance" and Instance and type(Instance.new) == "function" then
-        local ok, grad = pcall(function()
-            return Instance.new("UIGradient")
-        end)
-        if ok and grad and ColorSequence then
-            local c1 = toColor3(UITheme.colors.windowBackground)
-            local c2 = toColor3(UITheme.colors.windowBackground2)
-            grad.Color = ColorSequence.new(c1, c2)
-            grad.Parent = frame
-        end
-        local okStroke, stroke = pcall(function()
-            return Instance.new("UIStroke")
-        end)
-        if okStroke and stroke then
-            stroke.Color = toColor3(UITheme.colors.highlight)
-            stroke.Thickness = 1
-            stroke.Parent = frame
-        end
-    else
-        frame.gradient = {UITheme.colors.windowBackground, UITheme.colors.windowBackground2}
-        frame.strokeColor = UITheme.colors.highlight
+-- Функция для создания тени
+function UITheme.CreateShadow(parent, offset, blur)
+    offset = offset or Vector2.new(2, 2)
+    blur = blur or 4
+
+    local shadow = Instance.new("ImageLabel")
+    shadow.Name = "Shadow"
+    shadow.Size = UDim2.new(1, blur * 2, 1, blur * 2)
+    shadow.Position = UDim2.new(0, offset.X - blur, 0, offset.Y - blur)
+    shadow.BackgroundTransparency = 1
+    shadow.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+    shadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
+    shadow.ImageTransparency = 0.3
+    shadow.ZIndex = parent.ZIndex - 1
+    shadow.Parent = parent.Parent
+
+    return shadow
+end
+
+-- Функция для создания скруглённых углов
+function UITheme.CreateCorner(radius)
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, radius or 8)
+    return corner
+end
+
+-- Функция для создания отступов
+function UITheme.CreatePadding(size)
+    local padding = Instance.new("UIPadding")
+    local paddingSize = size or UITheme.Sizes.PaddingMedium
+
+    padding.PaddingTop = paddingSize
+    padding.PaddingBottom = paddingSize
+    padding.PaddingLeft = paddingSize
+    padding.PaddingRight = paddingSize
+
+    return padding
+end
+
+-- Функция для создания обводки
+function UITheme.CreateStroke(color, thickness)
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = color or UITheme.Colors.BorderDark
+    stroke.Thickness = thickness or 1
+    return stroke
+end
+
+-- Локальные темы для разных локаций
+UITheme.LocationThemes = {
+    forest = {
+        primary = Color3.fromRGB(34, 197, 94),
+        background = Color3.fromRGB(20, 30, 20),
+    },
+
+    desert = {
+        primary = Color3.fromRGB(245, 158, 11),
+        background = Color3.fromRGB(40, 30, 20),
+    },
+
+    ice = {
+        primary = Color3.fromRGB(59, 130, 246),
+        background = Color3.fromRGB(20, 25, 35),
+    },
+
+    volcano = {
+        primary = Color3.fromRGB(239, 68, 68),
+        background = Color3.fromRGB(40, 20, 20),
+    },
+
+    shadow = {
+        primary = Color3.fromRGB(168, 85, 247),
+        background = Color3.fromRGB(25, 20, 35),
+    },
+}
+
+-- Функция для применения темы локации
+function UITheme.ApplyLocationTheme(locationName)
+    local theme = UITheme.LocationThemes[locationName]
+    if theme then
+        UITheme.Colors.Primary = theme.primary
+        UITheme.Colors.BackgroundDark = theme.background
+        UITheme.Styles.Button.BackgroundColor3 = theme.primary
     end
-    addCorner(frame)
+end
+
+-- Совместимость со старым API
+function UITheme.styleWindow(frame)
+    UITheme.ApplyStyle(frame, "Window")
+    UITheme.CreateCorner(8).Parent = frame
 end
 
 function UITheme.styleButton(btn)
-    assign(btn, {
-        Font = UITheme.font,
-        TextColor3 = toColor3(UITheme.colors.buttonText),
-        BackgroundColor3 = toColor3(UITheme.colors.buttonBackground),
-        AutoButtonColor = false,
-        TextScaled = true,
-    })
-    addCorner(btn)
-    if typeof and typeof(btn) == "Instance" and Instance and type(Instance.new) == "function" then
-        local ok, stroke = pcall(function()
-            return Instance.new("UIStroke")
-        end)
-        if ok and stroke then
-            stroke.Color = toColor3(UITheme.colors.highlight)
-            stroke.Thickness = 1
-            stroke.Parent = btn
-        end
-    else
-        btn.strokeColor = UITheme.colors.highlight
-    end
+    UITheme.ApplyStyle(btn, "Button")
+    UITheme.CreateCorner(6).Parent = btn
 end
 
 function UITheme.styleLabel(lbl)
-    assign(lbl, {
-        Font = UITheme.font,
-        TextColor3 = toColor3(UITheme.colors.labelText),
-        BackgroundTransparency = lbl.BackgroundTransparency or 1,
-        TextScaled = true,
-    })
-    addCorner(lbl)
+    UITheme.ApplyStyle(lbl, "Label")
 end
 
----Styles an ImageButton with rounded corners and highlight stroke.
--- @param btn table|Instance ImageButton object
 function UITheme.styleImageButton(btn)
-    assign(btn, {
-        BackgroundColor3 = toColor3(UITheme.colors.buttonBackground),
-        AutoButtonColor = false,
-    })
-    addCorner(btn)
-    if typeof and typeof(btn) == "Instance" and Instance and type(Instance.new) == "function" then
-        local ok, stroke = pcall(function()
-            return Instance.new("UIStroke")
-        end)
-        if ok and stroke then
-            stroke.Color = toColor3(UITheme.colors.highlight)
-            stroke.Thickness = 1
-            stroke.Parent = btn
-        end
-    else
-        btn.strokeColor = UITheme.colors.highlight
-    end
+    UITheme.ApplyStyle(btn, "Button")
+    UITheme.CreateCorner(6).Parent = btn
 end
 
----Styles an input TextBox control with the theme colors.
--- Adds consistent font and rounded corners similar to buttons.
--- @param input table|Instance TextBox object
 function UITheme.styleInput(input)
-    assign(input, {
-        Font = UITheme.font,
-        TextColor3 = toColor3(UITheme.colors.labelText),
-        BackgroundColor3 = toColor3(UITheme.colors.buttonBackground),
-    })
-    addCorner(input)
+    UITheme.ApplyStyle(input, "Input")
+    UITheme.CreateCorner(6).Parent = input
 end
 
----Styles a simple progress bar frame.
---@param bar table|Instance progress bar container
 function UITheme.styleProgressBar(bar)
-    assign(bar, {
-        BackgroundTransparency = 0.1,
-        BackgroundColor3 = toColor3(UITheme.colors.windowBackground2),
-    })
-    addCorner(bar)
-    if typeof and typeof(bar) == "Instance" and Instance and type(Instance.new) == "function" then
-        local okGrad, grad = pcall(function()
-            return Instance.new("UIGradient")
-        end)
-        if okGrad and grad and ColorSequence then
-            local start = lighten(UITheme.colors.progressBar, 0.3)
-            local finish = toColor3(UITheme.colors.progressBar)
-            grad.Color = ColorSequence.new(toColor3(start), finish)
-            grad.Parent = bar
-        end
-        local okStroke, stroke = pcall(function()
-            return Instance.new("UIStroke")
-        end)
-        if okStroke and stroke then
-            stroke.Color = toColor3(UITheme.colors.highlight)
-            stroke.Thickness = 1
-            stroke.Parent = bar
-        end
-    else
-        bar.strokeColor = UITheme.colors.highlight
-    end
+    UITheme.ApplyStyle(bar, "ProgressBar")
+    UITheme.CreateCorner(4).Parent = bar
 end
 
----Returns an interpolated color from green to red based on the health ratio.
--- @param ratio number value between 0 and 1 representing current HP
 function UITheme.getHealthColor(ratio)
-    ratio = math.clamp and math.clamp(ratio or 1, 0, 1) or math.max(0, math.min(ratio or 1, 1))
-    local hi = toColor3(UITheme.colors.healthHigh)
-    local lo = toColor3(UITheme.colors.healthLow)
-    if Color3 and Color3.new and typeof then
-        local r = lo.R + (hi.R - lo.R) * ratio
-        local g = lo.G + (hi.G - lo.G) * ratio
-        local b = lo.B + (hi.B - lo.B) * ratio
-        return Color3.new(r, g, b)
-    end
-    return {
-        r = lo.r + (hi.r - lo.r) * ratio,
-        g = lo.g + (hi.g - lo.g) * ratio,
-        b = lo.b + (hi.b - lo.b) * ratio,
-    }
+    local hi = UITheme.Colors.Success
+    local lo = UITheme.Colors.Danger
+    ratio = math.clamp(ratio or 1, 0, 1)
+    local r = lo.R + (hi.R - lo.R) * ratio
+    local g = lo.G + (hi.G - lo.G) * ratio
+    local b = lo.B + (hi.B - lo.B) * ratio
+    return Color3.new(r, g, b)
 end
 
 return UITheme
