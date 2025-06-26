@@ -25,7 +25,7 @@ local INPUT_KEYS = {
     adminKey = Enum.KeyCode.F10,
 
     -- Дополнительные клавиши
-    chatKey = Enum.KeyCode.Enter,
+    chatKey = Enum.KeyCode.Return,
     screenshotKey = Enum.KeyCode.F12,
     fullscreenKey = Enum.KeyCode.F11,
     settingsKey = Enum.KeyCode.Escape,
