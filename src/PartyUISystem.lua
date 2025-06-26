@@ -26,7 +26,7 @@ end)
 if not ok then Theme = nil end
 
 local function createInstance(className)
-    if PartyUI.useRobloxObjects and typeof and Instance then
+    if PartyUI.useRobloxObjects and typeof ~= nil and Instance and type(Instance.new) == "function" then
         local inst = Instance.new(className)
         if className == "ScreenGui" and inst.IgnoreGuiInset ~= nil then inst.IgnoreGuiInset = true end
         if Theme then
