@@ -12,6 +12,7 @@ local SkillTreeUISystem = {
     treeSystem = nil,
     listFrame = nil,
     window = nil,
+    visible = false,
 }
 
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
@@ -75,27 +76,28 @@ local function ensureGui()
     return gui
 end
 
-function SkillTreeUISystem:start(treeSys)
+function SkillTreeUISystem:start(treeSys, parentGui)
     self.treeSystem = treeSys or self.treeSystem
-    local gui = ensureGui()
-    self.gui = gui
-    if self.window then
-        if self.window.Parent ~= gui then
-            parent(self.window, gui)
-            self.gui = gui
+    local guiRoot = ensureGui()
+    local parentTarget = parentGui or guiRoot
+
+    if not self.window then
+        self.window = GuiUtil.createWindow("SkillTreeWindow")
+        if UDim2 and type(UDim2.new)=="function" then
+            self.window.AnchorPoint = Vector2.new(0, 0)
+            self.window.Position = UDim2.new(0, 0, 0, 0)
+            self.window.Size = UDim2.new(1, 0, 1, 0)
+            GuiUtil.clampToScreen(self.window)
         end
-        self:update()
-        return
     end
-    self.window = GuiUtil.createWindow("SkillTreeWindow")
-    if UDim2 and type(UDim2.new)=="function" then
-        self.window.AnchorPoint = Vector2.new(0, 0)
-        self.window.Position = UDim2.new(0, 0, 0, 0)
-        self.window.Size = UDim2.new(1, 0, 1, 0)
-        GuiUtil.clampToScreen(self.window)
+
+    if self.window.Parent ~= parentTarget then
+        parent(self.window, parentTarget)
     end
-    parent(self.window, gui)
+
+    self.gui = parentTarget
     self:update()
+    self:setVisible(self.visible)
 end
 
 local function clearChildren(container)
@@ -194,6 +196,30 @@ function SkillTreeUISystem:update()
     for i, skill in ipairs(self.treeSystem.skillSystem.skills) do
         renderSkill(container, i, skill, self.treeSystem)
     end
+end
+
+function SkillTreeUISystem:setVisible(on)
+    local newVis = not not on
+    if newVis == self.visible then
+        local gui = ensureGui()
+        local parentGui = self.window or gui
+        GuiUtil.setVisible(parentGui, self.visible)
+        return
+    end
+
+    self.visible = newVis
+    local gui = ensureGui()
+    local parentGui = self.window or gui
+    GuiUtil.setVisible(parentGui, self.visible)
+    GuiUtil.makeFullScreen(parentGui)
+    GuiUtil.clampToScreen(parentGui)
+end
+
+function SkillTreeUISystem:toggle()
+    if not self.gui then
+        self:start(self.treeSystem)
+    end
+    self:setVisible(not self.visible)
 end
 
 return SkillTreeUISystem
