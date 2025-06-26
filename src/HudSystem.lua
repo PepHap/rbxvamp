@@ -376,16 +376,23 @@ function HudSystem.ConnectEvents()
         if input.UserInputType == Enum.UserInputType.Keyboard then
             local keyCode = input.KeyCode
 
-            -- Быстрые слоты 1-9, 0
-            for i = 1, 9 do
-                if keyCode == Enum.KeyCode["Alpha" .. i] then
-                    HudSystem.UseQuickSlot(i)
-                    break
-                end
-            end
+            -- Быстрые слоты 1-9 и 0
+            local slotKeys = {
+                [Enum.KeyCode.One] = 1,
+                [Enum.KeyCode.Two] = 2,
+                [Enum.KeyCode.Three] = 3,
+                [Enum.KeyCode.Four] = 4,
+                [Enum.KeyCode.Five] = 5,
+                [Enum.KeyCode.Six] = 6,
+                [Enum.KeyCode.Seven] = 7,
+                [Enum.KeyCode.Eight] = 8,
+                [Enum.KeyCode.Nine] = 9,
+                [Enum.KeyCode.Zero] = 0,
+            }
 
-            if keyCode == Enum.KeyCode.Alpha0 then
-                HudSystem.UseQuickSlot(0)
+            local slot = slotKeys[keyCode]
+            if slot then
+                HudSystem.UseQuickSlot(slot)
             end
         end
     end)
