@@ -51,6 +51,10 @@ UITheme.Colors = {
     SemiTransparent = Color3.fromRGB(0, 0, 0),
 }
 
+-- Table used at runtime for dynamically adjusted colors.
+-- Defaults fall back to values from ``UITheme.Colors``.
+UITheme.colors = setmetatable({}, {__index = UITheme.Colors})
+
 -- Размеры и отступы
 UITheme.Sizes = {
     -- Стандартные размеры кнопок
