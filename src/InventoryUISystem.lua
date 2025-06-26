@@ -194,7 +194,7 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
         if ok and player and player.CharacterAdded then
             self.respawnConnection = player.CharacterAdded:Connect(function()
                 self:setVisible(false)
-                BlurManager:reset()
+                BlurManager.Cleanup()
             end)
         end
     end
@@ -651,11 +651,11 @@ function InventoryUI:setVisible(on)
     GuiUtil.clampToScreen(parentGui)
 
     if self.visible then
-        BlurManager:add()
+        BlurManager.EnableBlur()
     else
-        BlurManager:remove()
-        if BlurManager:isActive() == false then
-            BlurManager:reset()
+        BlurManager.DisableBlur()
+        if not BlurManager.IsBlurred() then
+            BlurManager.Cleanup()
         end
     end
 end
