@@ -112,17 +112,23 @@ function GameManager:start()
             elseif action == "upgrade" then
                 result = GameManager:upgradeItemWithCrystals(slot, tonumber(amount) or 1, currency)
             elseif action == "addTicket" then
-                local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
-                GachaSystem:addTickets(kind, tonumber(amount) or 0)
-                result = true
+                if self.networkSystem:isAdmin(player) then
+                    local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
+                    GachaSystem:addTickets(kind, tonumber(amount) or 0)
+                    result = true
+                end
             elseif action == "addCurrency" then
-                local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
-                CurrencySystem:add(kind, tonumber(amount) or 0)
-                result = true
+                if self.networkSystem:isAdmin(player) then
+                    local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
+                    CurrencySystem:add(kind, tonumber(amount) or 0)
+                    result = true
+                end
             elseif action == "addCrystals" then
-                local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
-                GachaSystem:addCrystals(tonumber(amount) or 0)
-                result = true
+                if self.networkSystem:isAdmin(player) then
+                    local GachaSystem = require(script.Parent:WaitForChild("GachaSystem"))
+                    GachaSystem:addCrystals(tonumber(amount) or 0)
+                    result = true
+                end
             end
             self.networkSystem:fireClient(player, "ExchangeResult", result)
         end)
@@ -158,6 +164,9 @@ function GameManager:setAdminIds(ids)
     local console = self.systems and self.systems.AdminConsole
     if console and console.setAdminIds then
         console:setAdminIds(ids)
+    end
+    if self.networkSystem and self.networkSystem.setAdminIds then
+        self.networkSystem:setAdminIds(ids)
     end
 end
 

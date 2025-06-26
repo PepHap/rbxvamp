@@ -10,7 +10,9 @@ local RunService = game:GetService("RunService")
 
 local NetworkSystem = {
     useRobloxObjects = EnvironmentUtil.detectRoblox(),
-    events = {}
+    events = {},
+    allowedEvents = {},
+    adminIds = {}
 }
 
 local ReplicatedStorage
@@ -50,15 +52,62 @@ function NetworkSystem:start()
         "RaidRequest", "AttackRequest", "SkillRequest", "SkillCooldown", "QuestUpdate",
         "QuestData", "QuestRequest", "QuestClaim", "PlayerDied", "GachaRequest", "GachaResult",
         "ExchangeRequest", "ExchangeResult", "StatUpgradeRequest", "StatUpdate",
-        "AutoBattleToggle"
+        "AutoBattleToggle", "LobbyRequest"
     }
     for _, alias in ipairs(aliases) do
         self.events[alias] = createRemoteEvent(alias)
     end
+
+    for name in pairs(RemoteEventNames) do
+        self.allowedEvents[name] = true
+    end
+end
+
+function NetworkSystem:setAdminIds(ids)
+    if type(ids) == "table" then
+        self.adminIds = ids
+    end
+end
+
+function NetworkSystem:isAdmin(player)
+    if typeof and typeof(player) == "Instance" then
+        local uid = player.UserId
+        for _, id in ipairs(self.adminIds) do
+            if id == uid then
+                return true
+            end
+        end
+    end
+    return false
 end
 
 function NetworkSystem:getEvent(name)
-    return self.events[name] or createRemoteEvent(name)
+    if self.allowedEvents[name] then
+        if not self.events[name] then
+            self.events[name] = createRemoteEvent(name)
+        end
+        return self.events[name]
+    end
+    return nil
+end
+
+function NetworkSystem:cleanup()
+    if not self.useRobloxObjects then
+        self.events = {}
+        return
+    end
+    ReplicatedStorage = ReplicatedStorage or game:GetService("ReplicatedStorage")
+    local folder = ReplicatedStorage:FindFirstChild("RemoteEvents")
+    if folder then
+        for name, ev in pairs(self.events) do
+            if ev and ev.Destroy and ev:IsDescendantOf(folder) then
+                ev:Destroy()
+            end
+            self.events[name] = nil
+        end
+    else
+        self.events = {}
+    end
 end
 
 -- Fires a RemoteEvent to all connected clients. Per Roblox API this
@@ -68,6 +117,7 @@ end
 -- https://create.roblox.com/docs/reference/engine/classes/RemoteEvent#FireAllClients
 function NetworkSystem:fireAllClients(name, ...)
     local ev = self:getEvent(name)
+    if not ev then return end
     if RunService and RunService:IsServer() then
         if ev and ev.FireAllClients then
             ev:FireAllClients(...)
@@ -91,6 +141,7 @@ end
 
 function NetworkSystem:fireClient(player, name, ...)
     local ev = self:getEvent(name)
+    if not ev then return end
     if ev and ev.FireClient then
         ev:FireClient(player, ...)
     elseif ev and ev.Fire then
@@ -98,8 +149,16 @@ function NetworkSystem:fireClient(player, name, ...)
     end
 end
 
+function NetworkSystem:fireClientAdmin(player, name, ...)
+    if not self:isAdmin(player) then
+        return
+    end
+    self:fireClient(player, name, ...)
+end
+
 function NetworkSystem:fireServer(name, ...)
     local ev = self:getEvent(name)
+    if not ev then return end
     if ev and ev.FireServer then
         ev:FireServer(...)
     elseif ev and ev.Fire then
@@ -107,10 +166,16 @@ function NetworkSystem:fireServer(name, ...)
     end
 end
 
-function NetworkSystem:onServerEvent(name, callback)
+function NetworkSystem:onServerEvent(name, callback, adminOnly)
     local ev = self:getEvent(name)
+    if not ev then return end
     if ev and ev.OnServerEvent then
-        ev.OnServerEvent:Connect(callback)
+        ev.OnServerEvent:Connect(function(player, ...)
+            if adminOnly and not self:isAdmin(player) then
+                return
+            end
+            callback(player, ...)
+        end)
     elseif ev and ev.Connect then
         ev:Connect(callback)
     end
@@ -118,6 +183,7 @@ end
 
 function NetworkSystem:onClientEvent(name, callback)
     local ev = self:getEvent(name)
+    if not ev then return end
     if ev and ev.OnClientEvent then
         ev.OnClientEvent:Connect(callback)
     elseif ev and ev.Connect then
