@@ -115,11 +115,10 @@ function AdminConsole:start(manager, admins)
     self.gui = gui
     local window = GuiUtil.createWindow("ConsoleWindow")
     if UDim2 and type(UDim2.new)=="function" then
-        -- Stretch the console across the screen to avoid cramped output and
-        -- ensure elements never exceed the viewport.
-        window.Size = UDim2.new(1, 0, 1, 0)
-        window.AnchorPoint = Vector2.new(0, 0)
-        window.Position = UDim2.new(0, 0, 0, 0)
+        -- Use a centered panel that does not hide the entire screen.
+        window.Size = UDim2.new(0.6, 0, 0.6, 0)
+        window.AnchorPoint = Vector2.new(0.5, 0.5)
+        window.Position = UDim2.new(0.5, 0, 0.5, 0)
         GuiUtil.clampToScreen(window)
     end
     window.Name = "Window"

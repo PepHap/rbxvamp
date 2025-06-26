@@ -16,6 +16,7 @@ local GachaUI = {
     companionButton = nil,
     equipmentButton = nil,
     window = nil,
+    contentFrame = nil,
 }
 
 local ok, Theme = pcall(function()
@@ -94,11 +95,11 @@ function GachaUI:start(manager, parentGui)
         -- use a plain window frame; banner images were removed
         self.window = GuiUtil.createWindow("GachaWindow")
         if UDim2 and type(UDim2.new)=="function" then
-            -- Show the gacha interface across the entire screen for a cleaner
-            -- layout on various resolutions.
-            self.window.Size = UDim2.new(1, 0, 1, 0)
-            self.window.AnchorPoint = Vector2.new(0, 0)
-            self.window.Position = UDim2.new(0, 0, 0, 0)
+            -- Provide a moderate sized window instead of covering the
+            -- entire screen so other UI remains visible.
+            self.window.Size = UDim2.new(0.3, 0, 0.5, 0)
+            self.window.AnchorPoint = Vector2.new(0.5, 0.5)
+            self.window.Position = UDim2.new(0.5, 0, 0.5, 0)
             GuiUtil.clampToScreen(self.window)
         end
         created = true
@@ -109,6 +110,14 @@ function GachaUI:start(manager, parentGui)
     self.gui = parentTarget
 
     if created then
+        -- create a container frame so the layout ignores decorative
+        -- cross bars added by createWindow
+        self.contentFrame = createInstance("Frame")
+        if UDim2 and type(UDim2.new)=="function" then
+            self.contentFrame.Size = UDim2.new(1, 0, 1, 0)
+        end
+        parent(self.contentFrame, self.window)
+
         local closeBtn = createInstance("TextButton")
         closeBtn.Name = "CloseButton"
         closeBtn.Text = "X"
@@ -136,35 +145,35 @@ function GachaUI:start(manager, parentGui)
         if UDim and type(UDim.new) == "function" then
             layout.Padding = UDim.new(0,5)
         end
-        parent(layout, self.window)
+        parent(layout, self.contentFrame)
 
         self.resultLabel = createInstance("TextLabel")
         self.resultLabel.Text = "Roll result"
         if UDim2 and type(UDim2.new)=="function" then
             self.resultLabel.Size = UDim2.new(1, -10, 0, 25)
         end
-        parent(self.resultLabel, self.window)
+        parent(self.resultLabel, self.contentFrame)
 
         self.skillButton = createInstance("TextButton")
         self.skillButton.Text = "Roll Skill"
         if UDim2 and type(UDim2.new)=="function" then
             self.skillButton.Size = UDim2.new(1, -10, 0, 30)
         end
-        parent(self.skillButton, self.window)
+        parent(self.skillButton, self.contentFrame)
 
         self.companionButton = createInstance("TextButton")
         self.companionButton.Text = "Roll Companion"
         if UDim2 and type(UDim2.new)=="function" then
             self.companionButton.Size = UDim2.new(1, -10, 0, 30)
         end
-        parent(self.companionButton, self.window)
+        parent(self.companionButton, self.contentFrame)
 
         self.equipmentButton = createInstance("TextButton")
         self.equipmentButton.Text = "Roll Weapon"
         if UDim2 and type(UDim2.new)=="function" then
             self.equipmentButton.Size = UDim2.new(1, -10, 0, 30)
         end
-        parent(self.equipmentButton, self.window)
+        parent(self.equipmentButton, self.contentFrame)
 
         connect(self.skillButton, function()
             NetworkSystem:fireServer("GachaRequest", "skill")
@@ -203,7 +212,6 @@ function GachaUI:setVisible(on)
     local gui = ensureGui()
     local parentGui = self.window or gui
     GuiUtil.setVisible(parentGui, self.visible)
-    GuiUtil.makeFullScreen(parentGui)
     GuiUtil.clampToScreen(parentGui)
 end
 
