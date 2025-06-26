@@ -375,6 +375,15 @@ local function renderInventory(container, items, page, perPage)
     grid:ensureCells(perPage)
 
     local list = items:getInventoryPage(page, perPage)
+    if #list == 0 then
+        local none = createInstance("TextLabel")
+        none.Text = "No items"
+        if UDim2 and type(UDim2.new)=="function" then
+            none.Position = UDim2.new(0, 5, 0, offset)
+            none.Size = UDim2.new(1, -10, 0, 20)
+        end
+        parent(none, holder)
+    end
     for i = 1, perPage do
         local idx = (page - 1) * perPage + i
         local item = list[i]

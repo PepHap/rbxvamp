@@ -146,6 +146,19 @@ function AchievementUI:update()
         end
         offset = offset + 35
     end
+
+    -- When no achievements exist, display an informative message so the
+    -- window is not left completely blank. This prevents a black screen
+    -- with no elements when the player has no achievements defined.
+    if offset == 0 then
+        local none = createInstance("TextLabel")
+        none.Text = "No achievements"
+        if UDim2 and type(UDim2.new)=="function" then
+            none.Position = UDim2.new(0, 5, 0, 5)
+            none.Size = UDim2.new(1, -10, 0, 20)
+        end
+        parent(none, parentGui)
+    end
 end
 
 function AchievementUI:claim(id)
