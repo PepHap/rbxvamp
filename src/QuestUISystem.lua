@@ -122,12 +122,29 @@ function QuestUISystem:start(questSys, parentGui)
 end
 
 function QuestUISystem:update()
-    local qs = self.questSystem
-    if not qs then
-        return
-    end
     local gui = ensureGui()
     local container = self.window or gui
+
+    local qs = self.questSystem
+    if not qs then
+        -- Show a placeholder message when no quest system exists
+        if container then
+            if type(container) == "table" then
+                container.children = {}
+            elseif container.ClearAllChildren then
+                container:ClearAllChildren()
+            end
+            local lbl = createInstance("TextLabel")
+            lbl.Text = "No quests available"
+            if UDim2 and type(UDim2.new)=="function" then
+                lbl.Position = UDim2.new(0, 5, 0, 5)
+                lbl.Size = UDim2.new(1, -10, 0, 20)
+            end
+            parent(lbl, container)
+        end
+        return
+    end
+
     if type(container) == "table" then
         container.children = {}
     elseif container.ClearAllChildren then
@@ -166,7 +183,9 @@ function QuestUISystem:update()
         parent(layout, container)
     end
 
+    local questCount = 0
     for id, q in pairs(qs.quests) do
+        questCount += 1
         local frame = createInstance("Frame")
         frame.Name = id .. "Frame"
         if UDim2 and type(UDim2.new)=="function" then
@@ -206,6 +225,16 @@ function QuestUISystem:update()
             frame.ProgressLabel = label
             frame.ClaimButton = btn
         end
+    end
+
+    if questCount == 0 then
+        local lbl = createInstance("TextLabel")
+        lbl.Text = "No quests available"
+        if UDim2 and type(UDim2.new)=="function" then
+            lbl.Position = UDim2.new(0, 5, 0, 5)
+            lbl.Size = UDim2.new(1, -10, 0, 20)
+        end
+        parent(lbl, container)
     end
 end
 
