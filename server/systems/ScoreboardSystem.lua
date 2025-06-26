@@ -4,10 +4,8 @@
 -- This module persists data using DataStoreService which is server-only:
 -- https://create.roblox.com/docs/reference/engine/classes/RunService#IsServer
 local RunService = game:GetService("RunService")
-if RunService and RunService.IsClient and RunService.IsServer then
-    if RunService:IsClient() then
-        error("ScoreboardSystem should only be required on the server", 2)
-    end
+if RunService and RunService:IsClient() then
+    error("ScoreboardSystem should only be required on the server", 2)
 end
 
 local server = script.Parent

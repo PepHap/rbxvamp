@@ -2,7 +2,7 @@
 -- Allows spending crystals for tickets or currency
 
 local RunService = game:GetService("RunService")
-if RunService and RunService.IsClient and RunService:IsClient() then
+if RunService and RunService:IsClient() then
     error("CrystalExchangeSystem should only be required on the server", 2)
 end
 

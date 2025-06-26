@@ -4,10 +4,8 @@
 local RunService = game:GetService("RunService")
 -- Only the server may access DataStoreService:
 -- https://create.roblox.com/docs/reference/engine/classes/RunService#IsServer
-if RunService and RunService.IsClient and RunService.IsServer then
-    if RunService:IsClient() then
-        error("DataPersistenceSystem should only be required on the server", 2)
-    end
+if RunService and RunService:IsClient() then
+    error("DataPersistenceSystem should only be required on the server", 2)
 end
 
 local src = script.Parent.Parent.Parent:WaitForChild("src")

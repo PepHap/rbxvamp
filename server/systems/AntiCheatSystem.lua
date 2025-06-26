@@ -4,10 +4,8 @@
 local RunService = game:GetService("RunService")
 -- This module must only execute on the server according to Roblox docs:
 -- https://create.roblox.com/docs/reference/engine/classes/RunService#IsServer
-if RunService and RunService.IsClient and RunService.IsServer then
-    if RunService:IsClient() then
-        error("AntiCheatSystem should only be required on the server", 2)
-    end
+if RunService and RunService:IsClient() then
+    error("AntiCheatSystem should only be required on the server", 2)
 end
 
 local AntiCheatSystem = {
