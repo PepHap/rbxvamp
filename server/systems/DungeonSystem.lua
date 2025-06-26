@@ -82,6 +82,9 @@ function DungeonSystem:complete()
     if NetworkSystem and NetworkSystem.fireAllClients then
         NetworkSystem:fireAllClients("DungeonState", nil, 0, 0)
     end
+    if NetworkSystem and NetworkSystem.cleanup then
+        NetworkSystem:cleanup()
+    end
     return true
 end
 
@@ -91,6 +94,9 @@ function DungeonSystem:abort()
     self.killCount = 0
     if NetworkSystem and NetworkSystem.fireAllClients then
         NetworkSystem:fireAllClients("DungeonState", nil, 0, 0)
+    end
+    if NetworkSystem and NetworkSystem.cleanup then
+        NetworkSystem:cleanup()
     end
 end
 

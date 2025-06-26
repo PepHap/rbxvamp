@@ -187,6 +187,9 @@ function RaidSystem:onBossKilled()
     EventManager:Get("RaidComplete"):Fire()
     NetworkSystem:fireAllClients("RaidStatus", "complete")
     NetworkSystem:fireAllClients("RaidEvent", "complete")
+    if NetworkSystem and NetworkSystem.cleanup then
+        NetworkSystem:cleanup()
+    end
     if self.partySystem and self.currentPartyId then
         for _, member in ipairs(self.partySystem:getMembers(self.currentPartyId)) do
             self.partySystem:setReady(member, false)
