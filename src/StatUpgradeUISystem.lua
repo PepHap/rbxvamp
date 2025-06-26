@@ -165,7 +165,9 @@ local function renderStats(container, sys)
         end
         parent(layout, container)
     end
+    local hasStats = false
     for name, stat in pairs(sys.stats) do
+        hasStats = true
         local frame = createInstance("Frame")
         frame.Name = name .. "Frame"
         if UDim2 and type(UDim2.new)=="function" then
@@ -203,6 +205,15 @@ local function renderStats(container, sys)
             frame.Label = label
             frame.Button = btn
         end
+    end
+    if not hasStats then
+        local none = createInstance("TextLabel")
+        none.Text = "No stats"
+        if UDim2 and type(UDim2.new)=="function" then
+            none.Position = UDim2.new(0, 5, 0, 5)
+            none.Size = UDim2.new(1, -10, 0, 20)
+        end
+        parent(none, container)
     end
 end
 

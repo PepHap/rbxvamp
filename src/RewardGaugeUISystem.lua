@@ -192,7 +192,18 @@ end
 
 function RewardGaugeUISystem:showOptions()
     local opts = RewardGaugeSystem:getOptions()
-    if not opts then return nil end
+    if not opts or #opts == 0 then
+        local gui = ensureGui()
+        local parentGui = self.window or gui
+        local none = createInstance("TextLabel")
+        none.Text = "No reward"
+        if UDim2 and type(UDim2.new)=="function" then
+            none.Position = UDim2.new(0, 5, 0, 5)
+            none.Size = UDim2.new(1, -10, 0, 20)
+        end
+        parent(none, parentGui)
+        return nil
+    end
     local gui = ensureGui()
     local parentGui = self.window or gui
     self.layout = self.layout or createInstance("UIListLayout")
