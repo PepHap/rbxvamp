@@ -25,6 +25,8 @@ local INPUT_KEYS = {
     adminKey = Enum.KeyCode.F10,
 
     -- Дополнительные клавиши
+    -- Используем Return, так как "Enter" отсутствует в Enum.KeyCode
+    -- Дополнительно обрабатываем KeypadEnter для совместимости
     chatKey = Enum.KeyCode.Return,
     screenshotKey = Enum.KeyCode.F12,
     fullscreenKey = Enum.KeyCode.F11,
@@ -153,6 +155,10 @@ end
 
 -- Обработка нажатия клавиш
 function PlayerInputSystem.HandleKeyPress(keyCode)
+    -- Обработка альтернативной клавиши ввода
+    if keyCode == Enum.KeyCode.KeypadEnter then
+        keyCode = Enum.KeyCode.Return
+    end
     -- Инвентарь
     if keyCode == INPUT_KEYS.inventoryKey then
         PlayerInputSystem.ToggleInterface("inventory", "InventoryUISystem")
@@ -406,7 +412,8 @@ function PlayerInputSystem.CreateMobileButton(buttonData)
     button.Text = buttonData.name:sub(1, 1)
     button.BackgroundColor3 = Color3.fromRGB(59, 130, 246)
     button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    button.Font = Enum.Font.GothamBold
+    -- Используем шрифт из темы для единообразия
+    button.Font = UITheme.Fonts.Bold
     button.TextSize = 18
     button.Parent = screenGui
     

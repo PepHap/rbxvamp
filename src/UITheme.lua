@@ -87,7 +87,8 @@ UITheme.Fonts = {
     Regular = Enum.Font.Gotham,
     Bold = Enum.Font.GothamBold,
     SemiBold = Enum.Font.GothamSemibold,
-    Light = Enum.Font.Gotham,
+    -- GothamLight отсутствует, поэтому используем SourceSans как облегчённый вариант
+    Light = Enum.Font.SourceSans,
     Mono = Enum.Font.RobotoMono,
 }
 
