@@ -161,8 +161,6 @@ function ProgressMapUI:start(ps)
 end
 
 function ProgressMapUI:update()
-    local ps = self.progressSystem
-    if not ps then return end
     local gui = ensureGui()
     self.label = self.label or createInstance("TextLabel")
     if UDim2 and type(UDim2.new)=="function" then
@@ -170,7 +168,18 @@ function ProgressMapUI:update()
         self.label.Size = UDim2.new(1, -10, 1, -10)
     end
     parent(self.label, self.window or gui)
+
+    local ps = self.progressSystem
+    if not ps then
+        -- Display a message when no progress system is available
+        self.label.Text = "Progress unavailable"
+        return
+    end
     local pr = ps:getProgress()
+    if not pr then
+        self.label.Text = "No progress data"
+        return
+    end
     local LevelSystem = require(script.Parent:WaitForChild("ClientLevelSystem"))
     local nextLevel, stageType, killsLeft, bossName, milestoneKills, milestoneType = LevelSystem:getNextStageInfo()
     local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
