@@ -97,7 +97,8 @@ function GachaUI:start(manager, parentGui)
         if UDim2 and type(UDim2.new)=="function" then
             -- Provide a moderate sized window instead of covering the
             -- entire screen so other UI remains visible.
-            self.window.Size = UDim2.new(0.3, 0, 0.5, 0)
+            -- Slightly larger window so buttons remain visible
+            self.window.Size = UDim2.new(0.4, 0, 0.5, 0)
             self.window.AnchorPoint = Vector2.new(0.5, 0.5)
             self.window.Position = UDim2.new(0.5, 0, 0.5, 0)
             GuiUtil.clampToScreen(self.window)
