@@ -219,8 +219,12 @@ function GuiUtil.clampToScreen(frame)
         local pos = frame.Position or {scaleX = 0, offsetX = 0, scaleY = 0, offsetY = 0}
         size.scaleX = clamp(size.scaleX or 1, 0, 1)
         size.scaleY = clamp(size.scaleY or 1, 0, 1)
+        size.offsetX = 0
+        size.offsetY = 0
         pos.scaleX = clamp(pos.scaleX or 0, 0, 1 - size.scaleX)
         pos.scaleY = clamp(pos.scaleY or 0, 0, 1 - size.scaleY)
+        pos.offsetX = 0
+        pos.offsetY = 0
         frame.Size = size
         frame.Position = pos
         return
@@ -231,7 +235,7 @@ function GuiUtil.clampToScreen(frame)
         local p = frame.Position
         local sx = clamp(s.X.Scale, 0, 1)
         local sy = clamp(s.Y.Scale, 0, 1)
-        frame.Size = UDim2.new(sx, s.X.Offset, sy, s.Y.Offset)
+        frame.Size = UDim2.new(sx, 0, sy, 0)
 
         local ax, ay = 0, 0
         if frame.AnchorPoint then
@@ -246,7 +250,7 @@ function GuiUtil.clampToScreen(frame)
 
         local px = clamp(p.X.Scale, minX, maxX)
         local py = clamp(p.Y.Scale, minY, maxY)
-        frame.Position = UDim2.new(px, p.X.Offset, py, p.Y.Offset)
+        frame.Position = UDim2.new(px, 0, py, 0)
     end)
     if not ok and type(frame) == "table" then
         local clamp = math.clamp or function(v, lo, hi) return math.max(lo, math.min(hi, v)) end
@@ -255,6 +259,8 @@ function GuiUtil.clampToScreen(frame)
         local anchor = frame.AnchorPoint or {x = 0, y = 0}
         size.scaleX = clamp(size.scaleX or 1, 0, 1)
         size.scaleY = clamp(size.scaleY or 1, 0, 1)
+        size.offsetX = 0
+        size.offsetY = 0
         local ax = anchor.X or anchor.x or 0
         local ay = anchor.Y or anchor.y or 0
         local minX = size.scaleX * ax
@@ -263,6 +269,8 @@ function GuiUtil.clampToScreen(frame)
         local maxY = 1 - size.scaleY * (1 - ay)
         pos.scaleX = clamp(pos.scaleX or 0, minX, maxX)
         pos.scaleY = clamp(pos.scaleY or 0, minY, maxY)
+        pos.offsetX = 0
+        pos.offsetY = 0
         frame.Size = size
         frame.Position = pos
     end
