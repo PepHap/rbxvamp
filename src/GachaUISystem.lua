@@ -203,6 +203,7 @@ function GachaUI:setVisible(on)
     local gui = ensureGui()
     local parentGui = self.window or gui
     GuiUtil.setVisible(parentGui, self.visible)
+    GuiUtil.makeFullScreen(parentGui)
     GuiUtil.clampToScreen(parentGui)
 end
 
