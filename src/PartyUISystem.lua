@@ -90,6 +90,9 @@ function PartyUI:start()
     end
     local window = createInstance("Frame")
     window.Name = "PartyWindow"
+    GuiUtil.makeFullScreen(window)
+    GuiUtil.clampToScreen(window)
+    GuiUtil.addCrossDecor(window)
     PartyUI.window = window
     local createBtn = createInstance("TextButton")
     createBtn.Text = "Create Party"
@@ -233,10 +236,10 @@ function PartyUI:toggle()
     PartyUI.visible = not PartyUI.visible
     local gui = ensureGui()
     if PartyUI.window then
-        PartyUI.window.Visible = PartyUI.visible
-        if PartyUI.useRobloxObjects and gui then
-            gui.Enabled = PartyUI.visible
-        end
+        GuiUtil.setVisible(PartyUI.window, PartyUI.visible)
+    end
+    if gui then
+        GuiUtil.setVisible(gui, PartyUI.visible)
     end
 end
 
