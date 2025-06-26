@@ -111,7 +111,13 @@ function LevelUI:start(pls, lvlSys, parentGui)
     end
 
     self.window = GuiUtil.createWindow("LevelWindow")
-    GuiUtil.clampToScreen(self.window)
+    if UDim2 and type(UDim2.new)=="function" then
+        -- Compact window anchored to the top left.
+        self.window.Size = UDim2.new(0, 220, 0, 80)
+        self.window.Position = UDim2.new(0, 10, 0, 10)
+        self.window.AnchorPoint = Vector2.new(0, 0)
+        GuiUtil.clampToScreen(self.window)
+    end
     parent(self.window, parentTarget)
 
     self.levelLabel = createInstance("TextLabel")
@@ -178,7 +184,6 @@ function LevelUI:setVisible(on)
     local gui = ensureGui()
     local parentGui = self.window or gui
     GuiUtil.setVisible(parentGui, self.visible)
-    GuiUtil.makeFullScreen(parentGui)
     GuiUtil.clampToScreen(parentGui)
 end
 
