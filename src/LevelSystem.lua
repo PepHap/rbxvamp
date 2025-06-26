@@ -29,10 +29,10 @@ if not mod then
         return self.killCount / self.requiredKills
     end
     function mod:addKill()
-        self.killCount += 1
+        self.killCount = (self.killCount or 0) + 1
         if self.killCount >= self.requiredKills then
             self.killCount = 0
-            self.currentLevel += 1
+            self.currentLevel = (self.currentLevel or 0) + 1
             self.requiredKills = self:getKillRequirement(self.currentLevel)
         end
     end

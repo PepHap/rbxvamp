@@ -185,7 +185,7 @@ function QuestUISystem:update()
 
     local questCount = 0
     for id, q in pairs(qs.quests) do
-        questCount += 1
+        questCount = questCount + 1
         local frame = createInstance("Frame")
         frame.Name = id .. "Frame"
         if UDim2 and type(UDim2.new)=="function" then
