@@ -436,4 +436,143 @@ function GuiUtil.CreateDivider(parent, orientation)
     return divider
 end
 
+-- Parent ``child`` to ``parentObj`` for both real Instances and table mocks.
+function GuiUtil.parent(child, parentObj)
+    if not child or not parentObj then return end
+    if typeof and typeof(child) == "Instance" then
+        child.Parent = parentObj
+    else
+        parentObj.children = parentObj.children or {}
+        table.insert(parentObj.children, child)
+        child.Parent = parentObj
+    end
+end
+
+-- Returns PlayerGui for the local player when running in Roblox.
+function GuiUtil.getPlayerGui()
+    if typeof then
+        local Players = game:GetService("Players")
+        local player = Players.LocalPlayer
+        if player then
+            local ok, gui = pcall(player.WaitForChild, player, "PlayerGui")
+            if ok then
+                return gui
+            end
+        end
+    end
+    return nil
+end
+
+-- Expands a GUI object to cover the full screen area.
+function GuiUtil.makeFullScreen(obj)
+    if not obj then return end
+    if UDim2 and type(UDim2.new) == "function" then
+        if obj.Size ~= nil then
+            obj.Size = UDim2.new(1, 0, 1, 0)
+        end
+        if obj.Position ~= nil then
+            obj.Position = UDim2.new(0, 0, 0, 0)
+        end
+    end
+end
+
+-- Ensures a frame stays within the screen bounds.
+function GuiUtil.clampToScreen(frame)
+    if not (frame and frame.Position and frame.Size and UDim2 and type(UDim2.new)=="function") then
+        return
+    end
+    local pos = frame.Position
+    local size = frame.Size
+    local x = math.clamp(pos.X.Scale, 0, 1 - size.X.Scale)
+    local y = math.clamp(pos.Y.Scale, 0, 1 - size.Y.Scale)
+    frame.Position = UDim2.new(x, pos.X.Offset, y, pos.Y.Offset)
+end
+
+-- Simple responsive sizing based on screen width.
+function GuiUtil.applyResponsive(frame, scale, minW, minH, maxW, maxH)
+    if not (frame and UDim2 and type(UDim2.new)=="function") then return end
+    local cam = workspace.CurrentCamera
+    local vw, vh = 800, 600
+    if cam and cam.ViewportSize then
+        vw, vh = cam.ViewportSize.X, cam.ViewportSize.Y
+    end
+    local w = math.clamp(vw * (scale or 1), minW or 0, maxW or vw)
+    local h = math.clamp(vh, minH or 0, maxH or vh)
+    frame.Size = UDim2.new(0, w, 0, h)
+end
+
+-- Adds simple cross style decoration frames to ``parent``.
+function GuiUtil.addCrossDecor(parent)
+    if not (parent and Instance and type(Instance.new)=="function") then return end
+    local vert = Instance.new("Frame")
+    vert.Name = "CrossVert"
+    vert.BackgroundColor3 = UITheme.Colors.BorderDark
+    vert.BorderSizePixel = 0
+    vert.Size = UDim2.new(0, 1, 1, 0)
+    vert.Position = UDim2.new(0.5, 0, 0, 0)
+    vert.Parent = parent
+
+    local horiz = Instance.new("Frame")
+    horiz.Name = "CrossHoriz"
+    horiz.BackgroundColor3 = UITheme.Colors.BorderDark
+    horiz.BorderSizePixel = 0
+    horiz.Size = UDim2.new(1, 0, 0, 1)
+    horiz.Position = UDim2.new(0, 0, 0.5, 0)
+    horiz.Parent = parent
+end
+
+-- Connects ``callback`` to the button's activation event.
+function GuiUtil.connectButton(btn, callback)
+    if not (btn and callback) then return end
+    btn.hoverColor = btn.hoverColor or (UITheme.Styles.ButtonHover and UITheme.Styles.ButtonHover.BackgroundColor3)
+    if btn.MouseButton1Click then
+        btn.MouseButton1Click:Connect(callback)
+    else
+        btn.onClick = callback
+    end
+end
+
+-- Highlights a TextButton when selected.
+function GuiUtil.highlightButton(btn, on)
+    if not btn then return end
+    local hover = UITheme.Styles.ButtonHover and UITheme.Styles.ButtonHover.BackgroundColor3 or UITheme.Colors.Primary
+    if on then
+        if btn.BackgroundColor3 ~= nil then
+            btn.BackgroundColor3 = hover
+        end
+    else
+        if btn.BackgroundColor3 ~= nil then
+            btn.BackgroundColor3 = UITheme.Colors.Primary
+        end
+    end
+end
+
+-- Applies the default label style from UITheme.
+function GuiUtil.styleLabel(lbl)
+    if not lbl then return end
+    if UITheme and UITheme.styleLabel then
+        UITheme.styleLabel(lbl)
+    end
+end
+
+-- Sets the ``Visible`` state of a GUI object or table.
+function GuiUtil.setVisible(obj, vis)
+    if not obj then return end
+    if obj.Visible ~= nil then
+        obj.Visible = vis
+    else
+        obj.visible = vis
+    end
+end
+
+-- Wrapper around ``CreateWindow`` with optional parent and close button.
+function GuiUtil.createWindow(name, parent, showClose)
+    parent = parent or GuiUtil.getPlayerGui()
+    local window, titleBar, content, closeBtn = GuiUtil.CreateWindow(parent, name)
+    if showClose == false and closeBtn then
+        closeBtn.Visible = false
+    end
+    return window
+end
+
 return GuiUtil
