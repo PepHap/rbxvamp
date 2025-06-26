@@ -9,7 +9,8 @@ local UserInputService = game:GetService("UserInputService")
 
 local UITheme = require(script.Parent.UITheme)
 local GuiUtil = require(script.Parent.GuiUtil)
-local MenuIcons = require(script.Parent.Assets.menu_icons)
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local MenuIcons = require(ReplicatedStorage:WaitForChild("assets"):WaitForChild("menu_icons"))
 local BlurManager = require(script.Parent.BlurManager)
 
 local player = Players.LocalPlayer
