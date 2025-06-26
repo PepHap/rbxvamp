@@ -12,11 +12,14 @@ local NetworkSystem = {
     useRobloxObjects = EnvironmentUtil.detectRoblox(),
     events = {},
     allowedEvents = {},
-    adminIds = {}
+    adminIds = {},
+    adminEvents = {}
 }
 
 local ReplicatedStorage
 
+-- Ensures a single RemoteEvent exists per name inside ReplicatedStorage.
+-- Removes duplicates that may remain from previous sessions.
 local function createRemoteEvent(alias)
     local realName = RemoteEventNames[alias] or alias
     if not NetworkSystem.useRobloxObjects then
@@ -34,11 +37,21 @@ local function createRemoteEvent(alias)
         ev = Instance.new("RemoteEvent")
         ev.Name = realName
         ev.Parent = folder
+    else
+        for _, child in ipairs(folder:GetChildren()) do
+            if child.Name == realName and child ~= ev and child.Destroy then
+                child:Destroy()
+            end
+        end
     end
     return ev
 end
 
 function NetworkSystem:start()
+    -- Remove stale events from previous sessions
+    if self.cleanup then
+        self:cleanup()
+    end
     -- List of event aliases created by the system
     local aliases = {
         "PartyUpdated", "RaidStatus", "RaidEvent", "RaidReward", "PartyInvite",
@@ -69,6 +82,18 @@ function NetworkSystem:setAdminIds(ids)
     end
 end
 
+---Registers a RemoteEvent name that should only be fired by admins.
+-- The event will still be created if needed.
+-- @param name string event alias
+function NetworkSystem:registerAdminEvent(name)
+    if not name then return end
+    self.adminEvents[name] = true
+    self.allowedEvents[name] = true
+    if not self.events[name] then
+        self.events[name] = createRemoteEvent(name)
+    end
+end
+
 function NetworkSystem:isAdmin(player)
     if typeof and typeof(player) == "Instance" then
         local uid = player.UserId
@@ -91,6 +116,8 @@ function NetworkSystem:getEvent(name)
     return nil
 end
 
+-- Destroys all RemoteEvents created by this system so they do not
+-- persist across rounds or sessions.
 function NetworkSystem:cleanup()
     if not self.useRobloxObjects then
         self.events = {}
@@ -149,6 +176,7 @@ function NetworkSystem:fireClient(player, name, ...)
     end
 end
 
+-- Sends an event only to a specific admin player.
 function NetworkSystem:fireClientAdmin(player, name, ...)
     if not self:isAdmin(player) then
         return
@@ -171,14 +199,26 @@ function NetworkSystem:onServerEvent(name, callback, adminOnly)
     if not ev then return end
     if ev and ev.OnServerEvent then
         ev.OnServerEvent:Connect(function(player, ...)
-            if adminOnly and not self:isAdmin(player) then
+            if typeof(player) ~= "Instance" or not player:IsA("Player") then
                 return
+            end
+            if adminOnly or self.adminEvents[name] then
+                if not self:isAdmin(player) then
+                    return
+                end
             end
             callback(player, ...)
         end)
     elseif ev and ev.Connect then
         ev:Connect(callback)
     end
+end
+
+---Connects to a RemoteEvent that only admins may trigger.
+-- @param name string event alias
+-- @param callback function handler
+function NetworkSystem:onServerEventAdmin(name, callback)
+    self:onServerEvent(name, callback, true)
 end
 
 function NetworkSystem:onClientEvent(name, callback)
