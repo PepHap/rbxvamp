@@ -17,10 +17,10 @@ PlayerLevelSystem.nextExp = 100
 PlayerLevelSystem.unlocked = {}
 
 function PlayerLevelSystem:start()
-    NetworkSystem:onClientEvent("PlayerLevelUpdate", function(lvl, xp, nextXp)
+    NetworkSystem:onClientEvent("PlayerLevelUpdate", function(lvl, xp, nextExp)
         if type(lvl) == "number" then self.level = lvl end
         if type(xp) == "number" then self.exp = xp end
-        if type(nextXp) == "number" then self.nextExp = nextXp end
+        if type(nextExp) == "number" then self.nextExp = nextExp end
     end)
     local ev = EventManager:Get("PlayerLevelUp")
     if ev and ev.Connect then

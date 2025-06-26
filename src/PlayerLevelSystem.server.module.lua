@@ -23,10 +23,10 @@ PlayerLevelSystem.unlocked = {}
 ---Sets up networking on the client so server updates replicate level data.
 function PlayerLevelSystem:start()
     if RunService:IsClient() then
-        NetworkSystem:onClientEvent("PlayerLevelUpdate", function(lvl, xp, nextXp)
+        NetworkSystem:onClientEvent("PlayerLevelUpdate", function(lvl, xp, nextExp)
             if type(lvl) == "number" then self.level = lvl end
             if type(xp) == "number" then self.exp = xp end
-            if type(nextXp) == "number" then self.nextExp = nextXp end
+            if type(nextExp) == "number" then self.nextExp = nextExp end
         end)
     end
 end
