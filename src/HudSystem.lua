@@ -1,831 +1,516 @@
 -- HudSystem.lua
--- Displays player level, experience and currency in a simple GUI
+-- Отображает уровень игрока, валюту, здоровье, кнопки быстрого доступа и т.д.
 
-local EnvironmentUtil = require(script.Parent:WaitForChild("EnvironmentUtil"))
-local HudSystem = {
-    useRobloxObjects = EnvironmentUtil.detectRoblox(),
-    gui = nil,
-    levelLabel = nil,
-    currencyLabel = nil,
-    autoButton = nil,
-    attackButton = nil,
-    gachaButton = nil,
-    inventoryButton = nil,
-    rewardButton = nil,
-    skillButton = nil,
-    companionButton = nil,
-    questButton = nil,
-    progressButton = nil,
-    exchangeButton = nil,
-    dungeonButton = nil,
-    partyButton = nil,
-    scoreboardButton = nil,
-    menuButton = nil,
-    buttonFrame = nil,
-    buttonLayout = nil,
-    healthFrame = nil,
-    healthFill = nil,
-    healthText = nil,
-    skillFrame = nil,
-    skillLayout = nil,
-    skillButtons = nil,
-    cooldownOverlays = nil,
-    cooldownLabels = nil,
-    cooldowns = nil,
-    maxCooldowns = nil,
-    playerHealth = nil,
-    autoEnabled = false,
-    progressFrame = nil,
-    progressFill = nil,
-    progressText = nil,
-    levelUpTimer = 0,
-    deathTimer = 0,
-    lastLevel = 1,
+local HudSystem = {}
+
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+
+local UITheme = require(script.Parent.UITheme)
+local GuiUtil = require(script.Parent.GuiUtil)
+local MenuIcons = require(script.Parent.Assets.menu_icons)
+local BlurManager = require(script.Parent.BlurManager)
+
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- Переменные HUD
+local hudGui = nil
+local healthBar = nil
+local manaBar = nil
+local staminaBar = nil
+local experienceBar = nil
+local currencyFrames = {}
+local quickSlots = {}
+local minimapFrame = nil
+
+-- Данные игрока (обновляются через RemoteEvents)
+local playerData = {
+    level = 1,
+    health = 100,
+    maxHealth = 100,
+    mana = 50,
+    maxMana = 50,
+    stamina = 80,
+    maxStamina = 80,
+    experience = 0,
+    experienceToNext = 100,
+
+    currencies = {
+        gold = 0,
+        crystals = 0,
+        souls = 0,
+        keys = 0
+    },
+
+    quickSlots = {
+        [1] = nil,
+        [2] = nil,
+        [3] = nil,
+        [4] = nil,
+        [5] = nil,
+        [6] = nil,
+        [7] = nil,
+        [8] = nil,
+        [9] = nil,
+        [0] = nil
+    }
 }
 
-local PlayerLevelSystem = require(script.Parent:WaitForChild("PlayerLevelSystem"))
-local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
-local LocationSystem = require(script.Parent:WaitForChild("LocationSystem"))
-local PlayerSystem = require(script.Parent:WaitForChild("PlayerSystem"))
-local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
-local RunService = game:GetService("RunService")
-local RewardGaugeSystem = require(script.Parent:WaitForChild("ClientRewardGaugeSystem"))
-local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
--- Delayed require to avoid circular dependency with GameManager
-local GameManager
-local function getGameManager()
-    if not GameManager then
-        GameManager = require(script.Parent:WaitForChild("ClientGameManager"))
-    end
-    return GameManager
-end
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local assets = ReplicatedStorage:WaitForChild("assets")
-local menuIcons = require(assets:WaitForChild("menu_icons"))
-local ok, Theme = pcall(function()
-    return require(script.Parent:WaitForChild("UITheme"))
-end)
-if not ok then Theme = nil end
+-- Инициализация HUD
+function HudSystem.Initialize()
+    HudSystem.CreateHudGui()
+    HudSystem.CreateHealthManaFrame()
+    HudSystem.CreateExperienceBar()
+    HudSystem.CreateCurrencyFrame()
+    HudSystem.CreateQuickSlots()
+    HudSystem.CreateMenuButtons()
+    HudSystem.CreateMinimap()
+    HudSystem.ConnectEvents()
 
-local levelUpColor = Color3 and Color3.fromRGB(255, 240, 120) or {r=255,g=240,b=120}
-
-local function createInstance(className)
-    if HudSystem.useRobloxObjects and typeof ~= nil and Instance and type(Instance.new) == "function" then
-        local inst = Instance.new(className)
-        if className == "ScreenGui" and inst.IgnoreGuiInset ~= nil then inst.IgnoreGuiInset = true end
-        if Theme then
-            if className == "TextLabel" then Theme.styleLabel(inst)
-            elseif className == "TextButton" then Theme.styleButton(inst)
-            elseif className == "ImageButton" then Theme.styleImageButton(inst)
-            elseif className == "Frame" then Theme.styleWindow(inst) end
-        end
-        return inst
-    end
-    local tbl = {ClassName = className}
-    if Theme then
-        if className == "TextLabel" then Theme.styleLabel(tbl)
-        elseif className == "TextButton" then Theme.styleButton(tbl)
-        elseif className == "ImageButton" then Theme.styleImageButton(tbl)
-        elseif className == "Frame" then Theme.styleWindow(tbl) end
-    end
-    return tbl
+    print("HudSystem инициализирован")
 end
 
-local function parent(child, parentObj)
-    GuiUtil.parent(child, parentObj)
+-- Создание основного GUI
+function HudSystem.CreateHudGui()
+    hudGui = Instance.new("ScreenGui")
+    hudGui.Name = "GameHUD"
+    hudGui.ResetOnSpawn = false
+    hudGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    hudGui.Parent = playerGui
 end
 
-local function ensureGui()
-    if HudSystem.gui and (not HudSystem.useRobloxObjects or HudSystem.gui.Parent) then
-        return HudSystem.gui
-    end
-    local pgui
-    if HudSystem.useRobloxObjects then
-        pgui = GuiUtil.getPlayerGui()
-        if pgui then
-            local existing = pgui:FindFirstChild("HudUI")
-            if existing then
-                HudSystem.gui = existing
-                return existing
-            end
-        end
-    end
-    local gui = createInstance("ScreenGui")
-    gui.Name = "HudUI"
-    if gui.Enabled ~= nil then
-        gui.Enabled = true
-    end
-    GuiUtil.makeFullScreen(gui)
-    if gui.ResetOnSpawn ~= nil then
-        gui.ResetOnSpawn = false
-    end
-    HudSystem.gui = gui
-    if HudSystem.useRobloxObjects and pgui then
-        gui.Parent = pgui
-    end
-    return gui
+-- Создание фрейма здоровья и маны
+function HudSystem.CreateHealthManaFrame()
+    local healthManaFrame = Instance.new("Frame")
+    healthManaFrame.Name = "HealthManaFrame"
+    healthManaFrame.Size = UDim2.new(0, 300, 0, 120)
+    healthManaFrame.Position = UDim2.new(0, 20, 0, 20)
+    healthManaFrame.BackgroundTransparency = 1
+    healthManaFrame.Parent = hudGui
+
+    -- Уровень игрока
+    local levelFrame = Instance.new("Frame")
+    levelFrame.Size = UDim2.new(0, 60, 0, 60)
+    levelFrame.Position = UDim2.new(0, 0, 0, 0)
+    levelFrame.BackgroundColor3 = UITheme.Colors.Primary
+    levelFrame.BorderSizePixel = 0
+    levelFrame.Parent = healthManaFrame
+
+    UITheme.CreateCorner(30).Parent = levelFrame
+    UITheme.CreateStroke(UITheme.Colors.Warning, 3).Parent = levelFrame
+
+    local levelLabel = Instance.new("TextLabel")
+    levelLabel.Size = UDim2.new(1, 0, 1, 0)
+    levelLabel.BackgroundTransparency = 1
+    levelLabel.Text = tostring(playerData.level)
+    levelLabel.TextColor3 = UITheme.Colors.TextPrimary
+    levelLabel.TextScaled = true
+    levelLabel.Font = UITheme.Fonts.Bold
+    levelLabel.Parent = levelFrame
+
+    -- Здоровье
+    local healthFrame = Instance.new("Frame")
+    healthFrame.Size = UDim2.new(0, 220, 0, 25)
+    healthFrame.Position = UDim2.new(0, 70, 0, 5)
+    healthFrame.BackgroundTransparency = 1
+    healthFrame.Parent = healthManaFrame
+
+    local healthLabel = Instance.new("TextLabel")
+    healthLabel.Size = UDim2.new(0, 30, 1, 0)
+    healthLabel.BackgroundTransparency = 1
+    healthLabel.Text = "HP"
+    healthLabel.TextColor3 = UITheme.Colors.Health
+    healthLabel.Font = UITheme.Fonts.Bold
+    healthLabel.TextSize = UITheme.Sizes.TextSmall
+    healthLabel.Parent = healthFrame
+
+    local healthBarFrame, healthBarFill, healthText = GuiUtil.CreateProgressBar(
+        healthFrame, UDim2.new(0, 150, 1, 0), UDim2.new(0, 35, 0, 0),
+        playerData.health, playerData.maxHealth, UITheme.Colors.Health
+    )
+    healthBar = {frame = healthBarFrame, fill = healthBarFill, text = healthText}
+
+    -- Мана
+    local manaFrame = Instance.new("Frame")
+    manaFrame.Size = UDim2.new(0, 220, 0, 25)
+    manaFrame.Position = UDim2.new(0, 70, 0, 35)
+    manaFrame.BackgroundTransparency = 1
+    manaFrame.Parent = healthManaFrame
+
+    local manaLabel = Instance.new("TextLabel")
+    manaLabel.Size = UDim2.new(0, 30, 1, 0)
+    manaLabel.BackgroundTransparency = 1
+    manaLabel.Text = "MP"
+    manaLabel.TextColor3 = UITheme.Colors.Mana
+    manaLabel.Font = UITheme.Fonts.Bold
+    manaLabel.TextSize = UITheme.Sizes.TextSmall
+    manaLabel.Parent = manaFrame
+
+    local manaBarFrame, manaBarFill, manaText = GuiUtil.CreateProgressBar(
+        manaFrame, UDim2.new(0, 150, 1, 0), UDim2.new(0, 35, 0, 0),
+        playerData.mana, playerData.maxMana, UITheme.Colors.Mana
+    )
+    manaBar = {frame = manaBarFrame, fill = manaBarFill, text = manaText}
+
+    -- Выносливость
+    local staminaFrame = Instance.new("Frame")
+    staminaFrame.Size = UDim2.new(0, 220, 0, 25)
+    staminaFrame.Position = UDim2.new(0, 70, 0, 65)
+    staminaFrame.BackgroundTransparency = 1
+    staminaFrame.Parent = healthManaFrame
+
+    local staminaLabel = Instance.new("TextLabel")
+    staminaLabel.Size = UDim2.new(0, 30, 1, 0)
+    staminaLabel.BackgroundTransparency = 1
+    staminaLabel.Text = "ST"
+    staminaLabel.TextColor3 = UITheme.Colors.Stamina
+    staminaLabel.Font = UITheme.Fonts.Bold
+    staminaLabel.TextSize = UITheme.Sizes.TextSmall
+    staminaLabel.Parent = staminaFrame
+
+    local staminaBarFrame, staminaBarFill, staminaText = GuiUtil.CreateProgressBar(
+        staminaFrame, UDim2.new(0, 150, 1, 0), UDim2.new(0, 35, 0, 0),
+        playerData.stamina, playerData.maxStamina, UITheme.Colors.Stamina
+    )
+    staminaBar = {frame = staminaBarFrame, fill = staminaBarFill, text = staminaText}
 end
 
-function HudSystem:start()
-    local gui = ensureGui()
-    NetworkSystem:onClientEvent("AutoBattleToggle", function(enabled)
-        self.autoEnabled = not not enabled
-        local ok, AutoBattle = pcall(function()
-            return require(script.Parent:WaitForChild("AutoBattleSystem"))
+-- Создание полосы опыта
+function HudSystem.CreateExperienceBar()
+    local expFrame = Instance.new("Frame")
+    expFrame.Name = "ExperienceFrame"
+    expFrame.Size = UDim2.new(0, 400, 0, 30)
+    expFrame.Position = UDim2.new(0.5, -200, 1, -50)
+    expFrame.BackgroundTransparency = 1
+    expFrame.Parent = hudGui
+
+    local expLabel = Instance.new("TextLabel")
+    expLabel.Size = UDim2.new(0, 40, 1, 0)
+    expLabel.BackgroundTransparency = 1
+    expLabel.Text = "EXP"
+    expLabel.TextColor3 = UITheme.Colors.Experience
+    expLabel.Font = UITheme.Fonts.Bold
+    expLabel.TextSize = UITheme.Sizes.TextMedium
+    expLabel.Parent = expFrame
+
+    local expBarFrame, expBarFill, expText = GuiUtil.CreateProgressBar(
+        expFrame, UDim2.new(0, 350, 1, 0), UDim2.new(0, 45, 0, 0),
+        playerData.experience, playerData.experienceToNext, UITheme.Colors.Experience
+    )
+    experienceBar = {frame = expBarFrame, fill = expBarFill, text = expText}
+end
+
+-- Создание фрейма валют
+function HudSystem.CreateCurrencyFrame()
+    local currencyFrame = Instance.new("Frame")
+    currencyFrame.Name = "CurrencyFrame"
+    currencyFrame.Size = UDim2.new(0, 250, 0, 120)
+    currencyFrame.Position = UDim2.new(1, -270, 0, 20)
+    currencyFrame.BackgroundColor3 = UITheme.Colors.BackgroundDark
+    currencyFrame.BackgroundTransparency = 0.2
+    currencyFrame.BorderSizePixel = 0
+    currencyFrame.Parent = hudGui
+
+    UITheme.CreateCorner(10).Parent = currencyFrame
+    UITheme.CreatePadding(UITheme.Sizes.PaddingMedium).Parent = currencyFrame
+
+    local currencies = {
+        {name = "gold", icon = MenuIcons.GetIcon("Interface", "gold"), color = UITheme.Colors.Gold},
+        {name = "crystals", icon = MenuIcons.GetIcon("Interface", "gems"), color = UITheme.Colors.Crystals},
+        {name = "souls", icon = MenuIcons.GetIcon("Interface", "souls"), color = UITheme.Colors.Souls},
+        {name = "keys", icon = MenuIcons.GetIcon("Interface", "keys"), color = UITheme.Colors.Keys}
+    }
+
+    for i, currency in ipairs(currencies) do
+        local currFrame = Instance.new("Frame")
+        currFrame.Size = UDim2.new(1, 0, 0, 25)
+        currFrame.Position = UDim2.new(0, 0, 0, (i-1) * 30)
+        currFrame.BackgroundTransparency = 1
+        currFrame.Parent = currencyFrame
+
+        local currIcon = Instance.new("ImageLabel")
+        currIcon.Size = UDim2.new(0, 20, 0, 20)
+        currIcon.Position = UDim2.new(0, 0, 0, 2)
+        currIcon.BackgroundTransparency = 1
+        currIcon.Image = currency.icon
+        currIcon.ImageColor3 = currency.color
+        currIcon.Parent = currFrame
+
+        local currLabel = Instance.new("TextLabel")
+        currLabel.Size = UDim2.new(1, -25, 1, 0)
+        currLabel.Position = UDim2.new(0, 25, 0, 0)
+        currLabel.BackgroundTransparency = 1
+        currLabel.Text = tostring(playerData.currencies[currency.name])
+        currLabel.TextColor3 = UITheme.Colors.TextPrimary
+        currLabel.TextXAlignment = Enum.TextXAlignment.Left
+        currLabel.Font = UITheme.Fonts.SemiBold
+        currLabel.TextSize = UITheme.Sizes.TextMedium
+        currLabel.Parent = currFrame
+
+        currencyFrames[currency.name] = currLabel
+    end
+end
+
+-- Создание быстрых слотов
+function HudSystem.CreateQuickSlots()
+    local quickSlotFrame = Instance.new("Frame")
+    quickSlotFrame.Name = "QuickSlotFrame"
+    quickSlotFrame.Size = UDim2.new(0, 520, 0, 60)
+    quickSlotFrame.Position = UDim2.new(0.5, -260, 1, -80)
+    quickSlotFrame.BackgroundTransparency = 1
+    quickSlotFrame.Parent = hudGui
+
+    for i = 1, 10 do
+        local slotKey = i == 10 and 0 or i
+        local slot, icon, countLabel, button = GuiUtil.CreateSlot(
+            quickSlotFrame, UDim2.new(0, 50, 0, 50), 
+            UDim2.new(0, (i-1) * 52, 0, 5)
+        )
+
+        -- Номер слота
+        local keyLabel = Instance.new("TextLabel")
+        keyLabel.Size = UDim2.new(0, 15, 0, 15)
+        keyLabel.Position = UDim2.new(0, 2, 0, 2)
+        keyLabel.BackgroundTransparency = 1
+        keyLabel.Text = tostring(slotKey)
+        keyLabel.TextColor3 = UITheme.Colors.Warning
+        keyLabel.TextScaled = true
+        keyLabel.Font = UITheme.Fonts.Bold
+        keyLabel.Parent = slot
+
+        quickSlots[slotKey] = {
+            slot = slot,
+            icon = icon,
+            count = countLabel,
+            button = button,
+            keyLabel = keyLabel
+        }
+
+        -- Обработчик клика
+        button.MouseButton1Click:Connect(function()
+            HudSystem.UseQuickSlot(slotKey)
         end)
-        if ok and AutoBattle then
-            AutoBattle.enabled = self.autoEnabled
-        end
-        self:update()
-    end)
-    if self.levelLabel then
-        if self.levelLabel.Parent ~= gui then
-            parent(self.levelLabel, gui)
-            parent(self.currencyLabel, gui)
-            parent(self.buttonLayout, self.buttonFrame)
-            parent(self.buttonFrame, gui)
-            parent(self.autoButton, self.buttonFrame)
-            parent(self.attackButton, self.buttonFrame)
-            parent(self.gachaButton, self.buttonFrame)
-            parent(self.inventoryButton, self.buttonFrame)
-            parent(self.rewardButton, self.buttonFrame)
-            parent(self.skillButton, self.buttonFrame)
-            parent(self.companionButton, self.buttonFrame)
-            parent(self.progressFrame, gui)
-        end
-        return
     end
-    self.levelLabel = createInstance("TextLabel")
-    if UDim2 and type(UDim2.new) == "function" then
-        self.levelLabel.AnchorPoint = Vector2.new(0.5, 0)
-        self.levelLabel.Position = UDim2.new(0.5, 0, 0.02, 0)
-        if self.levelLabel.TextXAlignment ~= nil then
-            self.levelLabel.TextXAlignment = Enum.TextXAlignment.Center
-        end
-    end
-    self.currencyLabel = createInstance("TextLabel")
-    self.autoButton = createInstance("TextButton")
-    self.attackButton = createInstance("TextButton")
-    self.gachaButton = createInstance("ImageButton")
-    self.inventoryButton = createInstance("ImageButton")
-    self.rewardButton = createInstance("ImageButton")
-    self.skillButton = createInstance("ImageButton")
-    self.companionButton = createInstance("ImageButton")
-    self.questButton = createInstance("ImageButton")
-    self.progressButton = createInstance("ImageButton")
-    self.exchangeButton = createInstance("ImageButton")
-    self.dungeonButton = createInstance("ImageButton")
-    self.partyButton = createInstance("ImageButton")
-    self.scoreboardButton = createInstance("ImageButton")
-    self.menuButton = createInstance("ImageButton")
-    self.buttonFrame = createInstance("Frame")
-    GuiUtil.addCrossDecor(self.buttonFrame)
-    self.buttonLayout = createInstance("UIGridLayout")
-    if Enum and Enum.FillDirection then
-        self.buttonLayout.FillDirection = Enum.FillDirection.Horizontal
-        self.buttonLayout.SortOrder = Enum.SortOrder.LayoutOrder
-        if self.buttonLayout.FillDirectionMaxCells ~= nil then
-            self.buttonLayout.FillDirectionMaxCells = 4
-        end
-    end
-    if UDim2 and type(UDim2.new) == "function" then
-        self.buttonLayout.CellSize = UDim2.new(0, 60, 0, 60)
-        self.buttonLayout.CellPadding = UDim2.new(0, 4, 0, 4)
-        self.buttonFrame.Size = UDim2.new(0.22, 0, 0.25, 0)
-        self.buttonFrame.Position = UDim2.new(0.02, 0, 0.96, 0)
-        self.buttonFrame.AnchorPoint = Vector2.new(0, 1)
-        self.buttonFrame.ClipsDescendants = true
-    end
-    GuiUtil.applyResponsive(self.buttonFrame, nil, 240, 252, 400, 400)
-    self.progressFrame = createInstance("Frame")
-    self.progressFill = createInstance("Frame")
-    self.progressText = createInstance("TextLabel")
-    if self.progressFrame.FindFirstChild and not self.progressFrame:FindFirstChild("Top") then
-        GuiUtil.addCrossDecor(self.progressFrame)
-    end
-    self.progressText.Text = "Lv.1"
-    self.autoButton.Text = "Auto: OFF"
-    self.attackButton.Text = "Attack"
-    self.gachaButton.Image = menuIcons.Gacha
-    self.inventoryButton.Image = menuIcons.Inventory
-    self.rewardButton.Image = menuIcons.Reward
-    self.skillButton.Image = menuIcons.Skills
-    self.companionButton.Image = menuIcons.Companions
-    self.questButton.Image = menuIcons.Quests
-    self.progressButton.Image = menuIcons.Map
-    self.exchangeButton.Image = menuIcons.Exchange
-    self.dungeonButton.Image = menuIcons.Dungeons
-    self.partyButton.Image = menuIcons.Party
-    self.scoreboardButton.Image = menuIcons.Scoreboard
-    self.menuButton.Image = menuIcons.Menu
-
-    self.healthFrame = createInstance("Frame")
-    self.healthFill = createInstance("Frame")
-    self.healthText = createInstance("TextLabel")
-    self.skillFrame = createInstance("Frame")
-    if self.healthFrame.FindFirstChild and not self.healthFrame:FindFirstChild("Top") then
-        GuiUtil.addCrossDecor(self.healthFrame)
-    end
-    if self.skillFrame.FindFirstChild and not self.skillFrame:FindFirstChild("Top") then
-        GuiUtil.addCrossDecor(self.skillFrame)
-    end
-    self.skillLayout = createInstance("UIListLayout")
-    if self.skillLayout.Padding ~= nil then
-        self.skillLayout.Padding = UDim.new(0, 4)
-    end
-    if Enum and Enum.FillDirection then
-        self.skillLayout.FillDirection = Enum.FillDirection.Horizontal
-        self.skillLayout.SortOrder = Enum.SortOrder.LayoutOrder
-        if self.skillLayout.HorizontalAlignment ~= nil then
-            self.skillLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-        end
-        if self.skillLayout.VerticalAlignment ~= nil then
-            self.skillLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-        end
-    end
-    if Theme and Theme.styleProgressBar then
-        Theme.styleProgressBar(self.progressFrame)
-        Theme.styleProgressBar(self.healthFrame)
-    end
-    GuiUtil.applyResponsive(self.healthFrame, 10, 150, 20, 800, 40)
-    GuiUtil.applyResponsive(self.progressFrame, 16, 200, 20, 1000, 40)
-    -- Keep the skill bar a fixed height while scaling for different resolutions
-    -- Reserve extra width so four 60x60 icons fit with padding
-    GuiUtil.applyResponsive(self.skillFrame, nil, 252, 60, 252, 60)
-    if UDim2 and type(UDim2.new) == "function" then
-        self.progressFrame.AnchorPoint = Vector2.new(0.5, 0)
-        self.skillFrame.AnchorPoint = Vector2.new(1, 1)
-        self.healthFrame.AnchorPoint = Vector2.new(0, 0)
-    end
-    if Theme and Theme.colors then
-        self.healthFill.BackgroundColor3 = Theme.colors.progressBar
-    end
-    if self.healthText.BackgroundTransparency ~= nil then
-        self.healthText.BackgroundTransparency = 1
-        self.healthText.TextScaled = true
-    end
-    self.skillButtons = {}
-    self.cooldownOverlays = {}
-    self.cooldownLabels = {}
-    self.cooldowns = {}
-    self.maxCooldowns = {}
-    GuiUtil.connectButton(self.autoButton, function()
-        HudSystem:toggleAutoBattle()
-    end)
-    GuiUtil.applyHoverEffect(self.autoButton)
-    GuiUtil.connectButton(self.attackButton, function()
-        HudSystem:manualAttack()
-    end)
-    GuiUtil.applyHoverEffect(self.attackButton)
-    GuiUtil.connectButton(self.gachaButton, function()
-        HudSystem:toggleGacha()
-    end)
-    GuiUtil.applyHoverEffect(self.gachaButton)
-    GuiUtil.connectButton(self.inventoryButton, function()
-        HudSystem:toggleInventory()
-    end)
-    GuiUtil.applyHoverEffect(self.inventoryButton)
-    GuiUtil.connectButton(self.rewardButton, function()
-        HudSystem:toggleRewardGauge()
-    end)
-    GuiUtil.applyHoverEffect(self.rewardButton)
-    GuiUtil.connectButton(self.skillButton, function()
-        HudSystem:toggleSkillUI()
-    end)
-    GuiUtil.applyHoverEffect(self.skillButton)
-    GuiUtil.connectButton(self.companionButton, function()
-        HudSystem:toggleCompanionUI()
-    end)
-    GuiUtil.applyHoverEffect(self.companionButton)
-    GuiUtil.connectButton(self.questButton, function()
-        HudSystem:toggleQuestUI()
-    end)
-    GuiUtil.applyHoverEffect(self.questButton)
-    GuiUtil.connectButton(self.progressButton, function()
-        HudSystem:toggleProgressMap()
-    end)
-    GuiUtil.applyHoverEffect(self.progressButton)
-    GuiUtil.connectButton(self.exchangeButton, function()
-        HudSystem:toggleExchangeUI()
-    end)
-    GuiUtil.applyHoverEffect(self.exchangeButton)
-    GuiUtil.connectButton(self.dungeonButton, function()
-        HudSystem:toggleDungeonUI()
-    end)
-    GuiUtil.applyHoverEffect(self.dungeonButton)
-    GuiUtil.connectButton(self.partyButton, function()
-        HudSystem:togglePartyUI()
-    end)
-    GuiUtil.applyHoverEffect(self.partyButton)
-    GuiUtil.connectButton(self.scoreboardButton, function()
-        HudSystem:toggleScoreboard()
-    end)
-    GuiUtil.applyHoverEffect(self.scoreboardButton)
-    GuiUtil.connectButton(self.menuButton, function()
-        HudSystem:toggleMenu()
-    end)
-    GuiUtil.applyHoverEffect(self.menuButton)
-    parent(self.healthFill, self.healthFrame)
-    parent(self.healthText, self.healthFrame)
-    parent(self.healthFrame, gui)
-    parent(self.skillLayout, self.skillFrame)
-    parent(self.skillFrame, gui)
-    parent(self.progressFill, self.progressFrame)
-    parent(self.progressText, self.progressFrame)
-    parent(self.progressFrame, gui)
-    parent(self.levelLabel, gui)
-    parent(self.currencyLabel, gui)
-    parent(self.buttonLayout, self.buttonFrame)
-    parent(self.buttonFrame, gui)
-    parent(self.autoButton, self.buttonFrame)
-    parent(self.attackButton, self.buttonFrame)
-    parent(self.gachaButton, self.buttonFrame)
-    parent(self.inventoryButton, self.buttonFrame)
-    parent(self.rewardButton, self.buttonFrame)
-    parent(self.skillButton, self.buttonFrame)
-    parent(self.companionButton, self.buttonFrame)
-    parent(self.questButton, self.buttonFrame)
-    parent(self.progressButton, self.buttonFrame)
-    parent(self.exchangeButton, self.buttonFrame)
-    parent(self.dungeonButton, self.buttonFrame)
-    parent(self.partyButton, self.buttonFrame)
-    parent(self.scoreboardButton, self.buttonFrame)
-    parent(self.menuButton, self.buttonFrame)
-
-    NetworkSystem:onClientEvent("StageAdvance", function(level)
-        if HudSystem.progressText then
-            HudSystem.progressText.Text = string.format("Lv.%d", level)
-        end
-    end)
-    NetworkSystem:onClientEvent("StageRollback", function(level)
-        if HudSystem.progressText then
-            HudSystem.progressText.Text = string.format("Lv.%d", level)
-        end
-    end)
-    NetworkSystem:onClientEvent("PlayerDied", function()
-        HudSystem.deathTimer = 2
-        if HudSystem.progressText then
-            HudSystem.progressText.Text = "Respawning..."
-        end
-    end)
-    NetworkSystem:onClientEvent("PlayerLevelUp", function(level)
-        HudSystem.levelUpTimer = 1
-        HudSystem.lastLevel = level
-    end)
-    NetworkSystem:onClientEvent("PlayerState", function(h)
-        HudSystem.playerHealth = h
-    end)
-    NetworkSystem:onClientEvent("SkillCooldown", function(idx, cd)
-        HudSystem.cooldowns[idx] = cd
-        HudSystem.maxCooldowns[idx] = cd
-    end)
-    self:update()
 end
 
-function HudSystem:update(dt)
-    dt = dt or 0
-    local gui = ensureGui()
-    self.progressFrame = self.progressFrame or createInstance("Frame")
-    self.progressFill = self.progressFill or createInstance("Frame")
-    self.progressText = self.progressText or createInstance("TextLabel")
-    self.healthFrame = self.healthFrame or createInstance("Frame")
-    self.healthFill = self.healthFill or createInstance("Frame")
-    self.healthText = self.healthText or createInstance("TextLabel")
-    if Theme and Theme.styleProgressBar then
-        Theme.styleProgressBar(self.progressFrame)
-        Theme.styleProgressBar(self.healthFrame)
-    end
-    self.skillFrame = self.skillFrame or createInstance("Frame")
-    self.skillLayout = self.skillLayout or createInstance("UIListLayout")
-    if self.skillLayout.Padding ~= nil then
-        self.skillLayout.Padding = UDim.new(0, 4)
-    end
-    if Enum and Enum.FillDirection then
-        self.skillLayout.FillDirection = Enum.FillDirection.Horizontal
-        self.skillLayout.SortOrder = Enum.SortOrder.LayoutOrder
-        if self.skillLayout.HorizontalAlignment ~= nil then
-            self.skillLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-        end
-        if self.skillLayout.VerticalAlignment ~= nil then
-            self.skillLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-        end
-    end
-    self.skillButtons = self.skillButtons or {}
-    self.cooldownOverlays = self.cooldownOverlays or {}
-    self.cooldownLabels = self.cooldownLabels or {}
-    self.cooldowns = self.cooldowns or {}
-    self.maxCooldowns = self.maxCooldowns or {}
-    parent(self.progressFill, self.progressFrame)
-    parent(self.progressText, self.progressFrame)
-    parent(self.progressFrame, gui)
-    parent(self.healthFill, self.healthFrame)
-    parent(self.healthText, self.healthFrame)
-    parent(self.healthFrame, gui)
-    parent(self.skillLayout, self.skillFrame)
-    parent(self.skillFrame, gui)
-    self.buttonFrame = self.buttonFrame or createInstance("Frame")
-    if self.buttonFrame.FindFirstChild and not self.buttonFrame:FindFirstChild("Top") then
-        GuiUtil.addCrossDecor(self.buttonFrame)
-    end
-    self.buttonLayout = self.buttonLayout or createInstance("UIGridLayout")
-    if Enum and Enum.FillDirection then
-        self.buttonLayout.FillDirection = Enum.FillDirection.Horizontal
-        self.buttonLayout.SortOrder = Enum.SortOrder.LayoutOrder
-        if self.buttonLayout.FillDirectionMaxCells ~= nil then
-            self.buttonLayout.FillDirectionMaxCells = 4
-        end
-    end
-    if UDim2 and type(UDim2.new) == "function" then
-        self.buttonLayout.CellSize = UDim2.new(0, 60, 0, 60)
-        self.buttonLayout.CellPadding = UDim2.new(0, 4, 0, 4)
-        self.buttonFrame.Size = UDim2.new(0.22, 0, 0.25, 0)
-        self.buttonFrame.Position = UDim2.new(0.02, 0, 0.96, 0)
-        self.buttonFrame.ClipsDescendants = true
-    end
-    GuiUtil.applyResponsive(self.buttonFrame, nil, 240, 252, 400, 400)
-    parent(self.buttonLayout, self.buttonFrame)
-    parent(self.buttonFrame, gui)
-    self.skillLayout = self.skillLayout or createInstance("UIListLayout")
-    if Enum and Enum.FillDirection then
-        self.skillLayout.FillDirection = Enum.FillDirection.Horizontal
-        self.skillLayout.SortOrder = Enum.SortOrder.LayoutOrder
-        if self.skillLayout.HorizontalAlignment ~= nil then
-            self.skillLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-        end
-        if self.skillLayout.VerticalAlignment ~= nil then
-            self.skillLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-        end
-    end
-    if self.skillLayout.Padding ~= nil then
-        self.skillLayout.Padding = UDim.new(0, 4)
-    end
+-- Создание кнопок меню
+function HudSystem.CreateMenuButtons()
+    local menuFrame = Instance.new("Frame")
+    menuFrame.Name = "MenuFrame"
+    menuFrame.Size = UDim2.new(0, 60, 0, 300)
+    menuFrame.Position = UDim2.new(1, -80, 0.5, -150)
+    menuFrame.BackgroundTransparency = 1
+    menuFrame.Parent = hudGui
 
-    self.levelLabel = self.levelLabel or createInstance("TextLabel")
-    parent(self.levelLabel, gui)
-    local lvl = PlayerLevelSystem.level or 1
-    local exp = PlayerLevelSystem.exp or 0
-    local nextExp = PlayerLevelSystem.nextExp or 0
-    if lvl > (self.lastLevel or 1) then
-        self.levelUpTimer = 1
-        self.lastLevel = lvl
-    end
-    self.levelLabel.Text = string.format("Lv.%d %d/%d EXP", lvl, exp, nextExp)
+    local menuButtons = {
+        {name = "inventory", icon = "inventory", key = "B"},
+        {name = "character", icon = "character", key = "C"},
+        {name = "skills", icon = "skills", key = "K"},
+        {name = "quests", icon = "quests", key = "J"},
+        {name = "map", icon = "map", key = "M"}
+    }
 
-    self.currencyLabel = self.currencyLabel or createInstance("TextLabel")
-    parent(self.currencyLabel, gui)
-    local loc = LocationSystem:getCurrent()
-    local currencyType = loc and loc.currency or "gold"
-    local amount = CurrencySystem:get(currencyType)
-    self.currencyLabel.Text = string.format("%s: %d", currencyType, amount)
+    for i, buttonData in ipairs(menuButtons) do
+        local button = GuiUtil.CreateButton(menuFrame, "", UDim2.new(0, 50, 0, 50))
+        button.Position = UDim2.new(0, 0, 0, (i-1) * 55)
+        button.Text = ""
 
-    local hp = self.playerHealth or PlayerSystem.health or PlayerSystem.maxHealth
-    local maxHp = PlayerSystem.maxHealth or 100
-    local hpRatio = maxHp > 0 and hp / maxHp or 0
-    self.healthText.Text = string.format("%d/%d", hp, maxHp)
-    if Theme and Theme.getHealthColor then
-        local color = Theme.getHealthColor(hpRatio)
-        local ok = pcall(function()
-            self.healthFill.BackgroundColor3 = color
+        local buttonIcon = Instance.new("ImageLabel")
+        buttonIcon.Size = UDim2.new(0, 30, 0, 30)
+        buttonIcon.Position = UDim2.new(0.5, -15, 0.5, -15)
+        buttonIcon.BackgroundTransparency = 1
+        buttonIcon.Image = MenuIcons.GetIcon("Interface", buttonData.icon)
+        buttonIcon.ImageColor3 = UITheme.Colors.TextPrimary
+        buttonIcon.Parent = button
+
+        local keyLabel = Instance.new("TextLabel")
+        keyLabel.Size = UDim2.new(0, 15, 0, 15)
+        keyLabel.Position = UDim2.new(0, 2, 0, 2)
+        keyLabel.BackgroundTransparency = 1
+        keyLabel.Text = buttonData.key
+        keyLabel.TextColor3 = UITheme.Colors.Warning
+        keyLabel.TextScaled = true
+        keyLabel.Font = UITheme.Fonts.Bold
+        keyLabel.Parent = button
+
+        button.MouseButton1Click:Connect(function()
+            HudSystem.OpenMenu(buttonData.name)
         end)
-        if not ok and type(self.healthFill)=="table" then
-            self.healthFill.BackgroundColor3 = color
+    end
+end
+
+-- Создание миникарты
+function HudSystem.CreateMinimap()
+    minimapFrame = Instance.new("Frame")
+    minimapFrame.Name = "MinimapFrame"
+    minimapFrame.Size = UDim2.new(0, 200, 0, 200)
+    minimapFrame.Position = UDim2.new(1, -220, 0, 150)
+    minimapFrame.BackgroundColor3 = UITheme.Colors.BackgroundDark
+    minimapFrame.BackgroundTransparency = 0.2
+    minimapFrame.BorderSizePixel = 0
+    minimapFrame.Parent = hudGui
+
+    UITheme.CreateCorner(15).Parent = minimapFrame
+    UITheme.CreateStroke(UITheme.Colors.BorderDark, 2).Parent = minimapFrame
+
+    local minimapLabel = Instance.new("TextLabel")
+    minimapLabel.Size = UDim2.new(1, 0, 0, 30)
+    minimapLabel.BackgroundTransparency = 1
+    minimapLabel.Text = "Миникарта"
+    minimapLabel.TextColor3 = UITheme.Colors.TextPrimary
+    minimapLabel.Font = UITheme.Fonts.Bold
+    minimapLabel.TextSize = UITheme.Sizes.TextMedium
+    minimapLabel.Parent = minimapFrame
+
+    -- Здесь можно добавить ViewportFrame для отображения карты
+end
+
+-- Подключение событий
+function HudSystem.ConnectEvents()
+    -- Обработка клавиш быстрого доступа
+    UserInputService.InputBegan:Connect(function(input, gameProcessed)
+        if gameProcessed then return end
+
+        if input.UserInputType == Enum.UserInputType.Keyboard then
+            local keyCode = input.KeyCode
+
+            -- Быстрые слоты 1-9, 0
+            for i = 1, 9 do
+                if keyCode == Enum.KeyCode["Alpha" .. i] then
+                    HudSystem.UseQuickSlot(i)
+                    break
+                end
+            end
+
+            if keyCode == Enum.KeyCode.Alpha0 then
+                HudSystem.UseQuickSlot(0)
+            end
+        end
+    end)
+end
+
+-- Обновление данных игрока
+function HudSystem.UpdatePlayerData(newData)
+    for key, value in pairs(newData) do
+        if playerData[key] ~= nil then
+            playerData[key] = value
         end
     end
-    if UDim2 and type(UDim2.new)=="function" then
-        self.healthFill.Size = UDim2.new(hpRatio, 0, 1, 0)
-    else
-        self.healthFill.FillRatio = hpRatio
+
+    HudSystem.RefreshDisplay()
+end
+
+-- Обновление отображения
+function HudSystem.RefreshDisplay()
+    -- Обновление полос здоровья, маны, выносливости
+    if healthBar then
+        local healthPercent = playerData.health / playerData.maxHealth
+        healthBar.fill.Size = UDim2.new(healthPercent, 0, 1, 0)
+        healthBar.text.Text = playerData.health .. "/" .. playerData.maxHealth
     end
 
-    self.autoButton = self.autoButton or createInstance("TextButton")
-    parent(self.autoButton, self.buttonFrame)
-    local state = self.autoEnabled and "ON" or "OFF"
-    self.autoButton.Text = "Auto: " .. state
+    if manaBar then
+        local manaPercent = playerData.mana / playerData.maxMana
+        manaBar.fill.Size = UDim2.new(manaPercent, 0, 1, 0)
+        manaBar.text.Text = playerData.mana .. "/" .. playerData.maxMana
+    end
 
-    self.attackButton = self.attackButton or createInstance("TextButton")
-    parent(self.attackButton, self.buttonFrame)
-    self.attackButton.Text = "Attack"
-    self.attackButton.Active = not self.autoEnabled
+    if staminaBar then
+        local staminaPercent = playerData.stamina / playerData.maxStamina
+        staminaBar.fill.Size = UDim2.new(staminaPercent, 0, 1, 0)
+        staminaBar.text.Text = playerData.stamina .. "/" .. playerData.maxStamina
+    end
 
-    self.gachaButton = self.gachaButton or createInstance("ImageButton")
-    parent(self.gachaButton, self.buttonFrame)
-    self.gachaButton.Image = menuIcons.Gacha
+    if experienceBar then
+        local expPercent = playerData.experience / playerData.experienceToNext
+        experienceBar.fill.Size = UDim2.new(expPercent, 0, 1, 0)
+        experienceBar.text.Text = playerData.experience .. "/" .. playerData.experienceToNext
+    end
 
-    self.inventoryButton = self.inventoryButton or createInstance("ImageButton")
-    parent(self.inventoryButton, self.buttonFrame)
-    self.inventoryButton.Image = menuIcons.Inventory
-
-    self.rewardButton = self.rewardButton or createInstance("ImageButton")
-    parent(self.rewardButton, self.buttonFrame)
-    self.rewardButton.Image = menuIcons.Reward
-
-    self.skillButton = self.skillButton or createInstance("ImageButton")
-    parent(self.skillButton, self.buttonFrame)
-    self.skillButton.Image = menuIcons.Skills
-
-    self.companionButton = self.companionButton or createInstance("ImageButton")
-    parent(self.companionButton, self.buttonFrame)
-    self.companionButton.Image = menuIcons.Companions
-
-    self.questButton = self.questButton or createInstance("ImageButton")
-    parent(self.questButton, self.buttonFrame)
-    self.questButton.Image = menuIcons.Quests
-
-    self.progressButton = self.progressButton or createInstance("ImageButton")
-    parent(self.progressButton, self.buttonFrame)
-    self.progressButton.Image = menuIcons.Map
-
-    self.exchangeButton = self.exchangeButton or createInstance("ImageButton")
-    parent(self.exchangeButton, self.buttonFrame)
-    self.exchangeButton.Image = menuIcons.Exchange
-
-    self.dungeonButton = self.dungeonButton or createInstance("ImageButton")
-    parent(self.dungeonButton, self.buttonFrame)
-    self.dungeonButton.Image = menuIcons.Dungeons
-
-    self.partyButton = self.partyButton or createInstance("ImageButton")
-    parent(self.partyButton, self.buttonFrame)
-    self.partyButton.Image = menuIcons.Party
-
-    self.scoreboardButton = self.scoreboardButton or createInstance("ImageButton")
-    parent(self.scoreboardButton, self.buttonFrame)
-    self.scoreboardButton.Image = menuIcons.Scoreboard
-
-    self.menuButton = self.menuButton or createInstance("ImageButton")
-    parent(self.menuButton, self.buttonFrame)
-    self.menuButton.Image = menuIcons.Menu
-
-    local gm = getGameManager()
-    local skills = gm and gm.skillSystem and gm.skillSystem.skills or {}
-    for i = 1, math.min(4, #skills) do
-        local skill = skills[i]
-        local btn = self.skillButtons[i]
-        if not btn then
-            btn = createInstance("ImageButton")
-            btn.Name = "Skill" .. i
-            if UDim2 and type(UDim2.new)=="function" then
-                btn.Size = UDim2.new(0, 60, 0, 60)
-            end
-            GuiUtil.addCrossDecor(btn)
-            if Instance and typeof ~= nil and typeof(Instance.new)=="function" then
-                local aspect = Instance.new("UIAspectRatioConstraint")
-                aspect.AspectRatio = 1
-                aspect.Parent = btn
-            end
-            btn.LayoutOrder = i
-            local pressStart = 0
-            if btn.MouseButton1Down then
-                btn.MouseButton1Down:Connect(function()
-                    pressStart = os.clock()
-                end)
-            end
-            if btn.MouseButton1Up then
-                btn.MouseButton1Up:Connect(function()
-                    local duration = os.clock() - pressStart
-                    if duration > 0.5 then
-                        local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
-                        MenuUISystem:openTab("Skills")
-                    else
-                        NetworkSystem:fireServer("SkillRequest", i)
-                    end
-                end)
-            else
-                GuiUtil.connectButton(btn, function()
-                    NetworkSystem:fireServer("SkillRequest", i)
-                end)
-            end
-            if btn.MouseButton2Click then
-                btn.MouseButton2Click:Connect(function()
-                    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
-                    MenuUISystem:openTab("Skills")
-                end)
-            end
-            GuiUtil.applyHoverEffect(btn)
-            parent(btn, self.skillFrame)
-            self.skillButtons[i] = btn
-            -- display the key number in the corner for quick reference
-            local keyLabel = createInstance("TextLabel")
-            keyLabel.Name = "Key" .. i
-            keyLabel.BackgroundTransparency = 1
-            keyLabel.TextScaled = true
-            keyLabel.Text = tostring(i)
-            if UDim2 and type(UDim2.new)=="function" then
-                keyLabel.Size = UDim2.new(0.3, 0, 0.3, 0)
-                keyLabel.Position = UDim2.new(0.7, 0, 0.7, 0)
-            end
-            if keyLabel.ZIndex ~= nil then
-                keyLabel.ZIndex = 2
-            else
-                keyLabel.zIndex = 2
-            end
-            parent(keyLabel, btn)
-            -- hint that holding the button opens the skill menu
-            local hint = createInstance("TextLabel")
-            hint.Name = "Hint" .. i
-            hint.BackgroundTransparency = 1
-            hint.TextScaled = true
-            hint.Text = "↗"
-            if UDim2 and type(UDim2.new)=="function" then
-                hint.Size = UDim2.new(0.3,0,0.3,0)
-                hint.Position = UDim2.new(0.7,0,0,0)
-            end
-            if hint.ZIndex ~= nil then
-                hint.ZIndex = 2
-            else
-                hint.zIndex = 2
-            end
-            parent(hint, btn)
-            local overlay = createInstance("Frame")
-            overlay.BackgroundTransparency = 0.4
-            overlay.BackgroundColor3 = Theme and Theme.colors and Theme.colors.cooldownOverlay or (Color3 and Color3.fromRGB and Color3.fromRGB(0,0,0) or {r=0,g=0,b=0})
-            overlay.BorderSizePixel = 0
-            if UDim2 and type(UDim2.new)=="function" then
-                overlay.Size = UDim2.new(1,0,1,0)
-            end
-            if overlay.ZIndex ~= nil then
-                overlay.ZIndex = 1
-            else
-                overlay.zIndex = 1
-            end
-            parent(overlay, btn)
-            self.cooldownOverlays[i] = overlay
+    -- Обновление валют
+    for currency, frame in pairs(currencyFrames) do
+        if playerData.currencies[currency] then
+            frame.Text = tostring(playerData.currencies[currency])
         end
-        btn.Image = skill.image or ""
-        self.maxCooldowns[i] = self.maxCooldowns[i] or (skill.cooldown or 1)
-        local cdLabel = self.cooldownLabels[i]
-        if not cdLabel then
-            cdLabel = createInstance("TextLabel")
-            cdLabel.BackgroundTransparency = 0.5
-            cdLabel.Size = UDim2.new(1,0,1,0)
-            cdLabel.TextScaled = true
-            cdLabel.TextColor3 = Theme and Theme.colors.labelText or Color3.new(1,1,1)
-            cdLabel.BackgroundColor3 = Color3 and Color3.fromRGB and Color3.fromRGB(0,0,0) or {r=0,g=0,b=0}
-            cdLabel.TextXAlignment = Enum and Enum.TextXAlignment.Center or cdLabel.TextXAlignment
-            cdLabel.TextYAlignment = Enum and Enum.TextYAlignment.Center or cdLabel.TextYAlignment
-            parent(cdLabel, btn)
-            self.cooldownLabels[i] = cdLabel
-        end
-        if cdLabel.ZIndex ~= nil then
-            cdLabel.ZIndex = 2
+    end
+end
+
+-- Использование быстрого слота
+function HudSystem.UseQuickSlot(slotNumber)
+    local slotData = playerData.quickSlots[slotNumber]
+    if slotData then
+        -- Здесь вызывается использование предмета
+        print("Использование слота " .. slotNumber .. ": " .. (slotData.name or "пустой"))
+
+        -- Анимация использования
+        local slot = quickSlots[slotNumber].slot
+        local tween = TweenService:Create(slot,
+            TweenInfo.new(0.1, Enum.EasingStyle.Quart),
+            {Size = UDim2.new(0, 45, 0, 45)}
+        )
+        tween:Play()
+
+        tween.Completed:Connect(function()
+            local backTween = TweenService:Create(slot,
+                TweenInfo.new(0.1, Enum.EasingStyle.Quart),
+                {Size = UDim2.new(0, 50, 0, 50)}
+            )
+            backTween:Play()
+        end)
+    end
+end
+
+-- Открытие меню
+function HudSystem.OpenMenu(menuName)
+    print("Открытие меню: " .. menuName)
+    BlurManager.EnableBlur()
+
+    -- Здесь вызывается соответствующая система UI
+    local MenuUISystem = require(script.Parent.MenuUISystem)
+    MenuUISystem.OpenMenu(menuName)
+end
+
+-- Обновление быстрого слота
+function HudSystem.UpdateQuickSlot(slotNumber, itemData)
+    playerData.quickSlots[slotNumber] = itemData
+
+    local slot = quickSlots[slotNumber]
+    if slot then
+        if itemData then
+            slot.icon.Image = itemData.icon or ""
+            slot.count.Text = itemData.count > 1 and tostring(itemData.count) or ""
+            slot.count.Visible = itemData.count > 1
         else
-            cdLabel.zIndex = 2
+            slot.icon.Image = ""
+            slot.count.Text = ""
+            slot.count.Visible = false
         end
-        self.cooldowns[i] = self.cooldowns[i] or 0
     end
+end
 
-    local ratio = nextExp > 0 and exp / nextExp or 0
-    if ratio < 0 then ratio = 0 elseif ratio > 1 then ratio = 1 end
-    if self.deathTimer > 0 then
-        self.deathTimer = math.max(0, self.deathTimer - dt)
-        self.progressText.Text = "Respawning..."
-    else
-        self.progressText.Text = string.format("Lv.%d", lvl)
-    end
-    if UDim2 and type(UDim2.new)=="function" then
-        self.progressFrame.Position = UDim2.new(0.5, -200, 0.02, 0)
-        self.progressFrame.Size = UDim2.new(0.4, 0, 0, 25)
-        local fillColor = Theme and Theme.colors and Theme.colors.progressBar or Color3.fromRGB(80, 120, 220)
-        if self.levelUpTimer > 0 then
-            self.levelUpTimer = math.max(0, self.levelUpTimer - dt)
-            fillColor = levelUpColor
-        end
-        self.progressFill.BackgroundColor3 = fillColor
-        self.progressFill.Size = UDim2.new(ratio, 0, 1, 0)
-        self.progressText.Size = UDim2.new(1, 0, 1, 0)
-        self.progressText.BackgroundTransparency = 1
-        self.progressText.TextScaled = true
-    else
-        if self.levelUpTimer > 0 then
-            self.levelUpTimer = math.max(0, self.levelUpTimer - dt)
-            self.progressFill.color = levelUpColor
-        else
-            self.progressFill.color = Theme and Theme.colors and Theme.colors.progressBar
-        end
-        self.progressFill.FillRatio = ratio
-    end
-
-    for i, cd in pairs(self.cooldowns) do
-        if cd > 0 then
-            self.cooldowns[i] = math.max(0, cd - dt)
-        end
-        local overlay = self.cooldownOverlays[i]
-        local maxCd = self.maxCooldowns[i] or cd
-        if overlay and UDim2 and type(UDim2.new)=="function" then
-            local ratio = (self.cooldowns[i] or 0) / math.max(maxCd, 1)
-            overlay.Size = UDim2.new(1,0,ratio,0)
-            overlay.Position = UDim2.new(0,0,1-ratio,0)
-            overlay.Visible = self.cooldowns[i] > 0
-        elseif overlay then
-            overlay.Visible = self.cooldowns[i] > 0
-        end
-        if self.cooldownLabels[i] then
-            if self.cooldowns[i] > 0 then
-                self.cooldownLabels[i].Text = tostring(math.ceil(self.cooldowns[i]))
-                self.cooldownLabels[i].Visible = true
-            else
-                self.cooldownLabels[i].Visible = false
-                self.cooldownLabels[i].Text = ""
-            end
-        end
-        if self.skillButtons[i] then
-            GuiUtil.highlightButton(self.skillButtons[i], self.cooldowns[i] <= 0)
-        end
-    end
-
-    if UDim2 and type(UDim2.new)=="function" then
-        self.levelLabel.AnchorPoint = Vector2.new(0.5, 0)
-        self.levelLabel.Position = UDim2.new(0.5, 0, 0.02, 0)
-        if self.levelLabel.TextXAlignment ~= nil then
-            self.levelLabel.TextXAlignment = Enum.TextXAlignment.Center
-        end
-        self.currencyLabel.Position = UDim2.new(0.02, 0, 0.06, 0)
-        self.buttonFrame.Size = UDim2.new(0.22, 0, 0.25, 0)
-        self.buttonFrame.Position = UDim2.new(0.02, 0, 0.96, 0)
-        self.buttonFrame.AnchorPoint = Vector2.new(0, 1)
-        GuiUtil.applyResponsive(self.buttonFrame, nil, 240, 252, 400, 400)
-        self.healthFrame.Position = UDim2.new(0.02, 0, 0.1, 0)
-        self.healthFrame.Size = UDim2.new(0.25, 0, 0.04, 0)
-        -- Position skill buttons near the bottom-right similar to modern action RPGs
-        -- https://create.roblox.com/docs/reference/engine/classes/UDim2
-        self.skillFrame.Position = UDim2.new(1, -262, 1, -70)
-        self.skillFrame.Size = UDim2.new(0, 252, 0, 60)
-        self.skillFrame.AnchorPoint = Vector2.new(1, 1)
-        self.progressFrame.Position = UDim2.new(0.5, -200, 0.02, 0)
-        self.progressFrame.Size = UDim2.new(0.4, 0, 0, 25)
-        self.progressFrame.AnchorPoint = Vector2.new(0.5, 0)
+-- Показать/скрыть HUD
+function HudSystem.SetVisible(visible)
+    if hudGui then
+        hudGui.Enabled = visible
     end
 end
 
-function HudSystem:toggleAutoBattle()
-    NetworkSystem:fireServer("AutoBattleToggle")
-end
-
-function HudSystem:manualAttack()
-    if self.autoEnabled then
-        return
+-- Очистка ресурсов
+function HudSystem.Cleanup()
+    if hudGui then
+        hudGui:Destroy()
+        hudGui = nil
     end
-    local PlayerInputSystem = require(script.Parent:WaitForChild("PlayerInputSystem"))
-    PlayerInputSystem:manualAttack()
-end
 
-function HudSystem:toggleGacha()
-    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
-    MenuUISystem:openTab("Gacha")
-end
-
-function HudSystem:toggleInventory()
-    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
-    MenuUISystem:openTab("Inventory")
-end
-
-function HudSystem:toggleRewardGauge()
-    local RewardGaugeUISystem = require(script.Parent:WaitForChild("RewardGaugeUISystem"))
-    RewardGaugeUISystem:toggle()
-end
-
-function HudSystem:toggleSkillUI()
-    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
-    MenuUISystem:openTab("Skills")
-end
-
-function HudSystem:toggleCompanionUI()
-    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
-    MenuUISystem:openTab("Companions")
-end
-
-function HudSystem:toggleQuestUI()
-    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
-    MenuUISystem:openTab("Quests")
-end
-
-function HudSystem:toggleProgressMap()
-    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
-    MenuUISystem:openTab("Progress")
-end
-
-function HudSystem:toggleExchangeUI()
-    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
-    MenuUISystem:openTab("Exchange")
-end
-
-function HudSystem:toggleDungeonUI()
-    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
-    MenuUISystem:openTab("Dungeons")
-end
-
-function HudSystem:togglePartyUI()
-    local PartyUISystem = require(script.Parent:WaitForChild("PartyUISystem"))
-    PartyUISystem:toggle()
-end
-
-function HudSystem:toggleScoreboard()
-    local ScoreboardUISystem = require(script.Parent:WaitForChild("ScoreboardUISystem"))
-    ScoreboardUISystem:toggle()
-end
-
-function HudSystem:toggleMenu()
-    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
-    MenuUISystem:toggle()
+    healthBar = nil
+    manaBar = nil
+    staminaBar = nil
+    experienceBar = nil
+    currencyFrames = {}
+    quickSlots = {}
+    minimapFrame = nil
 end
 
 return HudSystem
