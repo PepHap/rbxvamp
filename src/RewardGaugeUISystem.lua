@@ -111,7 +111,7 @@ function RewardGaugeUISystem:start()
         end
     else
         -- simple frame; image removed to keep repository text only
-        self.window = GuiUtil.createWindow("RewardWindow")
+        self.window = GuiUtil.createWindow("RewardWindow", nil, false)
         if UDim2 and type(UDim2.new)=="function" then
             self.window.AnchorPoint = Vector2.new(0, 0)
             self.window.Position = UDim2.new(0, 0, 0, 0)
@@ -179,15 +179,13 @@ function RewardGaugeUISystem:update()
     local parentGui = self.window or gui
     self.gaugeLabel = self.gaugeLabel or createInstance("TextLabel")
     parent(self.gaugeLabel, parentGui)
-    local segments = 10
     local max = RewardGaugeSystem.maxGauge
     if not max or max <= 0 then
         max = 1
     end
     local ratio = RewardGaugeSystem.gauge / max
-    local filled = math.floor(ratio * segments)
-    local bar = string.rep("●", filled) .. string.rep("○", segments - filled)
-    self.gaugeLabel.Text = string.format("Gauge: %s %d/%d", bar, RewardGaugeSystem.gauge, max)
+    self.gaugeLabel.Text = string.format("Gauge: %d/%d (%.0f%%)",
+        RewardGaugeSystem.gauge, max, ratio * 100)
 end
 
 function RewardGaugeUISystem:showOptions()

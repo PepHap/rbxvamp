@@ -279,8 +279,10 @@ end
 ---When running outside of Roblox, table objects are used instead of instances.
 ---@param name string Name of the frame
 ---@param image string? asset id for an ImageLabel background
+---@param addDecor boolean? whether to add decorative cross bars
 -- @return table|Instance the created Frame
-function GuiUtil.createWindow(name, image)
+function GuiUtil.createWindow(name, image, addDecor)
+    if addDecor == nil then addDecor = true end
     local frame = createInstance("Frame")
     frame.Name = name or "Window"
     if frame.BackgroundTransparency ~= nil then
@@ -340,7 +342,9 @@ function GuiUtil.createWindow(name, image)
     GuiUtil.clampToScreen(frame)
     -- Allow windows to fill the screen without hard limits
     GuiUtil.applyResponsive(frame, nil)
-    GuiUtil.addCrossDecor(frame)
+    if addDecor then
+        GuiUtil.addCrossDecor(frame)
+    end
     return frame
 end
 
