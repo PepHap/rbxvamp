@@ -3,12 +3,10 @@
 -- Logs are stored in memory for now but could be persisted via DataStoreService.
 
 local RunService = game:GetService("RunService")
--- Logging should only occur on the server as recommended here:
+-- Logging should only occur on the server according to Roblox guidelines:
 -- https://create.roblox.com/docs/reference/engine/classes/RunService#IsServer
-if RunService and RunService.IsClient and RunService.IsServer then
-    if RunService:IsClient() then
-        error("LoggingSystem should only be required on the server", 2)
-    end
+if RunService and RunService:IsClient() then
+    error("LoggingSystem should only be required on the server", 2)
 end
 
 local src = script.Parent.Parent.Parent:WaitForChild("src")

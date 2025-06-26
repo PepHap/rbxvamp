@@ -4,10 +4,8 @@
 local RunService = game:GetService("RunService")
 -- Party logic involves teleporting players and should run on the server:
 -- https://create.roblox.com/docs/reference/engine/classes/RunService#IsServer
-if RunService and RunService.IsClient and RunService.IsServer then
-    if RunService:IsClient() then
-        error("PartySystem should only be required on the server", 2)
-    end
+if RunService and RunService:IsClient() then
+    error("PartySystem should only be required on the server", 2)
 end
 
 local PartySystem = {}

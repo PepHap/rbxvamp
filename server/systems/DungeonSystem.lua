@@ -4,10 +4,8 @@
 local RunService = game:GetService("RunService")
 -- Dungeon logic is server controlled only:
 -- https://create.roblox.com/docs/reference/engine/classes/RunService#IsServer
-if RunService and RunService.IsClient and RunService.IsServer then
-    if RunService:IsClient() then
-        error("DungeonSystem should only be required on the server", 2)
-    end
+if RunService and RunService:IsClient() then
+    error("DungeonSystem should only be required on the server", 2)
 end
 
 local DungeonSystem = {}
