@@ -5,7 +5,6 @@ local SetBonusSystem = {
     itemSystem = nil,
 }
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ModuleUtil = require(script.Parent:WaitForChild("ModuleUtil"))
 SetBonusSystem.sets = ModuleUtil.loadAssetModule("set_bonuses") or {}
 

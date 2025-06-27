@@ -9,8 +9,8 @@ local UserInputService = game:GetService("UserInputService")
 
 local UITheme = require(script.Parent.UITheme)
 local GuiUtil = require(script.Parent.GuiUtil)
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local MenuIcons = require(ReplicatedStorage:WaitForChild("assets"):WaitForChild("menu_icons"))
+local ModuleUtil = require(script.Parent.ModuleUtil)
+local MenuIcons = ModuleUtil.loadAssetModule("menu_icons") or {}
 local BlurManager = require(script.Parent.BlurManager)
 
 local player = Players.LocalPlayer
@@ -71,6 +71,13 @@ function HudSystem.Initialize()
     HudSystem.ConnectEvents()
 
     print("HudSystem инициализирован")
+end
+
+-- Roblox GameManager expects systems to implement a ``start`` method
+-- for initialization. Provide an alias so HudSystem initializes
+-- correctly when added to GameManager.
+function HudSystem:start()
+    self.Initialize()
 end
 
 -- Создание основного GUI

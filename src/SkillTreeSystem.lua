@@ -5,7 +5,6 @@ local SkillTreeSystem = {}
 SkillTreeSystem.__index = SkillTreeSystem
 
 local SkillSystem = require(script.Parent:WaitForChild("SkillSystem"))
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ModuleUtil = require(script.Parent:WaitForChild("ModuleUtil"))
 local treeConfig = ModuleUtil.loadAssetModule("skill_trees") or {}
 
