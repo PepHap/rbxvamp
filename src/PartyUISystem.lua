@@ -88,12 +88,17 @@ function PartyUI:start()
         end
         return
     end
-    local window = createInstance("Frame")
-    window.Name = "PartyWindow"
+    local closeBtn
+    local window
+    window, closeBtn = GuiUtil.createWindow("PartyWindow")
     GuiUtil.makeFullScreen(window)
     GuiUtil.clampToScreen(window)
-    GuiUtil.addCrossDecor(window)
     PartyUI.window = window
+    if closeBtn then
+        GuiUtil.connectButton(closeBtn, function()
+            PartyUI:toggle()
+        end)
+    end
     local createBtn = createInstance("TextButton")
     createBtn.Text = "Create Party"
     local leaveBtn = createInstance("TextButton")

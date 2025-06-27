@@ -98,7 +98,8 @@ function DungeonUI:start(dungeonSys, parentGui)
         return
     end
 
-    self.window = GuiUtil.createWindow("DungeonWindow")
+    local closeBtn
+    self.window, closeBtn = GuiUtil.createWindow("DungeonWindow")
     if UDim2 and type(UDim2.new)=="function" then
         self.window.AnchorPoint = Vector2.new(0, 0)
         self.window.Position = UDim2.new(0, 0, 0, 0)
@@ -106,6 +107,11 @@ function DungeonUI:start(dungeonSys, parentGui)
         GuiUtil.clampToScreen(self.window)
     end
     parent(self.window, parentTarget)
+    if closeBtn then
+        GuiUtil.connectButton(closeBtn, function()
+            DungeonUI:toggle()
+        end)
+    end
     self.gui = parentTarget
     self.listFrame = createInstance("Frame")
     if UDim2 and type(UDim2.new)=="function" then

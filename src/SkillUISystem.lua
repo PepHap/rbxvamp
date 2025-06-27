@@ -84,7 +84,13 @@ function SkillUISystem:start(skillSys, parentGui)
     local guiRoot = ensureGui()
     local parentTarget = parentGui or guiRoot
     if not self.window then
-        self.window = GuiUtil.createWindow("SkillWindow")
+        local closeBtn
+        self.window, closeBtn = GuiUtil.createWindow("SkillWindow")
+        if closeBtn then
+            GuiUtil.connectButton(closeBtn, function()
+                SkillUISystem:toggle()
+            end)
+        end
     end
     if self.window.Parent ~= parentTarget then
         parent(self.window, parentTarget)

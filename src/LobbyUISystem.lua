@@ -89,7 +89,8 @@ function LobbyUI:start(ls)
         self:setVisible(self.visible)
         return
     end
-    self.window = GuiUtil.createWindow("LobbyWindow")
+    local closeBtn
+    self.window, closeBtn = GuiUtil.createWindow("LobbyWindow")
     if UDim2 and type(UDim2.new)=="function" then
         self.window.AnchorPoint = Vector2.new(0, 0)
         self.window.Position = UDim2.new(0, 0, 0, 0)
@@ -97,6 +98,11 @@ function LobbyUI:start(ls)
         GuiUtil.clampToScreen(self.window)
     end
     parent(self.window, gui)
+    if closeBtn then
+        GuiUtil.connectButton(closeBtn, function()
+            LobbyUI:toggle()
+        end)
+    end
     local btn = createInstance("TextButton")
     btn.Text = "Exit Lobby"
     if UDim2 and type(UDim2.new)=="function" then

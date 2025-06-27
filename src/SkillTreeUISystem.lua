@@ -82,7 +82,13 @@ function SkillTreeUISystem:start(treeSys, parentGui)
     local parentTarget = parentGui or guiRoot
 
     if not self.window then
-        self.window = GuiUtil.createWindow("SkillTreeWindow")
+        local closeBtn
+        self.window, closeBtn = GuiUtil.createWindow("SkillTreeWindow")
+        if closeBtn then
+            GuiUtil.connectButton(closeBtn, function()
+                SkillTreeUISystem:toggle()
+            end)
+        end
         if UDim2 and type(UDim2.new)=="function" then
             self.window.AnchorPoint = Vector2.new(0, 0)
             self.window.Position = UDim2.new(0, 0, 0, 0)

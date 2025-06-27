@@ -84,7 +84,13 @@ function QuestUISystem:start(questSys, parentGui)
     local guiRoot = ensureGui()
     local parentTarget = parentGui or guiRoot
     if not self.window then
-        self.window = GuiUtil.createWindow("QuestWindow")
+        local closeBtn
+        self.window, closeBtn = GuiUtil.createWindow("QuestWindow")
+        if closeBtn then
+            GuiUtil.connectButton(closeBtn, function()
+                QuestUISystem:toggle()
+            end)
+        end
     end
     if self.window.Parent ~= parentTarget then
         parent(self.window, parentTarget)

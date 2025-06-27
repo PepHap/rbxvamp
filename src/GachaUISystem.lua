@@ -98,7 +98,8 @@ function GachaUI:start(manager, parentGui)
     local created = false
     if not self.window then
         -- use a plain window frame; banner images were removed
-        self.window = GuiUtil.createWindow("GachaWindow")
+        local closeBtn
+        self.window, closeBtn = GuiUtil.createWindow("GachaWindow")
         if UDim2 and type(UDim2.new)=="function" then
             -- Provide a moderate sized window instead of covering the
             -- entire screen so other UI remains visible.
@@ -124,17 +125,11 @@ function GachaUI:start(manager, parentGui)
         end
         parent(self.contentFrame, self.window)
 
-        local closeBtn = createInstance("TextButton")
-        closeBtn.Name = "CloseButton"
-        closeBtn.Text = "X"
-        if UDim2 and type(UDim2.new)=="function" then
-            closeBtn.Size = UDim2.new(0,20,0,20)
-            closeBtn.Position = UDim2.new(1,-25,0,5)
+        if closeBtn then
+            connect(closeBtn, function()
+                GachaUI:toggle()
+            end)
         end
-        parent(closeBtn, self.window)
-        connect(closeBtn, function()
-            GachaUI:toggle()
-        end)
 
         local layout = createInstance("UIListLayout")
         layout.Name = "ButtonLayout"

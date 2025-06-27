@@ -113,7 +113,9 @@ function AdminConsole:start(manager, admins)
     end
     local gui = ensureGui()
     self.gui = gui
-    local window = GuiUtil.createWindow("ConsoleWindow")
+    local closeBtn
+    local window
+    window, closeBtn = GuiUtil.createWindow("ConsoleWindow")
     if UDim2 and type(UDim2.new)=="function" then
         -- Use a centered panel that does not hide the entire screen.
         window.Size = UDim2.new(0.6, 0, 0.6, 0)
@@ -125,6 +127,11 @@ function AdminConsole:start(manager, admins)
     window.Visible = self.visible
     self.window = window
     parent(window, gui)
+    if closeBtn then
+        GuiUtil.connectButton(closeBtn, function()
+            AdminConsole:toggle()
+        end)
+    end
 
     if NetworkSystem and NetworkSystem.onClientEvent then
         NetworkSystem:onClientEvent("GachaResult", function(kind, reward)
