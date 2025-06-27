@@ -512,6 +512,20 @@ function HudSystem.SetVisible(visible)
     end
 end
 
+-- Переключение видимости HUD
+function HudSystem.ToggleVisibility()
+    if hudGui then
+        hudGui.Enabled = not hudGui.Enabled
+    end
+end
+
+-- Переключение миникарты
+function HudSystem.ToggleMinimap()
+    if minimapFrame then
+        minimapFrame.Visible = not minimapFrame.Visible
+    end
+end
+
 -- Очистка ресурсов
 function HudSystem.Cleanup()
     if hudGui then
