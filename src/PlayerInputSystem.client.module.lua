@@ -287,36 +287,61 @@ end
 function PlayerInputSystem.OpenInterface(interfaceName, moduleName)
     -- Закрываем другие интерфейсы (кроме HUD)
     PlayerInputSystem.CloseAllInterfaces()
-    
+
     local module = uiModules[moduleName]
-    if module and module.Show then
+    if not module then return end
+    if type(module.start) == "function" then
+        pcall(function() module:start() end)
+    end
+    if module.setVisible then
+        module:setVisible(true)
+    elseif module.SetVisible then
+        module.SetVisible(true)
+    elseif module.toggle then
+        module:toggle()
+    elseif module.Toggle then
+        module.Toggle()
+    elseif module.Show then
         module.Show()
-        interfaceStates[interfaceName] = true
-        
-        print("Открыт интерфейс: " .. interfaceName)
-        
-        -- Включаем размытие для полноэкранных интерфейсов
-        if PlayerInputSystem.IsFullscreenInterface(interfaceName) then
-            local BlurManager = require(script.Parent.BlurManager)
-            BlurManager.EnableBlur()
-        end
+    elseif module.show then
+        module.show()
+    end
+    interfaceStates[interfaceName] = true
+
+    print("Открыт интерфейс: " .. interfaceName)
+
+    -- Включаем размытие для полноэкранных интерфейсов
+    if PlayerInputSystem.IsFullscreenInterface(interfaceName) then
+        local BlurManager = require(script.Parent.BlurManager)
+        BlurManager.EnableBlur()
     end
 end
 
 -- Закрытие интерфейса
 function PlayerInputSystem.CloseInterface(interfaceName, moduleName)
     local module = uiModules[moduleName]
-    if module and module.Hide then
+    if not module then return end
+    if module.setVisible then
+        module:setVisible(false)
+    elseif module.SetVisible then
+        module.SetVisible(false)
+    elseif module.toggle then
+        module:toggle()
+    elseif module.Toggle then
+        module.Toggle()
+    elseif module.Hide then
         module.Hide()
-        interfaceStates[interfaceName] = false
-        
-        print("Закрыт интерфейс: " .. interfaceName)
-        
-        -- Отключаем размытие
-        if PlayerInputSystem.IsFullscreenInterface(interfaceName) then
-            local BlurManager = require(script.Parent.BlurManager)
-            BlurManager.DisableBlur()
-        end
+    elseif module.hide then
+        module.hide()
+    end
+    interfaceStates[interfaceName] = false
+
+    print("Закрыт интерфейс: " .. interfaceName)
+
+    -- Отключаем размытие
+    if PlayerInputSystem.IsFullscreenInterface(interfaceName) then
+        local BlurManager = require(script.Parent.BlurManager)
+        BlurManager.DisableBlur()
     end
 end
 
