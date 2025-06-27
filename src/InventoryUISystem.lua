@@ -180,9 +180,15 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     local parentTarget = parentGui or guiRoot
     if not self.window then
         -- no bundled images; create a plain window instead
-        self.window = GuiUtil.createWindow("InventoryWindow")
+        local closeBtn
+        self.window, closeBtn = GuiUtil.createWindow("InventoryWindow")
         GuiUtil.makeFullScreen(self.window)
         GuiUtil.setVisible(self.window, self.visible)
+        if closeBtn then
+            GuiUtil.connectButton(closeBtn, function()
+                InventoryUI:toggle()
+            end)
+        end
     end
     if self.window.Parent ~= parentTarget then
         parent(self.window, parentTarget)

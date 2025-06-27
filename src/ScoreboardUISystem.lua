@@ -74,7 +74,8 @@ function ScoreboardUI:start()
     local gui = ensureGui()
     self.gui = gui
     if not self.window then
-        self.window = GuiUtil.createWindow("ScoreboardWindow")
+        local closeBtn
+        self.window, closeBtn = GuiUtil.createWindow("ScoreboardWindow")
         if UDim2 and type(UDim2.new)=="function" then
             self.window.AnchorPoint = Vector2.new(0, 0)
             self.window.Position = UDim2.new(0, 0, 0, 0)
@@ -82,6 +83,11 @@ function ScoreboardUI:start()
             GuiUtil.clampToScreen(self.window)
         end
         parent(self.window, gui)
+        if closeBtn then
+            GuiUtil.connectButton(closeBtn, function()
+                ScoreboardUI:toggle()
+            end)
+        end
         self.label = createInstance("TextLabel")
         if UDim2 and type(UDim2.new)=="function" then
             self.label.Size = UDim2.new(1, -10, 1, -10)

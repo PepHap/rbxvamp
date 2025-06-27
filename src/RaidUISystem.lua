@@ -85,7 +85,8 @@ function RaidUI:start()
             self.gui = gui
         end
     else
-        self.window = GuiUtil.createWindow("RaidWindow")
+        local closeBtn
+        self.window, closeBtn = GuiUtil.createWindow("RaidWindow")
         self.gui = gui
         if UDim2 and type(UDim2.new)=="function" then
             self.window.AnchorPoint = Vector2.new(0, 0)
@@ -94,6 +95,11 @@ function RaidUI:start()
             GuiUtil.clampToScreen(self.window)
         end
         parent(self.window, gui)
+        if closeBtn then
+            GuiUtil.connectButton(closeBtn, function()
+                RaidUI:toggle()
+            end)
+        end
         self.statusLabel = createInstance("TextLabel")
         parent(self.statusLabel, self.window)
     end

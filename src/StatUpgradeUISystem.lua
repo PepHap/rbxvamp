@@ -83,12 +83,18 @@ function StatUpgradeUISystem:start(statSys, parentGui)
     local guiRoot = ensureGui()
     local parentTarget = parentGui or guiRoot
     if not self.window then
-        self.window = GuiUtil.createWindow("StatUpgradeWindow")
+        local closeBtn
+        self.window, closeBtn = GuiUtil.createWindow("StatUpgradeWindow")
         if UDim2 and type(UDim2.new)=="function" then
             self.window.AnchorPoint = Vector2.new(0, 0)
             self.window.Position = UDim2.new(0, 0, 0, 0)
             self.window.Size = UDim2.new(1, 0, 1, 0)
             GuiUtil.clampToScreen(self.window)
+        end
+        if closeBtn then
+            GuiUtil.connectButton(closeBtn, function()
+                StatUpgradeUISystem:toggle()
+            end)
         end
     end
     if self.window.Parent ~= parentTarget then

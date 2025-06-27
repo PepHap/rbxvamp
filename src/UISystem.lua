@@ -113,7 +113,8 @@ function UISystem:showRewardOptions()
 
     local gui = ensureGui()
     if not self.optionsWindow then
-        self.optionsWindow = GuiUtil.createWindow("RewardOptions")
+        local closeBtn
+        self.optionsWindow, closeBtn = GuiUtil.createWindow("RewardOptions")
         if UDim2 and type(UDim2.new)=="function" then
             self.optionsWindow.Size = UDim2.new(1, 0, 1, 0)
             self.optionsWindow.Position = UDim2.new(0, 0, 0, 0)
@@ -121,17 +122,11 @@ function UISystem:showRewardOptions()
             GuiUtil.clampToScreen(self.optionsWindow)
         end
         parent(self.optionsWindow, gui)
-        local closeBtn = createInstance("TextButton")
-        closeBtn.Name = "CloseButton"
-        closeBtn.Text = "X"
-        if UDim2 and type(UDim2.new)=="function" then
-            closeBtn.Size = UDim2.new(0,20,0,20)
-            closeBtn.Position = UDim2.new(1,-25,0,5)
+        if closeBtn then
+            GuiUtil.connectButton(closeBtn, function()
+                UISystem.optionsWindow.Visible = false
+            end)
         end
-        parent(closeBtn, self.optionsWindow)
-        GuiUtil.connectButton(closeBtn, function()
-            UISystem.optionsWindow.Visible = false
-        end)
     else
         GuiUtil.setVisible(self.optionsWindow, true)
     end

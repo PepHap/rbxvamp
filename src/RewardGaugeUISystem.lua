@@ -110,8 +110,9 @@ function RewardGaugeUISystem:start()
             self.gui = gui
         end
     else
-        -- simple frame; image removed to keep repository text only
-        self.window = GuiUtil.createWindow("RewardWindow", nil, false)
+        -- themed window consistent with the HUD design
+        local closeBtn
+        self.window, closeBtn = GuiUtil.createWindow("RewardWindow")
         if UDim2 and type(UDim2.new)=="function" then
             self.window.AnchorPoint = Vector2.new(0, 0)
             self.window.Position = UDim2.new(0, 0, 0, 0)
@@ -119,6 +120,12 @@ function RewardGaugeUISystem:start()
             GuiUtil.clampToScreen(self.window)
         end
         parent(self.window, gui)
+
+        if closeBtn then
+            GuiUtil.connectButton(closeBtn, function()
+                RewardGaugeUISystem:toggle()
+            end)
+        end
         
         self.gaugeLabel = createInstance("TextLabel")
         if UDim2 and type(UDim2.new)=="function" then

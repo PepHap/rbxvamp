@@ -86,7 +86,8 @@ function AchievementUI:start(sys)
         self:setVisible(self.visible)
         return
     end
-    self.window = GuiUtil.createWindow("AchievementWindow")
+    local closeBtn
+    self.window, closeBtn = GuiUtil.createWindow("AchievementWindow")
     if UDim2 and type(UDim2.new)=="function" then
         self.window.AnchorPoint = Vector2.new(0, 0)
         self.window.Position = UDim2.new(0, 0, 0, 0)
@@ -94,6 +95,11 @@ function AchievementUI:start(sys)
         GuiUtil.clampToScreen(self.window)
     end
     parent(self.window, gui)
+    if closeBtn then
+        GuiUtil.connectButton(closeBtn, function()
+            AchievementUI:toggle()
+        end)
+    end
     self:update()
     self:setVisible(self.visible)
 end

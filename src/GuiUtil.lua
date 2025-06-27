@@ -586,10 +586,11 @@ end
 function GuiUtil.createWindow(name, parent, showClose)
     parent = parent or GuiUtil.getPlayerGui()
     local window, titleBar, content, closeBtn = GuiUtil.CreateWindow(parent, name)
+    GuiUtil.addCrossDecor(window)
     if showClose == false and closeBtn then
         closeBtn.Visible = false
     end
-    return window
+    return window, closeBtn
 end
 
 return GuiUtil

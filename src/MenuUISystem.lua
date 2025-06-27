@@ -129,7 +129,8 @@ function MenuUI:start()
     self.gui = gui
 
     if not self.window then
-        self.window = GuiUtil.createWindow("MenuWindow")
+        local closeBtn
+        self.window, closeBtn = GuiUtil.createWindow("MenuWindow")
         GuiUtil.makeFullScreen(self.window)
         if UDim2 and type(UDim2.new)=="function" then
             self.window.AnchorPoint = Vector2.new(0, 0)
@@ -138,6 +139,11 @@ function MenuUI:start()
             GuiUtil.clampToScreen(self.window)
         end
         parent(self.window, gui)
+        if closeBtn then
+            GuiUtil.connectButton(closeBtn, function()
+                MenuUI:toggle()
+            end)
+        end
     elseif self.window.Parent ~= gui then
         parent(self.window, gui)
     end

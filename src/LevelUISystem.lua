@@ -110,7 +110,8 @@ function LevelUI:start(pls, lvlSys, parentGui)
         return
     end
 
-    self.window = GuiUtil.createWindow("LevelWindow")
+    local closeBtn
+    self.window, closeBtn = GuiUtil.createWindow("LevelWindow")
     if UDim2 and type(UDim2.new)=="function" then
         -- Compact window anchored to the top left.
         self.window.Size = UDim2.new(0, 220, 0, 80)
@@ -119,6 +120,11 @@ function LevelUI:start(pls, lvlSys, parentGui)
         GuiUtil.clampToScreen(self.window)
     end
     parent(self.window, parentTarget)
+    if closeBtn then
+        GuiUtil.connectButton(closeBtn, function()
+            LevelUI:toggle()
+        end)
+    end
 
     self.levelLabel = createInstance("TextLabel")
     parent(self.levelLabel, self.window)

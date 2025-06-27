@@ -111,7 +111,8 @@ function ProgressMapUI:start(ps)
         self:setVisible(self.visible)
         return
     end
-    self.window = GuiUtil.createWindow("ProgressMapWindow")
+    local closeBtn
+    self.window, closeBtn = GuiUtil.createWindow("ProgressMapWindow")
     if UDim2 and type(UDim2.new)=="function" then
         self.window.AnchorPoint = Vector2.new(0, 0)
         self.window.Position = UDim2.new(0, 0, 0, 0)
@@ -120,17 +121,11 @@ function ProgressMapUI:start(ps)
     end
     parent(self.window, gui)
 
-    local closeBtn = createInstance("TextButton")
-    closeBtn.Name = "CloseButton"
-    closeBtn.Text = "X"
-    if UDim2 and type(UDim2.new)=="function" then
-        closeBtn.Size = UDim2.new(0, 20, 0, 20)
-        closeBtn.Position = UDim2.new(1, -25, 0, 5)
+    if closeBtn then
+        GuiUtil.connectButton(closeBtn, function()
+            ProgressMapUI:setVisible(false)
+        end)
     end
-    parent(closeBtn, self.window)
-    GuiUtil.connectButton(closeBtn, function()
-        ProgressMapUI:setVisible(false)
-    end)
 
     self.label = createInstance("TextLabel")
     if UDim2 and type(UDim2.new)=="function" then
