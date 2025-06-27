@@ -113,12 +113,16 @@ UITheme.Styles = {
         BackgroundColor3 = UITheme.Colors.BackgroundDark,
         BorderColor3 = UITheme.Colors.BorderDark,
         BorderSizePixel = 2,
+        -- Полупрозрачность в стиле HUD
+        BackgroundTransparency = 0.2,
     },
 
     Panel = {
         BackgroundColor3 = UITheme.Colors.BackgroundMedium,
         BorderColor3 = UITheme.Colors.BorderDark,
         BorderSizePixel = 1,
+        -- Такое же лёгкое затемнение, как и в окнах
+        BackgroundTransparency = 0.2,
     },
 
     Button = {
