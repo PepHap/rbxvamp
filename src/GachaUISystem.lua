@@ -15,6 +15,11 @@ local GachaUI = {
     skillButton = nil,
     companionButton = nil,
     equipmentButton = nil,
+    buySkillTicketButton = nil,
+    buyCompanionTicketButton = nil,
+    buyEquipmentTicketButton = nil,
+    buyGoldButton = nil,
+    exchangeResultLabel = nil,
     window = nil,
     contentFrame = nil,
 }
@@ -176,6 +181,45 @@ function GachaUI:start(manager, parentGui)
         end
         parent(self.equipmentButton, self.contentFrame)
 
+        -- buttons for purchasing tickets and currency directly in the gacha window
+        self.buySkillTicketButton = createInstance("TextButton")
+        self.buySkillTicketButton.Text = "Buy Skill Ticket"
+        if UDim2 and type(UDim2.new)=="function" then
+            self.buySkillTicketButton.Size = UDim2.new(1, -10, 0, 25)
+        end
+        parent(self.buySkillTicketButton, self.contentFrame)
+
+        self.buyCompanionTicketButton = createInstance("TextButton")
+        self.buyCompanionTicketButton.Text = "Buy Companion Ticket"
+        if UDim2 and type(UDim2.new)=="function" then
+            self.buyCompanionTicketButton.Size = UDim2.new(1, -10, 0, 25)
+        end
+        parent(self.buyCompanionTicketButton, self.contentFrame)
+
+        self.buyEquipmentTicketButton = createInstance("TextButton")
+        self.buyEquipmentTicketButton.Text = "Buy Equipment Ticket"
+        if UDim2 and type(UDim2.new)=="function" then
+            self.buyEquipmentTicketButton.Size = UDim2.new(1, -10, 0, 25)
+        end
+        parent(self.buyEquipmentTicketButton, self.contentFrame)
+
+        self.buyGoldButton = createInstance("TextButton")
+        self.buyGoldButton.Text = "Buy Gold"
+        if UDim2 and type(UDim2.new)=="function" then
+            self.buyGoldButton.Size = UDim2.new(1, -10, 0, 25)
+        end
+        parent(self.buyGoldButton, self.contentFrame)
+
+        -- label to display exchange results
+        self.exchangeResultLabel = createInstance("TextLabel")
+        self.exchangeResultLabel.Name = "ExchangeResult"
+        self.exchangeResultLabel.Text = ""
+        if UDim2 and type(UDim2.new)=="function" then
+            self.exchangeResultLabel.Size = UDim2.new(1, -10, 0, 20)
+        end
+        self.exchangeResultLabel.Visible = false
+        parent(self.exchangeResultLabel, self.contentFrame)
+
         connect(self.skillButton, function()
             NetworkSystem:fireServer("GachaRequest", "skill")
         end)
@@ -185,6 +229,19 @@ function GachaUI:start(manager, parentGui)
         connect(self.equipmentButton, function()
             NetworkSystem:fireServer("GachaRequest", "equipment", "Weapon")
         end)
+
+        connect(self.buySkillTicketButton, function()
+            GachaUI:buyTicket("skill")
+        end)
+        connect(self.buyCompanionTicketButton, function()
+            GachaUI:buyTicket("companion")
+        end)
+        connect(self.buyEquipmentTicketButton, function()
+            GachaUI:buyTicket("equipment")
+        end)
+        connect(self.buyGoldButton, function()
+            GachaUI:buyCurrency("gold")
+        end)
     end
 
     if NetworkSystem and NetworkSystem.onClientEvent then
@@ -193,6 +250,29 @@ function GachaUI:start(manager, parentGui)
                 GachaUI:showResult(reward)
             else
                 GachaUI:showResult(nil)
+            end
+        end)
+        NetworkSystem:onClientEvent("ExchangeResult", function(ok)
+            if GachaUI.exchangeResultLabel then
+                if ok then
+                    GachaUI.exchangeResultLabel.Text = "Purchase successful"
+                    if Color3 then
+                        GachaUI.exchangeResultLabel.TextColor3 = Color3.new(0, 1, 0)
+                    end
+                else
+                    GachaUI.exchangeResultLabel.Text = "Purchase failed"
+                    if Color3 then
+                        GachaUI.exchangeResultLabel.TextColor3 = Color3.new(1, 0, 0)
+                    end
+                end
+                GachaUI.exchangeResultLabel.Visible = true
+                if task and task.delay then
+                    task.delay(2, function()
+                        if GachaUI.exchangeResultLabel then
+                            GachaUI.exchangeResultLabel.Visible = false
+                        end
+                    end)
+                end
             end
         end)
     end
@@ -225,7 +305,8 @@ end
 
 function GachaUI:showResult(result)
     self.resultLabel = self.resultLabel or createInstance("TextLabel")
-    parent(self.resultLabel, self.window or ensureGui())
+    -- keep the label inside the existing container if available
+    parent(self.resultLabel, self.contentFrame or self.window or ensureGui())
     if not result then
         self.resultLabel.Text = "No reward"
         return
@@ -252,6 +333,18 @@ end
 function GachaUI:rollEquipment(slot)
     if NetworkSystem then
         NetworkSystem:fireServer("GachaRequest", "equipment", slot)
+    end
+end
+
+function GachaUI:buyTicket(kind)
+    if NetworkSystem then
+        NetworkSystem:fireServer("ExchangeRequest", "ticket", kind, 1)
+    end
+end
+
+function GachaUI:buyCurrency(kind)
+    if NetworkSystem then
+        NetworkSystem:fireServer("ExchangeRequest", "currency", kind, 1)
     end
 end
 

@@ -542,13 +542,6 @@ if RunService:IsClient() then
     StatUpgradeUISystem.statSystem = StatUpgradeSystem
     GameManager:addSystem("StatUI", StatUpgradeUISystem)
 
-    -- UI for exchanging crystals into tickets or currency
-    local CrystalExchangeUISystem = require(script.Parent:WaitForChild("CrystalExchangeUISystem"))
-    if CrystalExchangeSystem then
-        CrystalExchangeUISystem.exchangeSystem = CrystalExchangeSystem
-    end
-    GameManager:addSystem("CrystalExchangeUI", CrystalExchangeUISystem)
-
     local DungeonUISystem = require(script.Parent:WaitForChild("DungeonUISystem"))
     if DungeonSystem then
         DungeonUISystem.dungeonSystem = DungeonSystem

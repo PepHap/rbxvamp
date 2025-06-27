@@ -18,7 +18,6 @@ local INPUT_KEYS = {
     statsKey = Enum.KeyCode.U,
     progressKey = Enum.KeyCode.P,
     levelKey = Enum.KeyCode.V,
-    exchangeKey = Enum.KeyCode.C,
     lobbyKey = Enum.KeyCode.O,
     partyKey = Enum.KeyCode.Y,
     menuKey = Enum.KeyCode.M,
@@ -71,7 +70,6 @@ local interfaceStates = {
     stats = false,
     progress = false,
     level = false,
-    exchange = false,
     lobby = false,
     party = false,
     menu = false,
@@ -111,7 +109,6 @@ function PlayerInputSystem.LoadUIModules()
         "StatUpgradeUISystem",
         "QuestUISystem",
         "AchievementUISystem",
-        "CrystalExchangeUISystem",
         "GachaUISystem",
         "RewardGaugeUISystem",
         "DungeonUISystem",
@@ -205,10 +202,6 @@ function PlayerInputSystem.HandleKeyPress(keyCode)
     -- Уровень
     elseif keyCode == INPUT_KEYS.levelKey then
         PlayerInputSystem.ToggleInterface("level", "LevelUISystem")
-        
-    -- Обмен
-    elseif keyCode == INPUT_KEYS.exchangeKey then
-        PlayerInputSystem.ToggleInterface("exchange", "CrystalExchangeUISystem")
         
     -- Лобби
     elseif keyCode == INPUT_KEYS.lobbyKey then
@@ -386,7 +379,6 @@ function PlayerInputSystem.GetModuleNameForInterface(interfaceName)
         stats = "StatUpgradeUISystem",
         progress = "ProgressMapUISystem",
         level = "LevelUISystem",
-        exchange = "CrystalExchangeUISystem",
         lobby = "LobbyUISystem",
         party = "PartyUISystem",
         menu = "MenuUISystem",
