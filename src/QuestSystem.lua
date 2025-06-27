@@ -4,7 +4,6 @@
 local QuestSystem = {}
 
 -- Built-in quest definitions loaded when the system starts
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ModuleUtil = require(script.Parent:WaitForChild("ModuleUtil"))
 QuestSystem.definitions = ModuleUtil.loadAssetModule("quests") or {}
 
@@ -15,7 +14,6 @@ QuestSystem.connections = {}
 QuestSystem.quests = {}
 
 -- CurrencySystem is used for basic reward handling
-local ModuleUtil = require(script.Parent:WaitForChild("ModuleUtil"))
 local CurrencySystem = ModuleUtil.requireChild(script.Parent, "CurrencySystem", 10)
 local KeySystem = ModuleUtil.requireChild(script.Parent, "KeySystem", 10)
 local GachaSystem = ModuleUtil.requireChild(script.Parent, "GachaSystem", 10)

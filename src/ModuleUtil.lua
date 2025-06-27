@@ -17,11 +17,23 @@ function ModuleUtil.requireChild(parent, name, timeout)
             local altNames = {
                 container.Name .. "." .. name .. ".module",
                 container.Name .. "." .. name .. ".module.lua",
+                container.Name .. "." .. name .. ".client.module",
+                container.Name .. "." .. name .. ".client.module.lua",
+                container.Name .. "." .. name .. ".server.module",
+                container.Name .. "." .. name .. ".server.module.lua",
                 name .. ".module",
                 name .. ".module.lua",
+                name .. ".client.module",
+                name .. ".client.module.lua",
+                name .. ".server.module",
+                name .. ".server.module.lua",
                 container.Name .. "." .. name,
                 parent.Name .. "." .. name .. ".module",
                 parent.Name .. "." .. name .. ".module.lua",
+                parent.Name .. "." .. name .. ".client.module",
+                parent.Name .. "." .. name .. ".client.module.lua",
+                parent.Name .. "." .. name .. ".server.module",
+                parent.Name .. "." .. name .. ".server.module.lua",
                 parent.Name .. "." .. name,
             }
             for _, n in ipairs(altNames) do
@@ -36,6 +48,10 @@ function ModuleUtil.requireChild(parent, name, timeout)
                 parent.Name .. "." .. name,
                 parent.Name .. "." .. name .. ".module",
                 parent.Name .. "." .. name .. ".module.lua",
+                parent.Name .. "." .. name .. ".client.module",
+                parent.Name .. "." .. name .. ".client.module.lua",
+                parent.Name .. "." .. name .. ".server.module",
+                parent.Name .. "." .. name .. ".server.module.lua",
             }
             for _, n in ipairs(siblingNames) do
                 found = container.Parent and container.Parent:FindFirstChild(n)
@@ -52,14 +68,16 @@ function ModuleUtil.requireChild(parent, name, timeout)
 
     if not child then
         timeout = timeout or 5
-        for _, c in ipairs(containers) do
-            if c then
-                local ok, result = pcall(c.WaitForChild, c, name, timeout)
-                if ok then
-                    child = result
-                    break
+        local elapsed = 0
+        while elapsed < timeout and not child do
+            for _, c in ipairs(containers) do
+                if c then
+                    child = search(c)
+                    if child then break end
                 end
             end
+            if child then break end
+            elapsed = elapsed + task.wait(0.05)
         end
     end
 
@@ -92,11 +110,27 @@ end
 function ModuleUtil.loadAssetModule(name, timeout)
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local assets = ReplicatedStorage:FindFirstChild("assets")
-    if not assets then
-        warn("Missing assets folder in ReplicatedStorage")
-        return nil
+    if assets then
+        local mod = ModuleUtil.requireChild(assets, name, timeout or 5)
+        if mod then
+            return mod
+        end
     end
-    return ModuleUtil.requireChild(assets, name, timeout or 5)
+
+    -- Fallback to a local assets folder when running outside of Studio
+    local localAssets = script.Parent.Parent:FindFirstChild("assets")
+    if localAssets then
+        local child = localAssets:FindFirstChild(name)
+        if child and child:IsA("ModuleScript") then
+            local ok, result = pcall(require, child)
+            if ok then
+                return result
+            end
+        end
+    end
+
+    warn(("Missing assets folder or module %s"):format(name))
+    return nil
 end
 
 return ModuleUtil

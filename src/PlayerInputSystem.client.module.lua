@@ -92,6 +92,13 @@ function PlayerInputSystem.Initialize()
     print("PlayerInputSystem инициализирован")
 end
 
+-- Provide a start method used by ClientGameRunner to initialize the
+-- input system. This simply delegates to ``Initialize`` for backward
+-- compatibility with older code.
+function PlayerInputSystem:start()
+    self.Initialize()
+end
+
 -- Загрузка модулей UI
 function PlayerInputSystem.LoadUIModules()
     -- Загружаем все UI системы

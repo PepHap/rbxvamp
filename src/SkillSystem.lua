@@ -61,7 +61,6 @@ SkillSystem.rand = math.random
 
 local CurrencySystem = require(script.Parent:WaitForChild("CurrencySystem"))
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ModuleUtil = require(script.Parent:WaitForChild("ModuleUtil"))
 
 -- Table of predefined skills available to the game. Each skill entry
