@@ -32,7 +32,6 @@ local PlayerInputSystem = {
     statsKey = "U",
     progressKey = "P",
     levelKey = "V",
-    exchangeKey = "C",
     lobbyKey = "O",
     partyKey = "Y",
     menuKey = "M",
@@ -66,7 +65,6 @@ local StatUpgradeUISystem = require(script.Parent:WaitForChild("StatUpgradeUISys
 local StatUpgradeSystem = require(script.Parent:WaitForChild("StatUpgradeSystem"))
 local QuestUISystem = require(script.Parent:WaitForChild("QuestUISystem"))
 local AchievementUISystem = require(script.Parent:WaitForChild("AchievementUISystem"))
-local CrystalExchangeUISystem = require(script.Parent:WaitForChild("CrystalExchangeUISystem"))
 local ProgressMapUISystem = require(script.Parent:WaitForChild("ProgressMapUISystem"))
 local LevelUISystem = require(script.Parent:WaitForChild("LevelUISystem"))
 local AdminConsoleSystem = require(script.Parent:FindFirstChild("AdminConsoleSystem"))
@@ -143,8 +141,6 @@ function PlayerInputSystem:setKeyState(key, isDown)
         ProgressMapUISystem:toggle()
     elseif key == self.levelKey and isDown then
         LevelUISystem:toggle()
-    elseif key == self.exchangeKey and isDown then
-        CrystalExchangeUISystem:toggle()
     elseif key == self.lobbyKey and isDown then
         LobbySystem:enter()
         LobbyUISystem:toggle()
