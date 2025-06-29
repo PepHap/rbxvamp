@@ -529,7 +529,7 @@ local function renderStats(container, items, stats, setSys)
         local isLabel = false
         if child.ClassName then
             isLabel = child.ClassName == "TextLabel"
-        elseif child:IsA and child:IsA("TextLabel") then
+        elseif child.IsA and child:IsA("TextLabel") then
             isLabel = true
         end
         if isLabel then
