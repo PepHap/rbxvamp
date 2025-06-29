@@ -95,6 +95,12 @@
         },
         "StatUpgradeSystem_client": {
           "$path": "src/StatUpgradeSystem.client.module.lua"
+        },
+        "GuiXmlLoader": {
+          "$path": "src/GuiXmlLoader.lua"
+        },
+        "gui_data": {
+          "$path": "src/gui_data.lua"
         }
       },
       "server": {
@@ -200,6 +206,12 @@
         },
         "StatUpgradeSystem_client": {
           "$path": "src/StatUpgradeSystem.client.module.lua"
+        },
+        "GuiXmlLoader": {
+          "$path": "src/GuiXmlLoader.lua"
+        },
+        "gui_data": {
+          "$path": "src/gui_data.lua"
         }
       }
     },

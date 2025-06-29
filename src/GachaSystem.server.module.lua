@@ -3,6 +3,13 @@
 
 local GachaSystem = {}
 
+---Default gacha tickets awarded to new players.
+GachaSystem.startingTickets = {
+    skill = 1,
+    companion = 1,
+    equipment = 1,
+}
+
 -- Default rarity weight tables used for all reward categories. Each entry is
 -- a list of tuples ``{rarity, weight}`` where the weight acts as a relative
 -- probability.  The values intentionally do not sum to 100 so additional
@@ -96,11 +103,13 @@ end
 ---Restores ticket and crystal counts from data.
 -- @param data table serialized state
 function GachaSystem:loadData(data)
-    if type(data) ~= "table" then return end
+    data = type(data) == "table" and data or {}
     self.crystals = tonumber(data.crystals) or 0
-    self.tickets.skill = data.tickets and data.tickets.skill or 0
-    self.tickets.companion = data.tickets and data.tickets.companion or 0
-    self.tickets.equipment = data.tickets and data.tickets.equipment or 0
+    local tickets = data.tickets or {}
+    local defaults = self.startingTickets
+    self.tickets.skill = tickets.skill or defaults.skill or 0
+    self.tickets.companion = tickets.companion or defaults.companion or 0
+    self.tickets.equipment = tickets.equipment or defaults.equipment or 0
 end
 
 -- Returns rarity weight entries the player is allowed to roll based on level.
