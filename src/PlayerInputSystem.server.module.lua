@@ -21,8 +21,6 @@ local PlayerInputSystem = {
     keyStates = {},
     ---Reference to the player's position table.
     playerPosition = nil,
-    ---Key used to toggle the inventory UI.
-    inventoryKey = "B",
     skillKey = "K",
     companionKey = "L",
     gachaKey = "G",
@@ -34,7 +32,7 @@ local PlayerInputSystem = {
     levelKey = "V",
     lobbyKey = "O",
     partyKey = "Y",
-    menuKey = "M",
+    menuKey = "N",
     adminKey = "F10",
     ---Reference to the SkillCastSystem for manual skill use.
     skillCastSystem = nil,
@@ -50,7 +48,6 @@ else
 end
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkServer"))
 local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
-local InventoryUISystem = require(script.Parent:WaitForChild("InventoryUISystem"))
 local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
 local CompanionUISystem = require(script.Parent:WaitForChild("CompanionUISystem"))
 local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
@@ -113,19 +110,7 @@ end
 -- @param isDown boolean whether the key is pressed
 function PlayerInputSystem:setKeyState(key, isDown)
     self.keyStates[key] = isDown and true or false
-    if key == self.inventoryKey and isDown then
-        -- Use the same toggleTab logic as the client to close or open reliably
-        if MenuUISystem.toggleTab then
-            MenuUISystem:toggleTab("Inventory")
-        else
-            local invIndex = MenuUISystem.getTabIndex and MenuUISystem:getTabIndex("Inventory")
-            if MenuUISystem.visible and invIndex and invIndex == MenuUISystem.currentTab then
-                MenuUISystem:toggle()
-            else
-                MenuUISystem:openTab("Inventory")
-            end
-        end
-    elseif key == self.skillKey and isDown then
+    if key == self.skillKey and isDown then
         MenuUISystem:openTab("Skills")
     elseif key == self.companionKey and isDown then
         CompanionUISystem:toggle()

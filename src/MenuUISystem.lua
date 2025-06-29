@@ -20,7 +20,6 @@ local MenuUI = {
 }
 
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
-local InventoryUISystem = require(script.Parent:WaitForChild("InventoryUISystem"))
 local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
 local AchievementUISystem = require(script.Parent:WaitForChild("AchievementUISystem"))
 local CompanionUISystem = require(script.Parent:WaitForChild("CompanionUISystem"))
@@ -94,7 +93,6 @@ end
 
 function MenuUI:addDefaultTabs()
     if #self.tabs > 0 then return end
-    self:addTab("Inventory", InventoryUISystem)
     self:addTab("Skills", SkillUISystem)
     self:addTab("Achievements", AchievementUISystem)
     self:addTab("Companions", CompanionUISystem)
@@ -215,7 +213,6 @@ function MenuUI:start()
         if ok and player and player.CharacterAdded then
             self.respawnConnection = player.CharacterAdded:Connect(function()
                 self:setVisible(false)
-                InventoryUISystem:setVisible(false)
                 BlurManager.Cleanup()
             end)
         end
