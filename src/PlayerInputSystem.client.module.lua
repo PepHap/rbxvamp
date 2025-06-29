@@ -8,7 +8,7 @@ local GuiService = game:GetService("GuiService")
 
 -- Назначенные клавиши для различных интерфейсов
 local INPUT_KEYS = {
-    inventoryKey = Enum.KeyCode.B,
+    inventoryKey = Enum.KeyCode.M,
     skillKey = Enum.KeyCode.K,
     companionKey = Enum.KeyCode.L,
     gachaKey = Enum.KeyCode.G,
@@ -20,7 +20,7 @@ local INPUT_KEYS = {
     levelKey = Enum.KeyCode.V,
     lobbyKey = Enum.KeyCode.O,
     partyKey = Enum.KeyCode.Y,
-    menuKey = Enum.KeyCode.M,
+    menuKey = Enum.KeyCode.N,
     adminKey = Enum.KeyCode.F10,
 
     -- Дополнительные клавиши
