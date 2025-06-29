@@ -99,6 +99,9 @@
         "GuiXmlLoader": {
           "$path": "src/GuiXmlLoader.lua"
         },
+        "UIBridge": {
+          "$path": "src/UIBridge.lua"
+        },
         "gui_data": {
           "$path": "src/gui_data.lua"
         }
@@ -209,6 +212,9 @@
         },
         "GuiXmlLoader": {
           "$path": "src/GuiXmlLoader.lua"
+        },
+        "UIBridge": {
+          "$path": "src/UIBridge.lua"
         },
         "gui_data": {
           "$path": "src/gui_data.lua"
