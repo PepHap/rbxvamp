@@ -177,6 +177,18 @@ end
 ---Initializes the Inventory UI and binds page buttons.
 -- @param items table ItemSystem instance
 function InventoryUI:start(items, parentGui, statSystem, setSystem)
+    if self.window and not self.window.Parent then
+        self.window = nil
+    end
+    if self.equipmentFrame and not self.equipmentFrame.Parent then
+        self.equipmentFrame = nil
+    end
+    if self.inventoryFrame and not self.inventoryFrame.Parent then
+        self.inventoryFrame = nil
+    end
+    if self.statsFrame and not self.statsFrame.Parent then
+        self.statsFrame = nil
+    end
     -- Only create a new ItemSystem when none has been assigned yet. This
     -- prevents MenuUISystem:start from overwriting the instance provided by
     -- GameManager when ``items`` is nil.
@@ -593,6 +605,18 @@ end
 
 ---Updates the whole GUI based on the ItemSystem state
 function InventoryUI:update()
+    if self.window and not self.window.Parent then
+        self.window = nil
+    end
+    if self.equipmentFrame and not self.equipmentFrame.Parent then
+        self.equipmentFrame = nil
+    end
+    if self.inventoryFrame and not self.inventoryFrame.Parent then
+        self.inventoryFrame = nil
+    end
+    if self.statsFrame and not self.statsFrame.Parent then
+        self.statsFrame = nil
+    end
     local gui = ensureGui()
     if type(gui) == "table" then
         gui.children = gui.children or {}

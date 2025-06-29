@@ -438,9 +438,16 @@ end
 
 -- Parent ``child`` to ``parentObj`` for both real Instances and table mocks.
 function GuiUtil.parent(child, parentObj)
-    if not child or not parentObj then return end
+    if not child or not parentObj then
+        return
+    end
     if typeof and typeof(child) == "Instance" then
-        child.Parent = parentObj
+        local ok, err = pcall(function()
+            child.Parent = parentObj
+        end)
+        if not ok then
+            warn(err)
+        end
     else
         parentObj.children = parentObj.children or {}
         table.insert(parentObj.children, child)
