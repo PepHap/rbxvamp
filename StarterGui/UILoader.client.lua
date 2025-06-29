@@ -14,6 +14,7 @@ local RewardGaugeUISystem = require(src:WaitForChild("RewardGaugeUISystem"))
 local GameManager = require(src:WaitForChild("ClientGameManager"))
 local GuiXmlLoader = require(src:WaitForChild("GuiXmlLoader"))
 local guiData = require(src:WaitForChild("gui_data"))
+local UIBridge = require(src:WaitForChild("UIBridge"))
 
 -- load the interface defined in gui.rbxmx
 local Players = game:GetService("Players")
@@ -30,6 +31,7 @@ if not screenGui then
     end
     screenGui.Parent = playerGui
 end
+UIBridge.init(screenGui)
 
 local modules = {
     QuestUISystem,

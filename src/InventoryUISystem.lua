@@ -67,6 +67,7 @@ local InventorySlots = require(script.Parent:WaitForChild("InventorySlots"))
 local InventoryGrid = require(script.Parent:WaitForChild("InventoryGrid"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
 local GuiXmlLoader = require(script.Parent:WaitForChild("GuiXmlLoader"))
+local UIBridge = require(script.Parent:WaitForChild("UIBridge"))
 
 local function applyRarityColor(obj, rarity)
     if not obj or not Theme or not Theme.rarityColors then return end
@@ -118,53 +119,10 @@ local function clearChildren(container)
     end
 end
 
-local function ensureGui(parent)
-    if InventoryUI.useRobloxObjects then
-        local pgui = GuiUtil.getPlayerGui()
-        if pgui then
-            local xmlGui = pgui:FindFirstChild("InventoryUI")
-            if xmlGui and xmlGui ~= InventoryUI.gui then
-                if InventoryUI.gui and InventoryUI.gui ~= xmlGui and InventoryUI.gui.Destroy then
-                    InventoryUI.gui:Destroy()
-                end
-                InventoryUI.gui = xmlGui
-                return xmlGui
-            end
-        end
-    end
-
-    if InventoryUI.gui and (not InventoryUI.useRobloxObjects or InventoryUI.gui.Parent) then
-        return InventoryUI.gui
-    end
-    if parent then
-        InventoryUI.gui = parent
-        return parent
-    end
-    local pgui
-    if InventoryUI.useRobloxObjects then
-        pgui = GuiUtil.getPlayerGui()
-    end
-    if pgui then
-        local existing = pgui:FindFirstChild("InventoryUI")
-        if existing then
-            InventoryUI.gui = existing
-            return existing
-        end
-    end
-    local gui = createInstance("ScreenGui")
-    gui.Name = "InventoryUI"
-    GuiUtil.makeFullScreen(gui)
-    if gui.Enabled ~= nil then
-        gui.Enabled = true
-    end
-    if gui.ResetOnSpawn ~= nil then
-        gui.ResetOnSpawn = false
-    end
-    InventoryUI.gui = gui
-    if InventoryUI.useRobloxObjects and pgui then
-        gui.Parent = pgui
-    end
-    return gui
+local function ensureGui()
+    local gui = UIBridge.getScreenGui()
+    InventoryUI.gui = gui or InventoryUI.gui
+    return InventoryUI.gui
 end
 
 
@@ -211,28 +169,13 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     local guiRoot = ensureGui()
     local parentTarget = parentGui or guiRoot
 
-    local xmlWindow = GuiXmlLoader.findFirstDescendant(parentTarget, "InventoryFrame")
+    local xmlWindow = UIBridge.getFrame("InventoryFrame")
     if not xmlWindow then
-        xmlWindow = GuiXmlLoader.findFirstDescendant(parentTarget, "Window")
+        return
     end
-
-    if xmlWindow then
-        self.window = xmlWindow
-        self.useXmlWindow = true
-        GuiUtil.setVisible(self.window, self.visible)
-    elseif not self.window then
-        self.useXmlWindow = false
-        -- fallback to a simple generated window
-        local closeBtn
-        self.window, closeBtn = GuiUtil.createWindow("InventoryWindow")
-        GuiUtil.makeFullScreen(self.window)
-        GuiUtil.setVisible(self.window, self.visible)
-        if closeBtn then
-            GuiUtil.connectButton(closeBtn, function()
-                InventoryUI:toggle()
-            end)
-        end
-    end
+    self.window = xmlWindow
+    self.useXmlWindow = true
+    GuiUtil.setVisible(self.window, self.visible)
     if self.window.Parent ~= parentTarget then
         parent(self.window, parentTarget)
     end
@@ -248,21 +191,6 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
         end
     end
     self.gui = parentTarget
-    if not self.useXmlWindow and UDim2 and type(UDim2.new)=="function" then
-        self.window.Size = UDim2.new(1, 0, 1, 0)
-        self.window.AnchorPoint = Vector2.new(0, 0)
-        self.window.Position = UDim2.new(0, 0, 0, 0)
-        GuiUtil.clampToScreen(self.window)
-        -- slightly visible background for readability
-        if self.window.BackgroundTransparency ~= nil then
-            local ok = pcall(function()
-                self.window.BackgroundTransparency = 0.2
-            end)
-            if not ok and type(self.window) == "table" then
-                self.window.BackgroundTransparency = 0.2
-            end
-        end
-    end
 
 
     local btnParent = self.window

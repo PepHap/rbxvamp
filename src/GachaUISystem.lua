@@ -30,6 +30,7 @@ end)
 if not ok then Theme = nil end
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
 local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
+local UIBridge = require(script.Parent:WaitForChild("UIBridge"))
 
 local function createInstance(className)
     if GachaUI.useRobloxObjects and typeof ~= nil and Instance and type(Instance.new) == "function" then
@@ -56,34 +57,9 @@ local function parent(child, parentObj)
 end
 
 local function ensureGui()
-    if GachaUI.gui and (not GachaUI.useRobloxObjects or GachaUI.gui.Parent) then
-        return GachaUI.gui
-    end
-    local pgui
-    if GachaUI.useRobloxObjects then
-        pgui = GuiUtil.getPlayerGui()
-        if pgui then
-            local existing = pgui:FindFirstChild("GachaUI")
-            if existing then
-                GachaUI.gui = existing
-                return existing
-            end
-        end
-    end
-    local gui = createInstance("ScreenGui")
-    gui.Name = "GachaUI"
-    GuiUtil.makeFullScreen(gui)
-    if gui.Enabled ~= nil then
-        gui.Enabled = true
-    end
-    if gui.ResetOnSpawn ~= nil then
-        gui.ResetOnSpawn = false
-    end
-    GachaUI.gui = gui
-    if GachaUI.useRobloxObjects and pgui then
-        gui.Parent = pgui
-    end
-    return gui
+    local gui = UIBridge.getScreenGui()
+    GachaUI.gui = gui or GachaUI.gui
+    return GachaUI.gui
 end
 
 local function connect(btn, callback)
@@ -95,149 +71,54 @@ function GachaUI:start(manager, parentGui)
     self.gameManager = manager or self.gameManager or require(script.Parent:WaitForChild("ClientGameManager"))
     local guiRoot = ensureGui()
     local parentTarget = parentGui or guiRoot
-    local created = false
-    if not self.window then
-        -- use a plain window frame; banner images were removed
-        local closeBtn
-        self.window, closeBtn = GuiUtil.createWindow("GachaWindow")
-        if UDim2 and type(UDim2.new)=="function" then
-            -- Provide a moderate sized window instead of covering the
-            -- entire screen so other UI remains visible.
-            -- Slightly larger window so buttons remain visible
-            self.window.Size = UDim2.new(0.4, 0, 0.5, 0)
-            self.window.AnchorPoint = Vector2.new(0.5, 0.5)
-            self.window.Position = UDim2.new(0.5, 0, 0.5, 0)
-            GuiUtil.clampToScreen(self.window)
-        end
-        created = true
+    local xmlWindow = UIBridge.getFrame("GachaFrame")
+    if not xmlWindow then
+        return
     end
+    self.window = xmlWindow
+    self.contentFrame = xmlWindow
     if self.window.Parent ~= parentTarget then
         parent(self.window, parentTarget)
     end
     self.gui = parentTarget
 
-    if created then
-        -- create a container frame so the layout ignores decorative
-        -- cross bars added by createWindow
-        self.contentFrame = createInstance("Frame")
-        if UDim2 and type(UDim2.new)=="function" then
-            self.contentFrame.Size = UDim2.new(1, 0, 1, 0)
-        end
-        parent(self.contentFrame, self.window)
+    self.resultLabel = GuiXmlLoader.findFirstDescendant(xmlWindow, "ResultLabel")
+    self.skillButton = GuiXmlLoader.findFirstDescendant(xmlWindow, "SkillButton")
+    self.companionButton = GuiXmlLoader.findFirstDescendant(xmlWindow, "CompanionButton")
+    self.equipmentButton = GuiXmlLoader.findFirstDescendant(xmlWindow, "EquipmentButton")
+    self.buySkillTicketButton = GuiXmlLoader.findFirstDescendant(xmlWindow, "BuySkillTicketButton")
+    self.buyCompanionTicketButton = GuiXmlLoader.findFirstDescendant(xmlWindow, "BuyCompanionTicketButton")
+    self.buyEquipmentTicketButton = GuiXmlLoader.findFirstDescendant(xmlWindow, "BuyEquipmentTicketButton")
+    self.buyGoldButton = GuiXmlLoader.findFirstDescendant(xmlWindow, "BuyGoldButton")
+    self.exchangeResultLabel = GuiXmlLoader.findFirstDescendant(xmlWindow, "ExchangeResult")
 
-        if closeBtn then
-            connect(closeBtn, function()
-                GachaUI:toggle()
-            end)
+    local function safeConnect(btn, callback)
+        if btn then
+            connect(btn, callback)
         end
-
-        local layout = createInstance("UIListLayout")
-        layout.Name = "ButtonLayout"
-        if Enum and Enum.FillDirection then
-            layout.FillDirection = Enum.FillDirection.Vertical
-            layout.SortOrder = Enum.SortOrder.LayoutOrder
-            if layout.HorizontalAlignment ~= nil then
-                layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-            end
-            if layout.VerticalAlignment ~= nil then
-                layout.VerticalAlignment = Enum.VerticalAlignment.Center
-            end
-        end
-        if UDim and type(UDim.new) == "function" then
-            layout.Padding = UDim.new(0,5)
-        end
-        parent(layout, self.contentFrame)
-
-        self.resultLabel = createInstance("TextLabel")
-        self.resultLabel.Text = "Roll result"
-        if UDim2 and type(UDim2.new)=="function" then
-            self.resultLabel.Size = UDim2.new(1, -10, 0, 25)
-        end
-        parent(self.resultLabel, self.contentFrame)
-
-        self.skillButton = createInstance("TextButton")
-        self.skillButton.Text = "Roll Skill"
-        if UDim2 and type(UDim2.new)=="function" then
-            self.skillButton.Size = UDim2.new(1, -10, 0, 30)
-        end
-        parent(self.skillButton, self.contentFrame)
-
-        self.companionButton = createInstance("TextButton")
-        self.companionButton.Text = "Roll Companion"
-        if UDim2 and type(UDim2.new)=="function" then
-            self.companionButton.Size = UDim2.new(1, -10, 0, 30)
-        end
-        parent(self.companionButton, self.contentFrame)
-
-        self.equipmentButton = createInstance("TextButton")
-        self.equipmentButton.Text = "Roll Weapon"
-        if UDim2 and type(UDim2.new)=="function" then
-            self.equipmentButton.Size = UDim2.new(1, -10, 0, 30)
-        end
-        parent(self.equipmentButton, self.contentFrame)
-
-        -- buttons for purchasing tickets and currency directly in the gacha window
-        self.buySkillTicketButton = createInstance("TextButton")
-        self.buySkillTicketButton.Text = "Buy Skill Ticket"
-        if UDim2 and type(UDim2.new)=="function" then
-            self.buySkillTicketButton.Size = UDim2.new(1, -10, 0, 25)
-        end
-        parent(self.buySkillTicketButton, self.contentFrame)
-
-        self.buyCompanionTicketButton = createInstance("TextButton")
-        self.buyCompanionTicketButton.Text = "Buy Companion Ticket"
-        if UDim2 and type(UDim2.new)=="function" then
-            self.buyCompanionTicketButton.Size = UDim2.new(1, -10, 0, 25)
-        end
-        parent(self.buyCompanionTicketButton, self.contentFrame)
-
-        self.buyEquipmentTicketButton = createInstance("TextButton")
-        self.buyEquipmentTicketButton.Text = "Buy Equipment Ticket"
-        if UDim2 and type(UDim2.new)=="function" then
-            self.buyEquipmentTicketButton.Size = UDim2.new(1, -10, 0, 25)
-        end
-        parent(self.buyEquipmentTicketButton, self.contentFrame)
-
-        self.buyGoldButton = createInstance("TextButton")
-        self.buyGoldButton.Text = "Buy Gold"
-        if UDim2 and type(UDim2.new)=="function" then
-            self.buyGoldButton.Size = UDim2.new(1, -10, 0, 25)
-        end
-        parent(self.buyGoldButton, self.contentFrame)
-
-        -- label to display exchange results
-        self.exchangeResultLabel = createInstance("TextLabel")
-        self.exchangeResultLabel.Name = "ExchangeResult"
-        self.exchangeResultLabel.Text = ""
-        if UDim2 and type(UDim2.new)=="function" then
-            self.exchangeResultLabel.Size = UDim2.new(1, -10, 0, 20)
-        end
-        self.exchangeResultLabel.Visible = false
-        parent(self.exchangeResultLabel, self.contentFrame)
-
-        connect(self.skillButton, function()
-            NetworkSystem:fireServer("GachaRequest", "skill")
-        end)
-        connect(self.companionButton, function()
-            NetworkSystem:fireServer("GachaRequest", "companion")
-        end)
-        connect(self.equipmentButton, function()
-            NetworkSystem:fireServer("GachaRequest", "equipment", "Weapon")
-        end)
-
-        connect(self.buySkillTicketButton, function()
-            GachaUI:buyTicket("skill")
-        end)
-        connect(self.buyCompanionTicketButton, function()
-            GachaUI:buyTicket("companion")
-        end)
-        connect(self.buyEquipmentTicketButton, function()
-            GachaUI:buyTicket("equipment")
-        end)
-        connect(self.buyGoldButton, function()
-            GachaUI:buyCurrency("gold")
-        end)
     end
+
+    safeConnect(self.skillButton, function()
+        NetworkSystem:fireServer("GachaRequest", "skill")
+    end)
+    safeConnect(self.companionButton, function()
+        NetworkSystem:fireServer("GachaRequest", "companion")
+    end)
+    safeConnect(self.equipmentButton, function()
+        NetworkSystem:fireServer("GachaRequest", "equipment", "Weapon")
+    end)
+    safeConnect(self.buySkillTicketButton, function()
+        GachaUI:buyTicket("skill")
+    end)
+    safeConnect(self.buyCompanionTicketButton, function()
+        GachaUI:buyTicket("companion")
+    end)
+    safeConnect(self.buyEquipmentTicketButton, function()
+        GachaUI:buyTicket("equipment")
+    end)
+    safeConnect(self.buyGoldButton, function()
+        GachaUI:buyCurrency("gold")
+    end)
 
     if NetworkSystem and NetworkSystem.onClientEvent then
         NetworkSystem:onClientEvent("GachaResult", function(kind, reward)
