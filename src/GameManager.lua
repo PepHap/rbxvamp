@@ -512,9 +512,6 @@ if RunService:IsClient() then
     GachaUISystem.gameManager = GameManager
     GameManager:addSystem("GachaUI", GachaUISystem)
 
-    -- Heads-up display with level, experience and currency
-    local HudSystem = require(script.Parent:WaitForChild("HudSystem"))
-    GameManager:addSystem("HUD", HudSystem)
 
     -- Skill and companion UI modules
     local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
@@ -562,8 +559,7 @@ if RunService:IsClient() then
     GameManager:addSystem("EnemyUI", EnemyUISystem)
 
     -- The old PlayerUI duplicated HUD elements and caused visual overlap.
-    -- HudSystem already displays health and status information in a modern
-    -- layout, so the legacy PlayerUI is no longer started.
+    -- The legacy PlayerUI is no longer started.
 
     local ScoreboardUISystem = require(script.Parent:WaitForChild("ScoreboardUISystem"))
     GameManager:addSystem("ScoreboardUI", ScoreboardUISystem)

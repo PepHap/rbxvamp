@@ -31,8 +31,13 @@ local enumProps = {
 
 local function mapStyleProperty(inst, value)
     local className = inst.ClassName
-    local styleEnum = Enum[className .. "Style"]
-    if not styleEnum and inst:IsA("GuiButton") then
+    local styleEnum
+    local ok, enumObj = pcall(function()
+        return Enum[className .. "Style"]
+    end)
+    if ok then
+        styleEnum = enumObj
+    elseif inst:IsA("GuiButton") then
         styleEnum = Enum.ButtonStyle
     end
     if styleEnum then

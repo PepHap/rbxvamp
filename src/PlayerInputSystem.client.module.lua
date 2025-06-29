@@ -101,8 +101,7 @@ end
 function PlayerInputSystem.LoadUIModules()
     -- Загружаем все UI системы
     local uiSystemNames = {
-        "HudSystem",
-        "InventoryUISystem", 
+        "InventoryUISystem",
         "SkillUISystem",
         "CompanionUISystem",
         "SkillTreeUISystem",
@@ -118,7 +117,7 @@ function PlayerInputSystem.LoadUIModules()
         "ProgressMapUISystem",
         "ScoreboardUISystem",
         "LevelUISystem",
-        "PlayerUISystem",
+        -- Legacy PlayerUISystem duplicated HUD elements and is disabled.
         "EnemyUISystem",
         "MenuUISystem"
     }

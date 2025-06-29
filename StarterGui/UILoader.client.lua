@@ -27,7 +27,9 @@ if not screenGui then
     screenGui.IgnoreGuiInset = true
     screenGui.ResetOnSpawn = false
     for _, item in ipairs(guiData) do
-        GuiXmlLoader.createFromTable(item, screenGui)
+        if not (item.Properties and item.Properties.Name == "Hud") then
+            GuiXmlLoader.createFromTable(item, screenGui)
+        end
     end
     screenGui.Parent = playerGui
 end
