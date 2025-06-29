@@ -12,6 +12,24 @@ local src = ReplicatedStorage:WaitForChild("src")
 local QuestUISystem = require(src:WaitForChild("QuestUISystem"))
 local RewardGaugeUISystem = require(src:WaitForChild("RewardGaugeUISystem"))
 local GameManager = require(src:WaitForChild("ClientGameManager"))
+local GuiXmlLoader = require(src:WaitForChild("GuiXmlLoader"))
+local guiData = require(src:WaitForChild("gui_data"))
+
+-- load the interface defined in gui.rbxmx
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer or Players.PlayerAdded:Wait()
+local playerGui = player:WaitForChild("PlayerGui")
+local screenGui = playerGui:FindFirstChild("InventoryUI")
+if not screenGui then
+    screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "InventoryUI"
+    screenGui.IgnoreGuiInset = true
+    screenGui.ResetOnSpawn = false
+    for _, item in ipairs(guiData) do
+        GuiXmlLoader.createFromTable(item, screenGui)
+    end
+    screenGui.Parent = playerGui
+end
 
 local modules = {
     QuestUISystem,
