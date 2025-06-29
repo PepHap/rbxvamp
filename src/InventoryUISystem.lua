@@ -45,6 +45,10 @@ local InventoryUI = {
     setSystem = nil,
     ---References to equipment slot buttons
     slotRefs = nil,
+    ---Flags for using xml placeholders
+    useXmlEquip = false,
+    useXmlInventory = false,
+    useXmlStats = false,
 }
 
 -- Render order for equipment slots to ensure deterministic layout
@@ -62,6 +66,7 @@ local GuiUtil = require(script.Parent:WaitForChild("GuiUtil"))
 local InventorySlots = require(script.Parent:WaitForChild("InventorySlots"))
 local InventoryGrid = require(script.Parent:WaitForChild("InventoryGrid"))
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkClient"))
+local GuiXmlLoader = require(script.Parent:WaitForChild("GuiXmlLoader"))
 
 local function applyRarityColor(obj, rarity)
     if not obj or not Theme or not Theme.rarityColors then return end
@@ -114,6 +119,20 @@ local function clearChildren(container)
 end
 
 local function ensureGui(parent)
+    if InventoryUI.useRobloxObjects then
+        local pgui = GuiUtil.getPlayerGui()
+        if pgui then
+            local xmlGui = pgui:FindFirstChild("InventoryUI")
+            if xmlGui and xmlGui ~= InventoryUI.gui then
+                if InventoryUI.gui and InventoryUI.gui ~= xmlGui and InventoryUI.gui.Destroy then
+                    InventoryUI.gui:Destroy()
+                end
+                InventoryUI.gui = xmlGui
+                return xmlGui
+            end
+        end
+    end
+
     if InventoryUI.gui and (not InventoryUI.useRobloxObjects or InventoryUI.gui.Parent) then
         return InventoryUI.gui
     end
@@ -124,12 +143,12 @@ local function ensureGui(parent)
     local pgui
     if InventoryUI.useRobloxObjects then
         pgui = GuiUtil.getPlayerGui()
-        if pgui then
-            local existing = pgui:FindFirstChild("InventoryUI")
-            if existing then
-                InventoryUI.gui = existing
-                return existing
-            end
+    end
+    if pgui then
+        local existing = pgui:FindFirstChild("InventoryUI")
+        if existing then
+            InventoryUI.gui = existing
+            return existing
         end
     end
     local gui = createInstance("ScreenGui")
@@ -147,6 +166,7 @@ local function ensureGui(parent)
     end
     return gui
 end
+
 
 -- Clears any pending inventory or slot selection
 local function clearSelection()
@@ -178,8 +198,19 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     self.slotRefs = nil
     local guiRoot = ensureGui()
     local parentTarget = parentGui or guiRoot
-    if not self.window then
-        -- no bundled images; create a plain window instead
+
+    local xmlWindow = GuiXmlLoader.findFirstDescendant(parentTarget, "InventoryFrame")
+    if not xmlWindow then
+        xmlWindow = GuiXmlLoader.findFirstDescendant(parentTarget, "Window")
+    end
+
+    if xmlWindow then
+        self.window = xmlWindow
+        self.useXmlWindow = true
+        GuiUtil.setVisible(self.window, self.visible)
+    elseif not self.window then
+        self.useXmlWindow = false
+        -- fallback to a simple generated window
         local closeBtn
         self.window, closeBtn = GuiUtil.createWindow("InventoryWindow")
         GuiUtil.makeFullScreen(self.window)
@@ -205,56 +236,65 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
         end
     end
     self.gui = parentTarget
-    if UDim2 and type(UDim2.new)=="function" then
+    if not self.useXmlWindow and UDim2 and type(UDim2.new)=="function" then
         self.window.Size = UDim2.new(1, 0, 1, 0)
         self.window.AnchorPoint = Vector2.new(0, 0)
         self.window.Position = UDim2.new(0, 0, 0, 0)
         GuiUtil.clampToScreen(self.window)
-    end
-    -- slightly visible background for readability
-    if self.window.BackgroundTransparency ~= nil then
-        local ok = pcall(function()
-            self.window.BackgroundTransparency = 0.2
-        end)
-        if not ok and type(self.window) == "table" then
-            self.window.BackgroundTransparency = 0.2
+        -- slightly visible background for readability
+        if self.window.BackgroundTransparency ~= nil then
+            local ok = pcall(function()
+                self.window.BackgroundTransparency = 0.2
+            end)
+            if not ok and type(self.window) == "table" then
+                self.window.BackgroundTransparency = 0.2
+            end
         end
     end
 
 
     local btnParent = self.window
 
-    local prev = btnParent.FindFirstChild and btnParent:FindFirstChild("PrevPage") or createInstance("TextButton")
-    prev.Name = "PrevPage"
-    prev.Text = "<"
-    if UDim2 and type(UDim2.new)=="function" then
-        prev.Position = UDim2.new(0.45, -60, 1, -40)
+    local prev = GuiXmlLoader.findFirstDescendant(btnParent, "Pagination") or GuiXmlLoader.findFirstDescendant(btnParent, "PrevPage")
+    if not prev then
+        prev = createInstance("TextButton")
+        prev.Name = "PrevPage"
+        prev.Text = "<"
+        if UDim2 and type(UDim2.new)=="function" then
+            prev.Position = UDim2.new(0.45, -60, 1, -40)
+        end
+        parent(prev, btnParent)
     end
-    parent(prev, btnParent)
     GuiUtil.connectButton(prev, function()
         InventoryUI:changePage(-1)
     end)
     if type(btnParent) == "table" then btnParent.PrevPage = prev end
 
-    local nextBtn = btnParent.FindFirstChild and btnParent:FindFirstChild("NextPage") or createInstance("TextButton")
-    nextBtn.Name = "NextPage"
-    nextBtn.Text = ">"
-    if UDim2 and type(UDim2.new)=="function" then
-        nextBtn.Position = UDim2.new(0.55, 0, 1, -40)
+    local nextBtn = GuiXmlLoader.findFirstDescendant(btnParent, "Pagination1") or GuiXmlLoader.findFirstDescendant(btnParent, "NextPage")
+    if not nextBtn then
+        nextBtn = createInstance("TextButton")
+        nextBtn.Name = "NextPage"
+        nextBtn.Text = ">"
+        if UDim2 and type(UDim2.new)=="function" then
+            nextBtn.Position = UDim2.new(0.55, 0, 1, -40)
+        end
+        parent(nextBtn, btnParent)
     end
-    parent(nextBtn, btnParent)
     GuiUtil.connectButton(nextBtn, function()
         InventoryUI:changePage(1)
     end)
     if type(btnParent) == "table" then btnParent.NextPage = nextBtn end
 
-    local upgradeBtn = btnParent.FindFirstChild and btnParent:FindFirstChild("Upgrade") or createInstance("TextButton")
-    upgradeBtn.Name = "Upgrade"
-    upgradeBtn.Text = "Upgrade"
-    if UDim2 and type(UDim2.new)=="function" then
-        upgradeBtn.Position = UDim2.new(0.8, 0, 1, -40)
+    local upgradeBtn = GuiXmlLoader.findFirstDescendant(btnParent, "Upgrade")
+    if not upgradeBtn then
+        upgradeBtn = createInstance("TextButton")
+        upgradeBtn.Name = "Upgrade"
+        upgradeBtn.Text = "Upgrade"
+        if UDim2 and type(UDim2.new)=="function" then
+            upgradeBtn.Position = UDim2.new(0.8, 0, 1, -40)
+        end
+        parent(upgradeBtn, btnParent)
     end
-    parent(upgradeBtn, btnParent)
     GuiUtil.connectButton(upgradeBtn, function()
         if InventoryUI.selectedSlot then
             InventoryUI:upgradeSlot(InventoryUI.selectedSlot)
@@ -263,13 +303,16 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     if type(btnParent) == "table" then btnParent.Upgrade = upgradeBtn end
     self.upgradeButton = upgradeBtn
 
-    local crystalBtn = btnParent.FindFirstChild and btnParent:FindFirstChild("CrystalUpgrade") or createInstance("TextButton")
-    crystalBtn.Name = "CrystalUpgrade"
-    crystalBtn.Text = "Crystal Upg"
-    if UDim2 and type(UDim2.new)=="function" then
-        crystalBtn.Position = UDim2.new(0.8, 0, 1, -70)
+    local crystalBtn = GuiXmlLoader.findFirstDescendant(btnParent, "CrystalUpgrade")
+    if not crystalBtn then
+        crystalBtn = createInstance("TextButton")
+        crystalBtn.Name = "CrystalUpgrade"
+        crystalBtn.Text = "Crystal Upg"
+        if UDim2 and type(UDim2.new)=="function" then
+            crystalBtn.Position = UDim2.new(0.8, 0, 1, -70)
+        end
+        parent(crystalBtn, btnParent)
     end
-    parent(crystalBtn, btnParent)
     GuiUtil.connectButton(crystalBtn, function()
         if InventoryUI.selectedSlot then
             InventoryUI:upgradeSlotWithCrystals(InventoryUI.selectedSlot)
@@ -277,14 +320,16 @@ function InventoryUI:start(items, parentGui, statSystem, setSystem)
     end)
     if type(btnParent) == "table" then btnParent.CrystalUpgrade = crystalBtn end
 
-    local salvageBtn = btnParent.FindFirstChild and btnParent:FindFirstChild("Salvage") or createInstance("TextButton")
-    salvageBtn.Name = "Salvage"
-    salvageBtn.Text = "Salvage"
-    if UDim2 and type(UDim2.new)=="function" then
-        -- place salvage button below the crystal upgrade button
-        salvageBtn.Position = UDim2.new(0.8, 0, 1, -100)
+    local salvageBtn = GuiXmlLoader.findFirstDescendant(btnParent, "Salvage")
+    if not salvageBtn then
+        salvageBtn = createInstance("TextButton")
+        salvageBtn.Name = "Salvage"
+        salvageBtn.Text = "Salvage"
+        if UDim2 and type(UDim2.new)=="function" then
+            salvageBtn.Position = UDim2.new(0.8, 0, 1, -100)
+        end
+        parent(salvageBtn, btnParent)
     end
-    parent(salvageBtn, btnParent)
     GuiUtil.connectButton(salvageBtn, function()
         if InventoryUI.selectedSlot then
             InventoryUI:salvageSlot(InventoryUI.selectedSlot)
@@ -321,10 +366,24 @@ local function renderSectionTitle(container, text)
 end
 
 local function renderEquipment(container, items)
-    if not InventoryUI.slotRefs or not InventorySlots.container then
-        clearChildren(container)
-        renderSectionTitle(container, "Equipment")
-        InventoryUI.slotRefs = InventorySlots:create(container)
+    if not InventoryUI.slotRefs then
+        local slotContainer = GuiXmlLoader.findFirstDescendant(container, "EquipSlots")
+        if slotContainer then
+            InventoryUI.useXmlEquip = true
+            InventoryUI.slotRefs = {}
+            for _, slot in ipairs(slotOrder) do
+                local btn = GuiXmlLoader.findFirstDescendant(slotContainer, slot)
+                if btn then
+                    InventoryUI.slotRefs[slot] = btn
+                end
+            end
+            InventorySlots.slots = InventoryUI.slotRefs
+            InventorySlots.container = slotContainer
+        else
+            clearChildren(container)
+            renderSectionTitle(container, "Equipment")
+            InventoryUI.slotRefs = InventorySlots:create(container)
+        end
     end
     for _, slot in ipairs(slotOrder) do
         local btn = InventoryUI.slotRefs[slot]
@@ -366,6 +425,55 @@ end
 
 ---Renders inventory item buttons for the current page
 local function renderInventory(container, items, page, perPage)
+    local slotsContainer = GuiXmlLoader.findFirstDescendant(container, "InventorySlots")
+    local xmlSlots = {}
+    if slotsContainer then
+        InventoryUI.useXmlInventory = true
+        local i = 1
+        while true do
+            local btn = slotsContainer:FindFirstChild("InventorySlot" .. i)
+            if not btn then break end
+            xmlSlots[i] = btn
+            i = i + 1
+        end
+    end
+
+    if #xmlSlots > 0 then
+        perPage = math.min(perPage, #xmlSlots)
+        InventoryUI.itemsPerPage = perPage
+        local list = items:getInventoryPage(page, perPage)
+        for i = 1, perPage do
+            local idx = (page - 1) * perPage + i
+            local item = list[i]
+            local btn = xmlSlots[i]
+            if btn then
+                if item then
+                    local lvl = tonumber(item.level)
+                    if lvl and lvl > 1 then
+                        btn.Text = string.format("%s Lv%d", item.name, lvl)
+                    else
+                        btn.Text = item.name
+                    end
+                else
+                    btn.Text = ""
+                end
+                applyRarityColor(btn, item and item.rarity)
+                if btn.SetAttribute then
+                    btn:SetAttribute("Index", idx)
+                end
+                if InventoryUI.pendingIndex == idx then
+                    GuiUtil.highlightButton(btn, true)
+                else
+                    GuiUtil.highlightButton(btn, false)
+                end
+                GuiUtil.connectButton(btn, function()
+                    InventoryUI:selectInventory(idx)
+                end)
+            end
+        end
+        return
+    end
+
     clearChildren(container)
     local offset = renderSectionTitle(container, "Inventory")
     local holder = createInstance("Frame")
@@ -411,7 +519,27 @@ end
 
 ---Renders a list of basic stats derived from PlayerSystem and equipped items
 local function renderStats(container, items, stats, setSys)
-    clearChildren(container)
+    local children = {}
+    if container.GetChildren then
+        children = container:GetChildren()
+    elseif type(container) == "table" and container.children then
+        children = container.children
+    end
+    for _, child in ipairs(children) do
+        local isLabel = false
+        if child.ClassName then
+            isLabel = child.ClassName == "TextLabel"
+        elseif child:IsA and child:IsA("TextLabel") then
+            isLabel = true
+        end
+        if isLabel then
+            if child.Destroy then
+                child:Destroy()
+            else
+                child.Parent = nil
+            end
+        end
+    end
     local offset = renderSectionTitle(container, "Stats")
     local layout = container.FindFirstChild and container:FindFirstChild("Layout")
     if not layout then
@@ -470,44 +598,63 @@ function InventoryUI:update()
         gui.children = gui.children or {}
     end
     local parentGui = self.window or gui
-    local existing = parentGui.FindFirstChild and parentGui:FindFirstChild("Equipment")
-    self.equipmentFrame = self.equipmentFrame or existing or createInstance("Frame")
-    self.equipmentFrame.Name = "Equipment"
-    if UDim2 and type(UDim2.new)=="function" then
-        self.equipmentFrame.Position = UDim2.new(0, 0, 0, 0)
-        self.equipmentFrame.Size = UDim2.new(0.25, 0, 1, 0)
-    end
-    -- allow the equipment column to stretch the full screen height
-    GuiUtil.applyResponsive(self.equipmentFrame, 0.25, 150, 100, 2000, 2000)
-    GuiUtil.addCrossDecor(self.equipmentFrame)
-    existing = parentGui.FindFirstChild and parentGui:FindFirstChild("Inventory")
-    self.inventoryFrame = self.inventoryFrame or existing or createInstance("Frame")
-    self.inventoryFrame.Name = "Inventory"
-    if UDim2 and type(UDim2.new)=="function" then
-        self.inventoryFrame.Position = UDim2.new(0.25, 0, 0, 0)
-        self.inventoryFrame.Size = UDim2.new(0.5, 0, 1, 0)
-    end
-    -- center inventory grid with large max size for fullscreen window
-    GuiUtil.applyResponsive(self.inventoryFrame, 0.5, 150, 100, 2000, 2000)
-    GuiUtil.addCrossDecor(self.inventoryFrame)
-    existing = parentGui.FindFirstChild and parentGui:FindFirstChild("Stats")
-    self.statsFrame = self.statsFrame or existing or createInstance("Frame")
-    self.statsFrame.Name = "Stats"
-    if UDim2 and type(UDim2.new)=="function" then
-        self.statsFrame.Position = UDim2.new(0.75, 0, 0, 0)
-        self.statsFrame.Size = UDim2.new(0.25, 0, 1, 0)
-    end
-    -- stats column shares the same dimensions as the equipment column
-    GuiUtil.applyResponsive(self.statsFrame, 0.25, 150, 100, 2000, 2000)
-    GuiUtil.addCrossDecor(self.statsFrame)
 
-    clearChildren(self.equipmentFrame)
-    clearChildren(self.inventoryFrame)
-    clearChildren(self.statsFrame)
-    -- reset slot references to avoid using destroyed instances
-    self.slotRefs = nil
-    InventorySlots.slots = {}
-    InventorySlots.container = nil
+    local existing = GuiXmlLoader.findFirstDescendant(parentGui, "Equipment")
+    if existing then
+        self.equipmentFrame = existing
+    else
+        self.equipmentFrame = self.equipmentFrame or createInstance("Frame")
+        self.equipmentFrame.Name = "Equipment"
+        if UDim2 and type(UDim2.new)=="function" then
+            self.equipmentFrame.Position = UDim2.new(0, 0, 0, 0)
+            self.equipmentFrame.Size = UDim2.new(0.25, 0, 1, 0)
+        end
+        GuiUtil.applyResponsive(self.equipmentFrame, 0.25, 150, 100, 2000, 2000)
+        GuiUtil.addCrossDecor(self.equipmentFrame)
+    end
+    existing = GuiXmlLoader.findFirstDescendant(parentGui, "Inventory") or GuiXmlLoader.findFirstDescendant(parentGui, "InventorySlots")
+    if existing then
+        self.inventoryFrame = existing
+    else
+        self.inventoryFrame = self.inventoryFrame or createInstance("Frame")
+        self.inventoryFrame.Name = "Inventory"
+        if UDim2 and type(UDim2.new)=="function" then
+            self.inventoryFrame.Position = UDim2.new(0.25, 0, 0, 0)
+            self.inventoryFrame.Size = UDim2.new(0.5, 0, 1, 0)
+        end
+        GuiUtil.applyResponsive(self.inventoryFrame, 0.5, 150, 100, 2000, 2000)
+        GuiUtil.addCrossDecor(self.inventoryFrame)
+    end
+    existing = GuiXmlLoader.findFirstDescendant(parentGui, "Stats")
+    if existing then
+        self.statsFrame = existing
+    else
+        self.statsFrame = self.statsFrame or createInstance("Frame")
+        self.statsFrame.Name = "Stats"
+        if UDim2 and type(UDim2.new)=="function" then
+            self.statsFrame.Position = UDim2.new(0.75, 0, 0, 0)
+            self.statsFrame.Size = UDim2.new(0.25, 0, 1, 0)
+        end
+        GuiUtil.applyResponsive(self.statsFrame, 0.25, 150, 100, 2000, 2000)
+        GuiUtil.addCrossDecor(self.statsFrame)
+    end
+
+    self.useXmlEquip = GuiXmlLoader.findFirstDescendant(self.equipmentFrame, "EquipSlots") ~= nil
+    self.useXmlInventory = GuiXmlLoader.findFirstDescendant(self.inventoryFrame, "InventorySlot1") ~= nil
+    self.useXmlStats = GuiXmlLoader.findFirstDescendant(self.statsFrame, "UICorner") ~= nil
+
+    if not self.useXmlEquip then
+        clearChildren(self.equipmentFrame)
+        self.slotRefs = nil
+        InventorySlots.slots = {}
+        InventorySlots.container = nil
+    end
+    if not self.useXmlInventory then
+        clearChildren(self.inventoryFrame)
+    end
+    if not self.useXmlStats then
+        clearChildren(self.statsFrame)
+    end
 
     parent(self.equipmentFrame, parentGui)
     parent(self.inventoryFrame, parentGui)
