@@ -5,11 +5,11 @@ local PlayerInputSystem = {}
 
 local UserInputService = game:GetService("UserInputService")
 local GuiService = game:GetService("GuiService")
-local MessageUI = require(script.Parent:WaitForChild("MessageUI"))
-local InventoryUI = require(script.Parent:WaitForChild("InventoryUI"))
-local GachaUI = require(script.Parent:WaitForChild("GachaUI"))
-local UIBridge = require(script.Parent:WaitForChild("UIBridge"))
-local WindowTabs = require(script.Parent:WaitForChild("WindowTabs"))
+local MessageUI
+local InventoryUI
+local GachaUI
+local UIBridge
+local WindowTabs
 
 local INPUT_KEYS = {
 
@@ -37,9 +37,24 @@ local INPUT_KEYS = {
 
 -- Инициализация системы ввода
 function PlayerInputSystem.Initialize()
-    -- Ensure the ScreenGui is available before initializing UI modules
-    -- https://create.roblox.com/docs/reference/engine/classes/ScreenGui
+    -- Lazily require UI modules after the ScreenGui exists to avoid
+    -- circular dependencies during ``GameManager`` startup.
+    if not UIBridge then
+        UIBridge = require(script.Parent:WaitForChild("UIBridge"))
+    end
     UIBridge.waitForGui()
+    if not InventoryUI then
+        InventoryUI = require(script.Parent:WaitForChild("InventoryUI"))
+    end
+    if not GachaUI then
+        GachaUI = require(script.Parent:WaitForChild("GachaUI"))
+    end
+    if not WindowTabs then
+        WindowTabs = require(script.Parent:WaitForChild("WindowTabs"))
+    end
+    if not MessageUI then
+        MessageUI = require(script.Parent:WaitForChild("MessageUI"))
+    end
     InventoryUI.init()
     GachaUI.init()
     WindowTabs.init()

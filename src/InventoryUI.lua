@@ -1,6 +1,8 @@
 local InventoryUI = {}
 local UIBridge = require(script.Parent:WaitForChild("UIBridge"))
-local GameManager = require(script.Parent:WaitForChild("ClientGameManager"))
+-- ClientGameManager is only required during initialization to
+-- avoid circular dependencies with GameManager.
+local GameManager
 local SlotConstants = require(script.Parent:WaitForChild("SlotConstants"))
 local MessageUI = require(script.Parent:WaitForChild("MessageUI"))
 
@@ -138,6 +140,9 @@ end
 
 function InventoryUI.init()
     UIBridge.waitForGui()
+    if not GameManager then
+        GameManager = require(script.Parent:WaitForChild("ClientGameManager"))
+    end
     InventoryUI.frame = UIBridge.waitForFrame("InventoryFrame")
     if InventoryUI.frame then
         InventoryUI.frame.Visible = false
