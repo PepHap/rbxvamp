@@ -101,7 +101,10 @@ local function genItem(node, parent)
         if child.name == "Properties" then
             for _, p in ipairs(child.children) do
                 if p.name then
-                    outLines[#outLines + 1] = string.format("    %s.%s = %s", var, p.attrs.name, propValue(p))
+                    local propName = p.attrs.name
+                    if propName ~= "SourceAssetId" and propName ~= "Tags" then
+                        outLines[#outLines + 1] = string.format("    %s.%s = %s", var, propName, propValue(p))
+                    end
                 end
             end
         elseif child.name == "Item" then

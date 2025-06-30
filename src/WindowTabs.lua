@@ -59,7 +59,9 @@ end
 
 local function style(btn, active)
     if not btn then return end
-    btn.AutoButtonColor = true
+    if btn:IsA("GuiButton") then
+        btn.AutoButtonColor = true
+    end
     if active then
         btn.BackgroundTransparency = 0
         btn.BorderSizePixel = 1
