@@ -6,6 +6,7 @@ local GachaUI = require(script.Parent:WaitForChild("GachaUI"))
 WindowTabs.inventoryButton = nil
 WindowTabs.summonButton = nil
 WindowTabs.labelsRoot = nil
+WindowTabs.allButtons = {}
 
 local function matches(obj, variants)
     local name = string.lower(obj.Name)
@@ -27,30 +28,61 @@ local function matches(obj, variants)
     return false
 end
 
+local function grabByName(root, name)
+    local obj = root:FindFirstChild(name, true)
+    if obj then
+        return obj
+    end
+    for _, child in ipairs(root:GetDescendants()) do
+        if string.lower(child.Name) == string.lower(name) then
+            return child
+        end
+    end
+    return nil
+end
+
+local function addButton(btn)
+    if not btn then
+        return
+    end
+    for _, existing in ipairs(WindowTabs.allButtons) do
+        if existing == btn then
+            return
+        end
+    end
+    table.insert(WindowTabs.allButtons, btn)
+end
+
 local function findButtons(root)
-    if not root then return end
+    if not root then
+        return end
     -- Prefer children of a frame named "Labels" if present
     local labels = root:FindFirstChild("Labels", true)
     if labels then
         WindowTabs.labelsRoot = labels
-        for _, obj in ipairs(labels:GetDescendants()) do
-            if obj:IsA("TextButton") or obj:IsA("ImageButton") or obj:IsA("TextLabel") then
-                if not WindowTabs.inventoryButton and matches(obj, {"Inventory"}) then
-                    WindowTabs.inventoryButton = obj
-                elseif not WindowTabs.summonButton and matches(obj, {"Summon","Gacha"}) then
-                    WindowTabs.summonButton = obj
-                end
+        for _, child in ipairs(labels:GetChildren()) do
+            if child:IsA("GuiBase") then
+                addButton(child)
             end
         end
     end
-    -- Fallback search across the entire gui
+
+    WindowTabs.inventoryButton = WindowTabs.inventoryButton or grabByName(root, "InventoryButton")
+    WindowTabs.summonButton = WindowTabs.summonButton or grabByName(root, "SummonButton")
+
+    addButton(WindowTabs.inventoryButton)
+    addButton(WindowTabs.summonButton)
+
     if not WindowTabs.inventoryButton or not WindowTabs.summonButton then
-        for _, obj in ipairs(root:GetDescendants()) do
+        local searchRoot = labels or root
+        for _, obj in ipairs(searchRoot:GetDescendants()) do
             if obj:IsA("TextButton") or obj:IsA("ImageButton") or obj:IsA("TextLabel") then
                 if not WindowTabs.inventoryButton and matches(obj, {"Inventory"}) then
                     WindowTabs.inventoryButton = obj
-                elseif not WindowTabs.summonButton and matches(obj, {"Summon","Gacha"}) then
+                    addButton(obj)
+                elseif not WindowTabs.summonButton and matches(obj, {"Summon", "Gacha"}) then
                     WindowTabs.summonButton = obj
+                    addButton(obj)
                 end
             end
         end
@@ -58,28 +90,39 @@ local function findButtons(root)
 end
 
 local function style(btn, active)
-    if not btn then return end
+    if not btn then
+        return
+    end
     if btn:IsA("GuiButton") then
         btn.AutoButtonColor = true
     end
-    if active then
-        btn.BackgroundTransparency = 0
-        btn.BorderSizePixel = 1
-        if btn:IsA("ImageButton") then
-            btn.ImageTransparency = 0
+    btn.BackgroundTransparency = active and 0 or 0.6
+    btn.BorderSizePixel = active and 1 or 0
+
+    local function apply(obj)
+        if obj:IsA("ImageButton") or obj:IsA("ImageLabel") then
+            obj.ImageTransparency = active and 0 or 0.5
+        elseif obj:IsA("TextLabel") or obj:IsA("TextButton") then
+            obj.TextTransparency = active and 0 or 0.5
         end
-    else
-        btn.BackgroundTransparency = 0.5
-        btn.BorderSizePixel = 0
-        if btn:IsA("ImageButton") then
-            btn.ImageTransparency = 0.5
-        end
+    end
+
+    apply(btn)
+    for _, child in ipairs(btn:GetDescendants()) do
+        apply(child)
     end
 end
 
 function WindowTabs.update(active)
-    style(WindowTabs.inventoryButton, active == "inventory")
-    style(WindowTabs.summonButton, active == "summon")
+    for _, btn in ipairs(WindowTabs.allButtons) do
+        if btn == WindowTabs.inventoryButton then
+            style(btn, active == "inventory")
+        elseif btn == WindowTabs.summonButton then
+            style(btn, active == "summon")
+        else
+            style(btn, false)
+        end
+    end
 end
 
 function WindowTabs.activateInventory()
@@ -92,6 +135,26 @@ function WindowTabs.activateSummon()
     GachaUI.show()
     InventoryUI.hide()
     WindowTabs.update("summon")
+end
+
+function WindowTabs.toggleInventory()
+    InventoryUI.toggle()
+    if InventoryUI.frame and InventoryUI.frame.Visible then
+        GachaUI.hide()
+        WindowTabs.update("inventory")
+    else
+        WindowTabs.update()
+    end
+end
+
+function WindowTabs.toggleSummon()
+    GachaUI.toggle()
+    if GachaUI.frame and GachaUI.frame.Visible then
+        InventoryUI.hide()
+        WindowTabs.update("summon")
+    else
+        WindowTabs.update()
+    end
 end
 
 function WindowTabs.init()
@@ -113,8 +176,8 @@ function WindowTabs.init()
         btn._connected = true
     end
 
-    connect(WindowTabs.inventoryButton, WindowTabs.activateInventory)
-    connect(WindowTabs.summonButton, WindowTabs.activateSummon)
+    connect(WindowTabs.inventoryButton, WindowTabs.toggleInventory)
+    connect(WindowTabs.summonButton, WindowTabs.toggleSummon)
     -- Default to inventory style when first initialized
     WindowTabs.update("inventory")
 end

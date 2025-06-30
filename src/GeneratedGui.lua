@@ -1828,8 +1828,6 @@ local function createGui(parent)
     obj83.Interactable = true
     obj83.LayoutOrder = 0
     obj83.LineHeight = 1
-    obj83.LocalizationMatchIdentifier = ""
-    obj83.LocalizationMatchedSourceText = ""
     obj83.MaxVisibleGraphemes = -1
     obj83.Name = "Golds"
     obj83.OpenTypeFeatures = ""
@@ -1875,8 +1873,6 @@ local function createGui(parent)
     obj84.Interactable = true
     obj84.LayoutOrder = 0
     obj84.LineHeight = 1
-    obj84.LocalizationMatchIdentifier = ""
-    obj84.LocalizationMatchedSourceText = ""
     obj84.MaxVisibleGraphemes = -1
     obj84.Name = "Keys"
     obj84.OpenTypeFeatures = ""
@@ -1922,8 +1918,6 @@ local function createGui(parent)
     obj85.Interactable = true
     obj85.LayoutOrder = 0
     obj85.LineHeight = 1
-    obj85.LocalizationMatchIdentifier = ""
-    obj85.LocalizationMatchedSourceText = ""
     obj85.MaxVisibleGraphemes = -1
     obj85.Name = "Crystals"
     obj85.OpenTypeFeatures = ""
@@ -1969,8 +1963,6 @@ local function createGui(parent)
     obj86.Interactable = true
     obj86.LayoutOrder = 0
     obj86.LineHeight = 1
-    obj86.LocalizationMatchIdentifier = ""
-    obj86.LocalizationMatchedSourceText = ""
     obj86.MaxVisibleGraphemes = -1
     obj86.Name = "Ether"
     obj86.OpenTypeFeatures = ""

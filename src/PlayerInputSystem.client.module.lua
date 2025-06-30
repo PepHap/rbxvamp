@@ -95,9 +95,9 @@ function PlayerInputSystem.HandleKeyPress(keyCode)
     elseif keyCode == INPUT_KEYS.fullscreenKey then
         PlayerInputSystem.ToggleFullscreen()
     elseif keyCode == INPUT_KEYS.inventory then
-        WindowTabs.activateInventory()
+        WindowTabs.toggleInventory()
     elseif keyCode == INPUT_KEYS.gacha then
-        WindowTabs.activateSummon()
+        WindowTabs.toggleSummon()
     end
 end
 
