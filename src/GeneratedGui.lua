@@ -7,7 +7,6 @@ local function createGui(parent)
     local obj0 = Instance.new("Frame")
     obj0.Active = false
     obj0.AnchorPoint = Vector2.new(0.5,0.5)
-    obj0.AttributesSerialize = ""
     obj0.AutoLocalize = true
     obj0.AutomaticSize = 0
     obj0.BackgroundColor3 = Color3.new(0,0,0)
@@ -16,7 +15,6 @@ local function createGui(parent)
     obj0.BorderMode = 0
     obj0.BorderSizePixel = 0
     obj0.ClipsDescendants = false
-    obj0.DefinesCapabilities = false
     obj0.Draggable = false
     obj0.Interactable = true
     obj0.LayoutOrder = 0
@@ -41,7 +39,6 @@ local function createGui(parent)
     local obj1 = Instance.new("Frame")
     obj1.Active = false
     obj1.AnchorPoint = Vector2.new(0,0)
-    obj1.AttributesSerialize = ""
     obj1.AutoLocalize = true
     obj1.AutomaticSize = 0
     obj1.BackgroundColor3 = Color3.new(1,1,1)
@@ -50,7 +47,6 @@ local function createGui(parent)
     obj1.BorderMode = 0
     obj1.BorderSizePixel = 0
     obj1.ClipsDescendants = false
-    obj1.DefinesCapabilities = false
     obj1.Draggable = false
     obj1.Interactable = true
     obj1.LayoutOrder = 0
@@ -73,9 +69,7 @@ local function createGui(parent)
     obj1.ZIndex = 1
     obj1.Parent = obj0
     local obj2 = Instance.new("UICorner")
-    obj2.AttributesSerialize = ""
     obj2.CornerRadius = UDim.new(0,20)
-    obj2.DefinesCapabilities = false
     obj2.Name = "UICorner"
     obj2.SourceAssetId = -1
     obj2.Tags = ""
@@ -83,7 +77,6 @@ local function createGui(parent)
     local obj3 = Instance.new("ImageButton")
     obj3.Active = true
     obj3.AnchorPoint = Vector2.new(0.5,0.5)
-    obj3.AttributesSerialize = ""
     obj3.AutoButtonColor = true
     obj3.AutoLocalize = true
     obj3.AutomaticSize = 0
@@ -93,7 +86,6 @@ local function createGui(parent)
     obj3.BorderMode = 0
     obj3.BorderSizePixel = 0
     obj3.ClipsDescendants = false
-    obj3.DefinesCapabilities = false
     obj3.Draggable = false
     obj3.ImageColor3 = Color3.new(1,1,1)
     obj3.ImageRectOffset = Vector2.new(0,0)
@@ -126,9 +118,7 @@ local function createGui(parent)
     obj3.ZIndex = 1
     obj3.Parent = obj1
     local obj4 = Instance.new("UICorner")
-    obj4.AttributesSerialize = ""
     obj4.CornerRadius = UDim.new(0,20)
-    obj4.DefinesCapabilities = false
     obj4.Name = "UICorner"
     obj4.SourceAssetId = -1
     obj4.Tags = ""
@@ -136,7 +126,6 @@ local function createGui(parent)
     local obj5 = Instance.new("ImageButton")
     obj5.Active = true
     obj5.AnchorPoint = Vector2.new(0.5,0.5)
-    obj5.AttributesSerialize = ""
     obj5.AutoButtonColor = true
     obj5.AutoLocalize = true
     obj5.AutomaticSize = 0
@@ -146,7 +135,6 @@ local function createGui(parent)
     obj5.BorderMode = 0
     obj5.BorderSizePixel = 0
     obj5.ClipsDescendants = false
-    obj5.DefinesCapabilities = false
     obj5.Draggable = false
     obj5.ImageColor3 = Color3.new(1,1,1)
     obj5.ImageRectOffset = Vector2.new(0,0)
@@ -179,9 +167,7 @@ local function createGui(parent)
     obj5.ZIndex = 1
     obj5.Parent = obj1
     local obj6 = Instance.new("UICorner")
-    obj6.AttributesSerialize = ""
     obj6.CornerRadius = UDim.new(0,20)
-    obj6.DefinesCapabilities = false
     obj6.Name = "UICorner"
     obj6.SourceAssetId = -1
     obj6.Tags = ""
@@ -189,7 +175,6 @@ local function createGui(parent)
     local obj7 = Instance.new("Frame")
     obj7.Active = false
     obj7.AnchorPoint = Vector2.new(0.5,0.5)
-    obj7.AttributesSerialize = ""
     obj7.AutoLocalize = true
     obj7.AutomaticSize = 0
     obj7.BackgroundColor3 = Color3.new(0,0,0)
@@ -198,7 +183,6 @@ local function createGui(parent)
     obj7.BorderMode = 0
     obj7.BorderSizePixel = 0
     obj7.ClipsDescendants = false
-    obj7.DefinesCapabilities = false
     obj7.Draggable = false
     obj7.Interactable = false
     obj7.LayoutOrder = 0
@@ -223,7 +207,6 @@ local function createGui(parent)
     local obj8 = Instance.new("ImageButton")
     obj8.Active = true
     obj8.AnchorPoint = Vector2.new(0.5,0.5)
-    obj8.AttributesSerialize = ""
     obj8.AutoButtonColor = true
     obj8.AutoLocalize = true
     obj8.AutomaticSize = 0
@@ -233,7 +216,6 @@ local function createGui(parent)
     obj8.BorderMode = 0
     obj8.BorderSizePixel = 0
     obj8.ClipsDescendants = false
-    obj8.DefinesCapabilities = false
     obj8.Draggable = false
     obj8.ImageColor3 = Color3.new(1,1,1)
     obj8.ImageRectOffset = Vector2.new(0,0)
@@ -266,18 +248,14 @@ local function createGui(parent)
     obj8.ZIndex = 1
     obj8.Parent = obj7
     local obj9 = Instance.new("UICorner")
-    obj9.AttributesSerialize = ""
     obj9.CornerRadius = UDim.new(0,20)
-    obj9.DefinesCapabilities = false
     obj9.Name = "UICorner"
     obj9.SourceAssetId = -1
     obj9.Tags = ""
     obj9.Parent = obj8
     local obj10 = Instance.new("UIGridLayout")
-    obj10.AttributesSerialize = ""
     obj10.CellPadding = UDim2.new(0.0199999996,0,0.0199999996,0)
     obj10.CellSize = UDim2.new(0.150000006,0,0.200000003,0)
-    obj10.DefinesCapabilities = false
     obj10.FillDirection = 0
     obj10.FillDirectionMaxCells = 5
     obj10.HorizontalAlignment = 0
@@ -291,7 +269,6 @@ local function createGui(parent)
     local obj11 = Instance.new("ImageButton")
     obj11.Active = true
     obj11.AnchorPoint = Vector2.new(0.5,0.5)
-    obj11.AttributesSerialize = ""
     obj11.AutoButtonColor = true
     obj11.AutoLocalize = true
     obj11.AutomaticSize = 0
@@ -301,7 +278,6 @@ local function createGui(parent)
     obj11.BorderMode = 0
     obj11.BorderSizePixel = 0
     obj11.ClipsDescendants = false
-    obj11.DefinesCapabilities = false
     obj11.Draggable = false
     obj11.ImageColor3 = Color3.new(1,1,1)
     obj11.ImageRectOffset = Vector2.new(0,0)
@@ -334,9 +310,7 @@ local function createGui(parent)
     obj11.ZIndex = 1
     obj11.Parent = obj7
     local obj12 = Instance.new("UICorner")
-    obj12.AttributesSerialize = ""
     obj12.CornerRadius = UDim.new(0,20)
-    obj12.DefinesCapabilities = false
     obj12.Name = "UICorner"
     obj12.SourceAssetId = -1
     obj12.Tags = ""
@@ -344,7 +318,6 @@ local function createGui(parent)
     local obj13 = Instance.new("ImageButton")
     obj13.Active = true
     obj13.AnchorPoint = Vector2.new(0.5,0.5)
-    obj13.AttributesSerialize = ""
     obj13.AutoButtonColor = true
     obj13.AutoLocalize = true
     obj13.AutomaticSize = 0
@@ -354,7 +327,6 @@ local function createGui(parent)
     obj13.BorderMode = 0
     obj13.BorderSizePixel = 0
     obj13.ClipsDescendants = false
-    obj13.DefinesCapabilities = false
     obj13.Draggable = false
     obj13.ImageColor3 = Color3.new(1,1,1)
     obj13.ImageRectOffset = Vector2.new(0,0)
@@ -387,9 +359,7 @@ local function createGui(parent)
     obj13.ZIndex = 1
     obj13.Parent = obj7
     local obj14 = Instance.new("UICorner")
-    obj14.AttributesSerialize = ""
     obj14.CornerRadius = UDim.new(0,20)
-    obj14.DefinesCapabilities = false
     obj14.Name = "UICorner"
     obj14.SourceAssetId = -1
     obj14.Tags = ""
@@ -397,7 +367,6 @@ local function createGui(parent)
     local obj15 = Instance.new("ImageButton")
     obj15.Active = true
     obj15.AnchorPoint = Vector2.new(0.5,0.5)
-    obj15.AttributesSerialize = ""
     obj15.AutoButtonColor = true
     obj15.AutoLocalize = true
     obj15.AutomaticSize = 0
@@ -407,7 +376,6 @@ local function createGui(parent)
     obj15.BorderMode = 0
     obj15.BorderSizePixel = 0
     obj15.ClipsDescendants = false
-    obj15.DefinesCapabilities = false
     obj15.Draggable = false
     obj15.ImageColor3 = Color3.new(1,1,1)
     obj15.ImageRectOffset = Vector2.new(0,0)
@@ -440,9 +408,7 @@ local function createGui(parent)
     obj15.ZIndex = 1
     obj15.Parent = obj7
     local obj16 = Instance.new("UICorner")
-    obj16.AttributesSerialize = ""
     obj16.CornerRadius = UDim.new(0,20)
-    obj16.DefinesCapabilities = false
     obj16.Name = "UICorner"
     obj16.SourceAssetId = -1
     obj16.Tags = ""
@@ -450,7 +416,6 @@ local function createGui(parent)
     local obj17 = Instance.new("ImageButton")
     obj17.Active = true
     obj17.AnchorPoint = Vector2.new(0.5,0.5)
-    obj17.AttributesSerialize = ""
     obj17.AutoButtonColor = true
     obj17.AutoLocalize = true
     obj17.AutomaticSize = 0
@@ -460,7 +425,6 @@ local function createGui(parent)
     obj17.BorderMode = 0
     obj17.BorderSizePixel = 0
     obj17.ClipsDescendants = false
-    obj17.DefinesCapabilities = false
     obj17.Draggable = false
     obj17.ImageColor3 = Color3.new(1,1,1)
     obj17.ImageRectOffset = Vector2.new(0,0)
@@ -493,9 +457,7 @@ local function createGui(parent)
     obj17.ZIndex = 1
     obj17.Parent = obj7
     local obj18 = Instance.new("UICorner")
-    obj18.AttributesSerialize = ""
     obj18.CornerRadius = UDim.new(0,20)
-    obj18.DefinesCapabilities = false
     obj18.Name = "UICorner"
     obj18.SourceAssetId = -1
     obj18.Tags = ""
@@ -503,7 +465,6 @@ local function createGui(parent)
     local obj19 = Instance.new("ImageButton")
     obj19.Active = true
     obj19.AnchorPoint = Vector2.new(0.5,0.5)
-    obj19.AttributesSerialize = ""
     obj19.AutoButtonColor = true
     obj19.AutoLocalize = true
     obj19.AutomaticSize = 0
@@ -513,7 +474,6 @@ local function createGui(parent)
     obj19.BorderMode = 0
     obj19.BorderSizePixel = 0
     obj19.ClipsDescendants = false
-    obj19.DefinesCapabilities = false
     obj19.Draggable = false
     obj19.ImageColor3 = Color3.new(1,1,1)
     obj19.ImageRectOffset = Vector2.new(0,0)
@@ -546,9 +506,7 @@ local function createGui(parent)
     obj19.ZIndex = 1
     obj19.Parent = obj7
     local obj20 = Instance.new("UICorner")
-    obj20.AttributesSerialize = ""
     obj20.CornerRadius = UDim.new(0,20)
-    obj20.DefinesCapabilities = false
     obj20.Name = "UICorner"
     obj20.SourceAssetId = -1
     obj20.Tags = ""
@@ -556,7 +514,6 @@ local function createGui(parent)
     local obj21 = Instance.new("ImageButton")
     obj21.Active = true
     obj21.AnchorPoint = Vector2.new(0.5,0.5)
-    obj21.AttributesSerialize = ""
     obj21.AutoButtonColor = true
     obj21.AutoLocalize = true
     obj21.AutomaticSize = 0
@@ -566,7 +523,6 @@ local function createGui(parent)
     obj21.BorderMode = 0
     obj21.BorderSizePixel = 0
     obj21.ClipsDescendants = false
-    obj21.DefinesCapabilities = false
     obj21.Draggable = false
     obj21.ImageColor3 = Color3.new(1,1,1)
     obj21.ImageRectOffset = Vector2.new(0,0)
@@ -599,9 +555,7 @@ local function createGui(parent)
     obj21.ZIndex = 1
     obj21.Parent = obj7
     local obj22 = Instance.new("UICorner")
-    obj22.AttributesSerialize = ""
     obj22.CornerRadius = UDim.new(0,20)
-    obj22.DefinesCapabilities = false
     obj22.Name = "UICorner"
     obj22.SourceAssetId = -1
     obj22.Tags = ""
@@ -609,7 +563,6 @@ local function createGui(parent)
     local obj23 = Instance.new("ImageButton")
     obj23.Active = true
     obj23.AnchorPoint = Vector2.new(0.5,0.5)
-    obj23.AttributesSerialize = ""
     obj23.AutoButtonColor = true
     obj23.AutoLocalize = true
     obj23.AutomaticSize = 0
@@ -619,7 +572,6 @@ local function createGui(parent)
     obj23.BorderMode = 0
     obj23.BorderSizePixel = 0
     obj23.ClipsDescendants = false
-    obj23.DefinesCapabilities = false
     obj23.Draggable = false
     obj23.ImageColor3 = Color3.new(1,1,1)
     obj23.ImageRectOffset = Vector2.new(0,0)
@@ -652,9 +604,7 @@ local function createGui(parent)
     obj23.ZIndex = 1
     obj23.Parent = obj7
     local obj24 = Instance.new("UICorner")
-    obj24.AttributesSerialize = ""
     obj24.CornerRadius = UDim.new(0,20)
-    obj24.DefinesCapabilities = false
     obj24.Name = "UICorner"
     obj24.SourceAssetId = -1
     obj24.Tags = ""
@@ -662,7 +612,6 @@ local function createGui(parent)
     local obj25 = Instance.new("ImageButton")
     obj25.Active = true
     obj25.AnchorPoint = Vector2.new(0.5,0.5)
-    obj25.AttributesSerialize = ""
     obj25.AutoButtonColor = true
     obj25.AutoLocalize = true
     obj25.AutomaticSize = 0
@@ -672,7 +621,6 @@ local function createGui(parent)
     obj25.BorderMode = 0
     obj25.BorderSizePixel = 0
     obj25.ClipsDescendants = false
-    obj25.DefinesCapabilities = false
     obj25.Draggable = false
     obj25.ImageColor3 = Color3.new(1,1,1)
     obj25.ImageRectOffset = Vector2.new(0,0)
@@ -705,9 +653,7 @@ local function createGui(parent)
     obj25.ZIndex = 1
     obj25.Parent = obj7
     local obj26 = Instance.new("UICorner")
-    obj26.AttributesSerialize = ""
     obj26.CornerRadius = UDim.new(0,20)
-    obj26.DefinesCapabilities = false
     obj26.Name = "UICorner"
     obj26.SourceAssetId = -1
     obj26.Tags = ""
@@ -715,7 +661,6 @@ local function createGui(parent)
     local obj27 = Instance.new("ImageButton")
     obj27.Active = true
     obj27.AnchorPoint = Vector2.new(0.5,0.5)
-    obj27.AttributesSerialize = ""
     obj27.AutoButtonColor = true
     obj27.AutoLocalize = true
     obj27.AutomaticSize = 0
@@ -725,7 +670,6 @@ local function createGui(parent)
     obj27.BorderMode = 0
     obj27.BorderSizePixel = 0
     obj27.ClipsDescendants = false
-    obj27.DefinesCapabilities = false
     obj27.Draggable = false
     obj27.ImageColor3 = Color3.new(1,1,1)
     obj27.ImageRectOffset = Vector2.new(0,0)
@@ -758,9 +702,7 @@ local function createGui(parent)
     obj27.ZIndex = 1
     obj27.Parent = obj7
     local obj28 = Instance.new("UICorner")
-    obj28.AttributesSerialize = ""
     obj28.CornerRadius = UDim.new(0,20)
-    obj28.DefinesCapabilities = false
     obj28.Name = "UICorner"
     obj28.SourceAssetId = -1
     obj28.Tags = ""
@@ -768,7 +710,6 @@ local function createGui(parent)
     local obj29 = Instance.new("ImageButton")
     obj29.Active = true
     obj29.AnchorPoint = Vector2.new(0.5,0.5)
-    obj29.AttributesSerialize = ""
     obj29.AutoButtonColor = true
     obj29.AutoLocalize = true
     obj29.AutomaticSize = 0
@@ -778,7 +719,6 @@ local function createGui(parent)
     obj29.BorderMode = 0
     obj29.BorderSizePixel = 0
     obj29.ClipsDescendants = false
-    obj29.DefinesCapabilities = false
     obj29.Draggable = false
     obj29.ImageColor3 = Color3.new(1,1,1)
     obj29.ImageRectOffset = Vector2.new(0,0)
@@ -811,9 +751,7 @@ local function createGui(parent)
     obj29.ZIndex = 1
     obj29.Parent = obj7
     local obj30 = Instance.new("UICorner")
-    obj30.AttributesSerialize = ""
     obj30.CornerRadius = UDim.new(0,20)
-    obj30.DefinesCapabilities = false
     obj30.Name = "UICorner"
     obj30.SourceAssetId = -1
     obj30.Tags = ""
@@ -821,7 +759,6 @@ local function createGui(parent)
     local obj31 = Instance.new("ImageButton")
     obj31.Active = true
     obj31.AnchorPoint = Vector2.new(0.5,0.5)
-    obj31.AttributesSerialize = ""
     obj31.AutoButtonColor = true
     obj31.AutoLocalize = true
     obj31.AutomaticSize = 0
@@ -831,7 +768,6 @@ local function createGui(parent)
     obj31.BorderMode = 0
     obj31.BorderSizePixel = 0
     obj31.ClipsDescendants = false
-    obj31.DefinesCapabilities = false
     obj31.Draggable = false
     obj31.ImageColor3 = Color3.new(1,1,1)
     obj31.ImageRectOffset = Vector2.new(0,0)
@@ -864,9 +800,7 @@ local function createGui(parent)
     obj31.ZIndex = 1
     obj31.Parent = obj7
     local obj32 = Instance.new("UICorner")
-    obj32.AttributesSerialize = ""
     obj32.CornerRadius = UDim.new(0,20)
-    obj32.DefinesCapabilities = false
     obj32.Name = "UICorner"
     obj32.SourceAssetId = -1
     obj32.Tags = ""
@@ -874,7 +808,6 @@ local function createGui(parent)
     local obj33 = Instance.new("ImageButton")
     obj33.Active = true
     obj33.AnchorPoint = Vector2.new(0.5,0.5)
-    obj33.AttributesSerialize = ""
     obj33.AutoButtonColor = true
     obj33.AutoLocalize = true
     obj33.AutomaticSize = 0
@@ -884,7 +817,6 @@ local function createGui(parent)
     obj33.BorderMode = 0
     obj33.BorderSizePixel = 0
     obj33.ClipsDescendants = false
-    obj33.DefinesCapabilities = false
     obj33.Draggable = false
     obj33.ImageColor3 = Color3.new(1,1,1)
     obj33.ImageRectOffset = Vector2.new(0,0)
@@ -917,9 +849,7 @@ local function createGui(parent)
     obj33.ZIndex = 1
     obj33.Parent = obj7
     local obj34 = Instance.new("UICorner")
-    obj34.AttributesSerialize = ""
     obj34.CornerRadius = UDim.new(0,20)
-    obj34.DefinesCapabilities = false
     obj34.Name = "UICorner"
     obj34.SourceAssetId = -1
     obj34.Tags = ""
@@ -927,7 +857,6 @@ local function createGui(parent)
     local obj35 = Instance.new("ImageButton")
     obj35.Active = true
     obj35.AnchorPoint = Vector2.new(0.5,0.5)
-    obj35.AttributesSerialize = ""
     obj35.AutoButtonColor = true
     obj35.AutoLocalize = true
     obj35.AutomaticSize = 0
@@ -937,7 +866,6 @@ local function createGui(parent)
     obj35.BorderMode = 0
     obj35.BorderSizePixel = 0
     obj35.ClipsDescendants = false
-    obj35.DefinesCapabilities = false
     obj35.Draggable = false
     obj35.ImageColor3 = Color3.new(1,1,1)
     obj35.ImageRectOffset = Vector2.new(0,0)
@@ -970,9 +898,7 @@ local function createGui(parent)
     obj35.ZIndex = 1
     obj35.Parent = obj7
     local obj36 = Instance.new("UICorner")
-    obj36.AttributesSerialize = ""
     obj36.CornerRadius = UDim.new(0,20)
-    obj36.DefinesCapabilities = false
     obj36.Name = "UICorner"
     obj36.SourceAssetId = -1
     obj36.Tags = ""
@@ -980,7 +906,6 @@ local function createGui(parent)
     local obj37 = Instance.new("ImageButton")
     obj37.Active = true
     obj37.AnchorPoint = Vector2.new(0.5,0.5)
-    obj37.AttributesSerialize = ""
     obj37.AutoButtonColor = true
     obj37.AutoLocalize = true
     obj37.AutomaticSize = 0
@@ -990,7 +915,6 @@ local function createGui(parent)
     obj37.BorderMode = 0
     obj37.BorderSizePixel = 0
     obj37.ClipsDescendants = false
-    obj37.DefinesCapabilities = false
     obj37.Draggable = false
     obj37.ImageColor3 = Color3.new(1,1,1)
     obj37.ImageRectOffset = Vector2.new(0,0)
@@ -1023,9 +947,7 @@ local function createGui(parent)
     obj37.ZIndex = 1
     obj37.Parent = obj7
     local obj38 = Instance.new("UICorner")
-    obj38.AttributesSerialize = ""
     obj38.CornerRadius = UDim.new(0,20)
-    obj38.DefinesCapabilities = false
     obj38.Name = "UICorner"
     obj38.SourceAssetId = -1
     obj38.Tags = ""
@@ -1033,7 +955,6 @@ local function createGui(parent)
     local obj39 = Instance.new("ImageButton")
     obj39.Active = true
     obj39.AnchorPoint = Vector2.new(0.5,0.5)
-    obj39.AttributesSerialize = ""
     obj39.AutoButtonColor = true
     obj39.AutoLocalize = true
     obj39.AutomaticSize = 0
@@ -1043,7 +964,6 @@ local function createGui(parent)
     obj39.BorderMode = 0
     obj39.BorderSizePixel = 0
     obj39.ClipsDescendants = false
-    obj39.DefinesCapabilities = false
     obj39.Draggable = false
     obj39.ImageColor3 = Color3.new(1,1,1)
     obj39.ImageRectOffset = Vector2.new(0,0)
@@ -1076,9 +996,7 @@ local function createGui(parent)
     obj39.ZIndex = 1
     obj39.Parent = obj7
     local obj40 = Instance.new("UICorner")
-    obj40.AttributesSerialize = ""
     obj40.CornerRadius = UDim.new(0,20)
-    obj40.DefinesCapabilities = false
     obj40.Name = "UICorner"
     obj40.SourceAssetId = -1
     obj40.Tags = ""
@@ -1086,7 +1004,6 @@ local function createGui(parent)
     local obj41 = Instance.new("ImageButton")
     obj41.Active = true
     obj41.AnchorPoint = Vector2.new(0.5,0.5)
-    obj41.AttributesSerialize = ""
     obj41.AutoButtonColor = true
     obj41.AutoLocalize = true
     obj41.AutomaticSize = 0
@@ -1096,7 +1013,6 @@ local function createGui(parent)
     obj41.BorderMode = 0
     obj41.BorderSizePixel = 0
     obj41.ClipsDescendants = false
-    obj41.DefinesCapabilities = false
     obj41.Draggable = false
     obj41.ImageColor3 = Color3.new(1,1,1)
     obj41.ImageRectOffset = Vector2.new(0,0)
@@ -1129,9 +1045,7 @@ local function createGui(parent)
     obj41.ZIndex = 1
     obj41.Parent = obj7
     local obj42 = Instance.new("UICorner")
-    obj42.AttributesSerialize = ""
     obj42.CornerRadius = UDim.new(0,20)
-    obj42.DefinesCapabilities = false
     obj42.Name = "UICorner"
     obj42.SourceAssetId = -1
     obj42.Tags = ""
@@ -1139,7 +1053,6 @@ local function createGui(parent)
     local obj43 = Instance.new("ImageButton")
     obj43.Active = true
     obj43.AnchorPoint = Vector2.new(0.5,0.5)
-    obj43.AttributesSerialize = ""
     obj43.AutoButtonColor = true
     obj43.AutoLocalize = true
     obj43.AutomaticSize = 0
@@ -1149,7 +1062,6 @@ local function createGui(parent)
     obj43.BorderMode = 0
     obj43.BorderSizePixel = 0
     obj43.ClipsDescendants = false
-    obj43.DefinesCapabilities = false
     obj43.Draggable = false
     obj43.ImageColor3 = Color3.new(1,1,1)
     obj43.ImageRectOffset = Vector2.new(0,0)
@@ -1182,9 +1094,7 @@ local function createGui(parent)
     obj43.ZIndex = 1
     obj43.Parent = obj7
     local obj44 = Instance.new("UICorner")
-    obj44.AttributesSerialize = ""
     obj44.CornerRadius = UDim.new(0,20)
-    obj44.DefinesCapabilities = false
     obj44.Name = "UICorner"
     obj44.SourceAssetId = -1
     obj44.Tags = ""
@@ -1192,7 +1102,6 @@ local function createGui(parent)
     local obj45 = Instance.new("ImageButton")
     obj45.Active = true
     obj45.AnchorPoint = Vector2.new(0.5,0.5)
-    obj45.AttributesSerialize = ""
     obj45.AutoButtonColor = true
     obj45.AutoLocalize = true
     obj45.AutomaticSize = 0
@@ -1202,7 +1111,6 @@ local function createGui(parent)
     obj45.BorderMode = 0
     obj45.BorderSizePixel = 0
     obj45.ClipsDescendants = false
-    obj45.DefinesCapabilities = false
     obj45.Draggable = false
     obj45.ImageColor3 = Color3.new(1,1,1)
     obj45.ImageRectOffset = Vector2.new(0,0)
@@ -1235,9 +1143,7 @@ local function createGui(parent)
     obj45.ZIndex = 1
     obj45.Parent = obj7
     local obj46 = Instance.new("UICorner")
-    obj46.AttributesSerialize = ""
     obj46.CornerRadius = UDim.new(0,20)
-    obj46.DefinesCapabilities = false
     obj46.Name = "UICorner"
     obj46.SourceAssetId = -1
     obj46.Tags = ""
@@ -1245,7 +1151,6 @@ local function createGui(parent)
     local obj47 = Instance.new("ImageButton")
     obj47.Active = true
     obj47.AnchorPoint = Vector2.new(0.5,0.5)
-    obj47.AttributesSerialize = ""
     obj47.AutoButtonColor = true
     obj47.AutoLocalize = true
     obj47.AutomaticSize = 0
@@ -1255,7 +1160,6 @@ local function createGui(parent)
     obj47.BorderMode = 0
     obj47.BorderSizePixel = 0
     obj47.ClipsDescendants = false
-    obj47.DefinesCapabilities = false
     obj47.Draggable = false
     obj47.ImageColor3 = Color3.new(1,1,1)
     obj47.ImageRectOffset = Vector2.new(0,0)
@@ -1288,9 +1192,7 @@ local function createGui(parent)
     obj47.ZIndex = 1
     obj47.Parent = obj7
     local obj48 = Instance.new("UICorner")
-    obj48.AttributesSerialize = ""
     obj48.CornerRadius = UDim.new(0,20)
-    obj48.DefinesCapabilities = false
     obj48.Name = "UICorner"
     obj48.SourceAssetId = -1
     obj48.Tags = ""
@@ -1298,7 +1200,6 @@ local function createGui(parent)
     local obj49 = Instance.new("ImageButton")
     obj49.Active = true
     obj49.AnchorPoint = Vector2.new(0.5,0.5)
-    obj49.AttributesSerialize = ""
     obj49.AutoButtonColor = true
     obj49.AutoLocalize = true
     obj49.AutomaticSize = 0
@@ -1308,7 +1209,6 @@ local function createGui(parent)
     obj49.BorderMode = 0
     obj49.BorderSizePixel = 0
     obj49.ClipsDescendants = false
-    obj49.DefinesCapabilities = false
     obj49.Draggable = false
     obj49.ImageColor3 = Color3.new(1,1,1)
     obj49.ImageRectOffset = Vector2.new(0,0)
@@ -1341,9 +1241,7 @@ local function createGui(parent)
     obj49.ZIndex = 1
     obj49.Parent = obj5
     local obj50 = Instance.new("UICorner")
-    obj50.AttributesSerialize = ""
     obj50.CornerRadius = UDim.new(0,20)
-    obj50.DefinesCapabilities = false
     obj50.Name = "UICorner"
     obj50.SourceAssetId = -1
     obj50.Tags = ""
@@ -1351,7 +1249,6 @@ local function createGui(parent)
     local obj51 = Instance.new("ImageButton")
     obj51.Active = true
     obj51.AnchorPoint = Vector2.new(0.5,0.5)
-    obj51.AttributesSerialize = ""
     obj51.AutoButtonColor = true
     obj51.AutoLocalize = true
     obj51.AutomaticSize = 0
@@ -1361,7 +1258,6 @@ local function createGui(parent)
     obj51.BorderMode = 0
     obj51.BorderSizePixel = 0
     obj51.ClipsDescendants = false
-    obj51.DefinesCapabilities = false
     obj51.Draggable = false
     obj51.ImageColor3 = Color3.new(1,1,1)
     obj51.ImageRectOffset = Vector2.new(0,0)
@@ -1394,9 +1290,7 @@ local function createGui(parent)
     obj51.ZIndex = 1
     obj51.Parent = obj5
     local obj52 = Instance.new("UICorner")
-    obj52.AttributesSerialize = ""
     obj52.CornerRadius = UDim.new(0,20)
-    obj52.DefinesCapabilities = false
     obj52.Name = "UICorner"
     obj52.SourceAssetId = -1
     obj52.Tags = ""
@@ -1404,7 +1298,6 @@ local function createGui(parent)
     local obj53 = Instance.new("ImageButton")
     obj53.Active = true
     obj53.AnchorPoint = Vector2.new(0.5,0.5)
-    obj53.AttributesSerialize = ""
     obj53.AutoButtonColor = true
     obj53.AutoLocalize = true
     obj53.AutomaticSize = 0
@@ -1414,7 +1307,6 @@ local function createGui(parent)
     obj53.BorderMode = 0
     obj53.BorderSizePixel = 0
     obj53.ClipsDescendants = false
-    obj53.DefinesCapabilities = false
     obj53.Draggable = false
     obj53.ImageColor3 = Color3.new(1,1,1)
     obj53.ImageRectOffset = Vector2.new(0,0)
@@ -1447,9 +1339,7 @@ local function createGui(parent)
     obj53.ZIndex = 1
     obj53.Parent = obj1
     local obj54 = Instance.new("UICorner")
-    obj54.AttributesSerialize = ""
     obj54.CornerRadius = UDim.new(0,20)
-    obj54.DefinesCapabilities = false
     obj54.Name = "UICorner"
     obj54.SourceAssetId = -1
     obj54.Tags = ""
@@ -1457,7 +1347,6 @@ local function createGui(parent)
     local obj55 = Instance.new("ImageButton")
     obj55.Active = true
     obj55.AnchorPoint = Vector2.new(0.5,0.5)
-    obj55.AttributesSerialize = ""
     obj55.AutoButtonColor = true
     obj55.AutoLocalize = true
     obj55.AutomaticSize = 0
@@ -1467,7 +1356,6 @@ local function createGui(parent)
     obj55.BorderMode = 0
     obj55.BorderSizePixel = 0
     obj55.ClipsDescendants = false
-    obj55.DefinesCapabilities = false
     obj55.Draggable = false
     obj55.ImageColor3 = Color3.new(1,1,1)
     obj55.ImageRectOffset = Vector2.new(0,0)
@@ -1500,9 +1388,7 @@ local function createGui(parent)
     obj55.ZIndex = 1
     obj55.Parent = obj53
     local obj56 = Instance.new("UICorner")
-    obj56.AttributesSerialize = ""
     obj56.CornerRadius = UDim.new(0,20)
-    obj56.DefinesCapabilities = false
     obj56.Name = "UICorner"
     obj56.SourceAssetId = -1
     obj56.Tags = ""
@@ -1510,7 +1396,6 @@ local function createGui(parent)
     local obj57 = Instance.new("ImageButton")
     obj57.Active = true
     obj57.AnchorPoint = Vector2.new(0.5,0.5)
-    obj57.AttributesSerialize = ""
     obj57.AutoButtonColor = true
     obj57.AutoLocalize = true
     obj57.AutomaticSize = 0
@@ -1520,7 +1405,6 @@ local function createGui(parent)
     obj57.BorderMode = 0
     obj57.BorderSizePixel = 0
     obj57.ClipsDescendants = false
-    obj57.DefinesCapabilities = false
     obj57.Draggable = false
     obj57.ImageColor3 = Color3.new(1,1,1)
     obj57.ImageRectOffset = Vector2.new(0,0)
@@ -1553,9 +1437,7 @@ local function createGui(parent)
     obj57.ZIndex = 1
     obj57.Parent = obj53
     local obj58 = Instance.new("UICorner")
-    obj58.AttributesSerialize = ""
     obj58.CornerRadius = UDim.new(0,20)
-    obj58.DefinesCapabilities = false
     obj58.Name = "UICorner"
     obj58.SourceAssetId = -1
     obj58.Tags = ""
@@ -1563,7 +1445,6 @@ local function createGui(parent)
     local obj59 = Instance.new("ImageButton")
     obj59.Active = true
     obj59.AnchorPoint = Vector2.new(0.5,0.5)
-    obj59.AttributesSerialize = ""
     obj59.AutoButtonColor = true
     obj59.AutoLocalize = true
     obj59.AutomaticSize = 0
@@ -1573,7 +1454,6 @@ local function createGui(parent)
     obj59.BorderMode = 0
     obj59.BorderSizePixel = 0
     obj59.ClipsDescendants = false
-    obj59.DefinesCapabilities = false
     obj59.Draggable = false
     obj59.ImageColor3 = Color3.new(1,1,1)
     obj59.ImageRectOffset = Vector2.new(0,0)
@@ -1606,9 +1486,7 @@ local function createGui(parent)
     obj59.ZIndex = 1
     obj59.Parent = obj53
     local obj60 = Instance.new("UICorner")
-    obj60.AttributesSerialize = ""
     obj60.CornerRadius = UDim.new(0,20)
-    obj60.DefinesCapabilities = false
     obj60.Name = "UICorner"
     obj60.SourceAssetId = -1
     obj60.Tags = ""
@@ -1616,7 +1494,6 @@ local function createGui(parent)
     local obj61 = Instance.new("ImageButton")
     obj61.Active = true
     obj61.AnchorPoint = Vector2.new(0.5,0.5)
-    obj61.AttributesSerialize = ""
     obj61.AutoButtonColor = true
     obj61.AutoLocalize = true
     obj61.AutomaticSize = 0
@@ -1626,7 +1503,6 @@ local function createGui(parent)
     obj61.BorderMode = 0
     obj61.BorderSizePixel = 0
     obj61.ClipsDescendants = false
-    obj61.DefinesCapabilities = false
     obj61.Draggable = false
     obj61.ImageColor3 = Color3.new(1,1,1)
     obj61.ImageRectOffset = Vector2.new(0,0)
@@ -1659,9 +1535,7 @@ local function createGui(parent)
     obj61.ZIndex = 1
     obj61.Parent = obj53
     local obj62 = Instance.new("UICorner")
-    obj62.AttributesSerialize = ""
     obj62.CornerRadius = UDim.new(0,20)
-    obj62.DefinesCapabilities = false
     obj62.Name = "UICorner"
     obj62.SourceAssetId = -1
     obj62.Tags = ""
@@ -1669,7 +1543,6 @@ local function createGui(parent)
     local obj63 = Instance.new("ImageButton")
     obj63.Active = true
     obj63.AnchorPoint = Vector2.new(0.5,0.5)
-    obj63.AttributesSerialize = ""
     obj63.AutoButtonColor = true
     obj63.AutoLocalize = true
     obj63.AutomaticSize = 0
@@ -1679,7 +1552,6 @@ local function createGui(parent)
     obj63.BorderMode = 0
     obj63.BorderSizePixel = 0
     obj63.ClipsDescendants = false
-    obj63.DefinesCapabilities = false
     obj63.Draggable = false
     obj63.ImageColor3 = Color3.new(1,1,1)
     obj63.ImageRectOffset = Vector2.new(0,0)
@@ -1712,9 +1584,7 @@ local function createGui(parent)
     obj63.ZIndex = 1
     obj63.Parent = obj53
     local obj64 = Instance.new("UICorner")
-    obj64.AttributesSerialize = ""
     obj64.CornerRadius = UDim.new(0,20)
-    obj64.DefinesCapabilities = false
     obj64.Name = "UICorner"
     obj64.SourceAssetId = -1
     obj64.Tags = ""
@@ -1722,7 +1592,6 @@ local function createGui(parent)
     local obj65 = Instance.new("ImageButton")
     obj65.Active = true
     obj65.AnchorPoint = Vector2.new(0.5,0.5)
-    obj65.AttributesSerialize = ""
     obj65.AutoButtonColor = true
     obj65.AutoLocalize = true
     obj65.AutomaticSize = 0
@@ -1732,7 +1601,6 @@ local function createGui(parent)
     obj65.BorderMode = 0
     obj65.BorderSizePixel = 0
     obj65.ClipsDescendants = false
-    obj65.DefinesCapabilities = false
     obj65.Draggable = false
     obj65.ImageColor3 = Color3.new(1,1,1)
     obj65.ImageRectOffset = Vector2.new(0,0)
@@ -1765,9 +1633,7 @@ local function createGui(parent)
     obj65.ZIndex = 1
     obj65.Parent = obj53
     local obj66 = Instance.new("UICorner")
-    obj66.AttributesSerialize = ""
     obj66.CornerRadius = UDim.new(0,20)
-    obj66.DefinesCapabilities = false
     obj66.Name = "UICorner"
     obj66.SourceAssetId = -1
     obj66.Tags = ""
@@ -1775,7 +1641,6 @@ local function createGui(parent)
     local obj67 = Instance.new("ImageButton")
     obj67.Active = true
     obj67.AnchorPoint = Vector2.new(0.5,0.5)
-    obj67.AttributesSerialize = ""
     obj67.AutoButtonColor = true
     obj67.AutoLocalize = true
     obj67.AutomaticSize = 0
@@ -1785,7 +1650,6 @@ local function createGui(parent)
     obj67.BorderMode = 0
     obj67.BorderSizePixel = 0
     obj67.ClipsDescendants = false
-    obj67.DefinesCapabilities = false
     obj67.Draggable = false
     obj67.ImageColor3 = Color3.new(1,1,1)
     obj67.ImageRectOffset = Vector2.new(0,0)
@@ -1818,9 +1682,7 @@ local function createGui(parent)
     obj67.ZIndex = 1
     obj67.Parent = obj1
     local obj68 = Instance.new("UICorner")
-    obj68.AttributesSerialize = ""
     obj68.CornerRadius = UDim.new(0,20)
-    obj68.DefinesCapabilities = false
     obj68.Name = "UICorner"
     obj68.SourceAssetId = -1
     obj68.Tags = ""
@@ -1828,7 +1690,6 @@ local function createGui(parent)
     local obj69 = Instance.new("Frame")
     obj69.Active = false
     obj69.AnchorPoint = Vector2.new(0,0)
-    obj69.AttributesSerialize = ""
     obj69.AutoLocalize = true
     obj69.AutomaticSize = 0
     obj69.BackgroundColor3 = Color3.new(1,1,1)
@@ -1837,7 +1698,6 @@ local function createGui(parent)
     obj69.BorderMode = 0
     obj69.BorderSizePixel = 0
     obj69.ClipsDescendants = false
-    obj69.DefinesCapabilities = false
     obj69.Draggable = false
     obj69.Interactable = true
     obj69.LayoutOrder = 0
@@ -1860,9 +1720,7 @@ local function createGui(parent)
     obj69.ZIndex = 1
     obj69.Parent = obj0
     local obj70 = Instance.new("UICorner")
-    obj70.AttributesSerialize = ""
     obj70.CornerRadius = UDim.new(0,20)
-    obj70.DefinesCapabilities = false
     obj70.Name = "UICorner"
     obj70.SourceAssetId = -1
     obj70.Tags = ""
@@ -1870,7 +1728,6 @@ local function createGui(parent)
     local obj71 = Instance.new("Frame")
     obj71.Active = false
     obj71.AnchorPoint = Vector2.new(0.5,0.5)
-    obj71.AttributesSerialize = ""
     obj71.AutoLocalize = true
     obj71.AutomaticSize = 0
     obj71.BackgroundColor3 = Color3.new(0.43921572,0.43921572,0.43921572)
@@ -1879,7 +1736,6 @@ local function createGui(parent)
     obj71.BorderMode = 0
     obj71.BorderSizePixel = 0
     obj71.ClipsDescendants = false
-    obj71.DefinesCapabilities = false
     obj71.Draggable = false
     obj71.Interactable = true
     obj71.LayoutOrder = 0
@@ -1902,9 +1758,7 @@ local function createGui(parent)
     obj71.ZIndex = 2
     obj71.Parent = obj69
     local obj72 = Instance.new("UICorner")
-    obj72.AttributesSerialize = ""
     obj72.CornerRadius = UDim.new(0,15)
-    obj72.DefinesCapabilities = false
     obj72.Name = "UICorner"
     obj72.SourceAssetId = -1
     obj72.Tags = ""
@@ -1912,7 +1766,6 @@ local function createGui(parent)
     local obj73 = Instance.new("Frame")
     obj73.Active = false
     obj73.AnchorPoint = Vector2.new(0.5,0.5)
-    obj73.AttributesSerialize = ""
     obj73.AutoLocalize = true
     obj73.AutomaticSize = 0
     obj73.BackgroundColor3 = Color3.new(1,1,1)
@@ -1921,7 +1774,6 @@ local function createGui(parent)
     obj73.BorderMode = 0
     obj73.BorderSizePixel = 0
     obj73.ClipsDescendants = false
-    obj73.DefinesCapabilities = false
     obj73.Draggable = false
     obj73.Interactable = true
     obj73.LayoutOrder = 0
@@ -1944,9 +1796,7 @@ local function createGui(parent)
     obj73.ZIndex = 1
     obj73.Parent = obj69
     local obj74 = Instance.new("UICorner")
-    obj74.AttributesSerialize = ""
     obj74.CornerRadius = UDim.new(0,20)
-    obj74.DefinesCapabilities = false
     obj74.Name = "UICorner"
     obj74.SourceAssetId = -1
     obj74.Tags = ""
@@ -1954,7 +1804,6 @@ local function createGui(parent)
     local obj75 = Instance.new("Frame")
     obj75.Active = false
     obj75.AnchorPoint = Vector2.new(0.5,0.5)
-    obj75.AttributesSerialize = ""
     obj75.AutoLocalize = true
     obj75.AutomaticSize = 0
     obj75.BackgroundColor3 = Color3.new(1,1,1)
@@ -1963,7 +1812,6 @@ local function createGui(parent)
     obj75.BorderMode = 0
     obj75.BorderSizePixel = 0
     obj75.ClipsDescendants = false
-    obj75.DefinesCapabilities = false
     obj75.Draggable = false
     obj75.Interactable = true
     obj75.LayoutOrder = 0
@@ -1986,9 +1834,7 @@ local function createGui(parent)
     obj75.ZIndex = 1
     obj75.Parent = obj69
     local obj76 = Instance.new("UICorner")
-    obj76.AttributesSerialize = ""
     obj76.CornerRadius = UDim.new(0,20)
-    obj76.DefinesCapabilities = false
     obj76.Name = "UICorner"
     obj76.SourceAssetId = -1
     obj76.Tags = ""
@@ -1996,7 +1842,6 @@ local function createGui(parent)
     local obj77 = Instance.new("Frame")
     obj77.Active = false
     obj77.AnchorPoint = Vector2.new(0.5,0.5)
-    obj77.AttributesSerialize = ""
     obj77.AutoLocalize = true
     obj77.AutomaticSize = 0
     obj77.BackgroundColor3 = Color3.new(1,1,1)
@@ -2005,7 +1850,6 @@ local function createGui(parent)
     obj77.BorderMode = 0
     obj77.BorderSizePixel = 0
     obj77.ClipsDescendants = false
-    obj77.DefinesCapabilities = false
     obj77.Draggable = false
     obj77.Interactable = true
     obj77.LayoutOrder = 0
@@ -2028,9 +1872,7 @@ local function createGui(parent)
     obj77.ZIndex = 1
     obj77.Parent = obj69
     local obj78 = Instance.new("UICorner")
-    obj78.AttributesSerialize = ""
     obj78.CornerRadius = UDim.new(0,20)
-    obj78.DefinesCapabilities = false
     obj78.Name = "UICorner"
     obj78.SourceAssetId = -1
     obj78.Tags = ""
@@ -2038,7 +1880,6 @@ local function createGui(parent)
     local obj79 = Instance.new("Frame")
     obj79.Active = false
     obj79.AnchorPoint = Vector2.new(0.5,0.5)
-    obj79.AttributesSerialize = ""
     obj79.AutoLocalize = true
     obj79.AutomaticSize = 0
     obj79.BackgroundColor3 = Color3.new(1,1,1)
@@ -2047,7 +1888,6 @@ local function createGui(parent)
     obj79.BorderMode = 0
     obj79.BorderSizePixel = 0
     obj79.ClipsDescendants = false
-    obj79.DefinesCapabilities = false
     obj79.Draggable = false
     obj79.Interactable = true
     obj79.LayoutOrder = 0
@@ -2070,9 +1910,7 @@ local function createGui(parent)
     obj79.ZIndex = 1
     obj79.Parent = obj69
     local obj80 = Instance.new("UICorner")
-    obj80.AttributesSerialize = ""
     obj80.CornerRadius = UDim.new(0,20)
-    obj80.DefinesCapabilities = false
     obj80.Name = "UICorner"
     obj80.SourceAssetId = -1
     obj80.Tags = ""
@@ -2080,7 +1918,6 @@ local function createGui(parent)
     local obj81 = Instance.new("Frame")
     obj81.Active = false
     obj81.AnchorPoint = Vector2.new(0.5,0.5)
-    obj81.AttributesSerialize = ""
     obj81.AutoLocalize = true
     obj81.AutomaticSize = 0
     obj81.BackgroundColor3 = Color3.new(1,1,1)
@@ -2089,7 +1926,6 @@ local function createGui(parent)
     obj81.BorderMode = 0
     obj81.BorderSizePixel = 0
     obj81.ClipsDescendants = false
-    obj81.DefinesCapabilities = false
     obj81.Draggable = false
     obj81.Interactable = true
     obj81.LayoutOrder = 0
@@ -2114,7 +1950,6 @@ local function createGui(parent)
     local obj82 = Instance.new("Frame")
     obj82.Active = false
     obj82.AnchorPoint = Vector2.new(0.5,0.5)
-    obj82.AttributesSerialize = ""
     obj82.AutoLocalize = true
     obj82.AutomaticSize = 0
     obj82.BackgroundColor3 = Color3.new(1,1,1)
@@ -2123,7 +1958,6 @@ local function createGui(parent)
     obj82.BorderMode = 0
     obj82.BorderSizePixel = 0
     obj82.ClipsDescendants = false
-    obj82.DefinesCapabilities = false
     obj82.Draggable = false
     obj82.Interactable = true
     obj82.LayoutOrder = 0
@@ -2148,7 +1982,6 @@ local function createGui(parent)
     local obj83 = Instance.new("TextLabel")
     obj83.Active = false
     obj83.AnchorPoint = Vector2.new(0,0)
-    obj83.AttributesSerialize = ""
     obj83.AutoLocalize = true
     obj83.AutomaticSize = 0
     obj83.BackgroundColor3 = Color3.new(1,1,1)
@@ -2157,7 +1990,6 @@ local function createGui(parent)
     obj83.BorderMode = 0
     obj83.BorderSizePixel = 0
     obj83.ClipsDescendants = true
-    obj83.DefinesCapabilities = false
     obj83.Draggable = false
     obj83.Interactable = true
     obj83.LayoutOrder = 0
@@ -2199,7 +2031,6 @@ local function createGui(parent)
     local obj84 = Instance.new("TextLabel")
     obj84.Active = false
     obj84.AnchorPoint = Vector2.new(0,0)
-    obj84.AttributesSerialize = ""
     obj84.AutoLocalize = true
     obj84.AutomaticSize = 0
     obj84.BackgroundColor3 = Color3.new(1,1,1)
@@ -2208,7 +2039,6 @@ local function createGui(parent)
     obj84.BorderMode = 0
     obj84.BorderSizePixel = 0
     obj84.ClipsDescendants = true
-    obj84.DefinesCapabilities = false
     obj84.Draggable = false
     obj84.Interactable = true
     obj84.LayoutOrder = 0
@@ -2250,7 +2080,6 @@ local function createGui(parent)
     local obj85 = Instance.new("TextLabel")
     obj85.Active = false
     obj85.AnchorPoint = Vector2.new(0,0)
-    obj85.AttributesSerialize = ""
     obj85.AutoLocalize = true
     obj85.AutomaticSize = 0
     obj85.BackgroundColor3 = Color3.new(1,1,1)
@@ -2259,7 +2088,6 @@ local function createGui(parent)
     obj85.BorderMode = 0
     obj85.BorderSizePixel = 0
     obj85.ClipsDescendants = true
-    obj85.DefinesCapabilities = false
     obj85.Draggable = false
     obj85.Interactable = true
     obj85.LayoutOrder = 0
@@ -2301,7 +2129,6 @@ local function createGui(parent)
     local obj86 = Instance.new("TextLabel")
     obj86.Active = false
     obj86.AnchorPoint = Vector2.new(0,0)
-    obj86.AttributesSerialize = ""
     obj86.AutoLocalize = true
     obj86.AutomaticSize = 0
     obj86.BackgroundColor3 = Color3.new(1,1,1)
@@ -2310,7 +2137,6 @@ local function createGui(parent)
     obj86.BorderMode = 0
     obj86.BorderSizePixel = 0
     obj86.ClipsDescendants = true
-    obj86.DefinesCapabilities = false
     obj86.Draggable = false
     obj86.Interactable = true
     obj86.LayoutOrder = 0
@@ -2352,7 +2178,6 @@ local function createGui(parent)
     local obj87 = Instance.new("Frame")
     obj87.Active = false
     obj87.AnchorPoint = Vector2.new(0.5,0.5)
-    obj87.AttributesSerialize = ""
     obj87.AutoLocalize = true
     obj87.AutomaticSize = 0
     obj87.BackgroundColor3 = Color3.new(1,1,1)
@@ -2361,7 +2186,6 @@ local function createGui(parent)
     obj87.BorderMode = 0
     obj87.BorderSizePixel = 0
     obj87.ClipsDescendants = false
-    obj87.DefinesCapabilities = false
     obj87.Draggable = false
     obj87.Interactable = true
     obj87.LayoutOrder = 0
@@ -2386,7 +2210,6 @@ local function createGui(parent)
     local obj88 = Instance.new("Frame")
     obj88.Active = false
     obj88.AnchorPoint = Vector2.new(0.5,0.5)
-    obj88.AttributesSerialize = ""
     obj88.AutoLocalize = true
     obj88.AutomaticSize = 0
     obj88.BackgroundColor3 = Color3.new(1,1,1)
@@ -2395,7 +2218,6 @@ local function createGui(parent)
     obj88.BorderMode = 0
     obj88.BorderSizePixel = 0
     obj88.ClipsDescendants = false
-    obj88.DefinesCapabilities = false
     obj88.Draggable = false
     obj88.Interactable = true
     obj88.LayoutOrder = 0
@@ -2420,7 +2242,6 @@ local function createGui(parent)
     local obj89 = Instance.new("Frame")
     obj89.Active = false
     obj89.AnchorPoint = Vector2.new(0.5,0.5)
-    obj89.AttributesSerialize = ""
     obj89.AutoLocalize = true
     obj89.AutomaticSize = 0
     obj89.BackgroundColor3 = Color3.new(1,1,1)
@@ -2429,7 +2250,6 @@ local function createGui(parent)
     obj89.BorderMode = 0
     obj89.BorderSizePixel = 0
     obj89.ClipsDescendants = false
-    obj89.DefinesCapabilities = false
     obj89.Draggable = false
     obj89.Interactable = true
     obj89.LayoutOrder = 0
@@ -2454,7 +2274,6 @@ local function createGui(parent)
     local obj90 = Instance.new("Frame")
     obj90.Active = false
     obj90.AnchorPoint = Vector2.new(0.5,0.5)
-    obj90.AttributesSerialize = ""
     obj90.AutoLocalize = true
     obj90.AutomaticSize = 0
     obj90.BackgroundColor3 = Color3.new(1,1,1)
@@ -2463,7 +2282,6 @@ local function createGui(parent)
     obj90.BorderMode = 0
     obj90.BorderSizePixel = 0
     obj90.ClipsDescendants = false
-    obj90.DefinesCapabilities = false
     obj90.Draggable = false
     obj90.Interactable = true
     obj90.LayoutOrder = 0
@@ -2488,7 +2306,6 @@ local function createGui(parent)
     local obj91 = Instance.new("Frame")
     obj91.Active = false
     obj91.AnchorPoint = Vector2.new(0,0)
-    obj91.AttributesSerialize = ""
     obj91.AutoLocalize = true
     obj91.AutomaticSize = 0
     obj91.BackgroundColor3 = Color3.new(1,1,1)
@@ -2497,7 +2314,6 @@ local function createGui(parent)
     obj91.BorderMode = 0
     obj91.BorderSizePixel = 0
     obj91.ClipsDescendants = false
-    obj91.DefinesCapabilities = false
     obj91.Draggable = false
     obj91.Interactable = true
     obj91.LayoutOrder = 0
@@ -2520,9 +2336,7 @@ local function createGui(parent)
     obj91.ZIndex = 1
     obj91.Parent = screenGui
     local obj92 = Instance.new("UICorner")
-    obj92.AttributesSerialize = ""
     obj92.CornerRadius = UDim.new(0,20)
-    obj92.DefinesCapabilities = false
     obj92.Name = "UICorner"
     obj92.SourceAssetId = -1
     obj92.Tags = ""
@@ -2530,7 +2344,6 @@ local function createGui(parent)
     local obj93 = Instance.new("ImageButton")
     obj93.Active = true
     obj93.AnchorPoint = Vector2.new(0.5,0.5)
-    obj93.AttributesSerialize = ""
     obj93.AutoButtonColor = true
     obj93.AutoLocalize = true
     obj93.AutomaticSize = 0
@@ -2540,7 +2353,6 @@ local function createGui(parent)
     obj93.BorderMode = 0
     obj93.BorderSizePixel = 0
     obj93.ClipsDescendants = false
-    obj93.DefinesCapabilities = false
     obj93.Draggable = false
     obj93.ImageColor3 = Color3.new(1,1,1)
     obj93.ImageRectOffset = Vector2.new(0,0)
@@ -2573,9 +2385,7 @@ local function createGui(parent)
     obj93.ZIndex = 1
     obj93.Parent = obj91
     local obj94 = Instance.new("UICorner")
-    obj94.AttributesSerialize = ""
     obj94.CornerRadius = UDim.new(0,20)
-    obj94.DefinesCapabilities = false
     obj94.Name = "UICorner"
     obj94.SourceAssetId = -1
     obj94.Tags = ""
@@ -2583,7 +2393,6 @@ local function createGui(parent)
     local obj95 = Instance.new("ImageButton")
     obj95.Active = true
     obj95.AnchorPoint = Vector2.new(0.5,0.5)
-    obj95.AttributesSerialize = ""
     obj95.AutoButtonColor = true
     obj95.AutoLocalize = true
     obj95.AutomaticSize = 0
@@ -2593,7 +2402,6 @@ local function createGui(parent)
     obj95.BorderMode = 0
     obj95.BorderSizePixel = 0
     obj95.ClipsDescendants = false
-    obj95.DefinesCapabilities = false
     obj95.Draggable = false
     obj95.ImageColor3 = Color3.new(1,1,1)
     obj95.ImageRectOffset = Vector2.new(0,0)
@@ -2626,9 +2434,7 @@ local function createGui(parent)
     obj95.ZIndex = 1
     obj95.Parent = obj91
     local obj96 = Instance.new("UICorner")
-    obj96.AttributesSerialize = ""
     obj96.CornerRadius = UDim.new(0,20)
-    obj96.DefinesCapabilities = false
     obj96.Name = "UICorner"
     obj96.SourceAssetId = -1
     obj96.Tags = ""
@@ -2636,7 +2442,6 @@ local function createGui(parent)
     local obj97 = Instance.new("Frame")
     obj97.Active = false
     obj97.AnchorPoint = Vector2.new(0.5,0.5)
-    obj97.AttributesSerialize = ""
     obj97.AutoLocalize = true
     obj97.AutomaticSize = 0
     obj97.BackgroundColor3 = Color3.new(0,0,0)
@@ -2645,7 +2450,6 @@ local function createGui(parent)
     obj97.BorderMode = 0
     obj97.BorderSizePixel = 0
     obj97.ClipsDescendants = false
-    obj97.DefinesCapabilities = false
     obj97.Draggable = false
     obj97.Interactable = false
     obj97.LayoutOrder = 0
@@ -2670,7 +2474,6 @@ local function createGui(parent)
     local obj98 = Instance.new("ImageButton")
     obj98.Active = true
     obj98.AnchorPoint = Vector2.new(0.5,0.5)
-    obj98.AttributesSerialize = ""
     obj98.AutoButtonColor = true
     obj98.AutoLocalize = true
     obj98.AutomaticSize = 0
@@ -2680,7 +2483,6 @@ local function createGui(parent)
     obj98.BorderMode = 0
     obj98.BorderSizePixel = 0
     obj98.ClipsDescendants = false
-    obj98.DefinesCapabilities = false
     obj98.Draggable = false
     obj98.ImageColor3 = Color3.new(1,1,1)
     obj98.ImageRectOffset = Vector2.new(0,0)
@@ -2713,18 +2515,14 @@ local function createGui(parent)
     obj98.ZIndex = 1
     obj98.Parent = obj97
     local obj99 = Instance.new("UICorner")
-    obj99.AttributesSerialize = ""
     obj99.CornerRadius = UDim.new(0,20)
-    obj99.DefinesCapabilities = false
     obj99.Name = "UICorner"
     obj99.SourceAssetId = -1
     obj99.Tags = ""
     obj99.Parent = obj98
     local obj100 = Instance.new("UIGridLayout")
-    obj100.AttributesSerialize = ""
     obj100.CellPadding = UDim2.new(0.0199999996,0,0.0199999996,0)
     obj100.CellSize = UDim2.new(0.150000006,0,0.200000003,0)
-    obj100.DefinesCapabilities = false
     obj100.FillDirection = 0
     obj100.FillDirectionMaxCells = 5
     obj100.HorizontalAlignment = 0
@@ -2738,7 +2536,6 @@ local function createGui(parent)
     local obj101 = Instance.new("ImageButton")
     obj101.Active = true
     obj101.AnchorPoint = Vector2.new(0.5,0.5)
-    obj101.AttributesSerialize = ""
     obj101.AutoButtonColor = true
     obj101.AutoLocalize = true
     obj101.AutomaticSize = 0
@@ -2748,7 +2545,6 @@ local function createGui(parent)
     obj101.BorderMode = 0
     obj101.BorderSizePixel = 0
     obj101.ClipsDescendants = false
-    obj101.DefinesCapabilities = false
     obj101.Draggable = false
     obj101.ImageColor3 = Color3.new(1,1,1)
     obj101.ImageRectOffset = Vector2.new(0,0)
@@ -2781,9 +2577,7 @@ local function createGui(parent)
     obj101.ZIndex = 1
     obj101.Parent = obj97
     local obj102 = Instance.new("UICorner")
-    obj102.AttributesSerialize = ""
     obj102.CornerRadius = UDim.new(0,20)
-    obj102.DefinesCapabilities = false
     obj102.Name = "UICorner"
     obj102.SourceAssetId = -1
     obj102.Tags = ""
@@ -2791,7 +2585,6 @@ local function createGui(parent)
     local obj103 = Instance.new("ImageButton")
     obj103.Active = true
     obj103.AnchorPoint = Vector2.new(0.5,0.5)
-    obj103.AttributesSerialize = ""
     obj103.AutoButtonColor = true
     obj103.AutoLocalize = true
     obj103.AutomaticSize = 0
@@ -2801,7 +2594,6 @@ local function createGui(parent)
     obj103.BorderMode = 0
     obj103.BorderSizePixel = 0
     obj103.ClipsDescendants = false
-    obj103.DefinesCapabilities = false
     obj103.Draggable = false
     obj103.ImageColor3 = Color3.new(1,1,1)
     obj103.ImageRectOffset = Vector2.new(0,0)
@@ -2834,9 +2626,7 @@ local function createGui(parent)
     obj103.ZIndex = 1
     obj103.Parent = obj97
     local obj104 = Instance.new("UICorner")
-    obj104.AttributesSerialize = ""
     obj104.CornerRadius = UDim.new(0,20)
-    obj104.DefinesCapabilities = false
     obj104.Name = "UICorner"
     obj104.SourceAssetId = -1
     obj104.Tags = ""
@@ -2844,7 +2634,6 @@ local function createGui(parent)
     local obj105 = Instance.new("ImageButton")
     obj105.Active = true
     obj105.AnchorPoint = Vector2.new(0.5,0.5)
-    obj105.AttributesSerialize = ""
     obj105.AutoButtonColor = true
     obj105.AutoLocalize = true
     obj105.AutomaticSize = 0
@@ -2854,7 +2643,6 @@ local function createGui(parent)
     obj105.BorderMode = 0
     obj105.BorderSizePixel = 0
     obj105.ClipsDescendants = false
-    obj105.DefinesCapabilities = false
     obj105.Draggable = false
     obj105.ImageColor3 = Color3.new(1,1,1)
     obj105.ImageRectOffset = Vector2.new(0,0)
@@ -2887,9 +2675,7 @@ local function createGui(parent)
     obj105.ZIndex = 1
     obj105.Parent = obj97
     local obj106 = Instance.new("UICorner")
-    obj106.AttributesSerialize = ""
     obj106.CornerRadius = UDim.new(0,20)
-    obj106.DefinesCapabilities = false
     obj106.Name = "UICorner"
     obj106.SourceAssetId = -1
     obj106.Tags = ""
@@ -2897,7 +2683,6 @@ local function createGui(parent)
     local obj107 = Instance.new("ImageButton")
     obj107.Active = true
     obj107.AnchorPoint = Vector2.new(0.5,0.5)
-    obj107.AttributesSerialize = ""
     obj107.AutoButtonColor = true
     obj107.AutoLocalize = true
     obj107.AutomaticSize = 0
@@ -2907,7 +2692,6 @@ local function createGui(parent)
     obj107.BorderMode = 0
     obj107.BorderSizePixel = 0
     obj107.ClipsDescendants = false
-    obj107.DefinesCapabilities = false
     obj107.Draggable = false
     obj107.ImageColor3 = Color3.new(1,1,1)
     obj107.ImageRectOffset = Vector2.new(0,0)
@@ -2940,9 +2724,7 @@ local function createGui(parent)
     obj107.ZIndex = 1
     obj107.Parent = obj97
     local obj108 = Instance.new("UICorner")
-    obj108.AttributesSerialize = ""
     obj108.CornerRadius = UDim.new(0,20)
-    obj108.DefinesCapabilities = false
     obj108.Name = "UICorner"
     obj108.SourceAssetId = -1
     obj108.Tags = ""
@@ -2950,7 +2732,6 @@ local function createGui(parent)
     local obj109 = Instance.new("ImageButton")
     obj109.Active = true
     obj109.AnchorPoint = Vector2.new(0.5,0.5)
-    obj109.AttributesSerialize = ""
     obj109.AutoButtonColor = true
     obj109.AutoLocalize = true
     obj109.AutomaticSize = 0
@@ -2960,7 +2741,6 @@ local function createGui(parent)
     obj109.BorderMode = 0
     obj109.BorderSizePixel = 0
     obj109.ClipsDescendants = false
-    obj109.DefinesCapabilities = false
     obj109.Draggable = false
     obj109.ImageColor3 = Color3.new(1,1,1)
     obj109.ImageRectOffset = Vector2.new(0,0)
@@ -2993,9 +2773,7 @@ local function createGui(parent)
     obj109.ZIndex = 1
     obj109.Parent = obj97
     local obj110 = Instance.new("UICorner")
-    obj110.AttributesSerialize = ""
     obj110.CornerRadius = UDim.new(0,20)
-    obj110.DefinesCapabilities = false
     obj110.Name = "UICorner"
     obj110.SourceAssetId = -1
     obj110.Tags = ""
@@ -3003,7 +2781,6 @@ local function createGui(parent)
     local obj111 = Instance.new("ImageButton")
     obj111.Active = true
     obj111.AnchorPoint = Vector2.new(0.5,0.5)
-    obj111.AttributesSerialize = ""
     obj111.AutoButtonColor = true
     obj111.AutoLocalize = true
     obj111.AutomaticSize = 0
@@ -3013,7 +2790,6 @@ local function createGui(parent)
     obj111.BorderMode = 0
     obj111.BorderSizePixel = 0
     obj111.ClipsDescendants = false
-    obj111.DefinesCapabilities = false
     obj111.Draggable = false
     obj111.ImageColor3 = Color3.new(1,1,1)
     obj111.ImageRectOffset = Vector2.new(0,0)
@@ -3046,9 +2822,7 @@ local function createGui(parent)
     obj111.ZIndex = 1
     obj111.Parent = obj97
     local obj112 = Instance.new("UICorner")
-    obj112.AttributesSerialize = ""
     obj112.CornerRadius = UDim.new(0,20)
-    obj112.DefinesCapabilities = false
     obj112.Name = "UICorner"
     obj112.SourceAssetId = -1
     obj112.Tags = ""
@@ -3056,7 +2830,6 @@ local function createGui(parent)
     local obj113 = Instance.new("ImageButton")
     obj113.Active = true
     obj113.AnchorPoint = Vector2.new(0.5,0.5)
-    obj113.AttributesSerialize = ""
     obj113.AutoButtonColor = true
     obj113.AutoLocalize = true
     obj113.AutomaticSize = 0
@@ -3066,7 +2839,6 @@ local function createGui(parent)
     obj113.BorderMode = 0
     obj113.BorderSizePixel = 0
     obj113.ClipsDescendants = false
-    obj113.DefinesCapabilities = false
     obj113.Draggable = false
     obj113.ImageColor3 = Color3.new(1,1,1)
     obj113.ImageRectOffset = Vector2.new(0,0)
@@ -3099,9 +2871,7 @@ local function createGui(parent)
     obj113.ZIndex = 1
     obj113.Parent = obj97
     local obj114 = Instance.new("UICorner")
-    obj114.AttributesSerialize = ""
     obj114.CornerRadius = UDim.new(0,20)
-    obj114.DefinesCapabilities = false
     obj114.Name = "UICorner"
     obj114.SourceAssetId = -1
     obj114.Tags = ""
@@ -3109,7 +2879,6 @@ local function createGui(parent)
     local obj115 = Instance.new("ImageButton")
     obj115.Active = true
     obj115.AnchorPoint = Vector2.new(0.5,0.5)
-    obj115.AttributesSerialize = ""
     obj115.AutoButtonColor = true
     obj115.AutoLocalize = true
     obj115.AutomaticSize = 0
@@ -3119,7 +2888,6 @@ local function createGui(parent)
     obj115.BorderMode = 0
     obj115.BorderSizePixel = 0
     obj115.ClipsDescendants = false
-    obj115.DefinesCapabilities = false
     obj115.Draggable = false
     obj115.ImageColor3 = Color3.new(1,1,1)
     obj115.ImageRectOffset = Vector2.new(0,0)
@@ -3152,9 +2920,7 @@ local function createGui(parent)
     obj115.ZIndex = 1
     obj115.Parent = obj97
     local obj116 = Instance.new("UICorner")
-    obj116.AttributesSerialize = ""
     obj116.CornerRadius = UDim.new(0,20)
-    obj116.DefinesCapabilities = false
     obj116.Name = "UICorner"
     obj116.SourceAssetId = -1
     obj116.Tags = ""
@@ -3162,7 +2928,6 @@ local function createGui(parent)
     local obj117 = Instance.new("ImageButton")
     obj117.Active = true
     obj117.AnchorPoint = Vector2.new(0.5,0.5)
-    obj117.AttributesSerialize = ""
     obj117.AutoButtonColor = true
     obj117.AutoLocalize = true
     obj117.AutomaticSize = 0
@@ -3172,7 +2937,6 @@ local function createGui(parent)
     obj117.BorderMode = 0
     obj117.BorderSizePixel = 0
     obj117.ClipsDescendants = false
-    obj117.DefinesCapabilities = false
     obj117.Draggable = false
     obj117.ImageColor3 = Color3.new(1,1,1)
     obj117.ImageRectOffset = Vector2.new(0,0)
@@ -3205,9 +2969,7 @@ local function createGui(parent)
     obj117.ZIndex = 1
     obj117.Parent = obj97
     local obj118 = Instance.new("UICorner")
-    obj118.AttributesSerialize = ""
     obj118.CornerRadius = UDim.new(0,20)
-    obj118.DefinesCapabilities = false
     obj118.Name = "UICorner"
     obj118.SourceAssetId = -1
     obj118.Tags = ""
@@ -3215,7 +2977,6 @@ local function createGui(parent)
     local obj119 = Instance.new("ImageButton")
     obj119.Active = true
     obj119.AnchorPoint = Vector2.new(0.5,0.5)
-    obj119.AttributesSerialize = ""
     obj119.AutoButtonColor = true
     obj119.AutoLocalize = true
     obj119.AutomaticSize = 0
@@ -3225,7 +2986,6 @@ local function createGui(parent)
     obj119.BorderMode = 0
     obj119.BorderSizePixel = 0
     obj119.ClipsDescendants = false
-    obj119.DefinesCapabilities = false
     obj119.Draggable = false
     obj119.ImageColor3 = Color3.new(1,1,1)
     obj119.ImageRectOffset = Vector2.new(0,0)
@@ -3258,9 +3018,7 @@ local function createGui(parent)
     obj119.ZIndex = 1
     obj119.Parent = obj97
     local obj120 = Instance.new("UICorner")
-    obj120.AttributesSerialize = ""
     obj120.CornerRadius = UDim.new(0,20)
-    obj120.DefinesCapabilities = false
     obj120.Name = "UICorner"
     obj120.SourceAssetId = -1
     obj120.Tags = ""
@@ -3268,7 +3026,6 @@ local function createGui(parent)
     local obj121 = Instance.new("ImageButton")
     obj121.Active = true
     obj121.AnchorPoint = Vector2.new(0.5,0.5)
-    obj121.AttributesSerialize = ""
     obj121.AutoButtonColor = true
     obj121.AutoLocalize = true
     obj121.AutomaticSize = 0
@@ -3278,7 +3035,6 @@ local function createGui(parent)
     obj121.BorderMode = 0
     obj121.BorderSizePixel = 0
     obj121.ClipsDescendants = false
-    obj121.DefinesCapabilities = false
     obj121.Draggable = false
     obj121.ImageColor3 = Color3.new(1,1,1)
     obj121.ImageRectOffset = Vector2.new(0,0)
@@ -3311,9 +3067,7 @@ local function createGui(parent)
     obj121.ZIndex = 1
     obj121.Parent = obj97
     local obj122 = Instance.new("UICorner")
-    obj122.AttributesSerialize = ""
     obj122.CornerRadius = UDim.new(0,20)
-    obj122.DefinesCapabilities = false
     obj122.Name = "UICorner"
     obj122.SourceAssetId = -1
     obj122.Tags = ""
@@ -3321,7 +3075,6 @@ local function createGui(parent)
     local obj123 = Instance.new("ImageButton")
     obj123.Active = true
     obj123.AnchorPoint = Vector2.new(0.5,0.5)
-    obj123.AttributesSerialize = ""
     obj123.AutoButtonColor = true
     obj123.AutoLocalize = true
     obj123.AutomaticSize = 0
@@ -3331,7 +3084,6 @@ local function createGui(parent)
     obj123.BorderMode = 0
     obj123.BorderSizePixel = 0
     obj123.ClipsDescendants = false
-    obj123.DefinesCapabilities = false
     obj123.Draggable = false
     obj123.ImageColor3 = Color3.new(1,1,1)
     obj123.ImageRectOffset = Vector2.new(0,0)
@@ -3364,9 +3116,7 @@ local function createGui(parent)
     obj123.ZIndex = 1
     obj123.Parent = obj97
     local obj124 = Instance.new("UICorner")
-    obj124.AttributesSerialize = ""
     obj124.CornerRadius = UDim.new(0,20)
-    obj124.DefinesCapabilities = false
     obj124.Name = "UICorner"
     obj124.SourceAssetId = -1
     obj124.Tags = ""
@@ -3374,7 +3124,6 @@ local function createGui(parent)
     local obj125 = Instance.new("ImageButton")
     obj125.Active = true
     obj125.AnchorPoint = Vector2.new(0.5,0.5)
-    obj125.AttributesSerialize = ""
     obj125.AutoButtonColor = true
     obj125.AutoLocalize = true
     obj125.AutomaticSize = 0
@@ -3384,7 +3133,6 @@ local function createGui(parent)
     obj125.BorderMode = 0
     obj125.BorderSizePixel = 0
     obj125.ClipsDescendants = false
-    obj125.DefinesCapabilities = false
     obj125.Draggable = false
     obj125.ImageColor3 = Color3.new(1,1,1)
     obj125.ImageRectOffset = Vector2.new(0,0)
@@ -3417,9 +3165,7 @@ local function createGui(parent)
     obj125.ZIndex = 1
     obj125.Parent = obj97
     local obj126 = Instance.new("UICorner")
-    obj126.AttributesSerialize = ""
     obj126.CornerRadius = UDim.new(0,20)
-    obj126.DefinesCapabilities = false
     obj126.Name = "UICorner"
     obj126.SourceAssetId = -1
     obj126.Tags = ""
@@ -3427,7 +3173,6 @@ local function createGui(parent)
     local obj127 = Instance.new("ImageButton")
     obj127.Active = true
     obj127.AnchorPoint = Vector2.new(0.5,0.5)
-    obj127.AttributesSerialize = ""
     obj127.AutoButtonColor = true
     obj127.AutoLocalize = true
     obj127.AutomaticSize = 0
@@ -3437,7 +3182,6 @@ local function createGui(parent)
     obj127.BorderMode = 0
     obj127.BorderSizePixel = 0
     obj127.ClipsDescendants = false
-    obj127.DefinesCapabilities = false
     obj127.Draggable = false
     obj127.ImageColor3 = Color3.new(1,1,1)
     obj127.ImageRectOffset = Vector2.new(0,0)
@@ -3470,9 +3214,7 @@ local function createGui(parent)
     obj127.ZIndex = 1
     obj127.Parent = obj97
     local obj128 = Instance.new("UICorner")
-    obj128.AttributesSerialize = ""
     obj128.CornerRadius = UDim.new(0,20)
-    obj128.DefinesCapabilities = false
     obj128.Name = "UICorner"
     obj128.SourceAssetId = -1
     obj128.Tags = ""
@@ -3480,7 +3222,6 @@ local function createGui(parent)
     local obj129 = Instance.new("ImageButton")
     obj129.Active = true
     obj129.AnchorPoint = Vector2.new(0.5,0.5)
-    obj129.AttributesSerialize = ""
     obj129.AutoButtonColor = true
     obj129.AutoLocalize = true
     obj129.AutomaticSize = 0
@@ -3490,7 +3231,6 @@ local function createGui(parent)
     obj129.BorderMode = 0
     obj129.BorderSizePixel = 0
     obj129.ClipsDescendants = false
-    obj129.DefinesCapabilities = false
     obj129.Draggable = false
     obj129.ImageColor3 = Color3.new(1,1,1)
     obj129.ImageRectOffset = Vector2.new(0,0)
@@ -3523,9 +3263,7 @@ local function createGui(parent)
     obj129.ZIndex = 1
     obj129.Parent = obj97
     local obj130 = Instance.new("UICorner")
-    obj130.AttributesSerialize = ""
     obj130.CornerRadius = UDim.new(0,20)
-    obj130.DefinesCapabilities = false
     obj130.Name = "UICorner"
     obj130.SourceAssetId = -1
     obj130.Tags = ""
@@ -3533,7 +3271,6 @@ local function createGui(parent)
     local obj131 = Instance.new("ImageButton")
     obj131.Active = true
     obj131.AnchorPoint = Vector2.new(0.5,0.5)
-    obj131.AttributesSerialize = ""
     obj131.AutoButtonColor = true
     obj131.AutoLocalize = true
     obj131.AutomaticSize = 0
@@ -3543,7 +3280,6 @@ local function createGui(parent)
     obj131.BorderMode = 0
     obj131.BorderSizePixel = 0
     obj131.ClipsDescendants = false
-    obj131.DefinesCapabilities = false
     obj131.Draggable = false
     obj131.ImageColor3 = Color3.new(1,1,1)
     obj131.ImageRectOffset = Vector2.new(0,0)
@@ -3576,9 +3312,7 @@ local function createGui(parent)
     obj131.ZIndex = 1
     obj131.Parent = obj97
     local obj132 = Instance.new("UICorner")
-    obj132.AttributesSerialize = ""
     obj132.CornerRadius = UDim.new(0,20)
-    obj132.DefinesCapabilities = false
     obj132.Name = "UICorner"
     obj132.SourceAssetId = -1
     obj132.Tags = ""
@@ -3586,7 +3320,6 @@ local function createGui(parent)
     local obj133 = Instance.new("ImageButton")
     obj133.Active = true
     obj133.AnchorPoint = Vector2.new(0.5,0.5)
-    obj133.AttributesSerialize = ""
     obj133.AutoButtonColor = true
     obj133.AutoLocalize = true
     obj133.AutomaticSize = 0
@@ -3596,7 +3329,6 @@ local function createGui(parent)
     obj133.BorderMode = 0
     obj133.BorderSizePixel = 0
     obj133.ClipsDescendants = false
-    obj133.DefinesCapabilities = false
     obj133.Draggable = false
     obj133.ImageColor3 = Color3.new(1,1,1)
     obj133.ImageRectOffset = Vector2.new(0,0)
@@ -3629,9 +3361,7 @@ local function createGui(parent)
     obj133.ZIndex = 1
     obj133.Parent = obj97
     local obj134 = Instance.new("UICorner")
-    obj134.AttributesSerialize = ""
     obj134.CornerRadius = UDim.new(0,20)
-    obj134.DefinesCapabilities = false
     obj134.Name = "UICorner"
     obj134.SourceAssetId = -1
     obj134.Tags = ""
@@ -3639,7 +3369,6 @@ local function createGui(parent)
     local obj135 = Instance.new("ImageButton")
     obj135.Active = true
     obj135.AnchorPoint = Vector2.new(0.5,0.5)
-    obj135.AttributesSerialize = ""
     obj135.AutoButtonColor = true
     obj135.AutoLocalize = true
     obj135.AutomaticSize = 0
@@ -3649,7 +3378,6 @@ local function createGui(parent)
     obj135.BorderMode = 0
     obj135.BorderSizePixel = 0
     obj135.ClipsDescendants = false
-    obj135.DefinesCapabilities = false
     obj135.Draggable = false
     obj135.ImageColor3 = Color3.new(1,1,1)
     obj135.ImageRectOffset = Vector2.new(0,0)
@@ -3682,9 +3410,7 @@ local function createGui(parent)
     obj135.ZIndex = 1
     obj135.Parent = obj97
     local obj136 = Instance.new("UICorner")
-    obj136.AttributesSerialize = ""
     obj136.CornerRadius = UDim.new(0,20)
-    obj136.DefinesCapabilities = false
     obj136.Name = "UICorner"
     obj136.SourceAssetId = -1
     obj136.Tags = ""
@@ -3692,7 +3418,6 @@ local function createGui(parent)
     local obj137 = Instance.new("ImageButton")
     obj137.Active = true
     obj137.AnchorPoint = Vector2.new(0.5,0.5)
-    obj137.AttributesSerialize = ""
     obj137.AutoButtonColor = true
     obj137.AutoLocalize = true
     obj137.AutomaticSize = 0
@@ -3702,7 +3427,6 @@ local function createGui(parent)
     obj137.BorderMode = 0
     obj137.BorderSizePixel = 0
     obj137.ClipsDescendants = false
-    obj137.DefinesCapabilities = false
     obj137.Draggable = false
     obj137.ImageColor3 = Color3.new(1,1,1)
     obj137.ImageRectOffset = Vector2.new(0,0)
@@ -3735,9 +3459,7 @@ local function createGui(parent)
     obj137.ZIndex = 1
     obj137.Parent = obj97
     local obj138 = Instance.new("UICorner")
-    obj138.AttributesSerialize = ""
     obj138.CornerRadius = UDim.new(0,20)
-    obj138.DefinesCapabilities = false
     obj138.Name = "UICorner"
     obj138.SourceAssetId = -1
     obj138.Tags = ""
@@ -3745,7 +3467,6 @@ local function createGui(parent)
     local obj139 = Instance.new("ImageButton")
     obj139.Active = true
     obj139.AnchorPoint = Vector2.new(0.5,0.5)
-    obj139.AttributesSerialize = ""
     obj139.AutoButtonColor = true
     obj139.AutoLocalize = true
     obj139.AutomaticSize = 0
@@ -3755,7 +3476,6 @@ local function createGui(parent)
     obj139.BorderMode = 0
     obj139.BorderSizePixel = 0
     obj139.ClipsDescendants = false
-    obj139.DefinesCapabilities = false
     obj139.Draggable = false
     obj139.ImageColor3 = Color3.new(1,1,1)
     obj139.ImageRectOffset = Vector2.new(0,0)
@@ -3788,9 +3508,7 @@ local function createGui(parent)
     obj139.ZIndex = 1
     obj139.Parent = obj95
     local obj140 = Instance.new("UICorner")
-    obj140.AttributesSerialize = ""
     obj140.CornerRadius = UDim.new(0,20)
-    obj140.DefinesCapabilities = false
     obj140.Name = "UICorner"
     obj140.SourceAssetId = -1
     obj140.Tags = ""
@@ -3798,7 +3516,6 @@ local function createGui(parent)
     local obj141 = Instance.new("ImageButton")
     obj141.Active = true
     obj141.AnchorPoint = Vector2.new(0.5,0.5)
-    obj141.AttributesSerialize = ""
     obj141.AutoButtonColor = true
     obj141.AutoLocalize = true
     obj141.AutomaticSize = 0
@@ -3808,7 +3525,6 @@ local function createGui(parent)
     obj141.BorderMode = 0
     obj141.BorderSizePixel = 0
     obj141.ClipsDescendants = false
-    obj141.DefinesCapabilities = false
     obj141.Draggable = false
     obj141.ImageColor3 = Color3.new(1,1,1)
     obj141.ImageRectOffset = Vector2.new(0,0)
@@ -3841,9 +3557,7 @@ local function createGui(parent)
     obj141.ZIndex = 1
     obj141.Parent = obj95
     local obj142 = Instance.new("UICorner")
-    obj142.AttributesSerialize = ""
     obj142.CornerRadius = UDim.new(0,20)
-    obj142.DefinesCapabilities = false
     obj142.Name = "UICorner"
     obj142.SourceAssetId = -1
     obj142.Tags = ""
@@ -3851,7 +3565,6 @@ local function createGui(parent)
     local obj143 = Instance.new("ImageButton")
     obj143.Active = true
     obj143.AnchorPoint = Vector2.new(0.5,0.5)
-    obj143.AttributesSerialize = ""
     obj143.AutoButtonColor = true
     obj143.AutoLocalize = true
     obj143.AutomaticSize = 0
@@ -3861,7 +3574,6 @@ local function createGui(parent)
     obj143.BorderMode = 0
     obj143.BorderSizePixel = 0
     obj143.ClipsDescendants = false
-    obj143.DefinesCapabilities = false
     obj143.Draggable = false
     obj143.ImageColor3 = Color3.new(1,1,1)
     obj143.ImageRectOffset = Vector2.new(0,0)
@@ -3894,9 +3606,7 @@ local function createGui(parent)
     obj143.ZIndex = 1
     obj143.Parent = obj91
     local obj144 = Instance.new("UICorner")
-    obj144.AttributesSerialize = ""
     obj144.CornerRadius = UDim.new(0,20)
-    obj144.DefinesCapabilities = false
     obj144.Name = "UICorner"
     obj144.SourceAssetId = -1
     obj144.Tags = ""
@@ -3904,7 +3614,6 @@ local function createGui(parent)
     local obj145 = Instance.new("ImageButton")
     obj145.Active = true
     obj145.AnchorPoint = Vector2.new(0.5,0.5)
-    obj145.AttributesSerialize = ""
     obj145.AutoButtonColor = true
     obj145.AutoLocalize = true
     obj145.AutomaticSize = 0
@@ -3914,7 +3623,6 @@ local function createGui(parent)
     obj145.BorderMode = 0
     obj145.BorderSizePixel = 0
     obj145.ClipsDescendants = false
-    obj145.DefinesCapabilities = false
     obj145.Draggable = false
     obj145.ImageColor3 = Color3.new(1,1,1)
     obj145.ImageRectOffset = Vector2.new(0,0)
@@ -3947,9 +3655,7 @@ local function createGui(parent)
     obj145.ZIndex = 1
     obj145.Parent = obj143
     local obj146 = Instance.new("UICorner")
-    obj146.AttributesSerialize = ""
     obj146.CornerRadius = UDim.new(0,20)
-    obj146.DefinesCapabilities = false
     obj146.Name = "UICorner"
     obj146.SourceAssetId = -1
     obj146.Tags = ""
@@ -3957,7 +3663,6 @@ local function createGui(parent)
     local obj147 = Instance.new("ImageButton")
     obj147.Active = true
     obj147.AnchorPoint = Vector2.new(0.5,0.5)
-    obj147.AttributesSerialize = ""
     obj147.AutoButtonColor = true
     obj147.AutoLocalize = true
     obj147.AutomaticSize = 0
@@ -3967,7 +3672,6 @@ local function createGui(parent)
     obj147.BorderMode = 0
     obj147.BorderSizePixel = 0
     obj147.ClipsDescendants = false
-    obj147.DefinesCapabilities = false
     obj147.Draggable = false
     obj147.ImageColor3 = Color3.new(1,1,1)
     obj147.ImageRectOffset = Vector2.new(0,0)
@@ -4000,9 +3704,7 @@ local function createGui(parent)
     obj147.ZIndex = 1
     obj147.Parent = obj143
     local obj148 = Instance.new("UICorner")
-    obj148.AttributesSerialize = ""
     obj148.CornerRadius = UDim.new(0,20)
-    obj148.DefinesCapabilities = false
     obj148.Name = "UICorner"
     obj148.SourceAssetId = -1
     obj148.Tags = ""
@@ -4010,7 +3712,6 @@ local function createGui(parent)
     local obj149 = Instance.new("ImageButton")
     obj149.Active = true
     obj149.AnchorPoint = Vector2.new(0.5,0.5)
-    obj149.AttributesSerialize = ""
     obj149.AutoButtonColor = true
     obj149.AutoLocalize = true
     obj149.AutomaticSize = 0
@@ -4020,7 +3721,6 @@ local function createGui(parent)
     obj149.BorderMode = 0
     obj149.BorderSizePixel = 0
     obj149.ClipsDescendants = false
-    obj149.DefinesCapabilities = false
     obj149.Draggable = false
     obj149.ImageColor3 = Color3.new(1,1,1)
     obj149.ImageRectOffset = Vector2.new(0,0)
@@ -4053,9 +3753,7 @@ local function createGui(parent)
     obj149.ZIndex = 1
     obj149.Parent = obj143
     local obj150 = Instance.new("UICorner")
-    obj150.AttributesSerialize = ""
     obj150.CornerRadius = UDim.new(0,20)
-    obj150.DefinesCapabilities = false
     obj150.Name = "UICorner"
     obj150.SourceAssetId = -1
     obj150.Tags = ""
@@ -4063,7 +3761,6 @@ local function createGui(parent)
     local obj151 = Instance.new("ImageButton")
     obj151.Active = true
     obj151.AnchorPoint = Vector2.new(0.5,0.5)
-    obj151.AttributesSerialize = ""
     obj151.AutoButtonColor = true
     obj151.AutoLocalize = true
     obj151.AutomaticSize = 0
@@ -4073,7 +3770,6 @@ local function createGui(parent)
     obj151.BorderMode = 0
     obj151.BorderSizePixel = 0
     obj151.ClipsDescendants = false
-    obj151.DefinesCapabilities = false
     obj151.Draggable = false
     obj151.ImageColor3 = Color3.new(1,1,1)
     obj151.ImageRectOffset = Vector2.new(0,0)
@@ -4106,9 +3802,7 @@ local function createGui(parent)
     obj151.ZIndex = 1
     obj151.Parent = obj143
     local obj152 = Instance.new("UICorner")
-    obj152.AttributesSerialize = ""
     obj152.CornerRadius = UDim.new(0,20)
-    obj152.DefinesCapabilities = false
     obj152.Name = "UICorner"
     obj152.SourceAssetId = -1
     obj152.Tags = ""
@@ -4116,7 +3810,6 @@ local function createGui(parent)
     local obj153 = Instance.new("ImageButton")
     obj153.Active = true
     obj153.AnchorPoint = Vector2.new(0.5,0.5)
-    obj153.AttributesSerialize = ""
     obj153.AutoButtonColor = true
     obj153.AutoLocalize = true
     obj153.AutomaticSize = 0
@@ -4126,7 +3819,6 @@ local function createGui(parent)
     obj153.BorderMode = 0
     obj153.BorderSizePixel = 0
     obj153.ClipsDescendants = false
-    obj153.DefinesCapabilities = false
     obj153.Draggable = false
     obj153.ImageColor3 = Color3.new(1,1,1)
     obj153.ImageRectOffset = Vector2.new(0,0)
@@ -4159,9 +3851,7 @@ local function createGui(parent)
     obj153.ZIndex = 1
     obj153.Parent = obj143
     local obj154 = Instance.new("UICorner")
-    obj154.AttributesSerialize = ""
     obj154.CornerRadius = UDim.new(0,20)
-    obj154.DefinesCapabilities = false
     obj154.Name = "UICorner"
     obj154.SourceAssetId = -1
     obj154.Tags = ""
@@ -4169,7 +3859,6 @@ local function createGui(parent)
     local obj155 = Instance.new("ImageButton")
     obj155.Active = true
     obj155.AnchorPoint = Vector2.new(0.5,0.5)
-    obj155.AttributesSerialize = ""
     obj155.AutoButtonColor = true
     obj155.AutoLocalize = true
     obj155.AutomaticSize = 0
@@ -4179,7 +3868,6 @@ local function createGui(parent)
     obj155.BorderMode = 0
     obj155.BorderSizePixel = 0
     obj155.ClipsDescendants = false
-    obj155.DefinesCapabilities = false
     obj155.Draggable = false
     obj155.ImageColor3 = Color3.new(1,1,1)
     obj155.ImageRectOffset = Vector2.new(0,0)
@@ -4212,9 +3900,7 @@ local function createGui(parent)
     obj155.ZIndex = 1
     obj155.Parent = obj143
     local obj156 = Instance.new("UICorner")
-    obj156.AttributesSerialize = ""
     obj156.CornerRadius = UDim.new(0,20)
-    obj156.DefinesCapabilities = false
     obj156.Name = "UICorner"
     obj156.SourceAssetId = -1
     obj156.Tags = ""
@@ -4222,7 +3908,6 @@ local function createGui(parent)
     local obj157 = Instance.new("ImageButton")
     obj157.Active = true
     obj157.AnchorPoint = Vector2.new(0.5,0.5)
-    obj157.AttributesSerialize = ""
     obj157.AutoButtonColor = true
     obj157.AutoLocalize = true
     obj157.AutomaticSize = 0
@@ -4232,7 +3917,6 @@ local function createGui(parent)
     obj157.BorderMode = 0
     obj157.BorderSizePixel = 0
     obj157.ClipsDescendants = false
-    obj157.DefinesCapabilities = false
     obj157.Draggable = false
     obj157.ImageColor3 = Color3.new(1,1,1)
     obj157.ImageRectOffset = Vector2.new(0,0)
@@ -4265,9 +3949,7 @@ local function createGui(parent)
     obj157.ZIndex = 1
     obj157.Parent = obj91
     local obj158 = Instance.new("UICorner")
-    obj158.AttributesSerialize = ""
     obj158.CornerRadius = UDim.new(0,20)
-    obj158.DefinesCapabilities = false
     obj158.Name = "UICorner"
     obj158.SourceAssetId = -1
     obj158.Tags = ""
@@ -4275,7 +3957,6 @@ local function createGui(parent)
     local obj159 = Instance.new("Frame")
     obj159.Active = false
     obj159.AnchorPoint = Vector2.new(0,0)
-    obj159.AttributesSerialize = ""
     obj159.AutoLocalize = true
     obj159.AutomaticSize = 0
     obj159.BackgroundColor3 = Color3.new(1,1,1)
@@ -4284,7 +3965,6 @@ local function createGui(parent)
     obj159.BorderMode = 0
     obj159.BorderSizePixel = 0
     obj159.ClipsDescendants = false
-    obj159.DefinesCapabilities = false
     obj159.Draggable = false
     obj159.Interactable = true
     obj159.LayoutOrder = 0
@@ -4307,9 +3987,7 @@ local function createGui(parent)
     obj159.ZIndex = 1
     obj159.Parent = screenGui
     local obj160 = Instance.new("UICorner")
-    obj160.AttributesSerialize = ""
     obj160.CornerRadius = UDim.new(0,20)
-    obj160.DefinesCapabilities = false
     obj160.Name = "UICorner"
     obj160.SourceAssetId = -1
     obj160.Tags = ""
@@ -4317,7 +3995,6 @@ local function createGui(parent)
     local obj161 = Instance.new("Frame")
     obj161.Active = false
     obj161.AnchorPoint = Vector2.new(0.5,0.5)
-    obj161.AttributesSerialize = ""
     obj161.AutoLocalize = true
     obj161.AutomaticSize = 0
     obj161.BackgroundColor3 = Color3.new(0.43921572,0.43921572,0.43921572)
@@ -4326,7 +4003,6 @@ local function createGui(parent)
     obj161.BorderMode = 0
     obj161.BorderSizePixel = 0
     obj161.ClipsDescendants = false
-    obj161.DefinesCapabilities = false
     obj161.Draggable = false
     obj161.Interactable = true
     obj161.LayoutOrder = 0
@@ -4349,9 +4025,7 @@ local function createGui(parent)
     obj161.ZIndex = 2
     obj161.Parent = obj159
     local obj162 = Instance.new("UICorner")
-    obj162.AttributesSerialize = ""
     obj162.CornerRadius = UDim.new(0,15)
-    obj162.DefinesCapabilities = false
     obj162.Name = "UICorner"
     obj162.SourceAssetId = -1
     obj162.Tags = ""
@@ -4359,7 +4033,6 @@ local function createGui(parent)
     local obj163 = Instance.new("Frame")
     obj163.Active = false
     obj163.AnchorPoint = Vector2.new(0.5,0.5)
-    obj163.AttributesSerialize = ""
     obj163.AutoLocalize = true
     obj163.AutomaticSize = 0
     obj163.BackgroundColor3 = Color3.new(1,1,1)
@@ -4368,7 +4041,6 @@ local function createGui(parent)
     obj163.BorderMode = 0
     obj163.BorderSizePixel = 0
     obj163.ClipsDescendants = false
-    obj163.DefinesCapabilities = false
     obj163.Draggable = false
     obj163.Interactable = true
     obj163.LayoutOrder = 0
@@ -4391,9 +4063,7 @@ local function createGui(parent)
     obj163.ZIndex = 1
     obj163.Parent = obj159
     local obj164 = Instance.new("UICorner")
-    obj164.AttributesSerialize = ""
     obj164.CornerRadius = UDim.new(0,20)
-    obj164.DefinesCapabilities = false
     obj164.Name = "UICorner"
     obj164.SourceAssetId = -1
     obj164.Tags = ""
@@ -4401,7 +4071,6 @@ local function createGui(parent)
     local obj165 = Instance.new("Frame")
     obj165.Active = false
     obj165.AnchorPoint = Vector2.new(0.5,0.5)
-    obj165.AttributesSerialize = ""
     obj165.AutoLocalize = true
     obj165.AutomaticSize = 0
     obj165.BackgroundColor3 = Color3.new(1,1,1)
@@ -4410,7 +4079,6 @@ local function createGui(parent)
     obj165.BorderMode = 0
     obj165.BorderSizePixel = 0
     obj165.ClipsDescendants = false
-    obj165.DefinesCapabilities = false
     obj165.Draggable = false
     obj165.Interactable = true
     obj165.LayoutOrder = 0
@@ -4433,9 +4101,7 @@ local function createGui(parent)
     obj165.ZIndex = 1
     obj165.Parent = obj159
     local obj166 = Instance.new("UICorner")
-    obj166.AttributesSerialize = ""
     obj166.CornerRadius = UDim.new(0,20)
-    obj166.DefinesCapabilities = false
     obj166.Name = "UICorner"
     obj166.SourceAssetId = -1
     obj166.Tags = ""
@@ -4443,7 +4109,6 @@ local function createGui(parent)
     local obj167 = Instance.new("Frame")
     obj167.Active = false
     obj167.AnchorPoint = Vector2.new(0.5,0.5)
-    obj167.AttributesSerialize = ""
     obj167.AutoLocalize = true
     obj167.AutomaticSize = 0
     obj167.BackgroundColor3 = Color3.new(1,1,1)
@@ -4452,7 +4117,6 @@ local function createGui(parent)
     obj167.BorderMode = 0
     obj167.BorderSizePixel = 0
     obj167.ClipsDescendants = false
-    obj167.DefinesCapabilities = false
     obj167.Draggable = false
     obj167.Interactable = true
     obj167.LayoutOrder = 0
@@ -4475,9 +4139,7 @@ local function createGui(parent)
     obj167.ZIndex = 1
     obj167.Parent = obj159
     local obj168 = Instance.new("UICorner")
-    obj168.AttributesSerialize = ""
     obj168.CornerRadius = UDim.new(0,20)
-    obj168.DefinesCapabilities = false
     obj168.Name = "UICorner"
     obj168.SourceAssetId = -1
     obj168.Tags = ""
@@ -4485,7 +4147,6 @@ local function createGui(parent)
     local obj169 = Instance.new("Frame")
     obj169.Active = false
     obj169.AnchorPoint = Vector2.new(0.5,0.5)
-    obj169.AttributesSerialize = ""
     obj169.AutoLocalize = true
     obj169.AutomaticSize = 0
     obj169.BackgroundColor3 = Color3.new(1,1,1)
@@ -4494,7 +4155,6 @@ local function createGui(parent)
     obj169.BorderMode = 0
     obj169.BorderSizePixel = 0
     obj169.ClipsDescendants = false
-    obj169.DefinesCapabilities = false
     obj169.Draggable = false
     obj169.Interactable = true
     obj169.LayoutOrder = 0
@@ -4517,9 +4177,7 @@ local function createGui(parent)
     obj169.ZIndex = 1
     obj169.Parent = obj159
     local obj170 = Instance.new("UICorner")
-    obj170.AttributesSerialize = ""
     obj170.CornerRadius = UDim.new(0,20)
-    obj170.DefinesCapabilities = false
     obj170.Name = "UICorner"
     obj170.SourceAssetId = -1
     obj170.Tags = ""
