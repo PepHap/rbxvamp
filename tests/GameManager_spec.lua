@@ -51,15 +51,6 @@ describe("GameManager", function()
         assert.equals(DungeonSystem, GameManager.systems.Dungeon)
     end)
 
-    it("includes the UI system", function()
-        local UISystem = require("src.UISystem")
-        assert.equals(UISystem, GameManager.systems.UI)
-    end)
-
-    it("registers the main menu UI", function()
-        local MenuUISystem = require("src.MenuUISystem")
-        assert.equals(MenuUISystem, GameManager.systems.MenuUI)
-    end)
 
     it("delegates ticket purchases to CrystalExchangeSystem", function()
         local CrystalExchangeSystem = require("src.CrystalExchangeSystem")

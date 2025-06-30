@@ -1,9 +1,26 @@
-local GuiXmlLoader = require(script.Parent:WaitForChild("GuiXmlLoader"))
-
 local UIBridge = {}
 
 local rootGui
 local cache = {}
+
+local function findFirstDescendant(root, name)
+    if not root or not name then
+        return nil
+    end
+    if root.FindFirstChild then
+        local child = root:FindFirstChild(name)
+        if child then
+            return child
+        end
+        for _, obj in ipairs(root:GetChildren()) do
+            local found = findFirstDescendant(obj, name)
+            if found then
+                return found
+            end
+        end
+    end
+    return nil
+end
 
 ---Initializes the bridge with the given ScreenGui containing the xml UI.
 -- @param gui ScreenGui
@@ -24,7 +41,7 @@ function UIBridge.getFrame(name)
         return nil
     end
     if cache[name] == nil then
-        cache[name] = GuiXmlLoader.findFirstDescendant(rootGui, name)
+        cache[name] = findFirstDescendant(rootGui, name)
     end
     return cache[name]
 end

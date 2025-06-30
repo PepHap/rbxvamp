@@ -158,13 +158,9 @@ function GameManager:update(dt)
     end
 end
 
----Passes admin id list to the AdminConsole system if present.
+-- Passes admin id list to the network system so privileged actions are allowed.
 -- @param ids table array of user ids
 function GameManager:setAdminIds(ids)
-    local console = self.systems and self.systems.AdminConsole
-    if console and console.setAdminIds then
-        console:setAdminIds(ids)
-    end
     if self.networkSystem and self.networkSystem.setAdminIds then
         self.networkSystem:setAdminIds(ids)
     end
@@ -495,88 +491,7 @@ end
 GameManager.lobbySystem = LobbySystem
 GameManager:addSystem("Lobby", LobbySystem)
 
-if RunService:IsClient() then
-    -- Minimal UI for displaying rewards and gacha results
-    local UISystem = require(script.Parent:WaitForChild("UISystem"))
-    GameManager:addSystem("UI", UISystem)
-
-    -- Inventory UI provides equipment and bag management
-    local InventoryUISystem = require(script.Parent:WaitForChild("InventoryUISystem"))
-    InventoryUISystem.itemSystem = GameManager.itemSystem
-    InventoryUISystem.statSystem = StatUpgradeSystem
-    InventoryUISystem.setSystem = SetBonusSystem
-    GameManager:addSystem("InventoryUI", InventoryUISystem)
-
-    -- Gacha UI for rolling rewards
-    local GachaUISystem = require(script.Parent:WaitForChild("GachaUISystem"))
-    GachaUISystem.gameManager = GameManager
-    GameManager:addSystem("GachaUI", GachaUISystem)
-
-
-    -- Skill and companion UI modules
-    local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
-    SkillUISystem.skillSystem = GameManager.skillSystem
-    GameManager:addSystem("SkillUI", SkillUISystem)
-
-    local SkillTreeUISystem = require(script.Parent:WaitForChild("SkillTreeUISystem"))
-    SkillTreeUISystem.treeSystem = GameManager.skillTreeSystem
-    GameManager:addSystem("SkillTreeUI", SkillTreeUISystem)
-
-    local CompanionUISystem = require(script.Parent:WaitForChild("CompanionUISystem"))
-    CompanionUISystem.companionSystem = GameManager.companionSystem
-    GameManager:addSystem("CompanionUI", CompanionUISystem)
-
-    local AchievementUISystem = require(script.Parent:WaitForChild("AchievementUISystem"))
-    AchievementUISystem.achievementSystem = AchievementSystem
-    GameManager:addSystem("AchievementUI", AchievementUISystem)
-
-    -- Main menu UI providing access to inventory and skills
-    local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
-    GameManager:addSystem("MenuUI", MenuUISystem)
-
-    -- UI for upgrading base stats
-    local StatUpgradeUISystem = require(script.Parent:WaitForChild("StatUpgradeUISystem"))
-    StatUpgradeUISystem.statSystem = StatUpgradeSystem
-    GameManager:addSystem("StatUI", StatUpgradeUISystem)
-
-    local DungeonUISystem = require(script.Parent:WaitForChild("DungeonUISystem"))
-    if DungeonSystem then
-        DungeonUISystem.dungeonSystem = DungeonSystem
-    end
-    GameManager:addSystem("DungeonUI", DungeonUISystem)
-
-    local LobbyUISystem = require(script.Parent:WaitForChild("LobbyUISystem"))
-    LobbyUISystem.lobbySystem = LobbySystem
-    GameManager:addSystem("LobbyUI", LobbyUISystem)
-
-    local PartyUISystem = require(script.Parent:WaitForChild("PartyUISystem"))
-    GameManager:addSystem("PartyUI", PartyUISystem)
-
-    local RaidUISystem = require(script.Parent:WaitForChild("RaidUISystem"))
-    GameManager:addSystem("RaidUI", RaidUISystem)
-
-    local EnemyUISystem = require(script.Parent:WaitForChild("EnemyUISystem"))
-    GameManager:addSystem("EnemyUI", EnemyUISystem)
-
-    -- The old PlayerUI duplicated HUD elements and caused visual overlap.
-    -- The legacy PlayerUI is no longer started.
-
-    local ScoreboardUISystem = require(script.Parent:WaitForChild("ScoreboardUISystem"))
-    GameManager:addSystem("ScoreboardUI", ScoreboardUISystem)
-
-    -- Admin console for privileged commands
-    local adminModule
-    local ok, result = pcall(function()
-        return require(script.Parent:WaitForChild("AdminConsoleSystem"))
-    end)
-    if ok then
-        adminModule = result
-    end
-    if adminModule then
-        adminModule.gameManager = GameManager
-        GameManager:addSystem("AdminConsole", adminModule)
-    end
-end
+-- All in-game interface now uses gui.rbxmx and is loaded by ``UILoader``.
 
 -- Manual player input when auto battle is disabled
 if RunService:IsClient() then
@@ -601,16 +516,7 @@ if IS_SERVER then
     GameManager:addSystem("Scoreboard", ScoreboardSystem)
 end
 
--- Simple map UI
-local ProgressMapUISystem = require(script.Parent:WaitForChild("ProgressMapUISystem"))
-ProgressMapUISystem.progressSystem = ProgressMapSystem
-if RunService:IsClient() then
-    GameManager:addSystem("ProgressMapUI", ProgressMapUISystem)
-end
-
--- Tutorial hints
-local TutorialSystem = require(script.Parent:WaitForChild("TutorialSystem"))
-GameManager:addSystem("Tutorial", TutorialSystem)
+-- Tutorial hints no longer display; interface handled entirely via gui.rbxmx
 
 if IS_SERVER then
     -- Server-only functionality is defined in ``ServerGameExtensions``

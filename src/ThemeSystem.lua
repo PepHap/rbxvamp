@@ -8,7 +8,11 @@ local ThemeSystem = {
     lastLevel = nil,
 }
 
-local UITheme = require(script.Parent:WaitForChild("UITheme"))
+-- UITheme was removed alongside the legacy interface modules.
+-- Provide a minimal color table so other systems can still query theme colors.
+local UITheme = {
+    colors = {}
+}
 local EventManager = require(script.Parent:WaitForChild("EventManager"))
 local ok, LightingSystem = pcall(function()
     return require(script.Parent:WaitForChild("LightingSystem"))

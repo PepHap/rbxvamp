@@ -21,19 +21,6 @@ local PlayerInputSystem = {
     keyStates = {},
     ---Reference to the player's position table.
     playerPosition = nil,
-    skillKey = "K",
-    companionKey = "L",
-    gachaKey = "G",
-    rewardKey = "R",
-    questKey = "J",
-    achievementKey = "H",
-    statsKey = "U",
-    progressKey = "P",
-    levelKey = "V",
-    lobbyKey = "O",
-    partyKey = "Y",
-    menuKey = "N",
-    adminKey = "F10",
     ---Reference to the SkillCastSystem for manual skill use.
     skillCastSystem = nil,
     ---Mapping from key names to skill slots.
@@ -48,26 +35,13 @@ else
 end
 local NetworkSystem = require(script.Parent:WaitForChild("NetworkServer"))
 local AutoBattleSystem = require(script.Parent:WaitForChild("AutoBattleSystem"))
-local SkillUISystem = require(script.Parent:WaitForChild("SkillUISystem"))
-local CompanionUISystem = require(script.Parent:WaitForChild("CompanionUISystem"))
-local MenuUISystem = require(script.Parent:WaitForChild("MenuUISystem"))
 local SkillCastSystem
 if RunService:IsServer() then
     local serverFolder = script.Parent.Parent:WaitForChild("server"):WaitForChild("systems")
     SkillCastSystem = require(serverFolder:WaitForChild("SkillCastSystem"))
 end
-local GachaUISystem = require(script.Parent:WaitForChild("GachaUISystem"))
-local RewardGaugeUISystem = require(script.Parent:WaitForChild("RewardGaugeUISystem"))
-local StatUpgradeUISystem = require(script.Parent:WaitForChild("StatUpgradeUISystem"))
 local StatUpgradeSystem = require(script.Parent:WaitForChild("StatUpgradeSystem"))
-local QuestUISystem = require(script.Parent:WaitForChild("QuestUISystem"))
-local AchievementUISystem = require(script.Parent:WaitForChild("AchievementUISystem"))
-local ProgressMapUISystem = require(script.Parent:WaitForChild("ProgressMapUISystem"))
-local LevelUISystem = require(script.Parent:WaitForChild("LevelUISystem"))
-local AdminConsoleSystem = require(script.Parent:FindFirstChild("AdminConsoleSystem"))
 local LobbySystem = require(script.Parent:WaitForChild("LobbySystem"))
-local LobbyUISystem = require(script.Parent:WaitForChild("LobbyUISystem"))
-local PartyUISystem = require(script.Parent:WaitForChild("PartyUISystem"))
 
 
 -- Utility to connect Roblox input events when available
@@ -110,36 +84,7 @@ end
 -- @param isDown boolean whether the key is pressed
 function PlayerInputSystem:setKeyState(key, isDown)
     self.keyStates[key] = isDown and true or false
-    if key == self.skillKey and isDown then
-        MenuUISystem:openTab("Skills")
-    elseif key == self.companionKey and isDown then
-        CompanionUISystem:toggle()
-    elseif key == self.gachaKey and isDown then
-        GachaUISystem:toggle()
-    elseif key == self.rewardKey and isDown then
-        RewardGaugeUISystem:toggle()
-    elseif key == self.questKey and isDown then
-        QuestUISystem:toggle()
-    elseif key == self.achievementKey and isDown then
-        AchievementUISystem:toggle()
-    elseif key == self.progressKey and isDown then
-        ProgressMapUISystem:toggle()
-    elseif key == self.levelKey and isDown then
-        LevelUISystem:toggle()
-    elseif key == self.lobbyKey and isDown then
-        LobbySystem:enter()
-        LobbyUISystem:toggle()
-    elseif key == self.partyKey and isDown then
-        PartyUISystem:toggle()
-    elseif key == self.statsKey and isDown then
-        StatUpgradeUISystem:toggle()
-    elseif key == self.menuKey and isDown then
-        MenuUISystem:toggle()
-    elseif key == self.adminKey and isDown then
-        if AdminConsoleSystem then
-            AdminConsoleSystem:toggle()
-        end
-    elseif isDown and self.skillCastSystem then
+    if isDown and self.skillCastSystem then
         local idx = self.skillKeyMap[key]
         if idx then
             NetworkSystem:fireServer("SkillRequest", idx)

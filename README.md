@@ -51,22 +51,20 @@ RunService.Heartbeat:Connect(function(dt)
 end)
 ```
 
-### Controls
-Press **B** during gameplay to toggle the inventory UI. The panel displays six
-equipment slots arranged in three rows with two slots in each row. The player
-can also use **K** to open skills, **L** for companions and **M** for the main
-menu.
-Use the number keys **1**&ndash;**4** to cast the skills in your slots. When
-the AutoSkill system is enabled, skills will fire automatically whenever they
-are off cooldown.
+### Interface
+All user interface comes from **gui.rbxmx**. During startup
+`StarterGui/UILoader.client.lua` requires the `GeneratedGui` module which
+creates a [`ScreenGui`](https://create.roblox.com/docs/reference/engine/classes/ScreenGui)
+and populates it with instances described in the XML file. No legacy UI modules
+remain and there are no keybinds for toggling windows.
 
-Press **F10** to open the admin console. Only players listed as admins (by
-default the game creator) can run console commands such as adding crystals.
+To rebuild the Lua module after editing `gui.rbxmx`, run:
 
-Quest rewards now include raid keys which allow parties to initiate raid runs
-through the **Party** interface. When the raid begins, the `TeleportSystem`
-teleports all party members to the dedicated raid place using
-`TeleportService:TeleportPartyAsync`.
+```bash
+lua scripts/generate_gui.lua
+```
+This converts the XML into `src/GeneratedGui.lua` so the game loads the
+interface without parsing XML at runtime.
 
 ### Syncing with Rojo
 Install [Rojo](https://rojo.space/docs) and run the following command to sync

@@ -12,12 +12,13 @@ local HttpService = game:GetService("HttpService")
 local src = ReplicatedStorage:WaitForChild("src")
 local ModuleUtil = require(src:WaitForChild("ModuleUtil"))
 
--- Handle player input locally so UI modules can toggle windows
+-- Handle player input locally. The interface built from gui.rbxmx
+-- does not include extra toggle keys but still needs basic input.
 local PlayerInputSystem = ModuleUtil.requireChild(src, "PlayerInputSystem") or {}
 PlayerInputSystem.useRobloxObjects = true
 
--- Start core gameplay systems on the client so UI modules
--- have initialized data like quests and inventory.
+-- Start core gameplay systems on the client so the GUI created
+-- from gui.rbxmx reflects the latest quest and inventory data.
 local GameManager = ModuleUtil.requireChild(src, "ClientGameManager") or {}
 if type(GameManager.start) == "function" then
     GameManager:start()
