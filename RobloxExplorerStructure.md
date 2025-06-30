@@ -22,12 +22,11 @@ ServerScriptService
         QuestSystem (ModuleScript)
         RewardGaugeSystem (ModuleScript)
         SkillSystem (ModuleScript)
-        SkillUISystem (ModuleScript)
-        CompanionUISystem (ModuleScript)
         StatUpgradeSystem (ModuleScript)
-        UISystem (ModuleScript)
-        InventoryUISystem (ModuleScript)
-    GameRunner (Script)
+        -- UI modules were removed; interface comes from gui.rbxmx
+        -- Run `lua scripts/generate_gui.lua` after editing gui.rbxmx
+        -- to regenerate the ScreenGui creator module.
+        GameRunner (Script)
 ```
 
 The `src` folder under `ServerScriptService` mirrors the `src` directory of this repository. Each Lua file becomes a `ModuleScript` with the same name.

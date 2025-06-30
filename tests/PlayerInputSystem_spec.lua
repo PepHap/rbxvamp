@@ -51,22 +51,6 @@ describe("PlayerInputSystem", function()
         assert.equals(0, PlayerSystem.position.x)
     end)
 
-    it("toggles skill and companion UIs using keys", function()
-        local SkillUISystem = require("src.SkillUISystem")
-        local CompanionUISystem = require("src.CompanionUISystem")
-        local MenuUISystem = require("src.MenuUISystem")
-        SkillUISystem.visible = false
-        CompanionUISystem.visible = false
-        MenuUISystem.visible = false
-        PlayerInputSystem:setKeyState(PlayerInputSystem.skillKey, true)
-        assert.is_true(SkillUISystem.visible)
-        assert.is_true(MenuUISystem.visible)
-        assert.equals("Skills", MenuUISystem.tabs[MenuUISystem.currentTab].name)
-        PlayerInputSystem:setKeyState(PlayerInputSystem.companionKey, true)
-        assert.is_true(CompanionUISystem.visible)
-        PlayerInputSystem:setKeyState(PlayerInputSystem.menuKey, true)
-        assert.is_false(MenuUISystem.visible)
-    end)
 
     it("casts skills when number keys are pressed", function()
         local SkillCastSystem = require("server.systems.SkillCastSystem")
