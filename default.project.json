@@ -101,6 +101,18 @@
         },
         "GeneratedGui": {
           "$path": "src/GeneratedGui.lua"
+        },
+        "MessageUI": {
+          "$path": "src/MessageUI.lua"
+        },
+        "InventoryUI": {
+          "$path": "src/InventoryUI.lua"
+        },
+        "GachaUI": {
+          "$path": "src/GachaUI.lua"
+        },
+        "WindowTabs": {
+          "$path": "src/WindowTabs.lua"
         }
       },
       "server": {
@@ -212,6 +224,18 @@
         },
         "GeneratedGui": {
           "$path": "src/GeneratedGui.lua"
+        },
+        "MessageUI": {
+          "$path": "src/MessageUI.lua"
+        },
+        "InventoryUI": {
+          "$path": "src/InventoryUI.lua"
+        },
+        "GachaUI": {
+          "$path": "src/GachaUI.lua"
+        },
+        "WindowTabs": {
+          "$path": "src/WindowTabs.lua"
         }
       }
     },

@@ -5,6 +5,11 @@ local PlayerInputSystem = {}
 
 local UserInputService = game:GetService("UserInputService")
 local GuiService = game:GetService("GuiService")
+local MessageUI = require(script.Parent:WaitForChild("MessageUI"))
+local InventoryUI = require(script.Parent:WaitForChild("InventoryUI"))
+local GachaUI = require(script.Parent:WaitForChild("GachaUI"))
+local UIBridge = require(script.Parent:WaitForChild("UIBridge"))
+local WindowTabs = require(script.Parent:WaitForChild("WindowTabs"))
 
 local INPUT_KEYS = {
 
@@ -26,10 +31,19 @@ local INPUT_KEYS = {
 
     -- Управление стандартными функциями
     toggleChat = Enum.KeyCode.F5,
+    inventory = Enum.KeyCode.M,
+    gacha = Enum.KeyCode.N,
 }
 
 -- Инициализация системы ввода
 function PlayerInputSystem.Initialize()
+    -- Ensure the ScreenGui is available before initializing UI modules
+    -- https://create.roblox.com/docs/reference/engine/classes/ScreenGui
+    UIBridge.waitForGui()
+    InventoryUI.init()
+    GachaUI.init()
+    WindowTabs.init()
+    MessageUI.init()
     PlayerInputSystem.ConnectInputEvents()
 
     print("PlayerInputSystem инициализирован")
@@ -44,6 +58,7 @@ end
 
 -- Подключение событий ввода
 function PlayerInputSystem.ConnectInputEvents()
+    -- https://create.roblox.com/docs/reference/engine/classes/UserInputService#InputBegan
     UserInputService.InputBegan:Connect(function(input, gameProcessed)
         if gameProcessed then return end
 
@@ -64,6 +79,10 @@ function PlayerInputSystem.HandleKeyPress(keyCode)
         PlayerInputSystem.TakeScreenshot()
     elseif keyCode == INPUT_KEYS.fullscreenKey then
         PlayerInputSystem.ToggleFullscreen()
+    elseif keyCode == INPUT_KEYS.inventory then
+        WindowTabs.activateInventory()
+    elseif keyCode == INPUT_KEYS.gacha then
+        WindowTabs.activateSummon()
     end
 end
 

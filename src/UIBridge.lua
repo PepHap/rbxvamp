@@ -3,6 +3,27 @@ local UIBridge = {}
 local rootGui
 local cache = {}
 
+-- Wait until a ScreenGui has been assigned via ``init``.
+-- https://create.roblox.com/docs/reference/engine/classes/ScreenGui
+function UIBridge.waitForGui()
+    while not rootGui do
+        task.wait()
+    end
+end
+
+---Blocks until the named frame is available.
+-- @param name string frame to locate
+-- @return Instance|nil GuiObject
+function UIBridge.waitForFrame(name)
+    UIBridge.waitForGui()
+    local frame = UIBridge.getFrame(name)
+    while not frame do
+        task.wait()
+        frame = UIBridge.getFrame(name)
+    end
+    return frame
+end
+
 local function findFirstDescendant(root, name)
     if not root or not name then
         return nil
