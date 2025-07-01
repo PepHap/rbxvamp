@@ -189,7 +189,7 @@ def main():
     lines.append("end")
     lines.append("return createGui")
 
-    with open('src/GeneratedGui.lua', 'w') as f:
+    with open('src/GeneratedGui.lua', 'w', encoding='utf-8') as f:
         f.write("\n".join(lines))
 
 

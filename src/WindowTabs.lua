@@ -56,7 +56,8 @@ end
 
 local function findButtons(root)
     if not root then
-        return end
+        return
+    end
     WindowTabs.rootWindow = root:FindFirstChild("Window")
         or root:FindFirstChild("window")
         or root
@@ -178,12 +179,16 @@ end
 function WindowTabs.init()
     UIBridge.waitForGui()
     local gui = UIBridge.getScreenGui()
-    if not gui then return end
+    if not gui then
+        return
+    end
     findButtons(gui)
     InventoryUI.hide()
     GachaUI.hide()
     local function connect(btn, handler)
-        if not btn or btn:GetAttribute("_connected") then return end
+        if not btn or btn:GetAttribute("_connected") then
+            return
+        end
         local function hook(obj)
             if obj:IsA("GuiButton") then
                 obj.MouseButton1Click:Connect(handler)
