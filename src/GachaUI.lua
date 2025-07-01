@@ -37,7 +37,10 @@ local function findButtons(root)
             or txt:find("x1")
             or txt:find("open1")
             or txt:find("openbutton1")
-            or txt:find("summon") then
+            or txt:find("summon")
+            or txt:find("открыть%s*1")
+            or txt:find("открыть1")
+            or txt:find("открыть") then
             table.insert(open1Candidates, obj)
         elseif txt:find("open%s*10")
             or txt:find("x10")
@@ -97,8 +100,22 @@ local function connectButtons()
         end)
     end
 
+    if #GachaUI.open1Buttons == 0 and GachaUI.open1 then
+        hookAll(GachaUI.open1, function()
+            GachaUI.currentKind = "skill"
+            GachaUI:roll(1)
+        end)
+    end
+
     for _, btn in ipairs(GachaUI.open10Buttons) do
         hookAll(btn, function()
+            GachaUI.currentKind = "skill"
+            GachaUI:roll(10)
+        end)
+    end
+
+    if #GachaUI.open10Buttons == 0 and GachaUI.open10 then
+        hookAll(GachaUI.open10, function()
             GachaUI.currentKind = "skill"
             GachaUI:roll(10)
         end)
@@ -114,8 +131,10 @@ local function connectResult()
         return
     end
     GachaUI.resultConn = Network:onClientEvent("GachaResult", function(kind, reward)
-        if reward then
-            MessageUI.show("Вы получили: " .. StringUtil.toNameString(reward.name or "?"))
+        if reward and reward.name then
+            MessageUI.show("Вы получили: " .. StringUtil.toNameString(reward.name))
+        elseif reward then
+            MessageUI.show("Вы получили предмет неизвестного типа")
         else
             MessageUI.show("Не удалось открыть")
         end

@@ -21,6 +21,19 @@ local function findSlots(root)
     if equip then
         for _, name in ipairs(SlotConstants.list) do
             local btn = equip:FindFirstChild(name, true)
+            if not btn then
+                for _, child in ipairs(equip:GetDescendants()) do
+                    local n = string.lower(child.Name)
+                    n = n:gsub("%s", "")
+                    if n == string.lower(name).."slot" or
+                       n == "slot"..string.lower(name) or
+                       n == string.lower(name).."слот" or
+                       n == "слот"..string.lower(name) then
+                        btn = child
+                        break
+                    end
+                end
+            end
             if btn then
                 if btn:IsA("GuiButton") then
                     btn.AutoButtonColor = true
@@ -124,7 +137,6 @@ end
 function InventoryUI:unequip(slot)
     local inv = GameManager.inventory
     if not (inv and inv.UnequipToInventory) then
-        self:refresh()
         return
     end
     local removed = inv:UnequipToInventory(slot)
