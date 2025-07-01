@@ -59,15 +59,15 @@ local function connectButtons()
         if obj:IsA("TextButton") or obj:IsA("ImageButton") then
             -- https://create.roblox.com/docs/reference/engine/events/TextButton/MouseButton1Click
             obj.MouseButton1Click:Connect(action)
-        else
-            if obj:IsA("GuiObject") then
-                obj.Active = true
-            end
+        elseif obj:IsA("GuiObject") then
+            obj.Active = true
             obj.InputBegan:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 then
                     action()
                 end
             end)
+        else
+            return
         end
         obj:SetAttribute("_connected", true)
     end
