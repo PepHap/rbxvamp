@@ -49,4 +49,6 @@ return {
     LobbyRequest = "ev_lr_v1",
     StatUpdate = "ev_su_v1",
     AutoBattleToggle = "ev_abt_v1",
+    UnequipRequest = "ev_ur_v1",
+    ItemUnequipped = "ev_iue_v1",
 }

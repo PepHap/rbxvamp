@@ -6,6 +6,7 @@ local GameManager
 local SlotConstants = require(script.Parent:WaitForChild("SlotConstants"))
 local MessageUI = require(script.Parent:WaitForChild("MessageUI"))
 local StringUtil = require(script.Parent:WaitForChild("StringUtil"))
+local NetworkSystem = require(script.Parent:WaitForChild("NetworkSystem"))
 
 InventoryUI.slots = {}
 InventoryUI.inventoryCells = {}
@@ -135,6 +136,10 @@ function InventoryUI:equipFromInventory(index)
 end
 
 function InventoryUI:unequip(slot)
+    if NetworkSystem and NetworkSystem.fireServer then
+        NetworkSystem:fireServer("UnequipRequest", slot)
+        return
+    end
     local inv = GameManager.inventory
     if not (inv and inv.UnequipToInventory) then
         return
@@ -201,6 +206,31 @@ function InventoryUI.init()
         InventoryUI.frame.Visible = false
         findSlots(InventoryUI.frame)
         InventoryUI:refresh()
+        if NetworkSystem and NetworkSystem.onClientEvent then
+            NetworkSystem:onClientEvent("ItemUnequipped", function(item, slot)
+                local inv = GameManager.inventory
+                if inv and inv.itemSystem then
+                    if item then
+                        table.insert(inv.itemSystem.inventory, 1, item)
+                    end
+                    inv.itemSystem.slots[slot] = nil
+                end
+                if item then
+                    if item.name then
+                        MessageUI.show("Снято: " .. StringUtil.toNameString(item.name))
+                    else
+                        MessageUI.show("Снято")
+                    end
+                else
+                    if inv and inv.itemSystem and inv.itemSystem:isInventoryFull() then
+                        MessageUI.show("Инвентарь переполнен")
+                    else
+                        MessageUI.show("Пустой слот")
+                    end
+                end
+                InventoryUI:refresh()
+            end)
+        end
     end
 end
 

@@ -65,7 +65,7 @@ function NetworkSystem:start()
         "RaidRequest", "AttackRequest", "SkillRequest", "SkillCooldown", "QuestUpdate",
         "QuestData", "QuestRequest", "QuestClaim", "PlayerDied", "GachaRequest", "GachaResult",
         "ExchangeRequest", "ExchangeResult", "StatUpgradeRequest", "StatUpdate",
-        "AutoBattleToggle", "LobbyRequest"
+        "AutoBattleToggle", "LobbyRequest", "UnequipRequest", "ItemUnequipped"
     }
     for _, alias in ipairs(aliases) do
         self.events[alias] = createRemoteEvent(alias)
