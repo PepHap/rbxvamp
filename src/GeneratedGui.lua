@@ -93,7 +93,7 @@ local function createGui(parent)
     obj3.BorderSizePixel = 0
     obj3.ClipsDescendants = true
     obj3.Draggable = false
-    obj3.FontFace = ''
+    obj3.FontFace = Font.fromEnum(Enum.Font.SourceSans)
     obj3.Interactable = true
     obj3.LayoutOrder = 0
     obj3.LineHeight = 1
@@ -103,7 +103,7 @@ local function createGui(parent)
     obj3.NextSelectionLeft = nil
     obj3.NextSelectionRight = nil
     obj3.NextSelectionUp = nil
-    obj3.OpenTypeFeatures = ''
+
     obj3.Position = UDim2.new(0.0,0,0.193236619,0)
     obj3.RichText = false
     obj3.Rotation = 0
@@ -147,7 +147,7 @@ local function createGui(parent)
     obj4.BorderSizePixel = 0
     obj4.ClipsDescendants = true
     obj4.Draggable = false
-    obj4.FontFace = ''
+    obj4.FontFace = Font.fromEnum(Enum.Font.SourceSans)
     obj4.Interactable = true
     obj4.LayoutOrder = 0
     obj4.LineHeight = 1
@@ -157,7 +157,7 @@ local function createGui(parent)
     obj4.NextSelectionLeft = nil
     obj4.NextSelectionRight = nil
     obj4.NextSelectionUp = nil
-    obj4.OpenTypeFeatures = ''
+
     obj4.Position = UDim2.new(0.520388365,0,0.193236619,0)
     obj4.RichText = false
     obj4.Rotation = 0
@@ -201,7 +201,7 @@ local function createGui(parent)
     obj5.BorderSizePixel = 0
     obj5.ClipsDescendants = true
     obj5.Draggable = false
-    obj5.FontFace = ''
+    obj5.FontFace = Font.fromEnum(Enum.Font.SourceSans)
     obj5.Interactable = true
     obj5.LayoutOrder = 0
     obj5.LineHeight = 1
@@ -211,7 +211,7 @@ local function createGui(parent)
     obj5.NextSelectionLeft = nil
     obj5.NextSelectionRight = nil
     obj5.NextSelectionUp = nil
-    obj5.OpenTypeFeatures = ''
+
     obj5.Position = UDim2.new(0.244660199,0,0.193236619,0)
     obj5.RichText = false
     obj5.Rotation = 0
@@ -255,7 +255,7 @@ local function createGui(parent)
     obj6.BorderSizePixel = 0
     obj6.ClipsDescendants = true
     obj6.Draggable = false
-    obj6.FontFace = ''
+    obj6.FontFace = Font.fromEnum(Enum.Font.SourceSans)
     obj6.Interactable = true
     obj6.LayoutOrder = 0
     obj6.LineHeight = 1
@@ -265,7 +265,7 @@ local function createGui(parent)
     obj6.NextSelectionLeft = nil
     obj6.NextSelectionRight = nil
     obj6.NextSelectionUp = nil
-    obj6.OpenTypeFeatures = ''
+
     obj6.Position = UDim2.new(0.75145632,0,0.193236619,0)
     obj6.RichText = false
     obj6.Rotation = 0
@@ -2345,7 +2345,7 @@ local function createGui(parent)
     obj85.BorderSizePixel = 0
     obj85.ClipsDescendants = false
     obj85.Draggable = false
-    obj85.FontFace = ''
+    obj85.FontFace = Font.fromEnum(Enum.Font.SourceSans)
     obj85.Interactable = true
     obj85.LayoutOrder = 0
     obj85.LineHeight = 1
@@ -2355,7 +2355,7 @@ local function createGui(parent)
     obj85.NextSelectionLeft = nil
     obj85.NextSelectionRight = nil
     obj85.NextSelectionUp = nil
-    obj85.OpenTypeFeatures = ''
+
     obj85.Position = UDim2.new(0.5,0,0.5,0)
     obj85.RichText = false
     obj85.Rotation = 0
@@ -2555,7 +2555,7 @@ local function createGui(parent)
     obj94.BorderSizePixel = 0
     obj94.ClipsDescendants = false
     obj94.Draggable = false
-    obj94.FontFace = ''
+    obj94.FontFace = Font.fromEnum(Enum.Font.SourceSans)
     obj94.Interactable = true
     obj94.LayoutOrder = 0
     obj94.LineHeight = 1
@@ -2565,7 +2565,7 @@ local function createGui(parent)
     obj94.NextSelectionLeft = nil
     obj94.NextSelectionRight = nil
     obj94.NextSelectionUp = nil
-    obj94.OpenTypeFeatures = ''
+
     obj94.Position = UDim2.new(0.072042942,0,0.0708333328,0)
     obj94.RichText = false
     obj94.Rotation = 0
@@ -2683,7 +2683,7 @@ local function createGui(parent)
     obj98.BorderSizePixel = 0
     obj98.ClipsDescendants = false
     obj98.Draggable = false
-    obj98.FontFace = ''
+    obj98.FontFace = Font.fromEnum(Enum.Font.SourceSans)
     obj98.Interactable = true
     obj98.LayoutOrder = 0
     obj98.LineHeight = 1
@@ -2693,7 +2693,7 @@ local function createGui(parent)
     obj98.NextSelectionLeft = nil
     obj98.NextSelectionRight = nil
     obj98.NextSelectionUp = nil
-    obj98.OpenTypeFeatures = ''
+
     obj98.Position = UDim2.new(0.5,0,0.5,0)
     obj98.RichText = false
     obj98.Rotation = 0
@@ -2907,7 +2907,7 @@ local function createGui(parent)
     obj104.BorderSizePixel = 0
     obj104.ClipsDescendants = false
     obj104.Draggable = false
-    obj104.FontFace = ''
+    obj104.FontFace = Font.fromEnum(Enum.Font.SourceSans)
     obj104.Interactable = true
     obj104.LayoutOrder = 0
     obj104.LineHeight = 1
@@ -2917,7 +2917,7 @@ local function createGui(parent)
     obj104.NextSelectionLeft = nil
     obj104.NextSelectionRight = nil
     obj104.NextSelectionUp = nil
-    obj104.OpenTypeFeatures = ''
+
     obj104.Position = UDim2.new(0.5,0,0.5,0)
     obj104.RichText = false
     obj104.Rotation = 0
@@ -3096,7 +3096,7 @@ local function createGui(parent)
     obj109.BorderSizePixel = 0
     obj109.ClipsDescendants = false
     obj109.Draggable = false
-    obj109.FontFace = ''
+    obj109.FontFace = Font.fromEnum(Enum.Font.SourceSans)
     obj109.Interactable = true
     obj109.LayoutOrder = 0
     obj109.LineHeight = 1
@@ -3106,7 +3106,7 @@ local function createGui(parent)
     obj109.NextSelectionLeft = nil
     obj109.NextSelectionRight = nil
     obj109.NextSelectionUp = nil
-    obj109.OpenTypeFeatures = ''
+
     obj109.Position = UDim2.new(0.5,0,0.5,0)
     obj109.RichText = false
     obj109.Rotation = 0
