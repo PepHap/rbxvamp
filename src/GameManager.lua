@@ -57,6 +57,16 @@ function GameManager:start()
             self.networkSystem:fireClient(player, "SalvageResult", result)
         end)
 
+        self.networkSystem:onServerEvent("UnequipRequest", function(player, slot)
+            local removed
+            if self.inventory and self.inventory.UnequipToInventory then
+                removed = self.inventory:UnequipToInventory(slot)
+            elseif self.itemSystem and self.itemSystem.unequipToInventory then
+                removed = self.itemSystem:unequipToInventory(slot)
+            end
+            self.networkSystem:fireClient(player, "ItemUnequipped", removed, slot)
+        end)
+
         self.networkSystem:onServerEvent("RewardChoice", function(player, index)
             local idx = tonumber(index)
             local choice
