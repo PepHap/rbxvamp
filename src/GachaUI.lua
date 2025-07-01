@@ -2,6 +2,7 @@ local GachaUI = {}
 local UIBridge = require(script.Parent:WaitForChild("UIBridge"))
 local Network = require(script.Parent:WaitForChild("NetworkClient"))
 local MessageUI = require(script.Parent:WaitForChild("MessageUI"))
+local StringUtil = require(script.Parent:WaitForChild("StringUtil"))
 
 GachaUI.frame = nil
 GachaUI.open1 = nil
@@ -114,7 +115,7 @@ local function connectResult()
     end
     GachaUI.resultConn = Network:onClientEvent("GachaResult", function(kind, reward)
         if reward then
-            MessageUI.show("Вы получили: " .. tostring(reward.name or "?"))
+            MessageUI.show("Вы получили: " .. StringUtil.toNameString(reward.name or "?"))
         else
             MessageUI.show("Не удалось открыть")
         end

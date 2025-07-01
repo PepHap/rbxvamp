@@ -5,6 +5,7 @@ local UIBridge = require(script.Parent:WaitForChild("UIBridge"))
 local GameManager
 local SlotConstants = require(script.Parent:WaitForChild("SlotConstants"))
 local MessageUI = require(script.Parent:WaitForChild("MessageUI"))
+local StringUtil = require(script.Parent:WaitForChild("StringUtil"))
 
 InventoryUI.slots = {}
 InventoryUI.inventoryCells = {}
@@ -115,7 +116,7 @@ function InventoryUI:equipFromInventory(index)
         return
     end
     if item and item.name then
-        MessageUI.show("Экипировано: " .. tostring(item.name))
+        MessageUI.show("Экипировано: " .. StringUtil.toNameString(item.name))
     end
     self:refresh()
 end
@@ -129,7 +130,7 @@ function InventoryUI:unequip(slot)
     local removed = inv:UnequipToInventory(slot)
     if removed then
         if removed.name then
-            MessageUI.show("Снято: " .. tostring(removed.name))
+            MessageUI.show("Снято: " .. StringUtil.toNameString(removed.name))
         else
             MessageUI.show("Снято")
         end
