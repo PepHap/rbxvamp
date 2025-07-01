@@ -5,9 +5,9 @@ local GachaSystem = {}
 
 ---Default gacha tickets awarded to new players.
 GachaSystem.startingTickets = {
-    skill = 1,
-    companion = 1,
-    equipment = 1,
+    skill = 10,
+    companion = 10,
+    equipment = 10,
 }
 
 -- Default rarity weight tables used for all reward categories. Each entry is

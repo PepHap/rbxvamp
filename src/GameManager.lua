@@ -91,16 +91,25 @@ function GameManager:start()
             QuestSystem:claimReward(id)
         end)
 
-        self.networkSystem:onServerEvent("GachaRequest", function(player, kind, arg)
-            local reward
+        self.networkSystem:onServerEvent("GachaRequest", function(player, kind, count, slot)
+            count = tonumber(count) or 1
+            local rewards
             if kind == "skill" then
-                reward = GameManager:rollSkill()
+                rewards = GameManager:rollSkill(count)
             elseif kind == "companion" then
-                reward = GameManager:rollCompanion()
+                rewards = GameManager:rollCompanion(count)
             elseif kind == "equipment" then
-                reward = GameManager:rollEquipment(arg)
+                rewards = GameManager:rollEquipment(slot, count)
+            else
+                rewards = {}
             end
-            self.networkSystem:fireClient(player, "GachaResult", kind, reward)
+            if not rewards or #rewards == 0 then
+                self.networkSystem:fireClient(player, "GachaResult", kind)
+            else
+                for _, reward in ipairs(rewards) do
+                    self.networkSystem:fireClient(player, "GachaResult", kind, reward)
+                end
+            end
         end)
 
         self.networkSystem:onServerEvent("ExchangeRequest", function(player, action, kind, amount, slot, currency)
@@ -252,6 +261,9 @@ local InventoryModule = require(script.Parent:WaitForChild("InventoryModule"))
 local ItemSystem = require(script.Parent:WaitForChild("ItemSystem"))
 GameManager.inventory = InventoryModule.new()
 GameManager.itemSystem = GameManager.inventory.itemSystem
+if GachaSystem.setInventory then
+    GachaSystem:setInventory(GameManager.inventory)
+end
 GameManager:addSystem("Items", GameManager.itemSystem)
 
 do

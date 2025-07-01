@@ -9,7 +9,7 @@ end
 local ClientGachaSystem = {
     tickets = {skill = 0, companion = 0, equipment = 0},
     crystals = 0,
-    startingTickets = {skill = 1, companion = 1, equipment = 1},
+    startingTickets = {skill = 10, companion = 10, equipment = 10},
 }
 
 ---Restores ticket and crystal counts from serialized data.

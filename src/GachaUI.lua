@@ -11,6 +11,9 @@ GachaUI.open10Buttons = {}
 GachaUI.banner1 = nil
 GachaUI.allBanners = {}
 GachaUI.resultConn = nil
+GachaUI.currentKind = "skill"
+GachaUI.expectedCount = nil
+GachaUI.resultBuffer = {}
 
 -- Wait until the GUI has been loaded through ``UIBridge``.
 local function findButtons(root)
@@ -92,8 +95,19 @@ local function connectResult()
         return
     end
     GachaUI.resultConn = Network:onClientEvent("GachaResult", function(kind, reward)
-        local name = reward and reward.name or "?"
-        MessageUI.show("Вы получили: " .. tostring(name))
+        if reward then
+            table.insert(GachaUI.resultBuffer, reward.name or "?")
+            if GachaUI.expectedCount and #GachaUI.resultBuffer >= GachaUI.expectedCount then
+                local text = table.concat(GachaUI.resultBuffer, ", ")
+                MessageUI.show("Вы получили: " .. text)
+                GachaUI.resultBuffer = {}
+                GachaUI.expectedCount = nil
+            end
+        else
+            MessageUI.show("Не удалось открыть")
+            GachaUI.resultBuffer = {}
+            GachaUI.expectedCount = nil
+        end
     end)
 end
 
@@ -109,14 +123,15 @@ local function showBanner1()
     end
     hideAllBanners()
     GachaUI.banner1.Visible = true
+    GachaUI.currentKind = "skill"
 end
 
 function GachaUI:roll(count)
     count = count or 1
-    for i = 1, count do
-        if Network and Network.fireServer then
-            Network:fireServer("GachaRequest", "skill")
-        end
+    if Network and Network.fireServer then
+        GachaUI.expectedCount = count
+        GachaUI.resultBuffer = {}
+        Network:fireServer("GachaRequest", GachaUI.currentKind, count)
     end
 end
 

@@ -122,14 +122,22 @@ end
 
 function InventoryUI:unequip(slot)
     local inv = GameManager.inventory
-    if inv and inv.UnequipToInventory then
+    if not (inv and inv.UnequipToInventory) then
+        self:refresh()
+        return
+    end
+    local removed = inv:UnequipToInventory(slot)
+    if removed then
+        if removed.name then
+            MessageUI.show("Снято: " .. tostring(removed.name))
+        else
+            MessageUI.show("Снято")
+        end
+    else
         if inv.itemSystem and inv.itemSystem:isInventoryFull() then
             MessageUI.show("Инвентарь переполнен")
-            return
-        end
-        local removed = inv:UnequipToInventory(slot)
-        if removed and removed.name then
-            MessageUI.show("Снято: " .. tostring(removed.name))
+        else
+            MessageUI.show("Пустой слот")
         end
     end
     self:refresh()
