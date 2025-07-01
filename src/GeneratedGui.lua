@@ -31,7 +31,7 @@ local function createGui(parent)
     obj0.Size = UDim2.new(1,0,1,0)
     obj0.SizeConstraint = 0
     obj0.Style = 0
-    obj0.Visible = true
+    obj0.Visible = false
     obj0.ZIndex = 1
     obj0.Parent = screenGui
     local obj1 = Instance.new("Frame")
@@ -1576,7 +1576,7 @@ local function createGui(parent)
     obj69.Size = UDim2.new(0,1610,0,728)
     obj69.SizeConstraint = 0
     obj69.Style = 0
-    obj69.Visible = true
+    obj69.Visible = false
     obj69.ZIndex = 1
     obj69.Parent = obj0
     local obj70 = Instance.new("UICorner")
@@ -1789,7 +1789,7 @@ local function createGui(parent)
     obj82.AutoLocalize = true
     obj82.AutomaticSize = 0
     obj82.BackgroundColor3 = Color3.new(1,1,1)
-    obj82.BackgroundTransparency = 0
+    obj82.BackgroundTransparency = 1
     obj82.BorderColor3 = Color3.new(0,0,0)
     obj82.BorderMode = 0
     obj82.BorderSizePixel = 0
@@ -1819,7 +1819,7 @@ local function createGui(parent)
     obj83.AutoLocalize = true
     obj83.AutomaticSize = 0
     obj83.BackgroundColor3 = Color3.new(1,1,1)
-    obj83.BackgroundTransparency = 0
+    obj83.BackgroundTransparency = 1
     obj83.BorderColor3 = Color3.new(0,0,0)
     obj83.BorderMode = 0
     obj83.BorderSizePixel = 0
@@ -1844,7 +1844,7 @@ local function createGui(parent)
     obj83.Size = UDim2.new(0.173786402,0,0.607246518,0)
     obj83.SizeConstraint = 0
     obj83.Text = "Монетки"
-    obj83.TextColor3 = Color3.new(0,0,0)
+    obj83.TextColor3 = Color3.new(1,1,1)
     obj83.TextDirection = 0
     obj83.TextScaled = true
     obj83.TextSize = 14
@@ -1864,7 +1864,7 @@ local function createGui(parent)
     obj84.AutoLocalize = true
     obj84.AutomaticSize = 0
     obj84.BackgroundColor3 = Color3.new(1,1,1)
-    obj84.BackgroundTransparency = 0
+    obj84.BackgroundTransparency = 1
     obj84.BorderColor3 = Color3.new(0,0,0)
     obj84.BorderMode = 0
     obj84.BorderSizePixel = 0
@@ -1889,7 +1889,7 @@ local function createGui(parent)
     obj84.Size = UDim2.new(0.173786402,0,0.607246518,0)
     obj84.SizeConstraint = 0
     obj84.Text = "Ключики"
-    obj84.TextColor3 = Color3.new(0,0,0)
+    obj84.TextColor3 = Color3.new(1,1,1)
     obj84.TextDirection = 0
     obj84.TextScaled = true
     obj84.TextSize = 14
@@ -1909,7 +1909,7 @@ local function createGui(parent)
     obj85.AutoLocalize = true
     obj85.AutomaticSize = 0
     obj85.BackgroundColor3 = Color3.new(1,1,1)
-    obj85.BackgroundTransparency = 0
+    obj85.BackgroundTransparency = 1
     obj85.BorderColor3 = Color3.new(0,0,0)
     obj85.BorderMode = 0
     obj85.BorderSizePixel = 0
@@ -1934,7 +1934,7 @@ local function createGui(parent)
     obj85.Size = UDim2.new(0.220388353,0,0.607246518,0)
     obj85.SizeConstraint = 0
     obj85.Text = "Кристаллики"
-    obj85.TextColor3 = Color3.new(0,0,0)
+    obj85.TextColor3 = Color3.new(1,1,1)
     obj85.TextDirection = 0
     obj85.TextScaled = true
     obj85.TextSize = 14
@@ -1954,7 +1954,7 @@ local function createGui(parent)
     obj86.AutoLocalize = true
     obj86.AutomaticSize = 0
     obj86.BackgroundColor3 = Color3.new(1,1,1)
-    obj86.BackgroundTransparency = 0
+    obj86.BackgroundTransparency = 1
     obj86.BorderColor3 = Color3.new(0,0,0)
     obj86.BorderMode = 0
     obj86.BorderSizePixel = 0
@@ -1979,7 +1979,7 @@ local function createGui(parent)
     obj86.Size = UDim2.new(0.220388353,0,0.607246518,0)
     obj86.SizeConstraint = 0
     obj86.Text = "Эфир"
-    obj86.TextColor3 = Color3.new(0,0,0)
+    obj86.TextColor3 = Color3.new(1,1,1)
     obj86.TextDirection = 0
     obj86.TextScaled = true
     obj86.TextSize = 14
@@ -1999,7 +1999,7 @@ local function createGui(parent)
     obj87.AutoLocalize = true
     obj87.AutomaticSize = 0
     obj87.BackgroundColor3 = Color3.new(1,1,1)
-    obj87.BackgroundTransparency = 0
+    obj87.BackgroundTransparency = 1
     obj87.BorderColor3 = Color3.new(0,0,0)
     obj87.BorderMode = 0
     obj87.BorderSizePixel = 0
@@ -2029,7 +2029,7 @@ local function createGui(parent)
     obj88.AutoLocalize = true
     obj88.AutomaticSize = 0
     obj88.BackgroundColor3 = Color3.new(1,1,1)
-    obj88.BackgroundTransparency = 0
+    obj88.BackgroundTransparency = 1
     obj88.BorderColor3 = Color3.new(0,0,0)
     obj88.BorderMode = 0
     obj88.BorderSizePixel = 0
@@ -2059,7 +2059,7 @@ local function createGui(parent)
     obj89.AutoLocalize = true
     obj89.AutomaticSize = 0
     obj89.BackgroundColor3 = Color3.new(1,1,1)
-    obj89.BackgroundTransparency = 0
+    obj89.BackgroundTransparency = 1
     obj89.BorderColor3 = Color3.new(0,0,0)
     obj89.BorderMode = 0
     obj89.BorderSizePixel = 0
@@ -2089,7 +2089,7 @@ local function createGui(parent)
     obj90.AutoLocalize = true
     obj90.AutomaticSize = 0
     obj90.BackgroundColor3 = Color3.new(1,1,1)
-    obj90.BackgroundTransparency = 0
+    obj90.BackgroundTransparency = 1
     obj90.BorderColor3 = Color3.new(0,0,0)
     obj90.BorderMode = 0
     obj90.BorderSizePixel = 0
@@ -3655,7 +3655,7 @@ local function createGui(parent)
     obj159.Size = UDim2.new(0,1610,0,728)
     obj159.SizeConstraint = 0
     obj159.Style = 0
-    obj159.Visible = true
+    obj159.Visible = false
     obj159.ZIndex = 1
     obj159.Parent = screenGui
     local obj160 = Instance.new("UICorner")
@@ -3832,6 +3832,63 @@ local function createGui(parent)
     obj170.CornerRadius = UDim.new(0,20)
     obj170.Name = "UICorner"
     obj170.Parent = obj169
+
+    -- Navigation labels at the top of the window
+    local labels = Instance.new("Frame")
+    labels.Name = "Labels"
+    labels.AnchorPoint = Vector2.new(0.5, 0.5)
+    labels.BackgroundTransparency = 1
+    labels.Position = UDim2.new(0.5, 0, 0.059178762, 0)
+    labels.Size = UDim2.new(0.818713427, 0, 0.11835745, 0)
+    labels.Parent = obj0
+
+    local function createNavButton(name, pos, text)
+        local frame = Instance.new("Frame")
+        frame.Name = name .. "Button"
+        frame.AnchorPoint = Vector2.new(0.5, 0.5)
+        frame.BackgroundTransparency = 1
+        frame.Position = pos
+        frame.Size = UDim2.new(0.1, 0, 0.446999997, 0)
+        frame.Parent = labels
+
+        local image = Instance.new("ImageButton")
+        image.Name = "ImageButton"
+        image.AnchorPoint = Vector2.new(0.5, 0.5)
+        image.Position = UDim2.new(0.5, 0, 0.5, 0)
+        image.Size = UDim2.new(1, 0, 1, 0)
+        image.BackgroundColor3 = Color3.new(0, 0, 0)
+        image.BackgroundTransparency = 0.8
+        image.BorderSizePixel = 1
+        image.AutoButtonColor = true
+        image.Parent = frame
+        local corner = Instance.new("UICorner")
+        corner.CornerRadius = UDim.new(0, 10)
+        corner.Parent = image
+
+        local overlay = Instance.new("ImageButton")
+        overlay.Name = "ImageButton1"
+        overlay.AnchorPoint = Vector2.new(0.5, 0.5)
+        overlay.Position = UDim2.new(0.5, 0, 0.5, 0)
+        overlay.Size = UDim2.new(1, 0, 1, 0)
+        overlay.BackgroundTransparency = 1
+        overlay.Image = "rbxassetid://85985957201684"
+        overlay.AutoButtonColor = false
+        overlay.Parent = frame
+
+        local label = Instance.new("TextLabel")
+        label.AnchorPoint = Vector2.new(0.5, 0.5)
+        label.Position = UDim2.new(0.5, 0, 0.5, 0)
+        label.Size = UDim2.new(1, 0, 1, 0)
+        label.BackgroundTransparency = 1
+        label.Text = text
+        label.TextColor3 = Color3.new(1, 1, 1)
+        label.TextScaled = true
+        label.Parent = frame
+    end
+
+    createNavButton("Inventory", UDim2.new(0.05, 0, 0.5, 0), "inventory")
+    createNavButton("Summon", UDim2.new(0.175, 0, 0.5, 0), "summon")
+
     return screenGui
 end
 return createGui
