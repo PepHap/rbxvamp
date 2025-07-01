@@ -90,11 +90,15 @@ function ItemSystem.new()
     for _, name in ipairs(SlotConstants.list) do
         slotTbl[name] = nil
     end
+    -- Instances inherit the default inventory limit so players can
+    -- actually store items when unequipping or rolling gacha rewards.
+    -- https://create.roblox.com/docs/reference/engine/classes/Instance
     return setmetatable({
         slots = slotTbl,
         ---List of unequipped item tables stored in the inventory.
         inventory = {},
         serialCounter = 0,
+        inventoryLimit = ItemSystem.inventoryLimit,
     }, ItemSystem)
 end
 

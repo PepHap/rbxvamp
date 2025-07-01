@@ -54,37 +54,39 @@ local function findButtons(root)
 end
 
 local function connectButtons()
-    local function hook(btn, action)
-        if not btn or btn:GetAttribute("_connected") then
-            return
-        end
-        if btn:IsA("TextButton") or btn:IsA("ImageButton") then
+    local function hook(obj, action)
+        if not obj or obj:GetAttribute("_connected") then return end
+        if obj:IsA("TextButton") or obj:IsA("ImageButton") then
             -- https://create.roblox.com/docs/reference/engine/events/TextButton/MouseButton1Click
-            btn.MouseButton1Click:Connect(action)
+            obj.MouseButton1Click:Connect(action)
         else
-            -- Non-button objects like Frames or TextLabels need the
-            -- ``Active`` property enabled to receive input callbacks.
-            -- https://create.roblox.com/docs/reference/engine/classes/GuiObject#Active
-            if btn:IsA("GuiObject") then
-                btn.Active = true
+            if obj:IsA("GuiObject") then
+                obj.Active = true
             end
-            btn.InputBegan:Connect(function(input)
+            obj.InputBegan:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 then
                     action()
                 end
             end)
         end
-        btn:SetAttribute("_connected", true)
+        obj:SetAttribute("_connected", true)
+    end
+
+    local function hookAll(btn, action)
+        hook(btn, action)
+        for _, child in ipairs(btn:GetDescendants()) do
+            hook(child, action)
+        end
     end
 
     for _, btn in ipairs(GachaUI.open1Buttons) do
-        hook(btn, function()
+        hookAll(btn, function()
             GachaUI:roll(1)
         end)
     end
 
     for _, btn in ipairs(GachaUI.open10Buttons) do
-        hook(btn, function()
+        hookAll(btn, function()
             GachaUI:roll(10)
         end)
     end

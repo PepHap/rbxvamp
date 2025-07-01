@@ -94,39 +94,23 @@ local function findButtons(root)
     end
 end
 
-local function style(btn, active)
-    if not btn then
-        return
-    end
+local function style(btn)
+    -- Leave all appearance settings untouched so the design exactly
+    -- matches the original "gui.rbxmx" asset. Only ensure every tab
+    -- element can receive input by enabling ``Active`` or the default
+    -- button highlighting.
+    if not btn then return end
     if btn:IsA("GuiButton") then
         btn.AutoButtonColor = true
+    elseif btn:IsA("GuiObject") then
+        btn.Active = true
     end
-
-    -- Base transparency and border style toggle. When the tab is
-    -- active we want a solid button similar to the inventory style.
-    -- Inactive tabs mimic the summon style which is mostly
-    -- transparent without a border.
-    local bgTransparency = active and 0.2 or 0.95
-    local borderSize = active and 1 or 0
-
-    local function apply(obj)
-        if obj:IsA("ImageButton") or obj:IsA("ImageLabel") then
-            obj.BackgroundTransparency = bgTransparency
-            obj.BorderSizePixel = borderSize
-            obj.ImageTransparency = active and 0 or 0.8
-        elseif obj:IsA("Frame") then
-            obj.BackgroundTransparency = bgTransparency
-            obj.BorderSizePixel = borderSize
-        elseif obj:IsA("TextLabel") or obj:IsA("TextButton") then
-            obj.BackgroundTransparency = bgTransparency
-            obj.BorderSizePixel = borderSize
-            obj.TextTransparency = active and 0 or 0.7
-        end
-    end
-
-    apply(btn)
     for _, child in ipairs(btn:GetDescendants()) do
-        apply(child)
+        if child:IsA("GuiButton") then
+            child.AutoButtonColor = true
+        elseif child:IsA("GuiObject") then
+            child.Active = true
+        end
     end
 end
 
@@ -135,13 +119,7 @@ function WindowTabs.update(active)
         WindowTabs.rootWindow.Visible = active ~= nil
     end
     for _, btn in ipairs(WindowTabs.allButtons) do
-        if btn == WindowTabs.inventoryButton then
-            style(btn, active == "inventory")
-        elseif btn == WindowTabs.summonButton then
-            style(btn, active == "summon")
-        else
-            style(btn, false)
-        end
+        style(btn)
     end
 end
 
