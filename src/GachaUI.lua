@@ -134,10 +134,8 @@ function GachaUI.show()
     local frame = GachaUI.frame or UIBridge.waitForFrame("GachaFrame") or UIBridge.waitForFrame("SummonFrame")
     if not frame then return end
     GachaUI.frame = frame
-    if not (GachaUI.open1 and GachaUI.open10) then
-        findButtons(frame)
-        connectButtons()
-    end
+    findButtons(frame)
+    connectButtons()
     connectResult()
     hideAllBanners()
     showBanner1()
@@ -150,9 +148,7 @@ function GachaUI.toggle()
     local frame = GachaUI.frame or UIBridge.waitForFrame("GachaFrame") or UIBridge.waitForFrame("SummonFrame")
     if not frame then return end
     GachaUI.frame = frame
-    if not (GachaUI.open1 and GachaUI.open10) then
-        findButtons(frame)
-    end
+    findButtons(frame)
     connectButtons()
     connectResult()
     hideAllBanners()

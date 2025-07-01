@@ -33,7 +33,11 @@ local function findFirstDescendant(root, name)
         if child then
             return child
         end
+        local lname = string.lower(name)
         for _, obj in ipairs(root:GetChildren()) do
+            if string.lower(obj.Name) == lname then
+                return obj
+            end
             local found = findFirstDescendant(obj, name)
             if found then
                 return found
@@ -51,6 +55,8 @@ function UIBridge.init(gui)
     -- Ensure newly created UI starts hidden so windows don't flash on spawn
     -- https://create.roblox.com/docs/reference/engine/classes/GuiObject#Visible
     if gui then
+        gui.IgnoreGuiInset = true
+        gui.ResetOnSpawn = false
         local window = gui:FindFirstChild("Window")
         if window then
             window.Visible = false

@@ -57,7 +57,9 @@ end
 local function findButtons(root)
     if not root then
         return end
-    WindowTabs.rootWindow = root:FindFirstChild("Window") or root
+    WindowTabs.rootWindow = root:FindFirstChild("Window")
+        or root:FindFirstChild("window")
+        or root
     -- Prefer children of a frame named "Labels" if present
     local labels = root:FindFirstChild("Labels", true)
     if labels then
@@ -182,22 +184,25 @@ function WindowTabs.init()
     GachaUI.hide()
     local function connect(btn, handler)
         if not btn or btn:GetAttribute("_connected") then return end
-        if btn:IsA("GuiButton") then
-            btn.MouseButton1Click:Connect(handler)
-        else
-            local child = btn:FindFirstChildWhichIsA("GuiButton", true)
-            if child then
-                connect(child, handler)
-            end
-            if btn:IsA("GuiObject") then
-                -- Enable input events for frames or text labels
-                btn.Active = true
-            end
-            btn.InputBegan:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                    handler()
+        local function hook(obj)
+            if obj:IsA("GuiButton") then
+                obj.MouseButton1Click:Connect(handler)
+            else
+                if obj:IsA("GuiObject") then
+                    obj.Active = true
                 end
-            end)
+                obj.InputBegan:Connect(function(input)
+                    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                        handler()
+                    end
+                end)
+            end
+        end
+        hook(btn)
+        for _, child in ipairs(btn:GetDescendants()) do
+            if child:IsA("GuiButton") then
+                hook(child)
+            end
         end
         btn:SetAttribute("_connected", true)
     end
