@@ -18,7 +18,7 @@ PlayerLevelSystem.exp = 0
 PlayerLevelSystem.nextExp = 100
 
 ---List of content identifiers unlocked so far.
-PlayerLevelSystem.unlocked = {}
+PlayerLevelSystem.unlocked = {"skills", "companions"}
 
 ---Sets up networking on the client so server updates replicate level data.
 function PlayerLevelSystem:start()
@@ -115,10 +115,22 @@ function PlayerLevelSystem:unlockForLevel(lvl)
     local entry = milestones[lvl]
     if not entry then return end
     if type(entry) == "string" then
+        for _, v in ipairs(self.unlocked) do
+            if v == entry then return end
+        end
         table.insert(self.unlocked, entry)
     elseif type(entry) == "table" then
         if entry.unlock then
-            table.insert(self.unlocked, entry.unlock)
+            local exists = false
+            for _, v in ipairs(self.unlocked) do
+                if v == entry.unlock then
+                    exists = true
+                    break
+                end
+            end
+            if not exists then
+                table.insert(self.unlocked, entry.unlock)
+            end
         end
         grantMilestoneReward(entry.reward)
     end
@@ -207,6 +219,9 @@ function PlayerLevelSystem:loadData(data)
         self.unlocked = {}
         for i, v in ipairs(data.unlocked) do
             self.unlocked[i] = v
+        end
+        if #self.unlocked == 0 then
+            self.unlocked = {"skills", "companions"}
         end
     end
     if RunService:IsServer() then

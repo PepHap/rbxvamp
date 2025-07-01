@@ -210,10 +210,15 @@ end
 -- @param slot string equipment slot
 -- @return table|nil removed item
 function ItemSystem:unequipToInventory(slot)
-    local itm = self:unequip(slot)
-    if itm then
-        table.insert(self.inventory, itm)
+    assertValidSlot(slot)
+    if self:isInventoryFull() then
+        return nil
     end
+    local itm = self:unequip(slot)
+    if not itm then
+        return nil
+    end
+    table.insert(self.inventory, itm)
     return itm
 end
 

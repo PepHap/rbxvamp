@@ -20,46 +20,57 @@ return function(GameManager, src)
     local QuestSystem = require(src:WaitForChild("QuestSystem"))
 
     -- Gacha rewards
-    function GameManager:rollSkill()
+    function GameManager:rollSkill(count)
         if not PlayerLevelSystem:isUnlocked("skills") then
-            return nil
+            return {}
         end
-        local reward = GachaSystem:rollSkill()
-        if reward then
+        count = tonumber(count) or 1
+        local results = {}
+        for _ = 1, count do
+            local reward = GachaSystem:rollSkill()
+            if not reward then
+                break
+            end
+            table.insert(results, reward)
             self.skillSystem:addSkill(reward)
             if self.skillCastSystem and self.skillCastSystem.addSkill then
                 self.skillCastSystem:addSkill(reward)
             end
         end
-        return reward
+        return results
     end
 
-    function GameManager:rollCompanion()
+    function GameManager:rollCompanion(count)
         if not PlayerLevelSystem:isUnlocked("companions") then
-            return nil
+            return {}
         end
-        local reward = GachaSystem:rollCompanion()
-        if reward then
+        count = tonumber(count) or 1
+        local results = {}
+        for _ = 1, count do
+            local reward = GachaSystem:rollCompanion()
+            if not reward then
+                break
+            end
+            table.insert(results, reward)
             self.companionSystem:add(reward)
             local ai = self.systems and self.systems.CompanionAI
             if ai and ai.addCompanion then
                 ai:addCompanion(reward)
             end
         end
-        return reward
+        return results
     end
 
-    function GameManager:rollEquipment(slot)
-        local reward = GachaSystem:rollEquipment(slot)
-        if reward then
+    function GameManager:rollEquipment(slot, count)
+        count = tonumber(count) or 1
+        local rewards = GachaSystem:rollEquipmentMultiple(slot, count)
+        for _, reward in ipairs(rewards) do
             self.itemSystem:assignId(reward)
-            if self.inventory and self.inventory.AddItem then
-                self.inventory:AddItem(reward)
-            else
+            if not (self.inventory and self.inventory.AddItem) then
                 self.itemSystem:addItem(reward)
             end
         end
-        return reward
+        return rewards or {}
     end
 
     -- Reward gauge management
