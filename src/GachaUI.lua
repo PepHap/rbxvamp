@@ -93,7 +93,11 @@ local function connectButtons()
 end
 
 local function connectResult()
-    if GachaUI.resultConn or not Network.onClientEvent then
+    if GachaUI.resultConn then
+        GachaUI.resultConn:Disconnect()
+        GachaUI.resultConn = nil
+    end
+    if not Network.onClientEvent then
         return
     end
     GachaUI.resultConn = Network:onClientEvent("GachaResult", function(kind, reward)
@@ -131,6 +135,7 @@ end
 function GachaUI:roll(count)
     count = count or 1
     if Network and Network.fireServer then
+        connectResult()
         GachaUI.expectedCount = count
         GachaUI.resultBuffer = {}
         Network:fireServer("GachaRequest", GachaUI.currentKind, count)
