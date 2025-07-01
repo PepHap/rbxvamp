@@ -58,9 +58,12 @@ local function ensureLabel(btn)
         label.Name = "Label"
         label.BackgroundTransparency = 1
         label.TextColor3 = Color3.new(1,1,1)
-        label.Size = UDim2.new(1,0,1,0)
+        label.Size = UDim2.fromScale(1,1)
         label.TextScaled = true
         label.Parent = btn
+        local corner = Instance.new("UICorner")
+        corner.CornerRadius = UDim.new(0.05,0)
+        corner.Parent = label
     end
     return label
 end
