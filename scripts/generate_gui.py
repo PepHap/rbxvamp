@@ -77,6 +77,29 @@ def prop_value(node):
                 o = float(c.text or 0)
         s = s + o / BASE_UDIM
         return f"UDim.new({s},0)"
+    if tag == "Font":
+        family = ""
+        weight = 400
+        style = "Normal"
+        for c in node:
+            if c.tag == "Family":
+                family = ""
+                for sub in c:
+                    if sub.tag.lower() == "url":
+                        family = (sub.text or "").strip()
+                        break
+            elif c.tag == "Weight":
+                try:
+                    weight = int(c.text or 400)
+                except ValueError:
+                    weight = 400
+            elif c.tag == "Style":
+                style = (c.text or "Normal").strip()
+        weight_enum = "Enum.FontWeight.Regular"
+        if weight >= 700:
+            weight_enum = "Enum.FontWeight.Bold"
+        style_enum = f"Enum.FontStyle.{style}"
+        return f"Font.new({repr(family)}, {weight_enum}, {style_enum})"
     if tag == "Rect2D":
         min_x = min_y = max_x = max_y = 0
         for c in node:
