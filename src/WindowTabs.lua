@@ -114,12 +114,62 @@ local function style(btn)
     end
 end
 
+local function setActive(btn, active)
+    if not btn then
+        return
+    end
+    local label = btn:FindFirstChildWhichIsA("TextLabel") or btn:FindFirstChild("Label")
+    if active then
+        if btn.BackgroundTransparency ~= 0 then
+            btn.BackgroundTransparency = 0
+        end
+        if btn.BorderSizePixel ~= 2 then
+            btn.BorderSizePixel = 2
+        end
+        if btn.BorderColor3 ~= Color3.new(1,1,1) then
+            btn.BorderColor3 = Color3.new(1,1,1)
+        end
+        if label then
+            if label.TextTransparency ~= 0 then
+                label.TextTransparency = 0
+            end
+            if label.TextColor3 ~= Color3.new(1,1,1) then
+                label.TextColor3 = Color3.new(1,1,1)
+            end
+        end
+    else
+        if btn.BackgroundTransparency ~= 0.5 then
+            btn.BackgroundTransparency = 0.5
+        end
+        if btn.BorderSizePixel ~= 0 then
+            btn.BorderSizePixel = 0
+        end
+        if label then
+            if label.TextTransparency ~= 0.5 then
+                label.TextTransparency = 0.5
+            end
+            if label.TextColor3 ~= Color3.new(1,1,1) then
+                label.TextColor3 = Color3.new(1,1,1)
+            end
+        end
+    end
+end
+
 function WindowTabs.update(active)
     if WindowTabs.rootWindow then
         WindowTabs.rootWindow.Visible = active ~= nil
     end
     for _, btn in ipairs(WindowTabs.allButtons) do
         style(btn)
+        local isInv = btn == WindowTabs.inventoryButton
+        local isSummon = btn == WindowTabs.summonButton
+        if active == "inventory" and isInv then
+            setActive(btn, true)
+        elseif active == "summon" and isSummon then
+            setActive(btn, true)
+        else
+            setActive(btn, false)
+        end
     end
 end
 

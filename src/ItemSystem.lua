@@ -215,6 +215,7 @@ end
 -- @return table|nil removed item
 function ItemSystem:unequipToInventory(slot)
     assertValidSlot(slot)
+    self.inventory = self.inventory or {}
     if self:isInventoryFull() then
         return nil
     end
