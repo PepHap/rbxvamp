@@ -7,6 +7,7 @@ WindowTabs.inventoryButton = nil
 WindowTabs.summonButton = nil
 WindowTabs.labelsRoot = nil
 WindowTabs.allButtons = {}
+WindowTabs.rootWindow = nil
 
 local function matches(obj, variants)
     local name = string.lower(obj.Name)
@@ -56,6 +57,7 @@ end
 local function findButtons(root)
     if not root then
         return end
+    WindowTabs.rootWindow = root:FindFirstChild("Window") or root
     -- Prefer children of a frame named "Labels" if present
     local labels = root:FindFirstChild("Labels", true)
     if labels then
@@ -97,22 +99,25 @@ local function style(btn, active)
         btn.AutoButtonColor = true
     end
 
-    -- Base transparency and border style toggle
-    local bgTransparency = active and 0 or 0.6
+    -- Base transparency and border style toggle. When the tab is
+    -- active we want a solid button similar to the inventory style.
+    -- Inactive tabs mimic the summon style which is mostly
+    -- transparent without a border.
+    local bgTransparency = active and 0.2 or 0.95
     local borderSize = active and 1 or 0
 
     local function apply(obj)
         if obj:IsA("ImageButton") or obj:IsA("ImageLabel") then
             obj.BackgroundTransparency = bgTransparency
             obj.BorderSizePixel = borderSize
-            obj.ImageTransparency = active and 0 or 0.5
+            obj.ImageTransparency = active and 0 or 0.8
         elseif obj:IsA("Frame") then
             obj.BackgroundTransparency = bgTransparency
             obj.BorderSizePixel = borderSize
         elseif obj:IsA("TextLabel") or obj:IsA("TextButton") then
             obj.BackgroundTransparency = bgTransparency
             obj.BorderSizePixel = borderSize
-            obj.TextTransparency = active and 0 or 0.5
+            obj.TextTransparency = active and 0 or 0.7
         end
     end
 
@@ -123,6 +128,9 @@ local function style(btn, active)
 end
 
 function WindowTabs.update(active)
+    if WindowTabs.rootWindow then
+        WindowTabs.rootWindow.Visible = active ~= nil
+    end
     for _, btn in ipairs(WindowTabs.allButtons) do
         if btn == WindowTabs.inventoryButton then
             style(btn, active == "inventory")
@@ -136,6 +144,7 @@ end
 
 function WindowTabs.activateInventory()
     InventoryUI.show()
+    InventoryUI:refresh()
     GachaUI.hide()
     WindowTabs.update("inventory")
 end
@@ -147,22 +156,20 @@ function WindowTabs.activateSummon()
 end
 
 function WindowTabs.toggleInventory()
-    InventoryUI.toggle()
     if InventoryUI.frame and InventoryUI.frame.Visible then
-        GachaUI.hide()
-        WindowTabs.update("inventory")
-    else
+        InventoryUI.hide()
         WindowTabs.update()
+    else
+        WindowTabs.activateInventory()
     end
 end
 
 function WindowTabs.toggleSummon()
-    GachaUI.toggle()
     if GachaUI.frame and GachaUI.frame.Visible then
-        InventoryUI.hide()
-        WindowTabs.update("summon")
-    else
+        GachaUI.hide()
         WindowTabs.update()
+    else
+        WindowTabs.activateSummon()
     end
 end
 
@@ -171,11 +178,20 @@ function WindowTabs.init()
     local gui = UIBridge.getScreenGui()
     if not gui then return end
     findButtons(gui)
+    InventoryUI.hide()
+    GachaUI.hide()
     local function connect(btn, handler)
         if not btn or btn:GetAttribute("_connected") then return end
-        if btn:IsA("TextButton") or btn:IsA("ImageButton") then
+        if btn:IsA("GuiButton") then
             btn.MouseButton1Click:Connect(handler)
         else
+            local child = btn:FindFirstChildWhichIsA("GuiButton", true)
+            if child then
+                connect(child, handler)
+            end
+            if btn:IsA("Frame") then
+                btn.Active = true
+            end
             btn.InputBegan:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 then
                     handler()
@@ -185,10 +201,10 @@ function WindowTabs.init()
         btn:SetAttribute("_connected", true)
     end
 
-    connect(WindowTabs.inventoryButton, WindowTabs.toggleInventory)
-    connect(WindowTabs.summonButton, WindowTabs.toggleSummon)
-    -- Default to inventory style when first initialized
-    WindowTabs.update("inventory")
+    connect(WindowTabs.inventoryButton, WindowTabs.activateInventory)
+    connect(WindowTabs.summonButton, WindowTabs.activateSummon)
+    -- Start with all windows hidden and no active tab
+    WindowTabs.update()
 end
 
 return WindowTabs

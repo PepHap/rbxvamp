@@ -21,6 +21,9 @@ local function findSlots(root)
         for _, name in ipairs(SlotConstants.list) do
             local btn = equip:FindFirstChild(name, true)
             if btn then
+                if btn:IsA("GuiButton") then
+                    btn.AutoButtonColor = true
+                end
                 InventoryUI.slots[name] = btn
                 -- https://create.roblox.com/docs/reference/engine/events/TextButton/MouseButton1Click
                 btn.MouseButton1Click:Connect(function()
@@ -33,6 +36,9 @@ local function findSlots(root)
     if invRoot then
         for _, child in ipairs(invRoot:GetChildren()) do
             if child:IsA("ImageButton") and child.Name:match("InventorySlot") then
+                if child:IsA("GuiButton") then
+                    child.AutoButtonColor = true
+                end
                 table.insert(InventoryUI.inventoryCells, child)
             end
         end
@@ -64,8 +70,10 @@ function InventoryUI:updateButton(btn, item)
     local label = ensureLabel(btn)
     if item then
         label.Text = item.name or ""
+        btn.BackgroundTransparency = 0.2
     else
         label.Text = ""
+        btn.BackgroundTransparency = 0.8
     end
 end
 
