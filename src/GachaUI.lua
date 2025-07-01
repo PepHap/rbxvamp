@@ -61,7 +61,7 @@ end
 
 local function connectButtons()
     local function hook(btn, action)
-        if not btn or btn._connected then
+        if not btn or btn:GetAttribute("_connected") then
             return
         end
         if btn:IsA("TextButton") or btn:IsA("ImageButton") then
@@ -74,7 +74,7 @@ local function connectButtons()
                 end
             end)
         end
-        btn._connected = true
+        btn:SetAttribute("_connected", true)
     end
 
     hook(GachaUI.open1, function()

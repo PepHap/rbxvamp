@@ -96,13 +96,22 @@ local function style(btn, active)
     if btn:IsA("GuiButton") then
         btn.AutoButtonColor = true
     end
-    btn.BackgroundTransparency = active and 0 or 0.6
-    btn.BorderSizePixel = active and 1 or 0
+
+    -- Base transparency and border style toggle
+    local bgTransparency = active and 0 or 0.6
+    local borderSize = active and 1 or 0
 
     local function apply(obj)
         if obj:IsA("ImageButton") or obj:IsA("ImageLabel") then
+            obj.BackgroundTransparency = bgTransparency
+            obj.BorderSizePixel = borderSize
             obj.ImageTransparency = active and 0 or 0.5
+        elseif obj:IsA("Frame") then
+            obj.BackgroundTransparency = bgTransparency
+            obj.BorderSizePixel = borderSize
         elseif obj:IsA("TextLabel") or obj:IsA("TextButton") then
+            obj.BackgroundTransparency = bgTransparency
+            obj.BorderSizePixel = borderSize
             obj.TextTransparency = active and 0 or 0.5
         end
     end
@@ -163,7 +172,7 @@ function WindowTabs.init()
     if not gui then return end
     findButtons(gui)
     local function connect(btn, handler)
-        if not btn or btn._connected then return end
+        if not btn or btn:GetAttribute("_connected") then return end
         if btn:IsA("TextButton") or btn:IsA("ImageButton") then
             btn.MouseButton1Click:Connect(handler)
         else
@@ -173,7 +182,7 @@ function WindowTabs.init()
                 end
             end)
         end
-        btn._connected = true
+        btn:SetAttribute("_connected", true)
     end
 
     connect(WindowTabs.inventoryButton, WindowTabs.toggleInventory)
