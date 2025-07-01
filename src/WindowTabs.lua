@@ -79,10 +79,10 @@ local function findButtons(root)
         local searchRoot = labels or root
         for _, obj in ipairs(searchRoot:GetDescendants()) do
             if obj:IsA("TextButton") or obj:IsA("ImageButton") or obj:IsA("TextLabel") then
-                if not WindowTabs.inventoryButton and matches(obj, {"Inventory"}) then
+                if not WindowTabs.inventoryButton and matches(obj, {"Inventory", "Bag", "Backpack"}) then
                     WindowTabs.inventoryButton = obj
                     addButton(obj)
-                elseif not WindowTabs.summonButton and matches(obj, {"Summon", "Gacha"}) then
+                elseif not WindowTabs.summonButton and matches(obj, {"Summon", "Gacha", "Summons"}) then
                     WindowTabs.summonButton = obj
                     addButton(obj)
                 end
@@ -189,7 +189,8 @@ function WindowTabs.init()
             if child then
                 connect(child, handler)
             end
-            if btn:IsA("Frame") then
+            if btn:IsA("GuiObject") then
+                -- Enable input events for frames or text labels
                 btn.Active = true
             end
             btn.InputBegan:Connect(function(input)

@@ -63,6 +63,10 @@ function UIBridge.init(gui)
         if gacha then
             gacha.Visible = false
         end
+        local hud = gui:FindFirstChild("Hud")
+        if hud then
+            hud.Visible = true
+        end
     end
 end
 
