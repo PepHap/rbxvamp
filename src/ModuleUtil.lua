@@ -21,6 +21,9 @@ function ModuleUtil.requireChild(parent, name, timeout)
                 container.Name .. "." .. name .. ".client.module.lua",
                 container.Name .. "." .. name .. ".server.module",
                 container.Name .. "." .. name .. ".server.module.lua",
+                container.Name .. "_" .. name,
+                container.Name .. "_" .. name .. ".module",
+                container.Name .. "_" .. name .. ".module.lua",
                 name .. ".module",
                 name .. ".module.lua",
                 name .. ".client.module",
@@ -34,6 +37,9 @@ function ModuleUtil.requireChild(parent, name, timeout)
                 parent.Name .. "." .. name .. ".client.module.lua",
                 parent.Name .. "." .. name .. ".server.module",
                 parent.Name .. "." .. name .. ".server.module.lua",
+                parent.Name .. "_" .. name,
+                parent.Name .. "_" .. name .. ".module",
+                parent.Name .. "_" .. name .. ".module.lua",
                 parent.Name .. "." .. name,
             }
             for _, n in ipairs(altNames) do
@@ -52,6 +58,9 @@ function ModuleUtil.requireChild(parent, name, timeout)
                 parent.Name .. "." .. name .. ".client.module.lua",
                 parent.Name .. "." .. name .. ".server.module",
                 parent.Name .. "." .. name .. ".server.module.lua",
+                parent.Name .. "_" .. name,
+                parent.Name .. "_" .. name .. ".module",
+                parent.Name .. "_" .. name .. ".module.lua",
             }
             for _, n in ipairs(siblingNames) do
                 found = container.Parent and container.Parent:FindFirstChild(n)
