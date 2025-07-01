@@ -222,14 +222,14 @@
 						<token name="SizeConstraint">0</token>
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
-						<string name="Text">&#208;&#156;&#208;&#190;&#208;&#189;&#208;&#181;&#209;&#130;&#208;&#186;&#208;&#184;</string>
+                                                <string name="Text">&#1052;&#1086;&#1085;&#1077;&#1090;&#1082;&#1080;</string>
 						<Color3 name="TextColor3">
 							<R>0</R>
 							<G>0</G>
 							<B>0</B>
 						</Color3>
 						<token name="TextDirection">0</token>
-						<bool name="TextScaled">false</bool>
+						<bool name="TextScaled">true</bool>
 						<float name="TextSize">14</float>
 						<Color3 name="TextStrokeColor3">
 							<R>0</R>
@@ -317,14 +317,14 @@
 						<token name="SizeConstraint">0</token>
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
-						<string name="Text">&#208;&#154;&#208;&#187;&#209;&#142;&#209;&#135;&#208;&#184;&#208;&#186;&#208;&#184;&#209;&#139;</string>
+                                                <string name="Text">&#1050;&#1083;&#1102;&#1095;&#1080;&#1082;&#1080;</string>
 						<Color3 name="TextColor3">
 							<R>0</R>
 							<G>0</G>
 							<B>0</B>
 						</Color3>
 						<token name="TextDirection">0</token>
-						<bool name="TextScaled">false</bool>
+						<bool name="TextScaled">true</bool>
 						<float name="TextSize">14</float>
 						<Color3 name="TextStrokeColor3">
 							<R>0</R>
@@ -412,14 +412,14 @@
 						<token name="SizeConstraint">0</token>
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
-						<string name="Text">&#208;&#154;&#209;&#128;&#208;&#184;&#209;&#129;&#209;&#130;&#208;&#176;&#208;&#187;&#208;&#184;&#208;&#186;&#208;&#184; &#208;&#188;&#208;&#181;&#209;&#132;&#209;&#139;</string>
+                                                <string name="Text">&#1050;&#1088;&#1080;&#1089;&#1090;&#1072;&#1083;&#1083;&#1080;&#1082;&#1080;</string>
 						<Color3 name="TextColor3">
 							<R>0</R>
 							<G>0</G>
 							<B>0</B>
 						</Color3>
 						<token name="TextDirection">0</token>
-						<bool name="TextScaled">false</bool>
+						<bool name="TextScaled">true</bool>
 						<float name="TextSize">14</float>
 						<Color3 name="TextStrokeColor3">
 							<R>0</R>
@@ -507,14 +507,14 @@
 						<token name="SizeConstraint">0</token>
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
-						<string name="Text">&#208;&#173;&#209;&#132;&#208;&#184;&#209;&#128;&#209;&#128;</string>
+                                                <string name="Text">&#1069;&#1092;&#1080;&#1088;</string>
 						<Color3 name="TextColor3">
 							<R>0</R>
 							<G>0</G>
 							<B>0</B>
 						</Color3>
 						<token name="TextDirection">0</token>
-						<bool name="TextScaled">false</bool>
+						<bool name="TextScaled">true</bool>
 						<float name="TextSize">14</float>
 						<Color3 name="TextStrokeColor3">
 							<R>0</R>
@@ -5125,7 +5125,7 @@
 								<B>1</B>
 							</Color3>
 							<token name="TextDirection">0</token>
-							<bool name="TextScaled">false</bool>
+							<bool name="TextScaled">true</bool>
 							<float name="TextSize">28</float>
 							<Color3 name="TextStrokeColor3">
 								<R>0</R>
@@ -5531,7 +5531,7 @@
 								<B>1</B>
 							</Color3>
 							<token name="TextDirection">0</token>
-							<bool name="TextScaled">false</bool>
+							<bool name="TextScaled">true</bool>
 							<float name="TextSize">28</float>
 							<Color3 name="TextStrokeColor3">
 								<R>0</R>
@@ -5767,7 +5767,7 @@
 								<B>1</B>
 							</Color3>
 							<token name="TextDirection">0</token>
-							<bool name="TextScaled">false</bool>
+							<bool name="TextScaled">true</bool>
 							<float name="TextSize">28</float>
 							<Color3 name="TextStrokeColor3">
 								<R>0</R>
@@ -6213,7 +6213,7 @@
 								<B>1</B>
 							</Color3>
 							<token name="TextDirection">0</token>
-							<bool name="TextScaled">false</bool>
+							<bool name="TextScaled">true</bool>
 							<float name="TextSize">28</float>
 							<Color3 name="TextStrokeColor3">
 								<R>0</R>
@@ -6595,7 +6595,7 @@
 								<B>1</B>
 							</Color3>
 							<token name="TextDirection">0</token>
-							<bool name="TextScaled">false</bool>
+							<bool name="TextScaled">true</bool>
 							<float name="TextSize">28</float>
 							<Color3 name="TextStrokeColor3">
 								<R>0</R>
