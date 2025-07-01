@@ -170,15 +170,15 @@ function WindowTabs.init()
         local function hook(obj)
             if obj:IsA("GuiButton") then
                 obj.MouseButton1Click:Connect(handler)
-            else
-                if obj:IsA("GuiObject") then
-                    obj.Active = true
-                end
+            elseif obj:IsA("GuiObject") then
+                obj.Active = true
                 obj.InputBegan:Connect(function(input)
                     if input.UserInputType == Enum.UserInputType.MouseButton1 then
                         handler()
                     end
                 end)
+            else
+                return
             end
         end
         hook(btn)
