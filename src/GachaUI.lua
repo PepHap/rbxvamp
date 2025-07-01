@@ -9,6 +9,7 @@ GachaUI.open10 = nil
 GachaUI.open1Buttons = {}
 GachaUI.open10Buttons = {}
 GachaUI.banner1 = nil
+GachaUI.mainBanner = nil
 GachaUI.allBanners = {}
 GachaUI.resultConn = nil
 GachaUI.currentKind = "skill"
@@ -31,16 +32,27 @@ local function findButtons(root)
             txt = txt .. " " .. string.lower(lbl.Text or "")
         end
 
-        if txt:find("open%s*1") or txt:find("x1") or txt:find("open1") or txt:find("openbutton1") then
+        if txt:find("open%s*1")
+            or txt:find("x1")
+            or txt:find("open1")
+            or txt:find("openbutton1")
+            or txt:find("summon") then
             table.insert(open1Candidates, obj)
-        elseif txt:find("open%s*10") or txt:find("x10") or txt:find("open10") or txt:find("openbutton10") then
+        elseif txt:find("open%s*10")
+            or txt:find("x10")
+            or txt:find("open10")
+            or txt:find("openbutton10") then
             table.insert(open10Candidates, obj)
         elseif txt:find("openbutton") then
             table.insert(open1Candidates, obj)
-        elseif obj:IsA("Frame") and txt:find("gachabanner") then
-            table.insert(GachaUI.allBanners, obj)
-            if obj.Name == "GachaBanner1" then
-                GachaUI.banner1 = obj
+        elseif obj:IsA("Frame") then
+            if txt == "gachamainbanner" then
+                GachaUI.mainBanner = obj
+            elseif txt:find("gachabanner") then
+                table.insert(GachaUI.allBanners, obj)
+                if obj.Name == "GachaBanner1" then
+                    GachaUI.banner1 = obj
+                end
             end
         end
     end
@@ -113,6 +125,9 @@ local function hideAllBanners()
     for _, frame in ipairs(GachaUI.allBanners) do
         frame.Visible = false
     end
+    if GachaUI.mainBanner then
+        GachaUI.mainBanner.Visible = false
+    end
 end
 
 local function showBanner1()
@@ -120,6 +135,9 @@ local function showBanner1()
         return
     end
     hideAllBanners()
+    if GachaUI.mainBanner then
+        GachaUI.mainBanner.Visible = true
+    end
     GachaUI.banner1.Visible = true
     GachaUI.currentKind = "skill"
 end
