@@ -121,14 +121,19 @@
       "GameRunner": {
         "$path": "ServerScriptService/GameRunner.server.lua"
       },
-      "MainServer": {
-        "$path": "ServerScriptService/MainServer.server.lua"
-      }
-    },
-    "ReplicatedStorage": {
-      "assets": {
-        "$path": "assets"
+        "MainServer": {
+          "$path": "ServerScriptService/MainServer.server.lua"
+        }
       },
+      "ServerStorage": {
+        "assets": {
+          "$path": "assets"
+        }
+      },
+      "ReplicatedStorage": {
+        "assets": {
+          "$path": "assets"
+        },
       "src": {
         "$path": "src",
         "$className": "Folder",

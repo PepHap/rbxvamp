@@ -109,7 +109,12 @@ end
 -- @return any loaded module or nil
 function ModuleUtil.loadAssetModule(name, timeout)
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local ServerStorage = game:GetService("ServerStorage")
     local assets = ReplicatedStorage:FindFirstChild("assets")
+    if not assets then
+        assets = ServerStorage:FindFirstChild("assets")
+    end
+
     if assets then
         local mod = ModuleUtil.requireChild(assets, name, timeout or 5)
         if mod then
@@ -117,7 +122,7 @@ function ModuleUtil.loadAssetModule(name, timeout)
         end
     end
 
-    -- Fallback to a local assets folder when running outside of Studio
+    -- Fallback to a local assets folder so tests can run outside Studio
     local localAssets = script.Parent.Parent:FindFirstChild("assets")
     if localAssets then
         local child = localAssets:FindFirstChild(name)

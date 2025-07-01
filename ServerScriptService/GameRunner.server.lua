@@ -5,10 +5,21 @@
 if not game:IsLoaded() then
     game.Loaded:Wait()
 end
-
 local src = script.Parent:WaitForChild("src")
 local server = script.Parent:WaitForChild("server")
 local GameManager = require(server:WaitForChild("ServerGameManager"))
+
+-- Ensure asset modules are replicated to clients
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerStorage = game:GetService("ServerStorage")
+local assets = ReplicatedStorage:FindFirstChild("assets")
+if not assets then
+    local ssAssets = ServerStorage:FindFirstChild("assets")
+    if ssAssets then
+        assets = ssAssets:Clone()
+        assets.Parent = ReplicatedStorage
+    end
+end
 
 local ADMIN_IDS = {game.CreatorId}
 
