@@ -70,7 +70,10 @@ local function propValue(node)
             if c.name == "YS" or c.name == "YScale" then ys = tonumber(c.children[1].text) end
             if c.name == "YO" or c.name == "YOffset" then yo = tonumber(c.children[1].text) end
         end
-        return string.format("UDim2.new(%s,%s,%s,%s)", xs, xo, ys, yo)
+        local baseW, baseH = 1920, 1080
+        xs = xs + xo / baseW
+        ys = ys + yo / baseH
+        return string.format("UDim2.fromScale(%s,%s)", xs, ys)
     elseif t == "Color3" then
         local r, g, b = 0, 0, 0
         for _, c in ipairs(node.children) do
@@ -85,7 +88,9 @@ local function propValue(node)
             if c.name == "S" or c.name == "Scale" then s = tonumber(c.children[1].text) end
             if c.name == "O" or c.name == "Offset" then o = tonumber(c.children[1].text) end
         end
-        return string.format("UDim.new(%s,%s)", s, o)
+        local base = 1000
+        s = s + o / base
+        return string.format("UDim.new(%s,0)", s)
     end
     return string.format("%q", val)
 end
@@ -117,6 +122,12 @@ local function genItem(node, parent)
     end
     if parent then
         outLines[#outLines + 1] = string.format("    %s.Parent = %s", var, parent)
+    end
+    if node.attrs.class == "TextLabel" then
+        local cornerVar = "corner" .. index
+        outLines[#outLines + 1] = string.format("    local %s = Instance.new(\"UICorner\")", cornerVar)
+        outLines[#outLines + 1] = string.format("    %s.CornerRadius = UDim.new(0.05,0)", cornerVar)
+        outLines[#outLines + 1] = string.format("    %s.Parent = %s", cornerVar, var)
     end
 end
 

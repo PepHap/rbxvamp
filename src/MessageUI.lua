@@ -14,11 +14,14 @@ function MessageUI.init()
         lbl.BackgroundTransparency = 0.5
         lbl.TextColor3 = Color3.new(1,1,1)
         lbl.AnchorPoint = Vector2.new(0.5,0)
-        lbl.Position = UDim2.new(0.5,0,0.05,0)
-        lbl.Size = UDim2.new(0,400,0,40)
+        lbl.Position = UDim2.fromScale(0.5,0.05)
+        lbl.Size = UDim2.fromScale(0.208,0.037)
         lbl.Visible = false
         lbl.TextScaled = true
         lbl.Parent = gui
+        local corner = Instance.new("UICorner")
+        corner.CornerRadius = UDim.new(0.05,0)
+        corner.Parent = lbl
         MessageUI.label = lbl
     end
 end
