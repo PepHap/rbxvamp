@@ -91,6 +91,26 @@ local function propValue(node)
         local base = 1000
         s = s + o / base
         return string.format("UDim.new(%s,0)", s)
+    elseif t == "Font" then
+        local family = ""
+        local weight = 400
+        local style = "Normal"
+        for _, c in ipairs(node.children) do
+            if c.name == "Family" then
+                local urlNode = c.children[1]
+                family = urlNode and urlNode.text or ""
+            elseif c.name == "Weight" then
+                weight = tonumber(c.children[1] and c.children[1].text) or 400
+            elseif c.name == "Style" then
+                style = c.children[1] and c.children[1].text or "Normal"
+            end
+        end
+        local weightEnum = "Enum.FontWeight.Regular"
+        if weight and weight >= 700 then
+            weightEnum = "Enum.FontWeight.Bold"
+        end
+        local styleEnum = "Enum.FontStyle." .. style
+        return string.format("Font.new(%q, %s, %s)", family, weightEnum, styleEnum)
     end
     return string.format("%q", val)
 end

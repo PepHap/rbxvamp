@@ -93,7 +93,7 @@ local function createGui(parent)
     obj3.BorderSizePixel = 0
     obj3.ClipsDescendants = true
     obj3.Draggable = false
-    obj3.FontFace = ''
+    obj3.FontFace = Font.new('rbxasset://fonts/families/SourceSansPro.json', Enum.FontWeight.Regular, Enum.FontStyle.Normal)
     obj3.Interactable = true
     obj3.LayoutOrder = 0
     obj3.LineHeight = 1
@@ -147,7 +147,7 @@ local function createGui(parent)
     obj4.BorderSizePixel = 0
     obj4.ClipsDescendants = true
     obj4.Draggable = false
-    obj4.FontFace = ''
+    obj4.FontFace = Font.new('rbxasset://fonts/families/SourceSansPro.json', Enum.FontWeight.Regular, Enum.FontStyle.Normal)
     obj4.Interactable = true
     obj4.LayoutOrder = 0
     obj4.LineHeight = 1
@@ -201,7 +201,7 @@ local function createGui(parent)
     obj5.BorderSizePixel = 0
     obj5.ClipsDescendants = true
     obj5.Draggable = false
-    obj5.FontFace = ''
+    obj5.FontFace = Font.new('rbxasset://fonts/families/SourceSansPro.json', Enum.FontWeight.Regular, Enum.FontStyle.Normal)
     obj5.Interactable = true
     obj5.LayoutOrder = 0
     obj5.LineHeight = 1
@@ -255,7 +255,7 @@ local function createGui(parent)
     obj6.BorderSizePixel = 0
     obj6.ClipsDescendants = true
     obj6.Draggable = false
-    obj6.FontFace = ''
+    obj6.FontFace = Font.new('rbxasset://fonts/families/SourceSansPro.json', Enum.FontWeight.Regular, Enum.FontStyle.Normal)
     obj6.Interactable = true
     obj6.LayoutOrder = 0
     obj6.LineHeight = 1
@@ -2345,7 +2345,7 @@ local function createGui(parent)
     obj85.BorderSizePixel = 0
     obj85.ClipsDescendants = false
     obj85.Draggable = false
-    obj85.FontFace = ''
+    obj85.FontFace = Font.new('rbxasset://fonts/families/GothamSSm.json', Enum.FontWeight.Regular, Enum.FontStyle.Normal)
     obj85.Interactable = true
     obj85.LayoutOrder = 0
     obj85.LineHeight = 1
@@ -2555,7 +2555,7 @@ local function createGui(parent)
     obj94.BorderSizePixel = 0
     obj94.ClipsDescendants = false
     obj94.Draggable = false
-    obj94.FontFace = ''
+    obj94.FontFace = Font.new('rbxasset://fonts/families/GothamSSm.json', Enum.FontWeight.Regular, Enum.FontStyle.Normal)
     obj94.Interactable = true
     obj94.LayoutOrder = 0
     obj94.LineHeight = 1
@@ -2683,7 +2683,7 @@ local function createGui(parent)
     obj98.BorderSizePixel = 0
     obj98.ClipsDescendants = false
     obj98.Draggable = false
-    obj98.FontFace = ''
+    obj98.FontFace = Font.new('rbxasset://fonts/families/GothamSSm.json', Enum.FontWeight.Regular, Enum.FontStyle.Normal)
     obj98.Interactable = true
     obj98.LayoutOrder = 0
     obj98.LineHeight = 1
@@ -2907,7 +2907,7 @@ local function createGui(parent)
     obj104.BorderSizePixel = 0
     obj104.ClipsDescendants = false
     obj104.Draggable = false
-    obj104.FontFace = ''
+    obj104.FontFace = Font.new('rbxasset://fonts/families/GothamSSm.json', Enum.FontWeight.Regular, Enum.FontStyle.Normal)
     obj104.Interactable = true
     obj104.LayoutOrder = 0
     obj104.LineHeight = 1
@@ -3096,7 +3096,7 @@ local function createGui(parent)
     obj109.BorderSizePixel = 0
     obj109.ClipsDescendants = false
     obj109.Draggable = false
-    obj109.FontFace = ''
+    obj109.FontFace = Font.new('rbxasset://fonts/families/GothamSSm.json', Enum.FontWeight.Regular, Enum.FontStyle.Normal)
     obj109.Interactable = true
     obj109.LayoutOrder = 0
     obj109.LineHeight = 1
