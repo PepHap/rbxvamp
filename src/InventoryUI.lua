@@ -109,7 +109,11 @@ function InventoryUI:equipFromInventory(index)
     if not inv or not inv.EquipFromInventory then return end
     local item = inv.itemSystem.inventory[index]
     if not item then return end
-    inv:EquipFromInventory(index, item.slot)
+    local ok = inv:EquipFromInventory(index, item.slot)
+    if not ok then
+        MessageUI.show("Не удалось экипировать")
+        return
+    end
     if item and item.name then
         MessageUI.show("Экипировано: " .. tostring(item.name))
     end
@@ -119,6 +123,10 @@ end
 function InventoryUI:unequip(slot)
     local inv = GameManager.inventory
     if inv and inv.UnequipToInventory then
+        if inv.itemSystem and inv.itemSystem:isInventoryFull() then
+            MessageUI.show("Инвентарь переполнен")
+            return
+        end
         local removed = inv:UnequipToInventory(slot)
         if removed and removed.name then
             MessageUI.show("Снято: " .. tostring(removed.name))

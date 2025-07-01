@@ -524,7 +524,7 @@ local function createGui(parent)
     obj14.BorderSizePixel = 0
     obj14.ClipsDescendants = false
     obj14.Draggable = false
-    obj14.Image = ''
+    obj14.Image = 'rbxassetid://83819638978368'
     obj14.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj14.ImageRectOffset = Vector2.new(0,0)
     obj14.ImageRectSize = Vector2.new(0,0)
@@ -576,7 +576,7 @@ local function createGui(parent)
     obj16.BorderSizePixel = 0
     obj16.ClipsDescendants = false
     obj16.Draggable = false
-    obj16.Image = ''
+    obj16.Image = 'rbxassetid://92354371735846'
     obj16.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj16.ImageRectOffset = Vector2.new(0,0)
     obj16.ImageRectSize = Vector2.new(0,0)
@@ -661,7 +661,7 @@ local function createGui(parent)
     obj19.BorderSizePixel = 0
     obj19.ClipsDescendants = false
     obj19.Draggable = false
-    obj19.Image = ''
+    obj19.Image = 'rbxassetid://133059657675905'
     obj19.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj19.ImageRectOffset = Vector2.new(0,0)
     obj19.ImageRectSize = Vector2.new(0,0)
@@ -724,7 +724,7 @@ local function createGui(parent)
     obj22.BorderSizePixel = 0
     obj22.ClipsDescendants = false
     obj22.Draggable = false
-    obj22.Image = ''
+    obj22.Image = 'rbxassetid://133059657675905'
     obj22.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj22.ImageRectOffset = Vector2.new(0,0)
     obj22.ImageRectSize = Vector2.new(0,0)
@@ -776,7 +776,7 @@ local function createGui(parent)
     obj24.BorderSizePixel = 0
     obj24.ClipsDescendants = false
     obj24.Draggable = false
-    obj24.Image = ''
+    obj24.Image = 'rbxassetid://133059657675905'
     obj24.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj24.ImageRectOffset = Vector2.new(0,0)
     obj24.ImageRectSize = Vector2.new(0,0)
@@ -828,7 +828,7 @@ local function createGui(parent)
     obj26.BorderSizePixel = 0
     obj26.ClipsDescendants = false
     obj26.Draggable = false
-    obj26.Image = ''
+    obj26.Image = 'rbxassetid://133059657675905'
     obj26.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj26.ImageRectOffset = Vector2.new(0,0)
     obj26.ImageRectSize = Vector2.new(0,0)
@@ -880,7 +880,7 @@ local function createGui(parent)
     obj28.BorderSizePixel = 0
     obj28.ClipsDescendants = false
     obj28.Draggable = false
-    obj28.Image = ''
+    obj28.Image = 'rbxassetid://133059657675905'
     obj28.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj28.ImageRectOffset = Vector2.new(0,0)
     obj28.ImageRectSize = Vector2.new(0,0)
@@ -932,7 +932,7 @@ local function createGui(parent)
     obj30.BorderSizePixel = 0
     obj30.ClipsDescendants = false
     obj30.Draggable = false
-    obj30.Image = ''
+    obj30.Image = 'rbxassetid://133059657675905'
     obj30.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj30.ImageRectOffset = Vector2.new(0,0)
     obj30.ImageRectSize = Vector2.new(0,0)
@@ -984,7 +984,7 @@ local function createGui(parent)
     obj32.BorderSizePixel = 0
     obj32.ClipsDescendants = false
     obj32.Draggable = false
-    obj32.Image = ''
+    obj32.Image = 'rbxassetid://133059657675905'
     obj32.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj32.ImageRectOffset = Vector2.new(0,0)
     obj32.ImageRectSize = Vector2.new(0,0)
@@ -1036,7 +1036,7 @@ local function createGui(parent)
     obj34.BorderSizePixel = 0
     obj34.ClipsDescendants = false
     obj34.Draggable = false
-    obj34.Image = ''
+    obj34.Image = 'rbxassetid://133059657675905'
     obj34.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj34.ImageRectOffset = Vector2.new(0,0)
     obj34.ImageRectSize = Vector2.new(0,0)
@@ -1088,7 +1088,7 @@ local function createGui(parent)
     obj36.BorderSizePixel = 0
     obj36.ClipsDescendants = false
     obj36.Draggable = false
-    obj36.Image = ''
+    obj36.Image = 'rbxassetid://133059657675905'
     obj36.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj36.ImageRectOffset = Vector2.new(0,0)
     obj36.ImageRectSize = Vector2.new(0,0)
@@ -1140,7 +1140,7 @@ local function createGui(parent)
     obj38.BorderSizePixel = 0
     obj38.ClipsDescendants = false
     obj38.Draggable = false
-    obj38.Image = ''
+    obj38.Image = 'rbxassetid://133059657675905'
     obj38.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj38.ImageRectOffset = Vector2.new(0,0)
     obj38.ImageRectSize = Vector2.new(0,0)
@@ -1192,7 +1192,7 @@ local function createGui(parent)
     obj40.BorderSizePixel = 0
     obj40.ClipsDescendants = false
     obj40.Draggable = false
-    obj40.Image = ''
+    obj40.Image = 'rbxassetid://133059657675905'
     obj40.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj40.ImageRectOffset = Vector2.new(0,0)
     obj40.ImageRectSize = Vector2.new(0,0)
@@ -1244,7 +1244,7 @@ local function createGui(parent)
     obj42.BorderSizePixel = 0
     obj42.ClipsDescendants = false
     obj42.Draggable = false
-    obj42.Image = ''
+    obj42.Image = 'rbxassetid://133059657675905'
     obj42.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj42.ImageRectOffset = Vector2.new(0,0)
     obj42.ImageRectSize = Vector2.new(0,0)
@@ -1296,7 +1296,7 @@ local function createGui(parent)
     obj44.BorderSizePixel = 0
     obj44.ClipsDescendants = false
     obj44.Draggable = false
-    obj44.Image = ''
+    obj44.Image = 'rbxassetid://133059657675905'
     obj44.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj44.ImageRectOffset = Vector2.new(0,0)
     obj44.ImageRectSize = Vector2.new(0,0)
@@ -1348,7 +1348,7 @@ local function createGui(parent)
     obj46.BorderSizePixel = 0
     obj46.ClipsDescendants = false
     obj46.Draggable = false
-    obj46.Image = ''
+    obj46.Image = 'rbxassetid://133059657675905'
     obj46.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj46.ImageRectOffset = Vector2.new(0,0)
     obj46.ImageRectSize = Vector2.new(0,0)
@@ -1400,7 +1400,7 @@ local function createGui(parent)
     obj48.BorderSizePixel = 0
     obj48.ClipsDescendants = false
     obj48.Draggable = false
-    obj48.Image = ''
+    obj48.Image = 'rbxassetid://133059657675905'
     obj48.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj48.ImageRectOffset = Vector2.new(0,0)
     obj48.ImageRectSize = Vector2.new(0,0)
@@ -1452,7 +1452,7 @@ local function createGui(parent)
     obj50.BorderSizePixel = 0
     obj50.ClipsDescendants = false
     obj50.Draggable = false
-    obj50.Image = ''
+    obj50.Image = 'rbxassetid://133059657675905'
     obj50.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj50.ImageRectOffset = Vector2.new(0,0)
     obj50.ImageRectSize = Vector2.new(0,0)
@@ -1504,7 +1504,7 @@ local function createGui(parent)
     obj52.BorderSizePixel = 0
     obj52.ClipsDescendants = false
     obj52.Draggable = false
-    obj52.Image = ''
+    obj52.Image = 'rbxassetid://133059657675905'
     obj52.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj52.ImageRectOffset = Vector2.new(0,0)
     obj52.ImageRectSize = Vector2.new(0,0)
@@ -1556,7 +1556,7 @@ local function createGui(parent)
     obj54.BorderSizePixel = 0
     obj54.ClipsDescendants = false
     obj54.Draggable = false
-    obj54.Image = ''
+    obj54.Image = 'rbxassetid://133059657675905'
     obj54.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj54.ImageRectOffset = Vector2.new(0,0)
     obj54.ImageRectSize = Vector2.new(0,0)
@@ -1608,7 +1608,7 @@ local function createGui(parent)
     obj56.BorderSizePixel = 0
     obj56.ClipsDescendants = false
     obj56.Draggable = false
-    obj56.Image = ''
+    obj56.Image = 'rbxassetid://133059657675905'
     obj56.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj56.ImageRectOffset = Vector2.new(0,0)
     obj56.ImageRectSize = Vector2.new(0,0)
@@ -1660,7 +1660,7 @@ local function createGui(parent)
     obj58.BorderSizePixel = 0
     obj58.ClipsDescendants = false
     obj58.Draggable = false
-    obj58.Image = ''
+    obj58.Image = 'rbxassetid://133059657675905'
     obj58.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj58.ImageRectOffset = Vector2.new(0,0)
     obj58.ImageRectSize = Vector2.new(0,0)
@@ -1713,7 +1713,7 @@ local function createGui(parent)
     obj60.BorderSizePixel = 0
     obj60.ClipsDescendants = false
     obj60.Draggable = false
-    obj60.Image = ''
+    obj60.Image = 'rbxassetid://75286597690363'
     obj60.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj60.ImageRectOffset = Vector2.new(0,0)
     obj60.ImageRectSize = Vector2.new(0,0)
@@ -1765,7 +1765,7 @@ local function createGui(parent)
     obj62.BorderSizePixel = 0
     obj62.ClipsDescendants = false
     obj62.Draggable = false
-    obj62.Image = ''
+    obj62.Image = 'rbxassetid://90484094717851'
     obj62.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj62.ImageRectOffset = Vector2.new(0,0)
     obj62.ImageRectSize = Vector2.new(0,0)
@@ -1818,7 +1818,7 @@ local function createGui(parent)
     obj64.BorderSizePixel = 0
     obj64.ClipsDescendants = false
     obj64.Draggable = false
-    obj64.Image = ''
+    obj64.Image = 'rbxassetid://118629121715671'
     obj64.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj64.ImageRectOffset = Vector2.new(0,0)
     obj64.ImageRectSize = Vector2.new(0,0)
@@ -1869,7 +1869,7 @@ local function createGui(parent)
     obj66.BorderSizePixel = 0
     obj66.ClipsDescendants = false
     obj66.Draggable = false
-    obj66.Image = ''
+    obj66.Image = 'rbxassetid://96607323312401'
     obj66.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj66.ImageRectOffset = Vector2.new(0,0)
     obj66.ImageRectSize = Vector2.new(0,0)
@@ -1921,7 +1921,7 @@ local function createGui(parent)
     obj68.BorderSizePixel = 0
     obj68.ClipsDescendants = false
     obj68.Draggable = false
-    obj68.Image = ''
+    obj68.Image = 'rbxassetid://96607323312401'
     obj68.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj68.ImageRectOffset = Vector2.new(0,0)
     obj68.ImageRectSize = Vector2.new(0,0)
@@ -1973,7 +1973,7 @@ local function createGui(parent)
     obj70.BorderSizePixel = 0
     obj70.ClipsDescendants = false
     obj70.Draggable = false
-    obj70.Image = ''
+    obj70.Image = 'rbxassetid://96607323312401'
     obj70.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj70.ImageRectOffset = Vector2.new(0,0)
     obj70.ImageRectSize = Vector2.new(0,0)
@@ -2025,7 +2025,7 @@ local function createGui(parent)
     obj72.BorderSizePixel = 0
     obj72.ClipsDescendants = false
     obj72.Draggable = false
-    obj72.Image = ''
+    obj72.Image = 'rbxassetid://96607323312401'
     obj72.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj72.ImageRectOffset = Vector2.new(0,0)
     obj72.ImageRectSize = Vector2.new(0,0)
@@ -2077,7 +2077,7 @@ local function createGui(parent)
     obj74.BorderSizePixel = 0
     obj74.ClipsDescendants = false
     obj74.Draggable = false
-    obj74.Image = ''
+    obj74.Image = 'rbxassetid://96607323312401'
     obj74.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj74.ImageRectOffset = Vector2.new(0,0)
     obj74.ImageRectSize = Vector2.new(0,0)
@@ -2129,7 +2129,7 @@ local function createGui(parent)
     obj76.BorderSizePixel = 0
     obj76.ClipsDescendants = false
     obj76.Draggable = false
-    obj76.Image = ''
+    obj76.Image = 'rbxassetid://96607323312401'
     obj76.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj76.ImageRectOffset = Vector2.new(0,0)
     obj76.ImageRectSize = Vector2.new(0,0)
@@ -2182,7 +2182,7 @@ local function createGui(parent)
     obj78.BorderSizePixel = 0
     obj78.ClipsDescendants = false
     obj78.Draggable = false
-    obj78.Image = ''
+    obj78.Image = 'rbxassetid://103732881960565'
     obj78.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj78.ImageRectOffset = Vector2.new(0,0)
     obj78.ImageRectSize = Vector2.new(0,0)
@@ -2808,7 +2808,7 @@ local function createGui(parent)
     obj101.BorderSizePixel = 1
     obj101.ClipsDescendants = false
     obj101.Draggable = false
-    obj101.Image = ''
+    obj101.Image = 'rbxassetid://79270923480804'
     obj101.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj101.ImageRectOffset = Vector2.new(0,0)
     obj101.ImageRectSize = Vector2.new(0,0)
@@ -2860,7 +2860,7 @@ local function createGui(parent)
     obj103.BorderSizePixel = 0
     obj103.ClipsDescendants = false
     obj103.Draggable = false
-    obj103.Image = ''
+    obj103.Image = 'rbxassetid://85985957201684'
     obj103.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj103.ImageRectOffset = Vector2.new(0,0)
     obj103.ImageRectSize = Vector2.new(0,0)
@@ -2997,7 +2997,7 @@ local function createGui(parent)
     obj106.BorderSizePixel = 1
     obj106.ClipsDescendants = false
     obj106.Draggable = false
-    obj106.Image = ''
+    obj106.Image = 'rbxassetid://79270923480804'
     obj106.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj106.ImageRectOffset = Vector2.new(0,0)
     obj106.ImageRectSize = Vector2.new(0,0)
@@ -3049,7 +3049,7 @@ local function createGui(parent)
     obj108.BorderSizePixel = 0
     obj108.ClipsDescendants = false
     obj108.Draggable = false
-    obj108.Image = ''
+    obj108.Image = 'rbxassetid://85985957201684'
     obj108.ImageColor3 = Color3.new(1.0,1.0,1.0)
     obj108.ImageRectOffset = Vector2.new(0,0)
     obj108.ImageRectSize = Vector2.new(0,0)

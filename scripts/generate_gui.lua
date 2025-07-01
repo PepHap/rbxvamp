@@ -49,7 +49,13 @@ end
 local function propValue(node)
     local t = node.name
     local val = node.children[1] and node.children[1].text or ""
-    if t == "string" or t == "BinaryString" or t == "Content" then
+    if t == "string" or t == "BinaryString" then
+        return string.format("%q", val)
+    elseif t == "Content" then
+        local urlNode = node.children[1]
+        if urlNode and urlNode.name == "url" then
+            val = urlNode.text or ""
+        end
         return string.format("%q", val)
     elseif t == "bool" then
         return tostring(val == "true")

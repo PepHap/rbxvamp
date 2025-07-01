@@ -28,7 +28,12 @@ lines = []
 def prop_value(node):
     tag = node.tag
     val = (node.text or "").strip()
-    if tag in {"string", "BinaryString", "Content"}:
+    if tag in {"string", "BinaryString"}:
+        return repr(val)
+    if tag == "Content":
+        url_node = node.find("url")
+        if url_node is not None:
+            val = (url_node.text or "").strip()
         return repr(val)
     if tag == "bool":
         return "true" if val == "true" else "false"
