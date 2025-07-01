@@ -55,7 +55,9 @@ def prop_value(node):
                 ys = float(c.text or 0)
             elif c.tag in ("YO", "YOffset"):
                 yo = float(c.text or 0)
-        return f"UDim2.new({xs},{int(xo)},{ys},{int(yo)})"
+        xs = xs + xo / BASE_W
+        ys = ys + yo / BASE_H
+        return f"UDim2.fromScale({xs},{ys})"
     if tag == "Color3":
         r = g = b = 0.0
         for c in node:
@@ -73,7 +75,8 @@ def prop_value(node):
                 s = float(c.text or 0)
             elif c.tag in ("O", "Offset"):
                 o = float(c.text or 0)
-        return f"UDim.new({s},{int(o)})"
+        s = s + o / BASE_UDIM
+        return f"UDim.new({s},0)"
     if tag == "Rect2D":
         min_x = min_y = max_x = max_y = 0
         for c in node:
