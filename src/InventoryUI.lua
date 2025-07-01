@@ -23,6 +23,8 @@ local function findSlots(root)
             if btn then
                 if btn:IsA("GuiButton") then
                     btn.AutoButtonColor = true
+                else
+                    btn.Active = true
                 end
                 InventoryUI.slots[name] = btn
                 -- https://create.roblox.com/docs/reference/engine/events/TextButton/MouseButton1Click
@@ -48,6 +50,8 @@ local function findSlots(root)
         for _, btn in ipairs(cells) do
             if btn:IsA("GuiButton") then
                 btn.AutoButtonColor = true
+            else
+                btn.Active = true
             end
             table.insert(InventoryUI.inventoryCells, btn)
         end

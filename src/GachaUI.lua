@@ -6,6 +6,8 @@ local MessageUI = require(script.Parent:WaitForChild("MessageUI"))
 GachaUI.frame = nil
 GachaUI.open1 = nil
 GachaUI.open10 = nil
+GachaUI.open1Buttons = {}
+GachaUI.open10Buttons = {}
 GachaUI.banner1 = nil
 GachaUI.allBanners = {}
 GachaUI.resultConn = nil
@@ -19,28 +21,22 @@ local function findButtons(root)
     local open1Candidates = {}
     local open10Candidates = {}
     for _, obj in ipairs(root:GetDescendants()) do
-        if obj:IsA("GuiButton") then
-            local txt = string.lower(obj.Name)
-            if obj:IsA("TextButton") then
-                txt = txt .. " " .. string.lower(obj.Text or "")
-            else
-                local lbl = obj:FindFirstChildWhichIsA("TextLabel")
-                if lbl then
-                    txt = txt .. " " .. string.lower(lbl.Text or "")
-                end
-            end
-            if txt:find("open 1") or txt:find("x1") then
-                table.insert(open1Candidates, obj)
-            elseif txt:find("open 10") or txt:find("x10") then
-                table.insert(open10Candidates, obj)
-            elseif txt:find("openbutton1") then
-                table.insert(open1Candidates, obj)
-            elseif txt:find("openbutton10") then
-                table.insert(open10Candidates, obj)
-            elseif txt:find("openbutton") then
-                table.insert(open1Candidates, obj)
-            end
-        elseif obj:IsA("Frame") and obj.Name:find("GachaBanner") then
+        local txt = string.lower(obj.Name)
+        if obj:IsA("TextButton") or obj:IsA("TextLabel") then
+            txt = txt .. " " .. string.lower(obj.Text or "")
+        end
+        local lbl = obj:FindFirstChildWhichIsA("TextLabel")
+        if lbl then
+            txt = txt .. " " .. string.lower(lbl.Text or "")
+        end
+
+        if txt:find("open%s*1") or txt:find("x1") or txt:find("open1") or txt:find("openbutton1") then
+            table.insert(open1Candidates, obj)
+        elseif txt:find("open%s*10") or txt:find("x10") or txt:find("open10") or txt:find("openbutton10") then
+            table.insert(open10Candidates, obj)
+        elseif txt:find("openbutton") then
+            table.insert(open1Candidates, obj)
+        elseif obj:IsA("Frame") and txt:find("gachabanner") then
             table.insert(GachaUI.allBanners, obj)
             if obj.Name == "GachaBanner1" then
                 GachaUI.banner1 = obj
@@ -48,6 +44,8 @@ local function findButtons(root)
         end
     end
 
+    GachaUI.open1Buttons = open1Candidates
+    GachaUI.open10Buttons = open10Candidates
     GachaUI.open1 = GachaUI.open1 or open1Candidates[1]
     GachaUI.open10 = GachaUI.open10 or open10Candidates[1] or open1Candidates[2]
 end
@@ -61,6 +59,12 @@ local function connectButtons()
             -- https://create.roblox.com/docs/reference/engine/events/TextButton/MouseButton1Click
             btn.MouseButton1Click:Connect(action)
         else
+            -- Non-button objects like Frames or TextLabels need the
+            -- ``Active`` property enabled to receive input callbacks.
+            -- https://create.roblox.com/docs/reference/engine/classes/GuiObject#Active
+            if btn:IsA("GuiObject") then
+                btn.Active = true
+            end
             btn.InputBegan:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 then
                     action()
@@ -70,12 +74,17 @@ local function connectButtons()
         btn:SetAttribute("_connected", true)
     end
 
-    hook(GachaUI.open1, function()
-        GachaUI:roll(1)
-    end)
-    hook(GachaUI.open10, function()
-        GachaUI:roll(10)
-    end)
+    for _, btn in ipairs(GachaUI.open1Buttons) do
+        hook(btn, function()
+            GachaUI:roll(1)
+        end)
+    end
+
+    for _, btn in ipairs(GachaUI.open10Buttons) do
+        hook(btn, function()
+            GachaUI:roll(10)
+        end)
+    end
 end
 
 local function connectResult()

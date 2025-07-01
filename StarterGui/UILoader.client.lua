@@ -13,6 +13,10 @@ local src = ReplicatedStorage:WaitForChild("src")
 -- create the interface from the generated Lua builder
 local GeneratedGui = require(src:WaitForChild("GeneratedGui"))
 local UIBridge = require(src:WaitForChild("UIBridge"))
+local InventoryUI = require(src:WaitForChild("InventoryUI"))
+local GachaUI = require(src:WaitForChild("GachaUI"))
+local WindowTabs = require(src:WaitForChild("WindowTabs"))
+local MessageUI = require(src:WaitForChild("MessageUI"))
 
 -- load the interface defined in gui.rbxmx
 local Players = game:GetService("Players")
@@ -24,5 +28,12 @@ if not screenGui then
 end
 UIBridge.init(screenGui)
 
--- No additional UI modules are initialized.
+-- Initialize and display the main interface immediately so
+-- players see the HUD and inventory without extra key presses.
+InventoryUI.init()
+GachaUI.init()
+WindowTabs.init()
+MessageUI.init()
+WindowTabs.activateInventory()
+
 
