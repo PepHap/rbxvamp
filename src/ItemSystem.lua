@@ -223,7 +223,9 @@ function ItemSystem:unequipToInventory(slot)
     if not itm then
         return nil
     end
-    table.insert(self.inventory, itm)
+    -- Insert unequipped items at the start so they remain visible even when
+    -- the inventory contains more entries than the display supports.
+    table.insert(self.inventory, 1, itm)
     return itm
 end
 
